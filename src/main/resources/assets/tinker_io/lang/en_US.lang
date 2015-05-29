@@ -1,0 +1,23 @@
+#Creative Tab
+itemGroup.TinkerIO_Tabs=Tinker I/O
+
+#Blocks
+tile.FuelInputMachine.name=Fuel Input Machine
+tile.SmartOutput.name=Smart Output
+
+#Items
+item.speedUPG.name=Speed Upgrade
+item.SolidFuel.name=Solid Fuel
+item.upg_0.name=Base Upgrade
+item.upg_1.name=Slot Upgrade I
+item.upg_2.name=Slot Upgrade II
+item.upg_3.name=Slot Upgrade III
+item.upg_4.name=Slot Upgrade IV
+item.upg_5.name=Redstone Upgrade
+
+#GUI
+tio.gui.fim.slot1=Speed UPG.
+tio.gui.fim.slot2=Solid Fuel
+
+#Waila
+tio.plugin.waila.tankEmpty=(Empty)

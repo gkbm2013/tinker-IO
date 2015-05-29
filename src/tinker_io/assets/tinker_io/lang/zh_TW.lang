@@ -1,0 +1,23 @@
+﻿#Creative Tab
+itemGroup.TinkerIO_Tabs=Tinker I/O
+
+#Blocks
+tile.FuelInputMachine.name=燃料輸入機
+tile.SmartOutput.name=智慧輸出
+
+#Items
+item.speedUPG.name=速度升級
+item.SolidFuel.name=固體燃料
+item.upg_0.name=基礎升級元件
+item.upg_1.name=插槽空間升級 I
+item.upg_2.name=插槽空間升級 II
+item.upg_3.name=插槽空間升級 III
+item.upg_4.name=插槽空間升級 IV
+item.upg_5.name=紅石控制升級
+
+#GUI
+tio.gui.fim.slot1=速度升級
+tio.gui.fim.slot2=固體燃料
+
+#Waila
+tio.plugin.waila.tankEmpty=(空)
