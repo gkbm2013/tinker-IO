@@ -628,7 +628,7 @@ public class SOTileEntity extends MultiServantLogic implements IFluidHandler , I
 			
 			
 			
-			if(recipes.getCastingFluid(liquid, itemStacksSO[0]).amount <= liquid.amount){
+			if(recipes.getCastingFluid(liquid, itemStacksSO[0])!= null && recipes.getCastingFluid(liquid, itemStacksSO[0]).amount <= liquid.amount){
 				this.drain(ForgeDirection.UNKNOWN, recipes.getCastingFluid(liquid, itemStacksSO[0]), true);
 				
 				if (this.itemStacksSO[1] == null) {

@@ -1,5 +1,8 @@
 package tinker_io.gui;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.gui.inventory.GuiContainer;
@@ -30,10 +33,22 @@ public class FIMGui extends GuiContainer {
 		String tip1 = I18n.format("tio.gui.fim.slot1", new Object[0]);
 		String tip2 = I18n.format("tio.gui.fim.slot2", new Object[0]);
 		
+		int cornerX = (width - xSize) / 2;
+        int cornerY = (height - ySize) / 2;
+		
 		this.fontRendererObj.drawString(string, (this.xSize - this.fontRendererObj.getStringWidth(string))/2, 6, 4210752);
 		this.fontRendererObj.drawString(tip1, (this.xSize - 145 - (this.fontRendererObj.getStringWidth(tip1))/2), 25, 4210752);
 		this.fontRendererObj.drawString(tip2, (this.xSize - 87 - (this.fontRendererObj.getStringWidth(tip2))/2), 25, 4210752);
 		this.fontRendererObj.drawString(I18n.format("container.inventory", new Object[0]), 8, this.ySize - 94, 4210752);
+		
+		
+		if(!tileASC.hasFuel() && par1 >= cornerX +159 && par1 <= cornerX + 170 && par2 >= cornerY + 4 && par2 <= cornerY + 15 ){
+			String[] info = {EnumChatFormatting.RED+I18n.format("tio.gui.fim.error_message", new Object[0])};
+            @SuppressWarnings("rawtypes")
+            List temp = Arrays.asList(info);
+            drawHoveringText(temp, par1 - cornerX, par2 - cornerY, fontRendererObj);
+        }
+		//System.out.println(cornerX);
 		
 	}
 	
@@ -48,6 +63,10 @@ public class FIMGui extends GuiContainer {
 	        int i1;
 	        i1 = this.tileASC.getCookProgressScaled(24);
 	        this.drawTexturedModalRect(k + 98, l + 34, 176, 14, i1 + 1, 16);
+	        
+	        if(!tileASC.hasFuel()){
+	        	this.drawTexturedModalRect(k + 159, l + 4, 177, 33, 11, 11);	
+	        }
 
 	}
 

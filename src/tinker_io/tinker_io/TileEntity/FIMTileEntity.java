@@ -175,6 +175,13 @@ public class FIMTileEntity extends TileEntity implements ISidedInventory  {
 		return this.inputTime * par1 / speed;
 	}
 	
+	public boolean hasFuel(){
+		if(this.itemStacksASC[1]!= null && this.itemStacksASC[1].isItemEqual(fuel)){
+			return true;
+		}
+		return false;
+	}
+	
 
 	public void updateEntity() {
 		boolean flag1 = false;
@@ -265,15 +272,17 @@ public class FIMTileEntity extends TileEntity implements ISidedInventory  {
 			if(smeltery != null){
 				int[] activeTemps = smeltery.activeTemps;
 				int fuelAmount = smeltery.fuelAmount;
+				int[] meltingTemps = smeltery.meltingTemps;
 				//activeTemps
 				if(activeTemps != null && fuelAmount >= 120){
 					for(int i = 0; i < activeTemps.length; i++){
 						if(activeTemps[i] < 200 || activeTemps[i] > 7999){
 							
 						}else{
-							activeTemps[i] = 8000;
+							activeTemps[i] = meltingTemps[i];
 							//System.out.println(activeTemps[i]);	
 						}
+						
 					}
 				}				
 			}
