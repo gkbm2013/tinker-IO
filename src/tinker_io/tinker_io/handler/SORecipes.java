@@ -1,29 +1,22 @@
 package tinker_io.handler;
 
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import tconstruct.library.TConstructRegistry;
 import tconstruct.library.crafting.CastingRecipe;
 import tconstruct.library.crafting.LiquidCasting;
+import tconstruct.smeltery.TinkerSmeltery;
+import tinker_io.mainRegistry.ItemRegistry;
 
 public class SORecipes{
-	public ItemStack getCastingRecipes(FluidStack fluid, ItemStack itemStack, boolean hasPowered){
-		if(!hasPowered){
-			LiquidCasting tableCasting = TConstructRegistry.instance.getTableCasting();
-			CastingRecipe tableRecipe = tableCasting.getCastingRecipe(fluid, itemStack);
-			
-			if(tableRecipe != null){
-				return tableRecipe.getResult();
-			}else{
-				return null;
-			}
-		}else{
-			return null;
+	
+	public ItemStack getCastingRecipes(FluidStack fluid, ItemStack itemStack){	
+		ItemStack basin = new ItemStack(TinkerSmeltery.searedBlock ,1 ,2);
+		if(fluid != null && fluid.isFluidEqual(new FluidStack(TinkerSmeltery.moltenGlassFluid, FluidContainerRegistry.BUCKET_VOLUME)) && itemStack != null && itemStack.isItemEqual(basin)){
+			return new ItemStack(TinkerSmeltery.clearGlass ,1);
 		}
 		
-	}
-	
-	public ItemStack getCastingRecipes(FluidStack fluid, ItemStack itemStack){
 		LiquidCasting tableCasting = TConstructRegistry.instance.getTableCasting();
 		CastingRecipe tableRecipe = tableCasting.getCastingRecipe(fluid, itemStack);
 		
@@ -35,6 +28,11 @@ public class SORecipes{
 	}
 	
 	public FluidStack getCastingFluid(FluidStack fluid, ItemStack itemStack){
+		ItemStack basin = new ItemStack(TinkerSmeltery.searedBlock ,1 ,2);
+		if(fluid != null && fluid.isFluidEqual(new FluidStack(TinkerSmeltery.moltenGlassFluid, FluidContainerRegistry.BUCKET_VOLUME)) && itemStack != null && itemStack.isItemEqual(basin)){
+			return new FluidStack(TinkerSmeltery.moltenGlassFluid, FluidContainerRegistry.BUCKET_VOLUME);
+		}
+		
 		
 		LiquidCasting tableCasting = TConstructRegistry.instance.getTableCasting();		
 		CastingRecipe tableRecipe = tableCasting.getCastingRecipe(fluid, itemStack);
@@ -54,22 +52,7 @@ public class SORecipes{
 	}
 	
 	
-	
-	public ItemStack getBasinRecipes(FluidStack fluid, ItemStack itemStack, boolean hasPowered){
-		if(hasPowered){
-			LiquidCasting basinCasting = TConstructRegistry.getBasinCasting();
-			CastingRecipe basinRecipe = basinCasting.getCastingRecipe(fluid, itemStack);
-			if(basinRecipe != null){
-				return basinRecipe.getResult();
-			}else{
-				return null;
-			}
-		}else{
-			return null;
-		}
-	}
-	
-	public FluidStack getBasinFluid(FluidStack fluid, ItemStack itemStack){
+	/*public FluidStack getBasinFluid(FluidStack fluid, ItemStack itemStack){
 		
 		LiquidCasting basinCasting = TConstructRegistry.getBasinCasting();
 		CastingRecipe basinRecipe = basinCasting.getCastingRecipe(fluid, itemStack);
@@ -85,6 +68,6 @@ public class SORecipes{
 			return null;
 		}
 		
-	}
+	}*/
 	
 }

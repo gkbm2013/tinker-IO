@@ -2,12 +2,16 @@ package tinker_io.mainRegistry;
 
 import java.util.ArrayList;
 
+import tconstruct.TConstruct;
+import tconstruct.library.TConstructRegistry;
+import tconstruct.library.crafting.LiquidCasting;
 import tconstruct.smeltery.TinkerSmeltery;
 import tconstruct.tools.TinkerTools;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;

@@ -49,7 +49,7 @@ import cpw.mods.fml.common.network.NetworkRegistry;
 public class Main
 {
     public static final String MODID = "tinker_io";
-    public static final String VERSION = "beta 1.1.3";
+    public static final String VERSION = "beta 1.2.0";
     public static final String Name = "Tinker I/O";
     
     //Proxy
@@ -71,7 +71,6 @@ public class Main
         };
         
      
-    
         
     @EventHandler
     public void preLoad(FMLPreInitializationEvent event){

@@ -1,5 +1,6 @@
 package tinker_io.TileEntity;
 
+import tconstruct.smeltery.TinkerSmeltery;
 import tinker_io.handler.SORecipes;
 import tinker_io.mainRegistry.ItemRegistry;
 import mantle.blocks.abstracts.MultiServantLogic;
@@ -625,6 +626,7 @@ public class SOTileEntity extends MultiServantLogic implements IFluidHandler , I
 		if(canFrozen() == true && info != null){
 			ItemStack itemstack = recipes.getCastingRecipes(liquid, this.itemStacksSO[0]/*, hasPowered*/);
 			ItemStack bucket = new ItemStack(Items.bucket);
+			ItemStack basin = new ItemStack(TinkerSmeltery.searedBlock ,1 ,2);
 			
 			
 			

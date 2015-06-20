@@ -1,5 +1,6 @@
 package tinker_io.proxy;
 
+import tconstruct.util.config.PHConstruct;
 import tinker_io.TileEntity.FIMTileEntity;
 import tinker_io.TileEntity.SOTileEntity;
 import tinker_io.handler.GuiHandler;
