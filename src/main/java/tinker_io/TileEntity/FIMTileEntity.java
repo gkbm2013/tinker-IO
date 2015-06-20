@@ -14,6 +14,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
 
 public class FIMTileEntity extends TileEntity implements ISidedInventory  {
@@ -30,8 +31,8 @@ public class FIMTileEntity extends TileEntity implements ISidedInventory  {
 	}
 	
 	
-	public int speedASC;
-	public int catalystASC;
+	//public int speedASC;
+	//public int catalystASC;
 	public int speed = 300;
 	
 	private ItemStack fuel = new ItemStack(ItemRegistry.SolidFuel);
@@ -129,8 +130,7 @@ public class FIMTileEntity extends TileEntity implements ISidedInventory  {
 			}
 		}
 
-		this.speedASC = tagCompound.getShort("SpeedASC");
-		this.catalystASC = tagCompound.getShort("catalystASC");
+		//this.speedASC = tagCompound.getShort("SpeedASC");
 		this.inputTime = tagCompound.getShort("InputTime");
 		this.x1 = tagCompound.getShort("x");
 		this.y1 = tagCompound.getShort("y");
@@ -143,8 +143,7 @@ public class FIMTileEntity extends TileEntity implements ISidedInventory  {
 	
 	public void writeToNBT(NBTTagCompound tagCompound) {
 		super.writeToNBT(tagCompound);
-		tagCompound.setShort("SpeedASC", (short) this.speedASC);
-		tagCompound.setShort("catalystASC", (short) this.catalystASC);
+		//tagCompound.setShort("SpeedASC", (short) this.speedASC);
 		tagCompound.setShort("InputTime", (short) this.inputTime);
 		tagCompound.setShort("x", (short) this.x1);
 		tagCompound.setShort("y", (short) this.y1);
@@ -186,7 +185,7 @@ public class FIMTileEntity extends TileEntity implements ISidedInventory  {
 	public void updateEntity() {
 		boolean flag1 = false;
 		if (!this.worldObj.isRemote) {
-			this.checkConnection(worldObj, xCoord, yCoord, zCoord);
+			this.checkConnection();
 			if (this.canSmelt()) {
 				//this.checkConnection(world1, x1, y1, z1);
 					flag1 = true;
@@ -305,11 +304,11 @@ public class FIMTileEntity extends TileEntity implements ISidedInventory  {
 		}
 	}
 	
-	public void checkConnection(World world,int x,int y,int z){
-		x1 = x;
-		y1 = y;
-		z1 = z;
-		world1 = world;
+	public void checkConnection(){
+		int x = this.xCoord;
+		int y = this.yCoord;
+		int z = this.zCoord;
+		World world = this.worldObj;
 		
 		int amount = 0;
 		connection = 0;
@@ -445,6 +444,32 @@ public class FIMTileEntity extends TileEntity implements ISidedInventory  {
 		}else{
 			return false;
 		}
+	}
+	
+	public String getDirection(){
+		this.checkConnection();
+		String dir;
+		if(canConnect == true){
+			if(connection == 6){
+				dir = "y - 1";
+			}else if(connection == 5){
+				dir = "y + 1";
+			}else if(connection == 1){
+				dir = "x - 1";
+			}else if(connection == 2){
+				dir = "x + 1";
+			}else if(connection == 3){
+				dir = "z - 1";
+			}else if(connection == 4){
+				dir = "z + 1";
+			}else{
+				dir = "Not Found";
+			}
+		}else{
+			dir = "Not Found";
+		}
+		
+		return dir;
 	}
 	
 	@Override

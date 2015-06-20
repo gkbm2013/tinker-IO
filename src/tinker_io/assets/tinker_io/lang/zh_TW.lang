@@ -19,6 +19,7 @@ item.upg_5.name=紅石控制升級
 tio.gui.fim.slot1=速度升級
 tio.gui.fim.slot2=固體燃料
 tio.gui.fim.error_message=缺少固體燃料
+tio.gui.fim.direction=Controller方位
 
 #Waila
 tio.plugin.waila.tankEmpty=(空)

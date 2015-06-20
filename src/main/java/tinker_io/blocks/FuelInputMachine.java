@@ -64,7 +64,7 @@ public class FuelInputMachine extends BlockContainer {
 		 player.openGui(Main.instance, 0, world, x, y, z);
 		 if(!world.isRemote){
 			 FIMTileEntity te = (FIMTileEntity) world.getTileEntity(x, y, z);
-			 te.checkConnection(world, x, y, z);
+			 te.checkConnection();
          }
 		
 		 
@@ -101,7 +101,7 @@ public class FuelInputMachine extends BlockContainer {
 		this.direction(world, x, y, z);
 		
 		FIMTileEntity te = (FIMTileEntity) world.getTileEntity(x, y, z);
-		te.checkConnection(world, x, y, z);
+		te.checkConnection();
 	}
 	
 	private void direction(World world, int x, int y, int z) {

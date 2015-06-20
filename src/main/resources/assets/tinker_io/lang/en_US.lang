@@ -19,6 +19,7 @@ item.upg_5.name=Redstone Upgrade
 tio.gui.fim.slot1=Speed UPG.
 tio.gui.fim.slot2=Solid Fuel
 tio.gui.fim.error_message=Lack of solid fuel
+tio.gui.fim.direction=Controller Direction
 
 #Waila
 tio.plugin.waila.tankEmpty=(Empty)
