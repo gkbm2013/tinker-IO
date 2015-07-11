@@ -30,24 +30,32 @@ public class FIMGui extends GuiContainer {
 	@Override
 	protected void drawGuiContainerForegroundLayer(int par1, int par2){
 		String string = this.tileASC.hasCustomInventoryName() ? this.tileASC.getInventoryName() : I18n.format(this.tileASC.getInventoryName(), new Object[0]);
-		String tip1 = I18n.format("tio.gui.fim.slot1", new Object[0]);
+		//String tip1 = I18n.format("tio.gui.fim.slot1", new Object[0]);
 		String tip2 = I18n.format("tio.gui.fim.slot2", new Object[0]);
 		
 		String connectInfo = I18n.format("tio.gui.fim.direction", new Object[0]) + " :";
 		String connectInfoDiraction = tileASC.getDirection();
 		String warn = EnumChatFormatting.RED+I18n.format("tio.gui.fim.error_message", new Object[0]);
+		int max = tileASC.getInputSize();
+		String msgMax = EnumChatFormatting.DARK_GREEN + "Max : " + max;
 		
 		int cornerX = (width - xSize) / 2;
         int cornerY = (height - ySize) / 2;
 		
 		this.fontRendererObj.drawString(string, (this.xSize - this.fontRendererObj.getStringWidth(string))/2, 6, 4210752);
-		this.fontRendererObj.drawString(tip1, (this.xSize - 145 - (this.fontRendererObj.getStringWidth(tip1))/2), 25, 4210752);
+		//this.fontRendererObj.drawString(tip1, (this.xSize - 145 - (this.fontRendererObj.getStringWidth(tip1))/2), 9, 4210752);
 		this.fontRendererObj.drawString(tip2, (this.xSize - 87 - (this.fontRendererObj.getStringWidth(tip2))/2), 25, 4210752);
 		this.fontRendererObj.drawString(I18n.format("container.inventory", new Object[0]), 8, this.ySize - 94, 4210752);
+		
 		this.fontRendererObj.drawString(connectInfo, (-55 - (this.fontRendererObj.getStringWidth(connectInfo))/2), 14, 4210752);
 		this.fontRendererObj.drawString(connectInfoDiraction, (-55 - (this.fontRendererObj.getStringWidth(connectInfoDiraction))/2), 26, 4210752);
+		if(max == 2048){
+			msgMax = EnumChatFormatting.DARK_GREEN + "Max : \u221e";
+		}
+		this.fontRendererObj.drawString(msgMax, (-55 - (this.fontRendererObj.getStringWidth(msgMax))/2), 42, 4210752);
+		
 		if(!tileASC.hasFuel()){
-			this.fontRendererObj.drawString(warn, (-55 - (this.fontRendererObj.getStringWidth(warn))/2), 42, 4210752);			
+			this.fontRendererObj.drawString(warn, (-55 - (this.fontRendererObj.getStringWidth(warn))/2), 54, 4210752);			
 		}
 		
 		

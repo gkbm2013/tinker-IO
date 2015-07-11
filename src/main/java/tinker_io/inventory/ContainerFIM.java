@@ -18,8 +18,11 @@ public class ContainerFIM extends Container {
 
 	public ContainerFIM(InventoryPlayer player, FIMTileEntity tileEntityASC){
 		this.tileFIM = tileEntityASC;
-		this.addSlotToContainer(new Slot(tileEntityASC, 0, 25, 34)); // Speed UPG.
+		this.addSlotToContainer(new Slot(tileEntityASC, 0, 25, 20)); // Speed UPG.
 		this.addSlotToContainer(new Slot(tileEntityASC, 1, 79, 34)); // catalyst
+		
+		this.addSlotToContainer(new Slot(tileEntityASC, 2, 25, 34)); // Speed UPG.
+		this.addSlotToContainer(new Slot(tileEntityASC, 3, 25, 48)); // Speed UPG.
 
 		//this.addSlotToContainer(new SlotFurnace(player.player, tileEntityASC, 0, 25, 34));
 		int i;

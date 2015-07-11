@@ -22,7 +22,10 @@ public class FIMTileEntity extends TileEntity implements ISidedInventory  {
 	private static final int[] slotsSpeedUPG = new int[] { 0 };
 	private static final int[] slotsFuel = new int[] { 1 };
 	
-	private ItemStack[] itemStacksASC = new ItemStack[2];
+	private static final int[] slotsUPG1 = new int[] { 2 };
+	private static final int[] slotsUPG2 = new int[] { 3 };
+	
+	private ItemStack[] itemStacksASC = new ItemStack[4];
 	
 	private String nameFIM;
 	
@@ -185,9 +188,7 @@ public class FIMTileEntity extends TileEntity implements ISidedInventory  {
 	public void updateEntity() {
 		boolean flag1 = false;
 		if (!this.worldObj.isRemote) {
-			this.checkConnection();
 			if (this.canSmelt()) {
-				//this.checkConnection(world1, x1, y1, z1);
 					flag1 = true;
 					if (this.itemStacksASC[1] != null) {
 
@@ -207,8 +208,6 @@ public class FIMTileEntity extends TileEntity implements ISidedInventory  {
 					flag1 = true;
 					connectToTConstruct();
 				}
-			} else {
-				this.inputTime = 0;
 			}
 		}
 
@@ -232,6 +231,7 @@ public class FIMTileEntity extends TileEntity implements ISidedInventory  {
 	}
 
 	private boolean canSmelt() {
+		this.checkConnection();
 		if(canConnect == true){
 			if(checkTemps() == true){
 				if (this.itemStacksASC[1] == null) return false;
@@ -275,10 +275,14 @@ public class FIMTileEntity extends TileEntity implements ISidedInventory  {
 				//activeTemps
 				if(activeTemps != null && fuelAmount >= 120){
 					for(int i = 0; i < activeTemps.length; i++){
-						if(activeTemps[i] < 200 || activeTemps[i] > 7999){
+						if(activeTemps[i] < 200 || activeTemps[i] == meltingTemps[i]){
 							
 						}else{
-							activeTemps[i] = meltingTemps[i];
+							if(this.getInputSize() == 2048){
+								activeTemps[i] = meltingTemps[i];
+							}else if(this.getInputSize() >= i){
+								activeTemps[i] = meltingTemps[i];
+							}
 							//System.out.println(activeTemps[i]);	
 						}
 						
@@ -314,7 +318,7 @@ public class FIMTileEntity extends TileEntity implements ISidedInventory  {
 		connection = 0;
 		int error = 0;
 		
-		if(xCoord != 0 || yCoord != 0 || zCoord != 0 || worldObj != null){
+		if(worldObj != null && !worldObj.isRemote){
 			/*
 			 * the value of connection : 
 			 * 0 = not found
@@ -387,7 +391,7 @@ public class FIMTileEntity extends TileEntity implements ISidedInventory  {
 		int start = 0;
 		int stop = 0;
 		
-		if(canConnect == true){
+		if(canConnect == true && !worldObj.isRemote){
 			if(canConnect == true){
 				SmelteryLogic smeltery = null;
 				if(connection == 6){
@@ -421,12 +425,29 @@ public class FIMTileEntity extends TileEntity implements ISidedInventory  {
 				if(smeltery != null){
 					int[] activeTemps = smeltery.activeTemps;
 					int fuelAmount = smeltery.fuelAmount;
+					int[] meltingTemps = smeltery.meltingTemps;
 					
 					//activeTemps
-					if(activeTemps != null && fuelAmount >= 120){		
-						for(int i = 0; i < activeTemps.length; i++){
-							if(activeTemps[i] > 200 && activeTemps[i] < 7900){
-								start++;
+					if(activeTemps != null && fuelAmount >= 120){
+						
+						if(this.getInputSize() == 2048){
+							for(int i = 0; i < activeTemps.length; i++){
+								if(activeTemps[i] > 200 && activeTemps[i] < meltingTemps[i]){
+									start++;
+								}
+							}							
+						}else{
+							int num = 0;
+							if(activeTemps.length > this.getInputSize()){
+								num = this.getInputSize();
+							}else{
+								num = activeTemps.length;
+							}
+							
+							for(int i = 0; i < num; i++){
+								if(activeTemps[i] > 200 && activeTemps[i] < meltingTemps[i]){
+									start++;
+								}
 							}
 						}
 					}				
@@ -470,6 +491,51 @@ public class FIMTileEntity extends TileEntity implements ISidedInventory  {
 		}
 		
 		return dir;
+	}
+	
+	public int getInputSize(){
+		int size = 1;
+		boolean infinity = false;
+		
+		ItemStack slotUPG1 = new ItemStack(ItemRegistry.Upgrade, 1, 1);
+		ItemStack slotUPG2 = new ItemStack(ItemRegistry.Upgrade, 1, 2);
+		ItemStack slotUPG3 = new ItemStack(ItemRegistry.Upgrade, 1, 3);
+		ItemStack slotUPG4 = new ItemStack(ItemRegistry.Upgrade, 1, 4);
+		ItemStack slotUPGinfinity = new ItemStack(ItemRegistry.Upgrade, 1, 6);
+		
+		if(this.itemStacksASC[2] != null){
+			if(this.itemStacksASC[2].isItemEqual(slotUPG1)){
+				size = size+(itemStacksASC[2].stackSize)*1;
+			}else if(this.itemStacksASC[2].isItemEqual(slotUPG2)){
+				size = size+(itemStacksASC[2].stackSize)*2;
+			}else if(this.itemStacksASC[2].isItemEqual(slotUPG3)){
+				size = size+(itemStacksASC[2].stackSize)*3;
+			}else if(this.itemStacksASC[2].isItemEqual(slotUPG4)){
+				size = size+(itemStacksASC[2].stackSize)*4;
+			}else if(this.itemStacksASC[2].isItemEqual(slotUPGinfinity)){
+				infinity = true;
+			}
+		}
+		
+		if(this.itemStacksASC[3] != null){
+			if(this.itemStacksASC[3].isItemEqual(slotUPG1)){
+				size = size+(itemStacksASC[3].stackSize)*1;
+			}else if(this.itemStacksASC[3].isItemEqual(slotUPG2)){
+				size = size+(itemStacksASC[3].stackSize)*2;
+			}else if(this.itemStacksASC[3].isItemEqual(slotUPG3)){
+				size = size+(itemStacksASC[3].stackSize)*3;
+			}else if(this.itemStacksASC[3].isItemEqual(slotUPG4)){
+				size = size+(itemStacksASC[3].stackSize)*4;
+			}else if(this.itemStacksASC[3].isItemEqual(slotUPGinfinity)){
+				infinity = true;
+			}
+		}
+		
+		if(infinity == true){
+			return 2048;
+		}
+			return size * 30;
+
 	}
 	
 	@Override

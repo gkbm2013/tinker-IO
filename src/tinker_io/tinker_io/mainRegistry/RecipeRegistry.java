@@ -52,12 +52,20 @@ public class RecipeRegistry {
 	static ItemStack comparator = new ItemStack(Items.comparator ,1);
 	static ItemStack repeater = new ItemStack(Items.repeater ,1);
 	
+	static ItemStack whatABeautifulBlock = new ItemStack(BlockRegistry.whatABeautifulBlock ,1);
+	static ItemStack glowstone = new ItemStack(Blocks.glowstone ,1);
+	static ItemStack nether_star = new ItemStack(Items.nether_star ,1);
+	
+	static ItemStack slotUPGInfinity = new ItemStack(ItemRegistry.Upgrade ,1 ,6);
+	static ItemStack obsidian = new ItemStack(Blocks.obsidian ,1);
+	
 
 	private static void registerRecipe() {		
 		GameRegistry.addRecipe(FIM, new Object[]{"AAA", "ABA","AAA", 'A', searedBrick, 'B', hopper});
 		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(ItemRegistry.SolidFuel,16), "ingotAluminum",Items.gunpowder,Items.coal));
 		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(ItemRegistry.SolidFuel,16), "dustAluminium",Items.gunpowder,"dustCoal"));
 		GameRegistry.addRecipe(SO, new Object[]{"ABA", "B B","ABA", 'A', searedBrick, 'B', ice});
+		GameRegistry.addRecipe(new ShapedOreRecipe(whatABeautifulBlock, true, new Object[]{"AAA", "ABA","AAA", 'A', glowstone, 'B', nether_star}));
 		
 		GameRegistry.addRecipe(new ShapedOreRecipe(UpgBase, true, new Object[]{"AAA", "BCB","AAA", 'A', lapis, 'B', "ingotAluminum", 'C', paper}));
 		GameRegistry.addRecipe(new ShapedOreRecipe(speedUPG, true, new Object[]{"ABA", "CDC","ABA", 'A', sugar, 'B', "ingotGold", 'C', "ingotTin", 'D', UpgBase}));
@@ -65,7 +73,9 @@ public class RecipeRegistry {
 		GameRegistry.addRecipe(new ShapedOreRecipe(slotUPG2, true, new Object[]{"ABA", "BCB","ABA", 'A', "ingotAluminum", 'B', iron_ingot, 'C', slotUPG1}));
 		GameRegistry.addRecipe(new ShapedOreRecipe(slotUPG3, true, new Object[]{"ABA", "BCB","ABA", 'A', alumite_nugget, 'B', "ingotGold", 'C', slotUPG2}));
 		GameRegistry.addRecipe(new ShapedOreRecipe(slotUPG4, true, new Object[]{"ABA", "BCB","ABA", 'A', manyullyn_nugget, 'B', "gemDiamond", 'C', slotUPG3}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(slotUPGInfinity, true, new Object[]{"ABA", "ACA","ABA", 'A', obsidian, 'B', whatABeautifulBlock, 'C', slotUPG4}));
 		GameRegistry.addRecipe(new ShapedOreRecipe(redstoneUPG, true, new Object[]{"ABA", "CDC","AEA", 'A', "blockRedstone", 'B', comparator, 'C', "gemQuartz", 'D', UpgBase, 'E', repeater}));
+		
 	}
 
 }

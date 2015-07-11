@@ -4,6 +4,7 @@ itemGroup.TinkerIO_Tabs=Tinker I/O
 #Blocks
 tile.FuelInputMachine.name=燃料輸入機
 tile.SmartOutput.name=智慧輸出
+tile.WhatABeautifulBlock.name=好漂亮的方塊
 
 #Items
 item.speedUPG.name=速度升級
@@ -14,6 +15,7 @@ item.upg_2.name=插槽空間升級 II
 item.upg_3.name=插槽空間升級 III
 item.upg_4.name=插槽空間升級 IV
 item.upg_5.name=紅石控制升級
+item.upg_6.name=插槽空間升級 無限
 
 #GUI
 tio.gui.fim.slot1=速度升級

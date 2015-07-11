@@ -4,6 +4,7 @@ itemGroup.TinkerIO_Tabs=Tinker I/O
 #Blocks
 tile.FuelInputMachine.name=Fuel Input Machine
 tile.SmartOutput.name=Smart Output
+tile.WhatABeautifulBlock.name=What a beautiful block
 
 #Items
 item.speedUPG.name=Speed Upgrade
@@ -14,9 +15,10 @@ item.upg_2.name=Slot Upgrade II
 item.upg_3.name=Slot Upgrade III
 item.upg_4.name=Slot Upgrade IV
 item.upg_5.name=Redstone Upgrade
+item.upg_6.name=Slot Upgrade Infinity
 
 #GUI
-tio.gui.fim.slot1=Speed UPG.
+tio.gui.fim.slot1=UPG.
 tio.gui.fim.slot2=Solid Fuel
 tio.gui.fim.error_message=Lack of solid fuel
 tio.gui.fim.direction=Controller Direction
