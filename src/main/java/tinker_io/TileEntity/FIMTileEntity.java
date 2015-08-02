@@ -40,11 +40,6 @@ public class FIMTileEntity extends TileEntity implements ISidedInventory  {
 	
 	private ItemStack fuel = new ItemStack(ItemRegistry.SolidFuel);
 	
-	private int x1;
-	private int y1;
-	private int z1;
-	World world1;
-	
 	public boolean canConnect = false;
 	public int connection;
 	
@@ -135,9 +130,6 @@ public class FIMTileEntity extends TileEntity implements ISidedInventory  {
 
 		//this.speedASC = tagCompound.getShort("SpeedASC");
 		this.inputTime = tagCompound.getShort("InputTime");
-		this.x1 = tagCompound.getShort("x");
-		this.y1 = tagCompound.getShort("y");
-		this.z1 = tagCompound.getShort("z");
 
 		if (tagCompound.hasKey("CustomName", 8)) {
 			this.nameFIM = tagCompound.getString("CustomName");
@@ -148,9 +140,6 @@ public class FIMTileEntity extends TileEntity implements ISidedInventory  {
 		super.writeToNBT(tagCompound);
 		//tagCompound.setShort("SpeedASC", (short) this.speedASC);
 		tagCompound.setShort("InputTime", (short) this.inputTime);
-		tagCompound.setShort("x", (short) this.x1);
-		tagCompound.setShort("y", (short) this.y1);
-		tagCompound.setShort("z", (short) this.z1);
 		//tagCompound.setTag("world", world1);
 		
 		//tagCompound.
@@ -186,7 +175,7 @@ public class FIMTileEntity extends TileEntity implements ISidedInventory  {
 	
 
 	public void updateEntity() {
-		boolean flag1 = false;
+		boolean flag1 = false;		
 		if (!this.worldObj.isRemote) {
 			if (this.canSmelt()) {
 					flag1 = true;
@@ -196,10 +185,7 @@ public class FIMTileEntity extends TileEntity implements ISidedInventory  {
 							this.itemStacksASC[1] = itemStacksASC[1].getItem().getContainerItem(this.itemStacksASC[1]);
 						}
 					}
-			}
-
-			
-			if (this.canSmelt()) {
+					
 				speedUPG();
 				++this.inputTime;
 				if (this.inputTime >= speed) {
@@ -208,12 +194,15 @@ public class FIMTileEntity extends TileEntity implements ISidedInventory  {
 					flag1 = true;
 					connectToTConstruct();
 				}
+
+			}
+			
+			if (flag1) {
+				this.markDirty();
 			}
 		}
 
-		if (flag1) {
-			this.markDirty();
-		}
+		
 		//canConnect = false;
 	}
 	
@@ -318,7 +307,7 @@ public class FIMTileEntity extends TileEntity implements ISidedInventory  {
 		connection = 0;
 		int error = 0;
 		
-		if(worldObj != null){
+		if(worldObj != null && !worldObj.isRemote){
 			/*
 			 * the value of connection : 
 			 * 0 = not found
@@ -391,7 +380,7 @@ public class FIMTileEntity extends TileEntity implements ISidedInventory  {
 		int start = 0;
 		int stop = 0;
 		
-		if(canConnect == true){
+		if(canConnect == true && !worldObj.isRemote){
 			if(canConnect == true){
 				SmelteryLogic smeltery = null;
 				if(connection == 6){
@@ -467,7 +456,7 @@ public class FIMTileEntity extends TileEntity implements ISidedInventory  {
 		}
 	}
 	
-	public String getDirection(){
+	/*public String getDirection(){
 		this.checkConnection();
 		String dir;
 		if(canConnect == true){
@@ -491,7 +480,7 @@ public class FIMTileEntity extends TileEntity implements ISidedInventory  {
 		}
 		
 		return dir;
-	}
+	}*/
 	
 	public int getInputSize(){
 		int size = 1;

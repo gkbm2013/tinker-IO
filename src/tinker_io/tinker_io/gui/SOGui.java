@@ -121,7 +121,7 @@ public class SOGui extends GuiContainer{
 	        
 	        //Tool Tips
 	        if (liquid != null){
-	        	if(mouseX >= cornerX + 26 && mouseX <= cornerX + 38 && mouseY <= cornerY + 67 && mouseY >= cornerY + 67 - liquidAmount){
+	        	if(mouseX >= cornerX + 26 && mouseX <= cornerX + 38 && mouseY <= cornerY + 67 && mouseY >= cornerY + 67 - 52/*liquidAmount*/){
 		        	drawFluidStackTooltip(liquid, mouseX, mouseY);
 		        }
 	        }

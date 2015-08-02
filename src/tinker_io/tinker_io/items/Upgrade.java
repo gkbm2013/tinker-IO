@@ -12,6 +12,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IIcon;
+import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 
 public class Upgrade extends Item {
@@ -72,28 +73,29 @@ public class Upgrade extends Item {
 		ItemStack redstoneUPG = new ItemStack(ItemRegistry.Upgrade ,1 ,5);
 		
 		if(itemStack.isItemEqual(UpgBase)){
-			list.add(EnumChatFormatting.GRAY + "Juest a material for crafting...");
+			list.add(EnumChatFormatting.GRAY + StatCollector.translateToLocal("tio.toolTips.UpgBase"));
 		}else if(itemStack.isItemEqual(slotUPG1)){
-			list.add(EnumChatFormatting.GRAY + "For : Fuel Input Machine , Smart Output");
-			list.add(EnumChatFormatting.GREEN + "Increase 1 slot in Smart Output");
-			list.add(EnumChatFormatting.GREEN + "Increase 30 slot in Fuel Input Machine");
+			list.add(EnumChatFormatting.GRAY + StatCollector.translateToLocal("tio.toolTips.slotUPG1"));
+			list.add(EnumChatFormatting.GREEN + StatCollector.translateToLocal("tio.toolTips.slotUPG1.usage1"));
+			list.add(EnumChatFormatting.GREEN + StatCollector.translateToLocal("tio.toolTips.slotUPG1.usage2"));
 		}else if(itemStack.isItemEqual(slotUPG2)){
-			list.add(EnumChatFormatting.GRAY + "For : Fuel Input Machine , Smart Output");
-			list.add(EnumChatFormatting.GREEN + "Increase 2 slots in Smart Output");
-			list.add(EnumChatFormatting.GREEN + "Increase 60 slot in Fuel Input Machine");
+			list.add(EnumChatFormatting.GRAY + StatCollector.translateToLocal("tio.toolTips.slotUPG2"));
+			list.add(EnumChatFormatting.GREEN + StatCollector.translateToLocal("tio.toolTips.slotUPG2.usage1"));
+			list.add(EnumChatFormatting.GREEN + StatCollector.translateToLocal("tio.toolTips.slotUPG2.usage2"));
 		}else if(itemStack.isItemEqual(slotUPG3)){
-			list.add(EnumChatFormatting.GRAY + "For : Fuel Input Machine , Smart Output");
-			list.add(EnumChatFormatting.GREEN + "Increase 3 slots in Smart Output");
-			list.add(EnumChatFormatting.GREEN + "Increase 90 slot in Fuel Input Machine");
+			list.add(EnumChatFormatting.GRAY + StatCollector.translateToLocal("tio.toolTips.slotUPG3"));
+			list.add(EnumChatFormatting.GREEN + StatCollector.translateToLocal("tio.toolTips.slotUPG3.usage1"));
+			list.add(EnumChatFormatting.GREEN + StatCollector.translateToLocal("tio.toolTips.slotUPG3.usage2"));
 		}else if(itemStack.isItemEqual(slotUPG4)){
-			list.add(EnumChatFormatting.GRAY + "For : Fuel Input Machine , Smart Output");
-			list.add(EnumChatFormatting.GREEN + "Increase 4 slots in Smart Output");
-			list.add(EnumChatFormatting.GREEN + "Increase 120 slot in Fuel Input Machine");
+			list.add(EnumChatFormatting.GRAY + StatCollector.translateToLocal("tio.toolTips.slotUPG4"));
+			list.add(EnumChatFormatting.GREEN + StatCollector.translateToLocal("tio.toolTips.slotUPG4.usage1"));
+			list.add(EnumChatFormatting.GREEN + StatCollector.translateToLocal("tio.toolTips.slotUPG4.usage2"));
 		}else if(itemStack.isItemEqual(slotUPGinfinity)){
-			list.add(EnumChatFormatting.GRAY + "For : Fuel Input Machine");
-			list.add(EnumChatFormatting.GREEN + "Increase \u221e slots");
+			list.add(EnumChatFormatting.GRAY + StatCollector.translateToLocal("tio.toolTips.slotUPGinfinity"));
+			list.add(EnumChatFormatting.GREEN + StatCollector.translateToLocal("tio.toolTips.slotUPGinfinity.usage1"));
 		}else if(itemStack.isItemEqual(redstoneUPG)){
-			list.add(EnumChatFormatting.GRAY + "For : Smart Output");
+			list.add(EnumChatFormatting.GRAY + StatCollector.translateToLocal("tio.toolTips.redstoneUPG"));
+			list.add(EnumChatFormatting.GREEN + StatCollector.translateToLocal("tio.toolTips.redstoneUPG.usage1"));
 		}
 	}
 

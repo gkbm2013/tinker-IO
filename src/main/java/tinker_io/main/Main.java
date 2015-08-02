@@ -49,7 +49,7 @@ import cpw.mods.fml.common.network.NetworkRegistry;
 public class Main
 {
     public static final String MODID = "tinker_io";
-    public static final String VERSION = "beta 1.3.0 hotfix";
+    public static final String VERSION = "beta 1.3.1";
     public static final String Name = "Tinker I/O";
     
     //Proxy

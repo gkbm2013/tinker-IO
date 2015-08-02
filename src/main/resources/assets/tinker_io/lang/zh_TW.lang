@@ -23,5 +23,33 @@ tio.gui.fim.slot2=固體燃料
 tio.gui.fim.error_message=缺少固體燃料
 tio.gui.fim.direction=Controller方位
 
+#Tool Tips
+tio.toolTips.UpgSpeed=For : 燃料輸入機
+
+tio.toolTips.UpgBase=單純拿來合成使用...
+
+tio.toolTips.slotUPG1=For : 燃料輸入機 , 智慧輸出
+tio.toolTips.slotUPG1.usage1=使智慧輸出增加 1 個輸出欄位
+tio.toolTips.slotUPG1.usage2=使燃料輸入機增加 30 個處理欄位
+
+tio.toolTips.slotUPG2=For : 燃料輸入機 , 智慧輸出
+tio.toolTips.slotUPG2.usage1=使智慧輸出增加 2 個輸出欄位
+tio.toolTips.slotUPG2.usage2=使燃料輸入機增加 60 個處理欄位
+
+tio.toolTips.slotUPG3=For : 燃料輸入機 , 智慧輸出
+tio.toolTips.slotUPG3.usage1=使智慧輸出增加 3 個輸出欄位
+tio.toolTips.slotUPG3.usage2=使燃料輸入機增加 90 個處理欄位
+
+tio.toolTips.slotUPG4=For : 燃料輸入機 , 智慧輸出
+tio.toolTips.slotUPG4.usage1=使智慧輸出增加 4 個輸出欄位
+tio.toolTips.slotUPG4.usage2=使燃料輸入機增加 120 個處理欄位
+
+tio.toolTips.slotUPGinfinity=For : 燃料輸入機
+tio.toolTips.slotUPGinfinity.usage1=將處理欄位設定為 ∞ (無限)
+
+tio.toolTips.redstoneUPG=For : 智慧輸出
+tio.toolTips.redstoneUPG.usage1=使智慧輸出可以被紅石控制
+
+
 #Waila
 tio.plugin.waila.tankEmpty=(空)

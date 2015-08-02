@@ -7,6 +7,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.StatCollector;
 
 public class SpeedUPG extends Item {
 	public SpeedUPG(){
@@ -17,7 +18,7 @@ public class SpeedUPG extends Item {
 	}
 	
 	public void addInformation(ItemStack itemStack, EntityPlayer player, List list, boolean par4) {
-		list.add(EnumChatFormatting.GRAY + "For : Fuel Input Machine");
+		list.add(EnumChatFormatting.GRAY + StatCollector.translateToLocal("tio.toolTips.UpgSpeed"));
 	}
 
 }

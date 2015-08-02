@@ -23,5 +23,33 @@ tio.gui.fim.slot2=Solid Fuel
 tio.gui.fim.error_message=Lack of solid fuel
 tio.gui.fim.direction=Controller Direction
 
+#Tool Tips
+tio.toolTips.UpgSpeed=For : Fuel Input Machine
+
+tio.toolTips.UpgBase=Just a material for crafting...
+
+tio.toolTips.slotUPG1=For : Fuel Input Machine , Smart Output
+tio.toolTips.slotUPG1.usage1=Increase 1 slot in Smart Output
+tio.toolTips.slotUPG1.usage2=Increase 30 maximum process slot in Fuel Input Machine
+
+tio.toolTips.slotUPG2=For : Fuel Input Machine , Smart Output
+tio.toolTips.slotUPG2.usage1=Increase 2 slot in Smart Output
+tio.toolTips.slotUPG2.usage2=Increase 60 maximum process slot in Fuel Input Machine
+
+tio.toolTips.slotUPG3=For : Fuel Input Machine , Smart Output
+tio.toolTips.slotUPG3.usage1=Increase 3 slot in Smart Output
+tio.toolTips.slotUPG3.usage2=Increase 90 maximum process slot in Fuel Input Machine
+
+tio.toolTips.slotUPG4=For : Fuel Input Machine , Smart Output
+tio.toolTips.slotUPG4.usage1=Increase 4 slot in Smart Output
+tio.toolTips.slotUPG4.usage2=Increase 120 maximum process slot in Fuel Input Machine
+
+tio.toolTips.slotUPGinfinity=For : Fuel Input Machine
+tio.toolTips.slotUPGinfinity.usage1=Set maximum process slot ∞
+
+tio.toolTips.redstoneUPG=For : Smart Output
+tio.toolTips.redstoneUPG.usage1=Make Smart Output can control by redstone signal
+
+
 #Waila
 tio.plugin.waila.tankEmpty=(Empty)
