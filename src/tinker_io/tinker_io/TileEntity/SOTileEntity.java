@@ -1,7 +1,6 @@
 package tinker_io.TileEntity;
 
 import tconstruct.smeltery.TinkerSmeltery;
-import tinker_io.handler.SOEliminateList;
 import tinker_io.handler.SORecipes;
 import tinker_io.mainRegistry.ItemRegistry;
 import mantle.blocks.abstracts.MultiServantLogic;
@@ -15,7 +14,6 @@ import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.StatCollector;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidContainerRegistry;
@@ -267,7 +265,7 @@ public class SOTileEntity extends MultiServantLogic implements IFluidHandler , I
 
 	@Override
 	public String getInventoryName() {
-		return this.hasCustomInventoryName() ? this.nameSO : StatCollector.translateToLocal("tile.SmartOutput.name");
+		return this.hasCustomInventoryName() ? this.nameSO : "Smart Output";
 	}
 
 	@Override
@@ -348,7 +346,7 @@ public class SOTileEntity extends MultiServantLogic implements IFluidHandler , I
 	
 	
 	
-	/*public void checkConnection(){
+	public void checkConnection(){
 		TileEntity TankX1 = worldObj.getTileEntity(xCoord +1, yCoord, zCoord);
 		TileEntity TankX2 = worldObj.getTileEntity(xCoord -1, yCoord, zCoord);
 		TileEntity TankZ1 = worldObj.getTileEntity(xCoord, yCoord, zCoord +1);
@@ -364,7 +362,7 @@ public class SOTileEntity extends MultiServantLogic implements IFluidHandler , I
 		 * y+1 = 5
 		 * y-1 = 6
 		 * null = 0
-		 *//*
+		 */
 		if(TankX1 != null && TankX1 instanceof IFluidHandler){
 			connection = 1;
 		}
@@ -384,9 +382,9 @@ public class SOTileEntity extends MultiServantLogic implements IFluidHandler , I
 			connection = 6;
 		}
 		
-	}*/
+	}
 	
-	/*public void setLiquid(){
+	public void setLiquid(){
 		x = xCoord;
 		y = yCoord;
 		z = zCoord;
@@ -419,7 +417,7 @@ public class SOTileEntity extends MultiServantLogic implements IFluidHandler , I
             	}
         	}
         }
-	}*/
+	}
 
 	/*
 	 *The value of "mode"
@@ -427,8 +425,8 @@ public class SOTileEntity extends MultiServantLogic implements IFluidHandler , I
 	 *1 = input
 	 *2 = output
 	 */
-	/*public void liquidIO(){
-		//mode = 1;
+	public void liquidIO(){
+		/*//mode = 1;
 		TileEntity otherTank = worldObj.getTileEntity(x, y, z);
 		FluidTankInfo[] info = getTankInfo(ForgeDirection.UNKNOWN);
 		
@@ -467,12 +465,12 @@ public class SOTileEntity extends MultiServantLogic implements IFluidHandler , I
 				markDirty();
             	
 			}
-		}
+		}*/
 		
-	}*/
+	}
 
-	/*public void changeMode(int modex){
-		modRest();
+	public void changeMode(int modex){
+		/*modRest();
 		if(modex == 1){
 			mode++;			
 		}else if(modex == 2){
@@ -480,17 +478,17 @@ public class SOTileEntity extends MultiServantLogic implements IFluidHandler , I
 			mode++;
 		}else if(modex == 0){
 			modRest();
-		}
-	}*/
+		}*/
+	}
 	
-	/*public void modRest(){
-		if(mode != 0){
+	public void modRest(){
+		/*if(mode != 0){
 			mode--;
 			if(mode != 0){
 				mode--;
 			}
-		}
-	}*/
+		}*/
+	}
 	
 	public int getOutputSize(){
 		int size = 1;
@@ -582,7 +580,7 @@ public class SOTileEntity extends MultiServantLogic implements IFluidHandler , I
 		}
 		
 		if(info != null && liquid != null && this.itemStacksSO[0] != null && canStart == true){
-			if(recipes.getCastingFluidCost(liquid, itemStacksSO[0]) != null && recipes.getCastingFluidCost(liquid, itemStacksSO[0]).amount <= liquid.amount){
+			if(recipes.getCastingFluid(liquid, itemStacksSO[0]) != null && recipes.getCastingFluid(liquid, itemStacksSO[0]).amount <= liquid.amount){
 				if(recipes.getCastingRecipes(liquid, this.itemStacksSO[0]) != null){
 					ItemStack itemstack = recipes.getCastingRecipes(liquid, this.itemStacksSO[0]);
 					if(this.itemStacksSO[1] != null){
@@ -626,12 +624,14 @@ public class SOTileEntity extends MultiServantLogic implements IFluidHandler , I
 		FluidTankInfo[] info = getTankInfo(ForgeDirection.UNKNOWN);
 		FluidStack liquid = info[0].fluid;
 		if(canFrozen() == true && info != null){
-			ItemStack itemstack = recipes.getCastingRecipes(liquid, this.itemStacksSO[0]); // Product
+			ItemStack itemstack = recipes.getCastingRecipes(liquid, this.itemStacksSO[0]/*, hasPowered*/);
 			ItemStack bucket = new ItemStack(Items.bucket);
-			//ItemStack basin = new ItemStack(TinkerSmeltery.searedBlock ,1 ,2);
+			ItemStack basin = new ItemStack(TinkerSmeltery.searedBlock ,1 ,2);
 			
-			if(recipes.getCastingFluidCost(liquid, itemStacksSO[0]) != null && recipes.getCastingFluidCost(liquid, itemStacksSO[0]).amount <= liquid.amount){
-				this.drain(ForgeDirection.UNKNOWN, recipes.getCastingFluidCost(liquid, itemStacksSO[0]), true);
+			
+			
+			if(recipes.getCastingFluid(liquid, itemStacksSO[0])!= null && recipes.getCastingFluid(liquid, itemStacksSO[0]).amount <= liquid.amount){
+				this.drain(ForgeDirection.UNKNOWN, recipes.getCastingFluid(liquid, itemStacksSO[0]), true);
 				
 				if (this.itemStacksSO[1] == null) {
 					this.itemStacksSO[1] = itemstack.copy();
@@ -639,20 +639,13 @@ public class SOTileEntity extends MultiServantLogic implements IFluidHandler , I
 					this.itemStacksSO[1].stackSize += itemstack.stackSize;
 				}
 				
-				if(SOEliminateList.eliminatedList().itemNeedToEliminate(itemStacksSO[0].toString())){
+				if(itemStacksSO[0].isItemEqual(bucket)){
 					if(itemStacksSO[0].stackSize == 1){
 						itemStacksSO[0] = null;
 					}else{
 						--itemStacksSO[0].stackSize;
 					}
 				}
-				/*if(itemStacksSO[0].isItemEqual(bucket)){
-					if(itemStacksSO[0].stackSize == 1){
-						itemStacksSO[0] = null;
-					}else{
-						--itemStacksSO[0].stackSize;
-					}
-				}*/
 			}
 		}
 	}
@@ -697,17 +690,6 @@ public class SOTileEntity extends MultiServantLogic implements IFluidHandler , I
         //System.out.println(hasPowered);
 	}*/	
 	
-	public void voidLiquid(){
-		FluidTankInfo[] info = getTankInfo(ForgeDirection.UNKNOWN);
-		FluidStack liquid = info[0].fluid;
-		if(liquid != null){
-			int amount = liquid.amount;
-			int toVoid = this.tank.drain(amount, false).amount;
-			this.tank.drain(toVoid, true);
-			this.markDirty();
-		}
-	}
-	
 	@SideOnly(Side.CLIENT)
 	public int getFrozenProgressScaled(int par1) {
 		return this.currentFrozenTime * par1 / frozenTimeMax;
@@ -730,7 +712,7 @@ public class SOTileEntity extends MultiServantLogic implements IFluidHandler , I
 
     	//System.out.println(mode);
     	//checkMode();
-    	//voidLiquid();
+    	
     	if(canFrozen()){
     		if(currentFrozenTime >= frozenTimeMax){
     			currentFrozenTime = 0;

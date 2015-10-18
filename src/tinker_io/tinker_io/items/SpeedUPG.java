@@ -2,8 +2,6 @@ package tinker_io.items;
 
 import java.util.List;
 
-import org.lwjgl.input.Keyboard;
-
 import tinker_io.main.Main;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -19,17 +17,8 @@ public class SpeedUPG extends Item {
 		setTextureName(Main.MODID + ":" + "speedUPG");
 	}
 	
-	public static boolean isShiftKeyDown(){
-        return Keyboard.isKeyDown(42) || Keyboard.isKeyDown(54);
-    }
-	
 	public void addInformation(ItemStack itemStack, EntityPlayer player, List list, boolean par4) {
-		if(this.isShiftKeyDown()){
-			list.add(EnumChatFormatting.GRAY + StatCollector.translateToLocal("tio.toolTips.UpgSpeed"));
-		}else{
-			list.add(EnumChatFormatting.GOLD + StatCollector.translateToLocal("tio.toolTips.common.holdShift"));			
-		}
-		
+		list.add(EnumChatFormatting.GRAY + StatCollector.translateToLocal("tio.toolTips.UpgSpeed"));
 	}
 
 }
