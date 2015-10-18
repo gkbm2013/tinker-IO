@@ -1,5 +1,12 @@
 package tinker_io.handler;
 
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Map.Entry;
+
+import net.minecraft.init.Items;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidStack;
@@ -27,7 +34,7 @@ public class SORecipes{
 		}
 	}
 	
-	public FluidStack getCastingFluid(FluidStack fluid, ItemStack itemStack){
+	public FluidStack getCastingFluidCost(FluidStack fluid, ItemStack itemStack){
 		ItemStack basin = new ItemStack(TinkerSmeltery.searedBlock ,1 ,2);
 		if(fluid != null && fluid.isFluidEqual(new FluidStack(TinkerSmeltery.moltenGlassFluid, FluidContainerRegistry.BUCKET_VOLUME)) && itemStack != null && itemStack.isItemEqual(basin)){
 			return new FluidStack(TinkerSmeltery.moltenGlassFluid, FluidContainerRegistry.BUCKET_VOLUME);
@@ -50,6 +57,7 @@ public class SORecipes{
 		}
 		
 	}
+	
 	
 	
 	/*public FluidStack getBasinFluid(FluidStack fluid, ItemStack itemStack){
