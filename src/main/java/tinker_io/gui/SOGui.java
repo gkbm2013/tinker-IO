@@ -1,9 +1,11 @@
 package tinker_io.gui;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Iterator;
 
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
@@ -11,6 +13,8 @@ import tconstruct.TConstruct;
 import tinker_io.TileEntity.SOTileEntity;
 import tinker_io.inventory.ContainerSO;
 import tinker_io.main.Main;
+import tinker_io.packet.PacketDispatcher;
+import tinker_io.packet.VoidLiquidPacket;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.RenderHelper;
@@ -19,9 +23,11 @@ import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidRegistry;
@@ -32,8 +38,19 @@ public class SOGui extends GuiContainer{
 
 	private static final ResourceLocation SOGuiTextures = new ResourceLocation(Main.MODID, "textures/gui/SmartOutput.png");
 	private SOTileEntity tileSO;
-	public World world;	
 	InventoryPlayer invPlayer2 = null;
+	
+	static GuiButton btn0;
+	
+	public void initGui(){
+		int k = (this.width - this.xSize) / 2;
+        int l = (this.height - this.ySize) / 2;
+        super.initGui();		
+		
+		btn0 = new GuiButton(0, k - 20,  l + ySize - 150, 20, 20, "");
+        buttonList.add(btn0);
+        
+	}
 	
 	public SOGui(InventoryPlayer invPlayer, SOTileEntity tile) {
 		super(new ContainerSO(invPlayer, tile));
@@ -43,6 +60,10 @@ public class SOGui extends GuiContainer{
 	
 	@Override
 	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY){
+		
+		this.mc.getTextureManager().bindTexture(SOGuiTextures);
+        btn0.drawTexturedModalRect(-20,  15, 178, 82, 20, 20);
+		
 		String string = this.tileSO.hasCustomInventoryName() ? this.tileSO.getInventoryName() : I18n.format(this.tileSO.getInventoryName(), new Object[0]);
         int outputSize = tileSO.getOutputSize();
 		
@@ -53,6 +74,24 @@ public class SOGui extends GuiContainer{
 		
 		FluidTankInfo[] info = tileSO.getTankInfo(ForgeDirection.UNKNOWN);
 		FluidStack Wliquid = info[0].fluid;
+		
+		//Tool Tips (For tank)
+		FluidStack liquid = info[0].fluid;
+		int cornerX = (width - xSize) / 2;
+        int cornerY = (height - ySize) / 2;
+        if (liquid != null){
+        	if(mouseX >= cornerX + 26 && mouseX <= cornerX + 38 && mouseY <= cornerY + 67 && mouseY >= cornerY + 67 - 52/*liquidAmount*/){
+	        	drawFluidStackTooltip(liquid, mouseX-cornerX, mouseY-cornerY);
+	        }
+        }
+        
+      //Tool Tips (For button)
+        if (btn0.func_146115_a()) { // Tells you if the button is hovered by mouse
+            String[] desc = { EnumChatFormatting.RED + StatCollector.translateToLocal("tio.gui.SO.toolTips.button_head"), EnumChatFormatting.GRAY + StatCollector.translateToLocal("tio.gui.SO.toolTips.button_info") };
+            @SuppressWarnings("rawtypes")
+            List temp = Arrays.asList(desc);
+            drawHoveringText(temp, mouseX - cornerX + 10, mouseY - cornerY + 10, fontRendererObj);
+        }
 		
 	}
 
@@ -87,6 +126,7 @@ public class SOGui extends GuiContainer{
             	}
         	}
         	
+        	
 	        
 			int liquidAmount = tileSO.getLiquidAmount(52);
 			
@@ -96,51 +136,35 @@ public class SOGui extends GuiContainer{
 				 renderIndex = liquid.getFluid().getStillIcon();
 	        }
 	        
-	        //Draw Liquid
+	        //Draw Liquid (For tank)
 			this.mc.getTextureManager().bindTexture(TextureMap.locationBlocksTexture); 
 	        this.drawLiquidRect(cornerX + 26, cornerY + 15 + 52 - liquidAmount, renderIndex, 12, liquidAmount);
 	        
-	        //Button
-	       /* GuiButton btn0 = new GuiButton(1, cornerX + 65, cornerY + 60, 20, 20, "I");
-	        GuiButton btn1 = new GuiButton(2, cornerX + 90, cornerY + 60, 20, 20, "O");
-	        GuiButton btn2 = new GuiButton(0, cornerX + 115, cornerY + 60, 20, 20, "OFF");
-	        
-	        if(tileSO.mode == 0){
-	        	btn2.enabled = false;
-	        }else if(tileSO.mode == 1){
+	        //Control the button of void liquid
+	        if(isShiftKeyDown()){
+	        	btn0.enabled = true;
+	        }else{
 	        	btn0.enabled = false;
-	        }else if(tileSO.mode == 2){
-	        	btn1.enabled = false;
 	        }
 	        
-	        
-	        this.buttonList.add(btn0);
-	        this.buttonList.add(btn1);
-	        this.buttonList.add(btn2);*/
-	        
-	        
-	        //Tool Tips
-	        if (liquid != null){
-	        	if(mouseX >= cornerX + 26 && mouseX <= cornerX + 38 && mouseY <= cornerY + 67 && mouseY >= cornerY + 67 - 52/*liquidAmount*/){
-		        	drawFluidStackTooltip(liquid, mouseX, mouseY);
-		        }
-	        }
 	        
 	}
 
 	public void actionPerformed(GuiButton button){
-		/*switch(button.id){
+		switch(button.id){
 		case 0:
-			tileSO.changeMode(0);
-			break;
-		case 1:
-			tileSO.changeMode(1);
-			break;
-		case 2:
-			tileSO.changeMode(2);
+			
+			int[] coord = new int[3];
+			
+			coord[0] = tileSO.xCoord;
+			coord[1] = tileSO.yCoord;
+			coord[2] = tileSO.zCoord;
+			
+			tileSO.voidLiquid();
+			PacketDispatcher.sendToServer(new VoidLiquidPacket(coord));
 			break;
 		default:
-		}*/
+		}
 		
 	}
 	
@@ -185,7 +209,7 @@ public class SOGui extends GuiContainer{
 	public List getLiquidTooltip (FluidStack liquid, boolean par2)
     {
         ArrayList list = new ArrayList();
-        if (liquid.fluidID == -37)
+        if (liquid.getFluidID() == -37)
         {
             //list.add("\u00A7f" + StatCollector.translateToLocal("gui.smeltery1"));
         	list.add("\u00A7f" + I18n.format("gui.smeltery1", new Object[0]));

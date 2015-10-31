@@ -2,6 +2,8 @@ package tinker_io.items;
 
 import java.util.List;
 
+import org.lwjgl.input.Keyboard;
+
 import tinker_io.main.Main;
 import tinker_io.mainRegistry.ItemRegistry;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -58,12 +60,11 @@ public class Upgrade extends Item {
 	    return this.getUnlocalizedName() + "_" + stack.getItemDamage();
 	}
 	
+	public static boolean isShiftKeyDown(){
+        return Keyboard.isKeyDown(42) || Keyboard.isKeyDown(54);
+    }
+	
 	public void addInformation(ItemStack itemStack, EntityPlayer player, List list, boolean par4) {
-		if(player.isSneaking()){
-			
-		}else{
-			//list.add(EnumChatFormatting.BLUE + "< Hold SHIFT! >");
-		}
 		ItemStack UpgBase = new ItemStack(ItemRegistry.Upgrade, 1, 0);
 		ItemStack slotUPG1 = new ItemStack(ItemRegistry.Upgrade, 1, 1);
 		ItemStack slotUPG2 = new ItemStack(ItemRegistry.Upgrade, 1, 2);
@@ -72,31 +73,37 @@ public class Upgrade extends Item {
 		ItemStack slotUPGinfinity = new ItemStack(ItemRegistry.Upgrade, 1, 6);
 		ItemStack redstoneUPG = new ItemStack(ItemRegistry.Upgrade ,1 ,5);
 		
-		if(itemStack.isItemEqual(UpgBase)){
-			list.add(EnumChatFormatting.GRAY + StatCollector.translateToLocal("tio.toolTips.UpgBase"));
-		}else if(itemStack.isItemEqual(slotUPG1)){
-			list.add(EnumChatFormatting.GRAY + StatCollector.translateToLocal("tio.toolTips.slotUPG1"));
-			list.add(EnumChatFormatting.GREEN + StatCollector.translateToLocal("tio.toolTips.slotUPG1.usage1"));
-			list.add(EnumChatFormatting.GREEN + StatCollector.translateToLocal("tio.toolTips.slotUPG1.usage2"));
-		}else if(itemStack.isItemEqual(slotUPG2)){
-			list.add(EnumChatFormatting.GRAY + StatCollector.translateToLocal("tio.toolTips.slotUPG2"));
-			list.add(EnumChatFormatting.GREEN + StatCollector.translateToLocal("tio.toolTips.slotUPG2.usage1"));
-			list.add(EnumChatFormatting.GREEN + StatCollector.translateToLocal("tio.toolTips.slotUPG2.usage2"));
-		}else if(itemStack.isItemEqual(slotUPG3)){
-			list.add(EnumChatFormatting.GRAY + StatCollector.translateToLocal("tio.toolTips.slotUPG3"));
-			list.add(EnumChatFormatting.GREEN + StatCollector.translateToLocal("tio.toolTips.slotUPG3.usage1"));
-			list.add(EnumChatFormatting.GREEN + StatCollector.translateToLocal("tio.toolTips.slotUPG3.usage2"));
-		}else if(itemStack.isItemEqual(slotUPG4)){
-			list.add(EnumChatFormatting.GRAY + StatCollector.translateToLocal("tio.toolTips.slotUPG4"));
-			list.add(EnumChatFormatting.GREEN + StatCollector.translateToLocal("tio.toolTips.slotUPG4.usage1"));
-			list.add(EnumChatFormatting.GREEN + StatCollector.translateToLocal("tio.toolTips.slotUPG4.usage2"));
-		}else if(itemStack.isItemEqual(slotUPGinfinity)){
-			list.add(EnumChatFormatting.GRAY + StatCollector.translateToLocal("tio.toolTips.slotUPGinfinity"));
-			list.add(EnumChatFormatting.GREEN + StatCollector.translateToLocal("tio.toolTips.slotUPGinfinity.usage1"));
-		}else if(itemStack.isItemEqual(redstoneUPG)){
-			list.add(EnumChatFormatting.GRAY + StatCollector.translateToLocal("tio.toolTips.redstoneUPG"));
-			list.add(EnumChatFormatting.GREEN + StatCollector.translateToLocal("tio.toolTips.redstoneUPG.usage1"));
+		if(this.isShiftKeyDown()){
+			if(itemStack.isItemEqual(UpgBase)){
+				list.add(EnumChatFormatting.GRAY + StatCollector.translateToLocal("tio.toolTips.UpgBase"));
+			}else if(itemStack.isItemEqual(slotUPG1)){
+				list.add(EnumChatFormatting.GRAY + StatCollector.translateToLocal("tio.toolTips.slotUPG1"));
+				list.add(EnumChatFormatting.GREEN + StatCollector.translateToLocal("tio.toolTips.slotUPG1.usage1"));
+				list.add(EnumChatFormatting.GREEN + StatCollector.translateToLocal("tio.toolTips.slotUPG1.usage2"));
+			}else if(itemStack.isItemEqual(slotUPG2)){
+				list.add(EnumChatFormatting.GRAY + StatCollector.translateToLocal("tio.toolTips.slotUPG2"));
+				list.add(EnumChatFormatting.GREEN + StatCollector.translateToLocal("tio.toolTips.slotUPG2.usage1"));
+				list.add(EnumChatFormatting.GREEN + StatCollector.translateToLocal("tio.toolTips.slotUPG2.usage2"));
+			}else if(itemStack.isItemEqual(slotUPG3)){
+				list.add(EnumChatFormatting.GRAY + StatCollector.translateToLocal("tio.toolTips.slotUPG3"));
+				list.add(EnumChatFormatting.GREEN + StatCollector.translateToLocal("tio.toolTips.slotUPG3.usage1"));
+				list.add(EnumChatFormatting.GREEN + StatCollector.translateToLocal("tio.toolTips.slotUPG3.usage2"));
+			}else if(itemStack.isItemEqual(slotUPG4)){
+				list.add(EnumChatFormatting.GRAY + StatCollector.translateToLocal("tio.toolTips.slotUPG4"));
+				list.add(EnumChatFormatting.GREEN + StatCollector.translateToLocal("tio.toolTips.slotUPG4.usage1"));
+				list.add(EnumChatFormatting.GREEN + StatCollector.translateToLocal("tio.toolTips.slotUPG4.usage2"));
+			}else if(itemStack.isItemEqual(slotUPGinfinity)){
+				list.add(EnumChatFormatting.GRAY + StatCollector.translateToLocal("tio.toolTips.slotUPGinfinity"));
+				list.add(EnumChatFormatting.GREEN + StatCollector.translateToLocal("tio.toolTips.slotUPGinfinity.usage1"));
+			}else if(itemStack.isItemEqual(redstoneUPG)){
+				list.add(EnumChatFormatting.GRAY + StatCollector.translateToLocal("tio.toolTips.redstoneUPG"));
+				list.add(EnumChatFormatting.GREEN + StatCollector.translateToLocal("tio.toolTips.redstoneUPG.usage1"));
+			}
+		}else{
+			list.add(EnumChatFormatting.GOLD + StatCollector.translateToLocal("tio.toolTips.common.holdShift"));
 		}
+		
+		
 	}
 
 }
