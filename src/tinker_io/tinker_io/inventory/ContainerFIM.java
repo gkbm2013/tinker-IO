@@ -3,6 +3,9 @@ package tinker_io.inventory;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import tinker_io.TileEntity.FIMTileEntity;
+import tinker_io.items.SolidFuel;
+import tinker_io.items.SpeedUPG;
+import tinker_io.items.Upgrade;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -66,12 +69,41 @@ public class ContainerFIM extends Container {
                 }
                 //itemstack is in player
                 else if (slot >= tileFIM.getSizeInventory()) {
-                	
+                	//fuel is in player
+                	if(stackInSlot.getItem() instanceof SolidFuel){
+                		if (!this.mergeItemStack(stackInSlot, FUEL, FUEL+1, false)){
+                			return null;
+                		}
+                	}
+                	//spUPG is in player
+                	else if (stackInSlot.getItem() instanceof SpeedUPG){
+                		if (!this.mergeItemStack(stackInSlot, SPEED_UPG, SPEED_UPG+1, false)){
+                			return null;
+                		}
+                	}
+                	//upg is in player
+                	else if (stackInSlot.getItem() instanceof Upgrade){
+                		if (!this.mergeItemStack(stackInSlot, INV1_UPG, INV2_UPG, false)){
+                			return null;
+                		}
+                	}
+                	// place in action bar
+        			else if (slot < tileFIM.getSizeInventory()+27) {
+        				if (!this.mergeItemStack(stackInSlot, tileFIM.getSizeInventory()+27, tileFIM.getSizeInventory()+36, false)){
+        					return null;
+        				}
+        			}
+        			// item in action bar - place in player inventory
+        			else if (slot >= tileFIM.getSizeInventory()+27 && slot < tileFIM.getSizeInventory()+36 ){
+        				if (!this.mergeItemStack(stackInSlot, tileFIM.getSizeInventory(), tileFIM.getSizeInventory()+27, false)){
+        					return null;
+        				}
+        			}
                 }
                 //places it into the tileEntity is possible since its in the player inventory
-                else if (!this.mergeItemStack(stackInSlot, 0, tileFIM.getSizeInventory(), false)) {
-                        return null;
-                }
+//                else if (!this.mergeItemStack(stackInSlot, 0, tileFIM.getSizeInventory(), false)) {
+//                        return null;
+//                }
 
                 if (stackInSlot.stackSize == 0) {
                         slotObject.putStack(null);
