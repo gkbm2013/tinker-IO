@@ -15,35 +15,39 @@ public class ContainerFIM extends Container {
 	
 	private FIMTileEntity tileFIM;
 	private int lastInputTime;
-
+	
+	public static final int SPEED_UPG = 0, FUEL = 1, INV1_UPG = 2, INV2_UPG = 3;  
 	public ContainerFIM(InventoryPlayer player, FIMTileEntity tileEntityASC){
 		this.tileFIM = tileEntityASC;
-		this.addSlotToContainer(new Slot(tileEntityASC, 0, 25, 20)); // Speed UPG.
-		this.addSlotToContainer(new Slot(tileEntityASC, 1, 79, 34)); // catalyst
+		this.addSlotToContainer(new Slot(tileEntityASC, SPEED_UPG, 25, 20)); // Speed UPG.
+		this.addSlotToContainer(new Slot(tileEntityASC, FUEL, 79, 34)); // catalyst
+		this.addSlotToContainer(new Slot(tileEntityASC, INV1_UPG, 25, 34)); // Speed UPG.
+		this.addSlotToContainer(new Slot(tileEntityASC, INV2_UPG, 25, 48)); // Speed UPG.
 		
-		this.addSlotToContainer(new Slot(tileEntityASC, 2, 25, 34)); // Speed UPG.
-		this.addSlotToContainer(new Slot(tileEntityASC, 3, 25, 48)); // Speed UPG.
-
 		//this.addSlotToContainer(new SlotFurnace(player.player, tileEntityASC, 0, 25, 34));
-		int i;
 		
+		//player's inventory
+		int i;
 		for(i = 0; i < 3; ++i){
 			for(int j = 0; j < 9; ++j){
 				this.addSlotToContainer(new Slot(player, j + i * 9 + 9, 8 + j * 18, 84 + i * 18));
 			}
 		}
 		
+		//action bar
 		for(i = 0; i < 9; ++i){
 			this.addSlotToContainer(new Slot(player, i , 8 + i * 18 , 142));
 		}
 	}
-	
 	
 	@Override
 	public boolean canInteractWith(EntityPlayer player) {
 		return this.tileFIM.isUseableByPlayer(player);
 	}
 	
+	/**
+	 * Called when a player shift-clicks on a slot.
+	 */
 	@Override
     public ItemStack transferStackInSlot(EntityPlayer player, int slot) {
 		ItemStack stack = null;
@@ -59,6 +63,10 @@ public class ContainerFIM extends Container {
                         if (!this.mergeItemStack(stackInSlot, tileFIM.getSizeInventory(), 36+tileFIM.getSizeInventory(), true)) {
                                 return null;
                         }
+                }
+                //itemstack is in player
+                else if (slot >= tileFIM.getSizeInventory()) {
+                	
                 }
                 //places it into the tileEntity is possible since its in the player inventory
                 else if (!this.mergeItemStack(stackInSlot, 0, tileFIM.getSizeInventory(), false)) {
