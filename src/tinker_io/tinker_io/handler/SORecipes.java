@@ -73,11 +73,14 @@ public class SORecipes{
 		ItemStack pattern = new ItemStack(TinkerSmeltery.metalPattern, 1, 0);
 		String patternString = pattern.toString();
 		String outputStirng = output.toString();
-		String model = "1xitem.tconstruct.MetalPattern";
+		String model = patternString.split("@")[0];
 		
-		String itemPatternString = patternString.substring(0, model.length());
-		String itemOutputStirngString = outputStirng.substring(0, model.length());
+		//System.out.println(patternString.split("@")[0]);
 		
+		String itemPatternString = patternString.split("@")[0];
+		String itemOutputStirngString = outputStirng.split("@")[0];
+		//System.out.println(itemPatternString);
+		//System.out.println(itemOutputStirngString);
 		
 		if(itemPatternString.equals(itemOutputStirngString)){
 			return true;
