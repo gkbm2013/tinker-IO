@@ -53,57 +53,58 @@ public class ContainerFIM extends Container {
 	 */
 	@Override
     public ItemStack transferStackInSlot(EntityPlayer player, int slot) {
+		final int fimINV_SIZE = tileFIM.getSizeInventory();
 		ItemStack stack = null;
         Slot slotObject = (Slot) inventorySlots.get(slot);
 
         //null checks and checks if the item can be stacked (maxStackSize > 1)
         if (slotObject != null && slotObject.getHasStack()) {
-                ItemStack stackInSlot = slotObject.getStack();
-                stack = stackInSlot.copy();
+            ItemStack stackInSlot = slotObject.getStack();
+            stack = stackInSlot.copy();
 
-                //merges the item into player inventory since its in the tileEntity
-                if (slot < tileFIM.getSizeInventory()) {
-                        if (!this.mergeItemStack(stackInSlot, tileFIM.getSizeInventory(), 36+tileFIM.getSizeInventory(), true)) {
-                                return null;
-                        }
-                }
-                //itemstack is in player
-                else if (slot >= tileFIM.getSizeInventory()) {
-                	//fuel is in player
-                	if(stackInSlot.getItem() instanceof SolidFuel){
-                		if (!this.mergeItemStack(stackInSlot, FUEL, FUEL+1, false)){
-                			return null;
-                		}
-                	}
-                	//spUPG is in player
-                	else if (stackInSlot.getItem() instanceof SpeedUPG){
-                		if (!this.mergeItemStack(stackInSlot, SPEED_UPG, SPEED_UPG+1, false)){
-                			return null;
-                		}
-                	}
-                	//upg is in player
-                	else if (stackInSlot.getItem() instanceof Upgrade){
-                		if (!this.mergeItemStack(stackInSlot, INV1_UPG, INV2_UPG, false)){
-                			return null;
-                		}
-                	}
-                	// place in action bar
-        			else if (slot < tileFIM.getSizeInventory()+27) {
-        				if (!this.mergeItemStack(stackInSlot, tileFIM.getSizeInventory()+27, tileFIM.getSizeInventory()+36, false)){
-        					return null;
-        				}
-        			}
-        			// item in action bar - place in player inventory
-        			else if (slot >= tileFIM.getSizeInventory()+27 && slot < tileFIM.getSizeInventory()+36 ){
-        				if (!this.mergeItemStack(stackInSlot, tileFIM.getSizeInventory(), tileFIM.getSizeInventory()+27, false)){
-        					return null;
-        				}
-        			}
-                }
-                //places it into the tileEntity is possible since its in the player inventory
-//                else if (!this.mergeItemStack(stackInSlot, 0, tileFIM.getSizeInventory(), false)) {
-//                        return null;
-//                }
+            //merges the item into player inventory since its in the tileEntity
+            if (slot < fimINV_SIZE) {
+                    if (!this.mergeItemStack(stackInSlot, fimINV_SIZE, 36+fimINV_SIZE, false)) {
+                            return null; //do nothing if it can't
+                    }
+            }
+            //itemstack is in player
+            else {
+            	//fuel is in player
+            	if(stackInSlot.getItem() instanceof SolidFuel){
+            		if (!this.mergeItemStack(stackInSlot, FUEL, FUEL+1, false)){
+            			return null;
+            		}
+            	}
+            	//spUPG is in player
+            	else if (stackInSlot.getItem() instanceof SpeedUPG){
+            		if (!this.mergeItemStack(stackInSlot, SPEED_UPG, SPEED_UPG+1, false)){
+            			return null;
+            		}
+            	}
+            	//upg is in player
+            	else if (stackInSlot.getItem() instanceof Upgrade){
+            		if (!this.mergeItemStack(stackInSlot, INV1_UPG, INV2_UPG+1, false)){
+            			return null;
+            		}
+            	}
+            	// place in action bar
+    			else if (slot < fimINV_SIZE+27) {
+    				if (!this.mergeItemStack(stackInSlot, fimINV_SIZE+27, fimINV_SIZE+36, false)){
+    					return null;
+    				}
+    			}
+    			// item in action bar - place in player inventory
+    			else if (slot >= fimINV_SIZE+27 && slot < fimINV_SIZE+36 ){
+    				if (!this.mergeItemStack(stackInSlot, fimINV_SIZE, fimINV_SIZE+27, false)){
+    					return null;
+    				}
+    			}
+            }
+            //places it into the tileEntity is possible since its in the player inventory
+//            else if (!this.mergeItemStack(stackInSlot, 0, tileFIM.getSizeInventory(), false)) {
+//                    return null;
+//            }
 
                 if (stackInSlot.stackSize == 0) {
                         slotObject.putStack(null);
