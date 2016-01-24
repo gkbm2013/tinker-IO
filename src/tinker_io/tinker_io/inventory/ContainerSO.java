@@ -11,6 +11,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import tinker_io.TileEntity.SOTileEntity;
 import tinker_io.handler.SORecipes;
+import tinker_io.items.Upgrade;
 
 public class ContainerSO extends Container{
 	private SOTileEntity tileSO;
@@ -54,6 +55,8 @@ public class ContainerSO extends Container{
 		return this.tileSO.isUseableByPlayer(player);
 	}
 	
+	public static final int INV_START = 4; 
+	public static final int HOTBAR_START = INV_START +27;
 	@Override
 	public ItemStack transferStackInSlot(EntityPlayer player, int slot) {
 		ItemStack stack = null;
@@ -71,13 +74,25 @@ public class ContainerSO extends Container{
 						36 + tileSO.getSizeInventory(), true)) {
 					return null;
 				}
+			} else { // in inventory and bar
+				if (stackInSlot.getItem() instanceof Upgrade) {
+					//pass
+				} else if(slot >= INV_START && slot < HOTBAR_START){ // inv -> bar
+					if(!mergeItemStack(stackInSlot, HOTBAR_START, HOTBAR_START + 9, false)) {
+						return null;
+					}
+				} else if (slot >= HOTBAR_START && slot < HOTBAR_START + 9) {
+					if(!mergeItemStack(stackInSlot, INV_START, HOTBAR_START, false)) {
+						return null;
+					}
+				}
 			}
 			// places it into the tileEntity is possible since its in the player
 			// inventory
-			else if (!this.mergeItemStack(stackInSlot, 0,
-					tileSO.getSizeInventory(), false)) {
-				return null;
-			}
+//			else if (!this.mergeItemStack(stackInSlot, 0,
+//					tileSO.getSizeInventory(), false)) {
+//				return null;
+//			}
 
 			if (stackInSlot.stackSize == 0) {
 				slotObject.putStack(null);
