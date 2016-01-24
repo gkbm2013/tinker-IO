@@ -76,7 +76,9 @@ public class ContainerSO extends Container{
 				}
 			} else { // in inventory and bar
 				if (stackInSlot.getItem() instanceof Upgrade) {
-					//pass
+					if (!mergeItemStack(stackInSlot, UPG_UP_SLOT, UPG_DOWN_SLOT+1, false)) {
+						return null;
+					}
 				} else if(slot >= INV_START && slot < HOTBAR_START){ // inv -> bar
 					if(!mergeItemStack(stackInSlot, HOTBAR_START, HOTBAR_START + 9, false)) {
 						return null;
