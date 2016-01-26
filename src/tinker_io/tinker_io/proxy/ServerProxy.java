@@ -7,9 +7,9 @@ import tinker_io.TileEntity.SOTileEntity;
 import tinker_io.TileEntity.TileEntityWhatABeautifulBlockEntity;
 import tinker_io.handler.GuiHandler;
 import tinker_io.main.Main;
-import cpw.mods.fml.common.network.NetworkRegistry;
-import cpw.mods.fml.common.network.simpleimpl.MessageContext;
-import cpw.mods.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.common.network.NetworkRegistry;
+import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class ServerProxy{
 	
