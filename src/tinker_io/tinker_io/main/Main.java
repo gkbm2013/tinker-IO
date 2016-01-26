@@ -1,9 +1,9 @@
 package tinker_io.main;
 
-import tconstruct.plugins.mfr.TinkerMFR;
-import tconstruct.plugins.te4.TinkerTE4;
-import tconstruct.smeltery.TinkerSmeltery;
-import tconstruct.tools.TinkerTools;
+//import tconstruct.plugins.mfr.TinkerMFR;
+//import tconstruct.plugins.te4.TinkerTE4;
+import slimeknights.tconstruct.smeltery.TinkerSmeltery;
+import slimeknights.tconstruct.tools.TinkerTools;
 import tinker_io.TileEntity.FIMTileEntity;
 import tinker_io.blocks.FuelInputMachine;
 import tinker_io.handler.GuiHandler;
@@ -18,8 +18,8 @@ import tinker_io.plugins.ee3.EE3Main;
 import tinker_io.plugins.waila.MainWaila;
 import tinker_io.proxy.ClientProxy;
 import tinker_io.proxy.ServerProxy;
-import mantle.pulsar.config.ForgeCFG;
-import mantle.pulsar.control.PulseManager;
+import slimeknights.mantle.pulsar.config.ForgeCFG;
+import slimeknights.mantle.pulsar.control.PulseManager;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
@@ -35,18 +35,18 @@ import net.minecraft.util.ChatComponentText;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
 import net.minecraftforge.oredict.OreDictionary;
-import cpw.mods.fml.common.Loader;
-import cpw.mods.fml.common.Mod;
-import cpw.mods.fml.common.Mod.EventHandler;
-import cpw.mods.fml.common.Mod.Instance;
-import cpw.mods.fml.common.SidedProxy;
-import cpw.mods.fml.common.event.FMLInitializationEvent;
-import cpw.mods.fml.common.event.FMLInterModComms;
-import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.PlayerEvent;
-import cpw.mods.fml.common.registry.GameRegistry;
-import cpw.mods.fml.common.network.NetworkRegistry;
+import net.minecraftforge.fml.common.Loader;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.Mod.EventHandler;
+import net.minecraftforge.fml.common.Mod.Instance;
+import net.minecraftforge.fml.common.SidedProxy;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLInterModComms;
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.PlayerEvent;
+import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.common.network.NetworkRegistry;
 
 @Mod(modid = Main.MODID, version = Main.VERSION, name = Main.Name, dependencies="required-after:Forge@[10.13.1.1217,);required-after:TConstruct@[1.7.10-1.8.2a,);after:NotEnoughItems;after:Waila;after:ForgeMultipart;after:EE3;")
 
