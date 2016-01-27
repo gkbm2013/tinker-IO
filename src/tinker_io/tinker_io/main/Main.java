@@ -26,8 +26,6 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
-
-
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -37,11 +35,11 @@ import net.minecraftforge.common.config.Property;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLInterModComms;
+import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
@@ -58,8 +56,6 @@ import net.minecraftforge.fml.common.network.NetworkRegistry;
 				+ "after:Waila;"
 				+ "after:ForgeMultipart;"
 				+ "after:EE3;")
-
-
 public class Main
 {
     public static final String MODID = "tinker_io";
@@ -72,7 +68,6 @@ public class Main
     @SidedProxy(modId=Main.MODID, clientSide="tinker_io.proxy.ClientProxy", serverSide="tinker_io.proxy.ServerProxy")
 	public static ServerProxy proxy;
     
-    
     //MOD
     @Instance(Main.MODID)
     public static Main instance;
@@ -83,32 +78,17 @@ public class Main
     		public Item getTabIconItem() {
     			return TinkerTools.largePlate;
     		}
-        	
         };
         
-     
-        
-    @EventHandler
-    public void preLoad(FMLPreInitializationEvent event){
-    	//magma heater
-    	BlockRegistry.mainRegistry();
-    	ItemRegistry.mainRegistry();
-    	RecipeRegistry.mainRegistry();
-    	
-    	PacketDispatcher.registerPackets();
-    	
-		proxy.registerTileEntities();
-		
-		//MainFmp.startPlugin(); // Developing...
-//		*** no waila
-//		MainWaila.startPlugin();
-//    	***
-    	 }
-    
-    @EventHandler
-    public void preInit(FMLPreInitializationEvent event){    	
-    	Configuration config = new Configuration(event.getSuggestedConfigurationFile());
-    	
+    /**
+     * read your config file, create Blocks, Items, etc. and register them with the GameRegistry.
+     * @param event
+     */
+    @Mod.EventHandler
+    public void preInit(FMLPreInitializationEvent event)
+    {
+		Configuration config = new Configuration(event.getSuggestedConfigurationFile());
+	  	
     	config.load();
     	
     	Property iguanas_support_cofg = config.get(Configuration.CATEGORY_GENERAL, "iguanas_support", true);
@@ -119,14 +99,38 @@ public class Main
     	if (!Loader.isModLoaded("IguanaTweaksTConstruct")) {
     		iguanas_support = false;
     	}
+    	
+		//magma heater
+    	BlockRegistry.mainRegistry();
+    	ItemRegistry.mainRegistry();
+
+    	PacketDispatcher.registerPackets();
+    	
+		proxy.registerTileEntities();
+		
+		//MainFmp.startPlugin(); // Developing...
+//		*** no waila
+//		MainWaila.startPlugin();
+//    	***
     }
     
-    
-	@EventHandler
-	public static void load(FMLInitializationEvent event){
-		proxy.registerNetworkStuff();
+    /**
+     * build up data structures, add Crafting Recipes and register new handler
+     * @param event
+     */
+	@Mod.EventHandler
+	public static void init(FMLInitializationEvent event)
+	{
+    	RecipeRegistry.mainRegistry();
 	}
     
-       
-    
+	/**
+	 * communicate with other mods and adjust your setup based on this
+	 * @param event
+	 */
+	  @Mod.EventHandler
+	  public void postInit(FMLPostInitializationEvent event)
+	  {
+			proxy.registerNetworkStuff();
+	  }
 }
