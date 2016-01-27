@@ -36,7 +36,6 @@ public class CD_Lonesome_Avenue extends ItemRecord {
 		records.put(recordName, this);
 		setUnlocalizedName("CD_Lonesome_Avenue");
 		setCreativeTab(Main.TinkerIOTabs);
-//		setTextureName(Main.MODID + ":" + "record_Lonesome_Avenue");
 	}
 	
     /**

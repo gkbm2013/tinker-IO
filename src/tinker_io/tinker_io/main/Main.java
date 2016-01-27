@@ -9,7 +9,9 @@ import tinker_io.blocks.FuelInputMachine;
 import tinker_io.handler.GuiHandler;
 import tinker_io.handler.SORecipes;
 import tinker_io.mainRegistry.BlockRegistry;
+import tinker_io.mainRegistry.BlockRenderRegister;
 import tinker_io.mainRegistry.ItemRegistry;
+import tinker_io.mainRegistry.ItemRenderRegister;
 //import tinker_io.mainRegistry.PartRegister;
 import tinker_io.mainRegistry.RecipeRegistry;
 import tinker_io.packet.PacketDispatcher;
@@ -121,6 +123,8 @@ public class Main
 	@Mod.EventHandler
 	public static void init(FMLInitializationEvent event)
 	{
+		BlockRenderRegister.registerBlockRenderer();
+		ItemRenderRegister.registerItemRenderer();
     	RecipeRegistry.mainRegistry();
 	}
     

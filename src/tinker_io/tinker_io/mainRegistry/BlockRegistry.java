@@ -10,7 +10,6 @@ public class BlockRegistry {
 	public static void mainRegistry() {
 		preLoadBlock();
 		registerBlock();
-		BlockRenderRegister.registerBlockRenderer();
 	}
 
 	public static Block fuelInputMachine;
@@ -30,12 +29,4 @@ public class BlockRegistry {
     	GameRegistry.registerBlock(smartOutput, "SmartOutput");
     	GameRegistry.registerBlock(whatABeautifulBlock, "WhatABeautifulBlock");
 	}
-    
-    public static void registerBlockRenderer() {
-    	
-    }
-    
-    public static void reg() {
-    	
-    }
 }

@@ -19,7 +19,7 @@ public class ItemRegistry {
 	public static Item Lonesome_Avenue;
 
 	private static void preLoadItem() {
-		SpeedUPG = new SpeedUPG();
+		SpeedUPG = new SpeedUPG("speedUPG");
 		SolidFuel = new SolidFuel();
 		Upgrade = new Upgrade("upg");
 		Lonesome_Avenue= new CD_Lonesome_Avenue("Lonesome_Avenue");
@@ -27,7 +27,7 @@ public class ItemRegistry {
 	}
 	
 	private static void registerItem() {
-		GameRegistry.registerItem(SpeedUPG, "SpeedUPG");
+		GameRegistry.registerItem(SpeedUPG, "speedUPG");
 		GameRegistry.registerItem(SolidFuel, "SolidFuel");
 		GameRegistry.registerItem(Upgrade, "Upgrade");
 		GameRegistry.registerItem(Lonesome_Avenue, "CD_Lonesome_Avenue");

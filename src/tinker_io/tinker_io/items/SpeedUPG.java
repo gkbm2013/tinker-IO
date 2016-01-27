@@ -12,17 +12,17 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
 
 public class SpeedUPG extends Item {
-	public SpeedUPG(){
+	public SpeedUPG(String unlocalizedName){
 		super();
-		setUnlocalizedName("speedUPG");
+		setUnlocalizedName(unlocalizedName);
 		setCreativeTab(Main.TinkerIOTabs);
-//		setTextureName(Main.MODID + ":" + "speedUPG");
 	}
 	
 	public static boolean isShiftKeyDown(){
         return Keyboard.isKeyDown(42) || Keyboard.isKeyDown(54);
     }
 	
+	@Override
 	public void addInformation(ItemStack itemStack, EntityPlayer player, List list, boolean par4) {
 		if(this.isShiftKeyDown()){
 			list.add(EnumChatFormatting.GRAY + StatCollector.translateToLocal("tio.toolTips.UpgSpeed"));
