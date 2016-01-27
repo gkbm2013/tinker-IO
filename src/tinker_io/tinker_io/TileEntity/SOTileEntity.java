@@ -1,10 +1,10 @@
 package tinker_io.TileEntity;
 
-import tconstruct.smeltery.TinkerSmeltery;
+//import tconstruct.smeltery.TinkerSmeltery;
 import tinker_io.handler.SOEliminateList;
 import tinker_io.handler.SORecipes;
 import tinker_io.mainRegistry.ItemRegistry;
-import mantle.blocks.abstracts.MultiServantLogic;
+import slimeknights.mantle.multiblock.MultiServantLogic;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.ISidedInventory;
@@ -15,8 +15,11 @@ import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.IChatComponent;
+import net.minecraft.util.ITickable;
 import net.minecraft.util.StatCollector;
-import net.minecraftforge.common.util.ForgeDirection;
+//import net.minecraftforge.common.util.ForgeDirection;1.7
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidRegistry;
@@ -24,10 +27,10 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class SOTileEntity extends MultiServantLogic implements IFluidHandler , ISidedInventory{
+public class SOTileEntity extends MultiServantLogic implements IFluidHandler , ISidedInventory, ITickable{
 	public FluidTank tank;
 	
 	public FluidStack otherLiquid;
@@ -60,19 +63,27 @@ public class SOTileEntity extends MultiServantLogic implements IFluidHandler , I
 		tank = new FluidTank(FluidContainerRegistry.BUCKET_VOLUME * 10);
 	}
 
+	/**
+	 * Fills fluid into internal tanks, distribution is left entirely to the IFluidHandler.
+	 */
 	@Override
-	public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
+	public int fill(EnumFacing from, FluidStack resource, boolean doFill) {
+		// TODO 自動產生的方法 Stub
 		int amount = tank.fill(resource, doFill);
         if (amount > 0 && doFill)
         {
-            worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+            worldObj.markBlockForUpdate(this.pos);
         }
 
         return amount;
 	}
 
+	/**
+	 * Drains fluid out of internal tanks, distribution is left entirely to the IFluidHandler.
+	 */
 	@Override
-	public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
+	public FluidStack drain(EnumFacing from, FluidStack resource,
+			boolean doDrain) {
 		if (tank.getFluidAmount() == 0)
             return null;
         if (tank.getFluid().getFluid() != resource.getFluid())
@@ -82,33 +93,33 @@ public class SOTileEntity extends MultiServantLogic implements IFluidHandler , I
 	}
 
 	@Override
-	public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
+	public FluidStack drain(EnumFacing from, int maxDrain, boolean doDrain) {
 		FluidStack amount = tank.drain(maxDrain, doDrain);
         if (amount != null && doDrain)
         {
-            worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+            worldObj.markBlockForUpdate(this.pos);
         }
         return amount;
 	}
 
 	@Override
-	public boolean canFill(ForgeDirection from, Fluid fluid) {
+	public boolean canFill(EnumFacing from, Fluid fluid) {
 		return tank.getFluidAmount() == 0 || (tank.getFluid().getFluid() == fluid && tank.getFluidAmount() < tank.getCapacity());
 	}
 
 	@Override
-	public boolean canDrain(ForgeDirection from, Fluid fluid) {
+	public boolean canDrain(EnumFacing from, Fluid fluid) {
 		return tank.getFluidAmount() > 0;
 	}
 
 	@Override
-	public FluidTankInfo[] getTankInfo(ForgeDirection from) {
+	public FluidTankInfo[] getTankInfo(EnumFacing from) {
 		FluidStack fluid = null;
         if (tank.getFluid() != null)
             fluid = tank.getFluid().copy();
         return new FluidTankInfo[] { new FluidTankInfo(fluid, tank.getCapacity()) };
-	}
-	
+	}    
+
 	@Override
     public void readFromNBT (NBTTagCompound tags)
     {
@@ -136,7 +147,7 @@ public class SOTileEntity extends MultiServantLogic implements IFluidHandler , I
         {
             if (tags.getInteger("itemID") != 0)
             {
-                tank.setFluid(new FluidStack(tags.getInteger("itemID"), tags.getInteger("amount")));
+//                tank.setFluid(new FluidStack(tags.getInteger("itemID"), tags.getInteger("amount")));
             }
             else
             {
@@ -158,9 +169,7 @@ public class SOTileEntity extends MultiServantLogic implements IFluidHandler , I
 				this.itemStacksSO[byte0] = ItemStack.loadItemStackFromNBT(tabCompound1);
 			}
 		}
-		
 		//mode = tags.getInteger("Mode");
-        
     }
 
     @Override
@@ -200,18 +209,26 @@ public class SOTileEntity extends MultiServantLogic implements IFluidHandler , I
     {
         NBTTagCompound tag = new NBTTagCompound();
         writeCustomNBT(tag);
-        return new S35PacketUpdateTileEntity(xCoord, yCoord, zCoord, 1, tag);
+        return new S35PacketUpdateTileEntity(this.pos, 1, tag);
     }
 
+    /**
+     * Called when you receive a TileEntityData packet for the location this TileEntity is currently in.
+     * On the client, the NetworkManager will always be the remote server.
+     * On the server, it will be whomever is responsible for sending the packet.
+     */
     @Override
     public void onDataPacket (NetworkManager net, S35PacketUpdateTileEntity packet)
     {
-        readCustomNBT(packet.func_148857_g());
-        worldObj.func_147479_m(xCoord, yCoord, zCoord);
+//    	1.7
+//        readCustomNBT(packet.func_148857_g());
+//        worldObj.func_147479_m(xCoord, yCoord, zCoord);
     }
     
+    @Override
 	public boolean isUseableByPlayer(EntityPlayer player) {
-		return this.worldObj.getTileEntity(this.xCoord, this.yCoord, this.zCoord) != this ? false : player.getDistanceSq((double) this.xCoord + 0.5D, (double) this.yCoord + 0.5D, (double) this.zCoord + 0.5D) <= 64.0D;
+//    	1.7
+//		return this.worldObj.getTileEntity(this.xCoord, this.yCoord, this.zCoord) != this ? false : player.getDistanceSq((double) this.xCoord + 0.5D, (double) this.yCoord + 0.5D, (double) this.zCoord + 0.5D) <= 64.0D;
 	}
 
 	@Override
@@ -244,17 +261,18 @@ public class SOTileEntity extends MultiServantLogic implements IFluidHandler , I
 			return null;
 		}
 	}
-
-	@Override
-	public ItemStack getStackInSlotOnClosing(int slot) {
-		if (this.itemStacksSO[slot] != null) {
-			ItemStack itemstack = this.itemStacksSO[slot];
-			this.itemStacksSO[slot] = null;
-			return itemstack;
-		} else {
-			return null;
-		}
-	}
+	
+//1.7	
+//	@Override
+//	public ItemStack getStackInSlotOnClosing(int slot) {
+//		if (this.itemStacksSO[slot] != null) {
+//			ItemStack itemstack = this.itemStacksSO[slot];
+//			this.itemStacksSO[slot] = null;
+//			return itemstack;
+//		} else {
+//			return null;
+//		}
+//	}
 
 	@Override
 	public void setInventorySlotContents(int slot, ItemStack itemstack) {
@@ -265,15 +283,16 @@ public class SOTileEntity extends MultiServantLogic implements IFluidHandler , I
 		}
 	}
 
-	@Override
-	public String getInventoryName() {
-		return this.hasCustomInventoryName() ? this.nameSO : StatCollector.translateToLocal("tile.SmartOutput.name");
-	}
-
-	@Override
-	public boolean hasCustomInventoryName() {
-		return this.nameSO != null && this.nameSO.length() > 0;
-	}
+//	1.7
+//	@Override
+//	public String getInventoryName() {
+//		return this.hasCustomInventoryName() ? this.nameSO : StatCollector.translateToLocal("tile.SmartOutput.name");
+//	}
+//
+//	@Override
+//	public boolean hasCustomInventoryName() {
+//		return this.nameSO != null && this.nameSO.length() > 0;
+//	}
 
 	@Override
 	public int getInventoryStackLimit() {
@@ -281,38 +300,15 @@ public class SOTileEntity extends MultiServantLogic implements IFluidHandler , I
 	}
 
 	@Override
-	public void openInventory() {
-		
-	}
-
-	@Override
-	public void closeInventory() {
-		
-	}
-
-	@Override
 	public boolean isItemValidForSlot(int p_94041_1_, ItemStack p_94041_2_) {
 		return true;
 	}
+//1.7
+//	@Override
+//	public int[] getAccessibleSlotsFromSide(int par1) {
+//		return slotsProduct;
+//	}
 
-	@Override
-	public int[] getAccessibleSlotsFromSide(int par1) {
-		return slotsProduct;
-	}
-
-	@Override
-	public boolean canInsertItem(int par1, ItemStack itemstack, int par3) {
-		//return this.isItemValidForSlot(par1, itemstack);
-		return false;
-	}
-
-	@Override
-	public boolean canExtractItem(int par1, ItemStack itemstack, int par3) {
-		return itemstack != null;
-	}
-    
-	
-	
 	public int getLiquidAmount(int par1){
 		FluidTankInfo[] info = getTankInfo(ForgeDirection.UNKNOWN);
 		FluidStack liquid = info[0].fluid;
@@ -729,48 +725,129 @@ public class SOTileEntity extends MultiServantLogic implements IFluidHandler , I
         return true;
     }
     
-
     @Override
-    public void updateEntity ()
-    {   	
-    	//checkConnection();
-    	//setLiquid();
-    	//liquidIO();
-
-    	//System.out.println(mode);
-    	//checkMode();
-    	//voidLiquid();
-    	if(canFrozen()){
-    		if(currentFrozenTime >= frozenTimeMax){
-    			currentFrozenTime = 0;
-    			frozen();
-    			//notifyMasterOfChange();
-    		}else{
-    				currentFrozenTime++;
-    		}
-    		
-    		this.markDirty();
-    	}else{
-    		currentFrozenTime = 0;
-    	}
+    public void update() {
     	
-    	/*if(canBasin() || canFrozen()){
-    		if(currentFrozenTime == frozenTimeMax){
-    			currentFrozenTime = 0;
-    			if(hasPowered && canBasin){
-    				basin();
-    			}else{
-    				frozen();
-    			}
-    			notifyMasterOfChange();
-    		}else{
-    			currentFrozenTime++;
-    		}
-    		this.markDirty();
-    	}else{
-    		currentFrozenTime = 0;
-    	}*/
-    }    
+    }
+    
+//    1.7
+//    @Override
+//    public void updateEntity ()
+//    {   	
+//    	//checkConnection();
+//    	//setLiquid();
+//    	//liquidIO();
+//
+//    	//System.out.println(mode);
+//    	//checkMode();
+//    	//voidLiquid();
+//    	if(canFrozen()){
+//    		if(currentFrozenTime >= frozenTimeMax){
+//    			currentFrozenTime = 0;
+//    			frozen();
+//    			//notifyMasterOfChange();
+//    		}else{
+//    				currentFrozenTime++;
+//    		}
+//    		
+//    		this.markDirty();
+//    	}else{
+//    		currentFrozenTime = 0;
+//    	}
+//    	
+//    	/*if(canBasin() || canFrozen()){
+//    		if(currentFrozenTime == frozenTimeMax){
+//    			currentFrozenTime = 0;
+//    			if(hasPowered && canBasin){
+//    				basin();
+//    			}else{
+//    				frozen();
+//    			}
+//    			notifyMasterOfChange();
+//    		}else{
+//    			currentFrozenTime++;
+//    		}
+//    		this.markDirty();
+//    	}else{
+//    		currentFrozenTime = 0;
+//    	}*/
+//    }
+
+	@Override
+	public ItemStack removeStackFromSlot(int index) {
+		// TODO 自動產生的方法 Stub
+		return null;
+	}
+
+	@Override
+	public void openInventory(EntityPlayer player) {
+		
+	}
+
+	@Override
+	public void closeInventory(EntityPlayer player) {
+		
+	}
+
+	@Override
+	public int getField(int id) {
+		// TODO 自動產生的方法 Stub
+		return 0;
+	}
+
+	@Override
+	public void setField(int id, int value) {
+		// TODO 自動產生的方法 Stub
+		
+	}
+
+	@Override
+	public int getFieldCount() {
+		// TODO 自動產生的方法 Stub
+		return 0;
+	}
+
+	@Override
+	public void clear() {
+		// TODO 自動產生的方法 Stub
+		
+	}
+
+	@Override
+	public String getName() {
+		// TODO 自動產生的方法 Stub
+		return null;
+	}
+
+	@Override
+	public boolean hasCustomName() {
+		// TODO 自動產生的方法 Stub
+		return false;
+	}
+
+	@Override
+	public IChatComponent getDisplayName() {
+		// TODO 自動產生的方法 Stub
+		return null;
+	}
+
+	@Override
+	public int[] getSlotsForFace(EnumFacing side) {
+		// TODO 自動產生的方法 Stub
+		return null;
+	}
+
+	@Override
+	public boolean canInsertItem(int index, ItemStack itemStackIn,
+			EnumFacing direction) {
+		return false;
+	}
+
+	@Override
+	public boolean canExtractItem(int index, ItemStack stack,
+			EnumFacing direction) {
+		return stack != null;
+	}
 
 }
 

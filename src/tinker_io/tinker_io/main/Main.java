@@ -13,9 +13,9 @@ import tinker_io.mainRegistry.ItemRegistry;
 //import tinker_io.mainRegistry.PartRegister;
 import tinker_io.mainRegistry.RecipeRegistry;
 import tinker_io.packet.PacketDispatcher;
-import tinker_io.plugins.ee3.EE3Main;
+//import tinker_io.plugins.ee3.EE3Main;
 //import tinker_io.plugins.fmp.MainFmp;
-import tinker_io.plugins.waila.MainWaila;
+//import tinker_io.plugins.waila.MainWaila;
 import tinker_io.proxy.ClientProxy;
 import tinker_io.proxy.ServerProxy;
 import slimeknights.mantle.pulsar.config.ForgeCFG;
@@ -48,13 +48,22 @@ import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 
-@Mod(modid = Main.MODID, version = Main.VERSION, name = Main.Name, dependencies="required-after:Forge@[10.13.1.1217,);required-after:TConstruct@[1.7.10-1.8.2a,);after:NotEnoughItems;after:Waila;after:ForgeMultipart;after:EE3;")
+@Mod(
+		modid = Main.MODID,
+		version = Main.VERSION,
+		name = Main.Name,
+		dependencies="required-after:Forge@[11.15.1.1722,);"
+//				+ "required-after:TConstruct@[1.8.9-2.0.1,);"
+				+ "after:NotEnoughItems;"
+				+ "after:Waila;"
+				+ "after:ForgeMultipart;"
+				+ "after:EE3;")
 
 
 public class Main
 {
     public static final String MODID = "tinker_io";
-    public static final String VERSION = "beta 1.4.2 a2";
+    public static final String VERSION = "beta 1.4.2 a2-0001";
     public static final String Name = "Tinker I/O";
     
     public static boolean iguanas_support;
@@ -91,8 +100,9 @@ public class Main
 		proxy.registerTileEntities();
 		
 		//MainFmp.startPlugin(); // Developing...
-		MainWaila.startPlugin();
-    	
+//		*** no waila
+//		MainWaila.startPlugin();
+//    	***
     	 }
     
     @EventHandler

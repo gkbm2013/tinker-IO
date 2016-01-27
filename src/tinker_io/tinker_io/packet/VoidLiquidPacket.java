@@ -3,13 +3,14 @@ package tinker_io.packet;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.MovingObjectPosition;
 import tinker_io.TileEntity.SOTileEntity;
 import tinker_io.main.Main;
 import io.netty.buffer.ByteBuf;
-import cpw.mods.fml.common.network.ByteBufUtils;
-import cpw.mods.fml.common.network.simpleimpl.IMessage;
-import cpw.mods.fml.common.network.simpleimpl.MessageContext;
+import net.minecraftforge.fml.common.network.ByteBufUtils;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
+import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
 public class VoidLiquidPacket implements IMessage{
 	
@@ -27,7 +28,7 @@ public class VoidLiquidPacket implements IMessage{
 	
 	@Override
 	public void fromBytes(ByteBuf buf) {
-		// TODO 自動產生的方法 Stub
+		// TODO 嚙諛動莎蕭嚙談迎蕭嚙踝蕭k Stub
 		//amount = buf.readInt();
 		data = ByteBufUtils.readTag(buf);
 
@@ -35,7 +36,7 @@ public class VoidLiquidPacket implements IMessage{
 
 	@Override
 	public void toBytes(ByteBuf buf) {
-		// TODO 自動產生的方法 Stub
+		// TODO 嚙諛動莎蕭嚙談迎蕭嚙踝蕭k Stub
 		//buf.writeInt(amount);
 		 ByteBufUtils.writeTag(buf, data);
 	}
@@ -69,7 +70,7 @@ public class VoidLiquidPacket implements IMessage{
 			int z = message.data.getIntArray("Coord")[2];
 			
 			if(player.worldObj.isRemote == false){
-				SOTileEntity tileSO = (SOTileEntity) player.worldObj.getTileEntity(x, y, z);
+				SOTileEntity tileSO = (SOTileEntity) player.worldObj.getTileEntity(new BlockPos(x, y, z));
 				if(tileSO != null){
 					tileSO.voidLiquid();
 					if(DEBUG==true) System.out.println("[Tinker I/O] [DEBUG] voided!");

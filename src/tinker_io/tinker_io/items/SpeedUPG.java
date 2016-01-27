@@ -16,7 +16,7 @@ public class SpeedUPG extends Item {
 		super();
 		setUnlocalizedName("speedUPG");
 		setCreativeTab(Main.TinkerIOTabs);
-		setTextureName(Main.MODID + ":" + "speedUPG");
+//		setTextureName(Main.MODID + ":" + "speedUPG");
 	}
 	
 	public static boolean isShiftKeyDown(){

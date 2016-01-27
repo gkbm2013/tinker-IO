@@ -2,15 +2,15 @@ package tinker_io.blocks;
 
 import java.util.Random;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import tinker_io.TileEntity.TileEntityWhatABeautifulBlockEntity;
 import tinker_io.main.Main;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IIconRegister;
+//import net.minecraft.client.renderer.texture.IIconRegister;1.7
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -27,9 +27,8 @@ public class WhatABeautifulBlock extends Block{
         setCreativeTab(Main.TinkerIOTabs);
         setStepSound(soundTypeGlass);
         setLightLevel(1.0F);
-        
-        setBlockTextureName(Main.MODID + ":" + "whatABeautifulBlock");
-        this.setBlockName("WhatABeautifulBlock");
+//        setBlockTextureName(Main.MODID + ":" + "whatABeautifulBlock");1.7
+        this.setUnlocalizedName("WhatABeautifulBlock");
 	}
 	
 	 @Override

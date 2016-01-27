@@ -8,7 +8,7 @@ public class SolidFuel extends Item {
 		super();
 		setUnlocalizedName("SolidFuel");
 		setCreativeTab(Main.TinkerIOTabs);
-		setTextureName(Main.MODID + ":" + "solidFuel");
+//		setTextureName(Main.MODID + ":" + "solidFuel");
 	}
 
 }

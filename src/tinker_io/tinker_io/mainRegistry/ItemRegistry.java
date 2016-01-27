@@ -1,6 +1,6 @@
 package tinker_io.mainRegistry;
 
-import cpw.mods.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import tinker_io.items.CD_Lonesome_Avenue;
 import tinker_io.items.SolidFuel;
 import tinker_io.items.SpeedUPG;

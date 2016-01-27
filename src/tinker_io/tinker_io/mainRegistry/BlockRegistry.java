@@ -1,6 +1,6 @@
 package tinker_io.mainRegistry;
 
-import cpw.mods.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import tinker_io.blocks.FuelInputMachine;
 import tinker_io.blocks.SmartOutput;
 import tinker_io.blocks.WhatABeautifulBlock;
@@ -10,6 +10,7 @@ public class BlockRegistry {
 	public static void mainRegistry() {
 		preLoadBlock();
 		registerBlock();
+		BlockRenderRegister.registerBlockRenderer();
 	}
 
 	public static Block fuelInputMachine;
@@ -29,4 +30,12 @@ public class BlockRegistry {
     	GameRegistry.registerBlock(smartOutput, "SmartOutput");
     	GameRegistry.registerBlock(whatABeautifulBlock, "WhatABeautifulBlock");
 	}
+    
+    public static void registerBlockRenderer() {
+    	
+    }
+    
+    public static void reg() {
+    	
+    }
 }
