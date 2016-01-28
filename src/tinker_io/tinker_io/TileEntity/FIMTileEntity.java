@@ -1,5 +1,6 @@
 package tinker_io.TileEntity;
 
+import scala.reflect.internal.Trees.This;
 import slimeknights.tconstruct.smeltery.TinkerSmeltery;
 import slimeknights.tconstruct.smeltery.tileentity.TileSmeltery;
 import tinker_io.mainRegistry.ItemRegistry;
@@ -13,6 +14,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.EnumFacing;
@@ -35,10 +37,6 @@ public class FIMTileEntity extends TileEntity implements ISidedInventory, ITicka
 	public void nameFIM(String string){
 		this.nameFIM = string;
 	}
-	
-	
-	//public int speedASC;
-	//public int catalystASC;
 	public int speed = 300;
 	
 	public ItemStack fuel = new ItemStack(ItemRegistry.SolidFuel);
@@ -178,16 +176,28 @@ public class FIMTileEntity extends TileEntity implements ISidedInventory, ITicka
 		return false;
 	}
 	
+	int tick = 0;
 	@Override
 	public void update() {
-		
+		try {
+			if (!this.worldObj.isRemote) {
+				++tick;
+				if (tick % 20 == 0) {
+					this.checkConnection();
+					System.out.println(connection);
+					System.out.println(this.smelteryController_blockPos != null? this.smelteryController_blockPos.toString():"null");
+				}
+			}
+		}catch(Throwable ex) {
+			System.out.println(ex.toString());
+		}
 	}
 	
 	public void updateEntity() {
-		boolean flag1 = false;		
-		if (!this.worldObj.isRemote) {
+		boolean dirtyFlag = false;		
+		if (!this.worldObj.isRemote) {//server do it
 			if (this.canSmelt()) {
-					flag1 = true;
+					dirtyFlag = true;
 					if (this.itemStacksASC[1] != null) {
 
 						if (this.itemStacksASC[1].stackSize == 0) {
@@ -200,19 +210,17 @@ public class FIMTileEntity extends TileEntity implements ISidedInventory, ITicka
 				if (this.inputTime >= speed) {
 					this.inputTime = 0;
 					this.smeltItem();
-					flag1 = true;
+					dirtyFlag = true;
 					connectToTConstruct();
 				}
 
 			}
 			
-			if (flag1) {
+			if (dirtyFlag) {
+				// this is like : Don't forge save the game.
 				this.markDirty();
 			}
 		}
-
-		
-		//canConnect = false;
 	}
 	
 	private void speedUPG(){
@@ -240,7 +248,6 @@ public class FIMTileEntity extends TileEntity implements ISidedInventory, ITicka
 		}else{
 			return false;
 		}
-		
 		return false;
 	}
 	
@@ -248,42 +255,42 @@ public class FIMTileEntity extends TileEntity implements ISidedInventory, ITicka
 		World world = worldObj;
 		
 		if(canConnect == true){
-			TileSmeltery smeltery = null;
-			if(connection == 6){
-				smeltery = (TileSmeltery) world.getTileEntity(this.pos.up());
-			}else if(connection == 5){
-				smeltery = (TileSmeltery) world.getTileEntity(this.pos.down());
-			}else if(connection == 1){
-				smeltery = (TileSmeltery) world.getTileEntity(this.pos.west());
-			}else if(connection == 2){
-				smeltery = (TileSmeltery) world.getTileEntity(this.pos.east());
-			}else if(connection == 3){
-				smeltery = (TileSmeltery) world.getTileEntity(this.pos.north());
-			}else if(connection == 4){
-				smeltery = (TileSmeltery) world.getTileEntity(this.pos.south());
-			}
-			
-			if(smeltery != null){
-				int[] activeTemps = smeltery.activeTemps;
-				int fuelAmount = smeltery.fuelAmount;
-				int[] meltingTemps = smeltery.meltingTemps;
-				//activeTemps
-				if(activeTemps != null && fuelAmount >= 120){
-					for(int i = 0; i < activeTemps.length; i++){
-						if(activeTemps[i] < 200 || activeTemps[i] == meltingTemps[i]){
-							
-						}else{
-							if(this.getInputSize() == 2048){
-								activeTemps[i] = meltingTemps[i];
-							}else if(this.getInputSize() >= i){
-								activeTemps[i] = meltingTemps[i];
-							}
-							//System.out.println(activeTemps[i]);	
-						}
-						
-					}
-				}				
-			}
+//			TileSmeltery smeltery = null;
+//			if(connection == 6){
+//				smeltery = (TileSmeltery) world.getTileEntity(this.pos.up());
+//			}else if(connection == 5){
+//				smeltery = (TileSmeltery) world.getTileEntity(this.pos.down());
+//			}else if(connection == 1){
+//				smeltery = (TileSmeltery) world.getTileEntity(this.pos.west());
+//			}else if(connection == 2){
+//				smeltery = (TileSmeltery) world.getTileEntity(this.pos.east());
+//			}else if(connection == 3){
+//				smeltery = (TileSmeltery) world.getTileEntity(this.pos.north());
+//			}else if(connection == 4){
+//				smeltery = (TileSmeltery) world.getTileEntity(this.pos.south());
+//			}
+//			
+//			if(smeltery != null){
+//				int[] activeTemps = smeltery.activeTemps;
+//				int fuelAmount = smeltery.fuelAmount;
+//				int[] meltingTemps = smeltery.meltingTemps;
+//				//activeTemps
+//				if(activeTemps != null && fuelAmount >= 120){
+//					for(int i = 0; i < activeTemps.length; i++){
+//						if(activeTemps[i] < 200 || activeTemps[i] == meltingTemps[i]){
+//							
+//						}else{
+//							if(this.getInputSize() == 2048){
+//								activeTemps[i] = meltingTemps[i];
+//							}else if(this.getInputSize() >= i){
+//								activeTemps[i] = meltingTemps[i];
+//							}
+//							//System.out.println(activeTemps[i]);	
+//						}
+//						
+//					}
+//				}				
+//			}
 			
 		}else{
 			System.out.println("[Tinker I/O] Error! (Maybe I will fix it ...)");
@@ -303,11 +310,12 @@ public class FIMTileEntity extends TileEntity implements ISidedInventory, ITicka
 		}
 	}
 	
+	private BlockPos smelteryController_blockPos ;
+	
 	public void checkConnection(){
-		World world = this.worldObj;
-		
 		int amount = 0;
 		connection = 0;
+		smelteryController_blockPos = null;
 		int error = 0;
 		
 		if(worldObj != null && !worldObj.isRemote){
@@ -320,130 +328,126 @@ public class FIMTileEntity extends TileEntity implements ISidedInventory, ITicka
 			 * 4 = z+1 n
 			 * 5 = y+1 u
 			 */
-			
-			
-			if(world.getBlock(this.pos.west()) == TinkerSmeltery.smeltery && world.getBlockMetadata(x -1, y, z) == 0){
-				connection = 1;
-				amount = amount+1;
-			}else{
-				error++;
-			}
-			if(world.getBlock(this.pos.east()) == TinkerSmeltery.smeltery && world.getBlockMetadata(x +1, y, z) == 0){
-				connection = 2;
-				amount = amount+1;
-			}else{
-				error++;
-			}
-			if(world.getBlock(this.pos.north()) == TinkerSmeltery.smeltery && world.getBlockMetadata(x, y, z -1) == 0){
-				connection = 3;
-				amount = amount+1;
-			}else{
-				error++;
-			}
-			if(world.getBlock(this.pos.south()) == TinkerSmeltery.smeltery && world.getBlockMetadata(x, y, z +1) == 0){
-				connection = 4;
-				amount = amount+1;
-			}else{
-				error++;
-			}
-			if(world.getBlock(this.pos.up()) == TinkerSmeltery.smeltery && world.getBlockMetadata(x, y +1, z) == 0){
-				connection = 5;
-				amount = amount+1;
-			}else{
-				error++;
-			}
-			if(world.getBlock(this.pos.down()) == TinkerSmeltery.smeltery && world.getBlockMetadata(x, y -1, z) == 0){
-				connection = 6;
-				amount = amount+1;
-			}else{
-				error++;
-			}
-			
-			
-			if(error == 5){
-				if(amount == 1 || connection != 0){
-					canConnect = true;
-				}else{
-					canConnect = false;
+			EnumFacing[] facings = EnumFacing.values();
+			for (EnumFacing facing : facings) { //d-u-n-s-w-e
+				if(worldObj.getBlockState(this.pos.offset(facing)).getBlock() == TinkerSmeltery.smelteryController) {
+					this.smelteryController_blockPos = new BlockPos(this.pos.offset(facing));
+					this.connection = facing.getIndex();
+					amount += 1;
+				} else {
+					++error;
 				}
+			}
+			
+//			if(world.getBlockState(this.pos.west()).getBlock() == TinkerSmeltery.smelteryController){
+//				connection = 1;
+//				amount = amount+1;
+//			}else{
+//				error++;
+//			}
+//			if(world.getBlockState(this.pos.east()).getBlock() == TinkerSmeltery.smelteryController){
+//				connection = 2;
+//				amount = amount+1;
+//			}else{
+//				error++;
+//			}
+//			if(world.getBlockState(this.pos.north()).getBlock() == TinkerSmeltery.smelteryController){
+//				connection = 3;
+//				amount = amount+1;
+//			}else{
+//				error++;
+//			}
+//			if(world.getBlockState(this.pos.south()).getBlock() == TinkerSmeltery.smelteryController){
+//				connection = 4;
+//				amount = amount+1;
+//			}else{
+//				error++;
+//			}
+//			if(world.getBlockState(this.pos.up()).getBlock() == TinkerSmeltery.smelteryController){
+//				connection = 5;
+//				amount = amount+1;
+//			}else{
+//				error++;
+//			}
+//			if(world.getBlockState(this.pos.down()).getBlock() == TinkerSmeltery.smelteryController){
+//				connection = 6;
+//				amount = amount+1;
+//			}else{
+//				error++;
+//			}
+			if (error == 5 && amount == 1 || connection != 0) {
+				canConnect = true;
 			}else{
 				canConnect = false;
 			}
-			
 		}else{
 			canConnect = false;
 		}
 	}
 	
 	private boolean checkTemps(){
-		int x = xCoord;
-		int y = yCoord;
-		int z = zCoord;
-		World world = worldObj;
 		int start = 0;
 		int stop = 0;
 		
-		if(canConnect == true && !worldObj.isRemote){
-			if(canConnect == true){
-				TileSmeltery smeltery = null;
-				if(connection == 6){
-					if(world.getTileEntity(x, y -1, z) instanceof TileSmeltery){
-						smeltery = (TileSmeltery) world.getTileEntity(x, y -1, z);
-					}		
-				}else if(connection == 5){
-					if(world.getTileEntity(x, y +1, z) instanceof TileSmeltery){
-						smeltery = (TileSmeltery) world.getTileEntity(x, y +1, z);
-					}					
-				}else if(connection == 1){
-					if(world.getTileEntity(x -1, y, z) instanceof TileSmeltery){
-						smeltery = (TileSmeltery) world.getTileEntity(x -1, y, z);
-					}		
-				}else if(connection == 2){
-					if(world.getTileEntity(x +1, y, z) instanceof TileSmeltery){
-						smeltery = (TileSmeltery) world.getTileEntity(x +1, y, z);
-					}		
-				}else if(connection == 3){
-					if(world.getTileEntity(x, y, z -1) instanceof TileSmeltery){
-						smeltery = (TileSmeltery) world.getTileEntity(x, y, z -1);
-					}		
-				}else if(connection == 4){
-					if(world.getTileEntity(x, y, z +1) instanceof TileSmeltery){
-						smeltery = (TileSmeltery) world.getTileEntity(x, y, z +1);
-					}		
-				}
+		if(!worldObj.isRemote){
+			if(canConnect){
+				TileSmeltery smeltery = (TileSmeltery) worldObj.getTileEntity(smelteryController_blockPos);
+//				if(connection == 6){
+//					if(world.getTileEntity(x, y -1, z) instanceof TileSmeltery){
+//						smeltery = (TileSmeltery) world.getTileEntity(x, y -1, z);
+//					}		
+//				}else if(connection == 5){
+//					if(world.getTileEntity(x, y +1, z) instanceof TileSmeltery){
+//						smeltery = (TileSmeltery) world.getTileEntity(x, y +1, z);
+//					}					
+//				}else if(connection == 1){
+//					if(world.getTileEntity(x -1, y, z) instanceof TileSmeltery){
+//						smeltery = (TileSmeltery) world.getTileEntity(x -1, y, z);
+//					}		
+//				}else if(connection == 2){
+//					if(world.getTileEntity(x +1, y, z) instanceof TileSmeltery){
+//						smeltery = (TileSmeltery) world.getTileEntity(x +1, y, z);
+//					}		
+//				}else if(connection == 3){
+//					if(world.getTileEntity(x, y, z -1) instanceof TileSmeltery){
+//						smeltery = (TileSmeltery) world.getTileEntity(x, y, z -1);
+//					}		
+//				}else if(connection == 4){
+//					if(world.getTileEntity(x, y, z +1) instanceof TileSmeltery){
+//						smeltery = (TileSmeltery) world.getTileEntity(x, y, z +1);
+//					}		
+//				}
 				
-				
-				
-				if(smeltery != null){
-					int[] activeTemps = smeltery.activeTemps;
-					int fuelAmount = smeltery.fuelAmount;
-					int[] meltingTemps = smeltery.meltingTemps;
-					
-					//activeTemps
-					if(activeTemps != null && fuelAmount >= 120){
-						
-						if(this.getInputSize() == 2048){
-							for(int i = 0; i < activeTemps.length; i++){
-								if(activeTemps[i] > 200 && activeTemps[i] < meltingTemps[i]){
-									start++;
-								}
-							}							
-						}else{
-							int num = 0;
-							if(activeTemps.length > this.getInputSize()){
-								num = this.getInputSize();
-							}else{
-								num = activeTemps.length;
-							}
-							
-							for(int i = 0; i < num; i++){
-								if(activeTemps[i] > 200 && activeTemps[i] < meltingTemps[i]){
-									start++;
-								}
-							}
-						}
-					}				
-				}
+//				if(smeltery != null){
+//					int[] activeTemps = smeltery.activeTemps;
+//					int fuelAmount = smeltery.fuelAmount;
+//					int[] meltingTemps = smeltery.meltingTemps;
+//					
+//					//activeTemps
+//					if(activeTemps != null && fuelAmount >= 120){
+//						
+//						if(this.getInputSize() == 2048){
+//							for(int i = 0; i < activeTemps.length; i++){
+//								if(activeTemps[i] > 200 && activeTemps[i] < meltingTemps[i]){
+//									start++;
+//								}
+//							}							
+//						}else{
+//							int num = 0;
+//							if(activeTemps.length > this.getInputSize()){
+//								num = this.getInputSize();
+//							}else{
+//								num = activeTemps.length;
+//							}
+//							
+//							for(int i = 0; i < num; i++){
+//								if(activeTemps[i] > 200 && activeTemps[i] < meltingTemps[i]){
+//									start++;
+//								}
+//							}
+//						}
+//					}				
+//				}
 				
 			}else{
 				System.out.println("[Tinker I/O] Error! (Maybe I will fix it ...)");

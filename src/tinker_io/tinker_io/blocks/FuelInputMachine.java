@@ -5,6 +5,9 @@ import java.util.Random;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.properties.PropertyDirection;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
 //import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.EntityLivingBase;
@@ -13,13 +16,16 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.EnumFacing;
 //import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import slimeknights.mantle.tileentity.TileInventory;
 import tinker_io.TileEntity.FIMTileEntity;
 import tinker_io.main.Main;
 import net.minecraftforge.fml.relauncher.Side;
@@ -27,47 +33,43 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class FuelInputMachine extends BlockContainer {
 	
-
-//	@SideOnly(Side.CLIENT)
-//	private IIcon front;
+	 public static final PropertyDirection FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
 	
 	private final Random random = new Random();
 	
-	public FuelInputMachine(String unlocalizedName) {
+	public FuelInputMachine(String unlocalizedName)
+	{
 		super(Material.rock);
 		setUnlocalizedName(unlocalizedName);
 		setCreativeTab(Main.TinkerIOTabs);
 		setHarvestLevel("pickaxe", 1);
 		setHardness(3);
-//		setBlockTextureName(Main.MODID + ":" + "asc_side");
+		this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
 	}
 	
-//	@SideOnly(Side.CLIENT)
-//	public void registerBlockIcons(IIconRegister iconregister) {
-//		this.blockIcon = iconregister.registerIcon(Main.MODID + ":fim_side");
-//		this.front = iconregister.registerIcon(Main.MODID + ":fim_front");
-//	}
-//	
-//	public IIcon getIcon(int side, int meta) {
-//		//return side == 3 ? this.front : (side == 0 ? this.blockIcon : (side != meta ? this.blockIcon : this.front));
-//		
-//		if(side == 3 && meta == 0){
-//			return this.front;
-//		}else{
-//			if(side != meta){
-//				return this.blockIcon;				
-//			}else{
-//				return this.front;
-//			}			
-//		}
-//		
-//	}
+	@Override
+	protected BlockState createBlockState()
+	{
+		return new BlockState(this, new IProperty[] { FACING });
+	}
 	
 	@Override
-	public void onBlockAdded(World worldIn, BlockPos pos, IBlockState state)
-    {
-		worldIn.getTileEntity(pos).setPos(pos);
-    }
+	public IBlockState getStateFromMeta(int meta)
+	{
+        EnumFacing enumfacing = EnumFacing.getFront(meta);
+
+        if (enumfacing.getAxis() == EnumFacing.Axis.Y)
+        {
+            enumfacing = EnumFacing.NORTH;
+        }
+		return getDefaultState().withProperty(FACING, enumfacing);
+	}
+	
+	@Override
+	public int getMetaFromState(IBlockState state)
+	{
+        return ((EnumFacing)state.getValue(FACING)).getIndex();
+	}
 	
     @Override
     public boolean onBlockEventReceived(World worldIn, BlockPos pos, IBlockState state, int eventID, int eventParam) {
@@ -76,9 +78,13 @@ public class FuelInputMachine extends BlockContainer {
         return tileentity == null ? false : tileentity.receiveClientEvent(eventID, eventParam);
     }
 	
+    /**
+     * right-click block 
+     */
 	@Override
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumFacing side, float hitX, float hitY, float hitZ)
     {
+		playerIn.openGui(Main.instance, 0, worldIn, pos.getX(), pos.getY(), pos.getZ());
         return true;
     }
 	
@@ -143,6 +149,11 @@ public class FuelInputMachine extends BlockContainer {
 //	}
 	
 	@Override
+	  public void onNeighborChange(IBlockAccess world, BlockPos pos, BlockPos neighbor){
+		
+	}
+	
+	@Override
 	public TileEntity createNewTileEntity(World world, int meta) {
 		return new FIMTileEntity();
 	}
@@ -186,6 +197,53 @@ public class FuelInputMachine extends BlockContainer {
 //			
 //		}
 //	}
+
+	@Override
+	public void onBlockAdded(World worldIn, BlockPos pos, IBlockState state)
+    {
+        this.setDefaultFacing(worldIn, pos, state);
+    }
+	
+	private void setDefaultFacing(World worldIn, BlockPos pos, IBlockState state)
+    {
+        if (!worldIn.isRemote)
+        {
+            Block block = worldIn.getBlockState(pos.north()).getBlock();
+            Block block1 = worldIn.getBlockState(pos.south()).getBlock();
+            Block block2 = worldIn.getBlockState(pos.west()).getBlock();
+            Block block3 = worldIn.getBlockState(pos.east()).getBlock();
+            EnumFacing enumfacing = (EnumFacing)state.getValue(FACING);
+
+            if (enumfacing == EnumFacing.NORTH && block.isFullBlock() && !block1.isFullBlock())
+            {
+                enumfacing = EnumFacing.SOUTH;
+            }
+            else if (enumfacing == EnumFacing.SOUTH && block1.isFullBlock() && !block.isFullBlock())
+            {
+                enumfacing = EnumFacing.NORTH;
+            }
+            else if (enumfacing == EnumFacing.WEST && block2.isFullBlock() && !block3.isFullBlock())
+            {
+                enumfacing = EnumFacing.EAST;
+            }
+            else if (enumfacing == EnumFacing.EAST && block3.isFullBlock() && !block2.isFullBlock())
+            {
+                enumfacing = EnumFacing.WEST;
+            }
+
+            worldIn.setBlockState(pos, state.withProperty(FACING, enumfacing), 2);
+        }
+    }
+	
+//	/**
+//     * Called by ItemBlocks just before a block is actually set in the world, to allow for adjustments to the
+//     * IBlockstate
+//     */
+//	@Override
+//    public IBlockState onBlockPlaced(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer)
+//    {
+//        return this.getDefaultState().withProperty(FACING, placer.getHorizontalFacing().getOpposite());
+//    }
 	
     /**
      * Called by ItemBlocks after a block is set in the world, to allow post-place logic
@@ -193,6 +251,26 @@ public class FuelInputMachine extends BlockContainer {
 	@Override
     public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack)
     {
+		worldIn.setBlockState(pos, state.withProperty(FACING, placer.getHorizontalFacing().getOpposite()), 2);
+    }
+	
+	/**
+     * The type of render function called. 3 for standard block models, 2 for TESR's, 1 for liquids, -1 is no render
+     */
+	@Override
+    public int getRenderType()
+    {
+        return 3 ;//number 3 for standrd block models
+    }
+
+    /**
+     * Possibly modify the given BlockState before rendering it on an Entity (Minecarts, Endermen, ...)
+     */
+	@Override
+    @SideOnly(Side.CLIENT)
+    public IBlockState getStateForEntityRender(IBlockState state)
+    {
+        return this.getDefaultState().withProperty(FACING, EnumFacing.SOUTH);
     }
 	
 //	public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entity, ItemStack itemstack) {
@@ -273,8 +351,4 @@ public class FuelInputMachine extends BlockContainer {
 //			}
 //		super.breakBlock(world, x, y, z, block, meta);
 //	}
-	
-	
-
-
 }

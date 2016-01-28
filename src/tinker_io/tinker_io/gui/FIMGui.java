@@ -87,9 +87,5 @@ public class FIMGui extends GuiContainer {
 	        	this.drawTexturedModalRect(k + 159, l + 4, 177, 33, 11, 11);	
 	        }*/
 	        this.drawTexturedModalRect(k - 110, l + 10, 146, 170, 110, 60);
-
 	}
-
-
-
 }
