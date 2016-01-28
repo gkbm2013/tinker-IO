@@ -33,9 +33,9 @@ public class FuelInputMachine extends BlockContainer {
 	
 	private final Random random = new Random();
 	
-	public FuelInputMachine() {
+	public FuelInputMachine(String unlocalizedName) {
 		super(Material.rock);
-		setUnlocalizedName("FuelInputMachine");
+		setUnlocalizedName(unlocalizedName);
 		setCreativeTab(Main.TinkerIOTabs);
 		setHarvestLevel("pickaxe", 1);
 		setHardness(3);

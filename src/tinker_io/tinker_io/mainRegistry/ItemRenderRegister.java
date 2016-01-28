@@ -2,6 +2,7 @@ package tinker_io.mainRegistry;
 
 import tinker_io.main.Main;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.model.ModelBakery;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 

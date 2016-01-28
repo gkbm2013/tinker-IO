@@ -31,35 +31,13 @@ import tinker_io.main.Main;
 
 public class SmartOutput extends BlockContainer {
 
-//	@SideOnly(Side.CLIENT)
-//	private IIcon side;
-//	private IIcon top;
-	
-	public SmartOutput() {
+	public SmartOutput(String unlocalizedName) {
 		super(Material.rock);
-		setHardness(3F);
-        setResistance(20F);
-        setCreativeTab(Main.TinkerIOTabs);
-//        this.setBlockName("SmartOutput");
+		this.setHardness(3F);
+        this.setResistance(20F);
+        this.setCreativeTab(Main.TinkerIOTabs);
+        this.setUnlocalizedName(unlocalizedName);
 	}
-	
-//	@SideOnly(Side.CLIENT)
-//	public void registerBlockIcons(IIconRegister iconregister) {
-//		this.blockIcon = iconregister.registerIcon(Main.MODID + ":SO_side");
-//		this.side = iconregister.registerIcon(Main.MODID + ":fim_side");
-//		this.top = iconregister.registerIcon(Main.MODID + ":SO_top");
-//	}
-//	
-//	public IIcon getIcon(int side, int meta) {
-//		//return side == 3 ? this.front : (side == 0 ? this.blockIcon : (side != meta ? this.blockIcon : this.front));
-//		if(side == 0){
-//			return this.side;
-//		}else if(side == 1){
-//			return this.top;
-//		}else{
-//			return this.blockIcon;
-//		}
-//	}
 	
 	private final Random random = new Random();
 	

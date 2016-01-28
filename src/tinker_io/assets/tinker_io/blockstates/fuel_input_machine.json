@@ -1,0 +1,8 @@
+{
+    "variants": {
+        "facing=north": { "model": "tinker_io:fuel_input_machine" },
+        "facing=south": { "model": "tinker_io:fuel_input_machine", "y": 180 },
+        "facing=west":  { "model": "tinker_io:fuel_input_machine", "y": 270 },
+        "facing=east":  { "model": "tinker_io:fuel_input_machine", "y": 90 }
+    }
+}

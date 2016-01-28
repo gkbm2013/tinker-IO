@@ -29,12 +29,12 @@ public class CD_Lonesome_Avenue extends ItemRecord {
 	
 	public final String recordName;
 	
-	public CD_Lonesome_Avenue(String recordName) {
-		super(recordName);
-		this.recordName = recordName;
+	public CD_Lonesome_Avenue(String recordname) {
+		super(recordname);
+		this.recordName = recordname;
 		this.maxStackSize = 1;
 		records.put(recordName, this);
-		setUnlocalizedName("CD_Lonesome_Avenue");
+		setUnlocalizedName("CD_" + recordname);
 		setCreativeTab(Main.TinkerIOTabs);
 	}
 	

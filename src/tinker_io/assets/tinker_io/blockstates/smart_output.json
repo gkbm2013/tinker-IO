@@ -1,0 +1,5 @@
+{
+    "variants": {
+        "normal": { "model": "tinker_io:smart_output" }
+    }
+}

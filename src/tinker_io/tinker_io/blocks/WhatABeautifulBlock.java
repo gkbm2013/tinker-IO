@@ -20,7 +20,7 @@ public class WhatABeautifulBlock extends Block{
 
 	private static final String __OBFID = "CL_00000065";
 	
-	public WhatABeautifulBlock() {
+	public WhatABeautifulBlock(String unlocalizedName) {
 		super(Material.grass);
 		setHardness(3F);
         setResistance(20F);
@@ -28,7 +28,7 @@ public class WhatABeautifulBlock extends Block{
         setStepSound(soundTypeGlass);
         setLightLevel(1.0F);
 //        setBlockTextureName(Main.MODID + ":" + "whatABeautifulBlock");1.7
-        this.setUnlocalizedName("WhatABeautifulBlock");
+        this.setUnlocalizedName(unlocalizedName);
 	}
 	
 	 @Override

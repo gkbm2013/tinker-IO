@@ -22,7 +22,6 @@ public class Upgrade extends Item {
 		super();
 		setUnlocalizedName(unlocalizedName);
 		setCreativeTab(Main.TinkerIOTabs);
-		//setTextureName(Main.MODID + ":" + "Upgrade");
 		setHasSubtypes(true);
 		setMaxStackSize(8);
 	}
@@ -48,6 +47,9 @@ public class Upgrade extends Item {
 //	    return this.icons[meta];
 //	}
 	
+	/**
+	 * returns a list of items with the same ID, but different meta (eg: dye returns 16 items)
+	 */
 	@Override
 	public void getSubItems(Item item, CreativeTabs tab, List list) {
 	    for (int i = 0; i < 7; i ++) {
@@ -55,10 +57,13 @@ public class Upgrade extends Item {
 	    }
 	}
 	
+	
 	@Override
 	public String getUnlocalizedName(ItemStack stack) {
 	    return this.getUnlocalizedName() + "_" + stack.getItemDamage();
 	}
+	
+	
 	
 	public static boolean isShiftKeyDown(){
         return Keyboard.isKeyDown(42) || Keyboard.isKeyDown(54);

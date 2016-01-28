@@ -1,0 +1,7 @@
+{
+    "parent": "block/orientable",
+    "textures": {
+        "top": "tinker_io:blocks/SO_top",
+        "side": "tinker_io:blocks/SO_side"
+    }
+}

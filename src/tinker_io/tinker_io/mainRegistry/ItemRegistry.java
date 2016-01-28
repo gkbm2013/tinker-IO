@@ -20,10 +20,10 @@ public class ItemRegistry {
 
 	private static void preLoadItem() {
 		SpeedUPG = new SpeedUPG("speedUPG");
-		SolidFuel = new SolidFuel();
+		SolidFuel = new SolidFuel("SolidFuel");
 		Upgrade = new Upgrade("upg");
-		Lonesome_Avenue= new CD_Lonesome_Avenue("Lonesome_Avenue");
-		
+		Lonesome_Avenue= new CD_Lonesome_Avenue("Lonesome_Avenue"); //record name
+
 	}
 	
 	private static void registerItem() {
