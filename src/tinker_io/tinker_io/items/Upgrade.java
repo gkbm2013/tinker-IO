@@ -57,13 +57,10 @@ public class Upgrade extends Item {
 	    }
 	}
 	
-	
 	@Override
 	public String getUnlocalizedName(ItemStack stack) {
 	    return this.getUnlocalizedName() + "_" + stack.getItemDamage();
 	}
-	
-	
 	
 	public static boolean isShiftKeyDown(){
         return Keyboard.isKeyDown(42) || Keyboard.isKeyDown(54);

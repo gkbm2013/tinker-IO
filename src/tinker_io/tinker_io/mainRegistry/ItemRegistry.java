@@ -5,12 +5,14 @@ import tinker_io.items.CD_Lonesome_Avenue;
 import tinker_io.items.SolidFuel;
 import tinker_io.items.SpeedUPG;
 import tinker_io.items.Upgrade;
+
 import net.minecraft.item.Item;
 
 public class ItemRegistry {
 	public static void mainRegistry() {
 		preLoadItem();
 		registerItem();
+		
 	}
 	
 	public static Item SpeedUPG;
@@ -23,7 +25,7 @@ public class ItemRegistry {
 		SolidFuel = new SolidFuel("SolidFuel");
 		Upgrade = new Upgrade("upg");
 		Lonesome_Avenue= new CD_Lonesome_Avenue("Lonesome_Avenue"); //record name
-
+		
 	}
 	
 	private static void registerItem() {
