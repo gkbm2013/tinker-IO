@@ -36,10 +36,7 @@ public class ItemRenderRegister {
 		reg(ItemRegistry.Upgrade, 4, "upg_4");
 		reg(ItemRegistry.Upgrade, 5, "upg_5");
 		reg(ItemRegistry.Upgrade, 6, "upg_6");
-		
 	}
-	
-	
 	
 	public static void reg(Item item) {
 		reg(item, 0, item.getUnlocalizedName().substring(5));
@@ -60,6 +57,5 @@ public class ItemRenderRegister {
 		for (ItemStack stack : stacks) {
 			item.getUnlocalizedName(stack);
 		}
-		
 	}
 }

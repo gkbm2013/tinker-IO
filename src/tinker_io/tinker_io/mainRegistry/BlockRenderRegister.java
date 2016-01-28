@@ -11,6 +11,8 @@ public class BlockRenderRegister {
 	public static String modid = Main.MODID;
 	public static void registerBlockRenderer() {
 		reg(BlockRegistry.whatABeautifulBlock);
+		reg(BlockRegistry.fuelInputMachine);
+		reg(BlockRegistry.smartOutput);
 	}
 	
 	public static void reg(Block block) {

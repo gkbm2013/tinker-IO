@@ -26,27 +26,6 @@ public class Upgrade extends Item {
 		setMaxStackSize(8);
 	}
 	
-//	public IIcon[] icons = new IIcon[7];
-//	
-//	@Override
-//	public void registerIcons(IIconRegister reg) {
-//		this.icons[0] = reg.registerIcon(Main.MODID + ":" + "UPG_Base");
-//		this.icons[1] = reg.registerIcon(Main.MODID + ":" + "UPG_slot1");
-//		this.icons[2] = reg.registerIcon(Main.MODID + ":" + "UPG_slot2");
-//		this.icons[3] = reg.registerIcon(Main.MODID + ":" + "UPG_slot3");
-//		this.icons[4] = reg.registerIcon(Main.MODID + ":" + "UPG_slot4");
-//		this.icons[5] = reg.registerIcon(Main.MODID + ":" + "UPG_Redstone");
-//		this.icons[6] = reg.registerIcon(Main.MODID + ":" + "UPG_slot_infinity");
-//	}
-//	
-//	@Override
-//	public IIcon getIconFromDamage(int meta) {
-//	    if (meta > 6)
-//	        meta = 0;
-//
-//	    return this.icons[meta];
-//	}
-	
 	/**
 	 * returns a list of items with the same ID, but different meta (eg: dye returns 16 items)
 	 */
