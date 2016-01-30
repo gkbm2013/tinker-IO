@@ -43,6 +43,9 @@ public class ContainerFIM extends Container {
 		}
 	}
 	
+	/**
+	 *  player move item with mouse;
+	 */
 	@Override
 	public boolean canInteractWith(EntityPlayer player) {
 		return this.tileFIM.isUseableByPlayer(player);
@@ -120,6 +123,7 @@ public class ContainerFIM extends Container {
         return stack;
     }
 	
+	@Override
 	public void detectAndSendChanges(){
 		super.detectAndSendChanges();
 		for(int i = 0; i < this.crafters.size(); ++i){
@@ -139,5 +143,4 @@ public class ContainerFIM extends Container {
 			this.tileFIM.inputTime = par2;
 		}
 	}
-
 }

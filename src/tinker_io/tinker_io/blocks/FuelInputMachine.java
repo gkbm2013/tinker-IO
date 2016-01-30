@@ -15,6 +15,7 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.stats.StatList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.util.BlockPos;
@@ -84,7 +85,12 @@ public class FuelInputMachine extends BlockContainer {
 	@Override
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumFacing side, float hitX, float hitY, float hitZ)
     {
-		playerIn.openGui(Main.instance, 0, worldIn, pos.getX(), pos.getY(), pos.getZ());
+	    if(playerIn.isSneaking()) {
+	        return false;
+	      }
+		if (!worldIn.isRemote) {
+		    playerIn.openGui(Main.instance, 0, worldIn, pos.getX(), pos.getY(), pos.getZ());
+		}
         return true;
     }
 	
@@ -149,12 +155,14 @@ public class FuelInputMachine extends BlockContainer {
 //	}
 	
 	@Override
-	  public void onNeighborChange(IBlockAccess world, BlockPos pos, BlockPos neighbor){
+	 public void onNeighborChange(IBlockAccess world, BlockPos pos, BlockPos neighbor)
+	{
 		
 	}
 	
+	
 	@Override
-	public TileEntity createNewTileEntity(World world, int meta) {
+	public TileEntity createNewTileEntity(World world, int meta) { //Called on placing the block.
 		return new FIMTileEntity();
 	}
 	

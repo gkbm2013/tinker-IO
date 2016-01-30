@@ -114,55 +114,6 @@ public class FIMTileEntity extends TileEntity implements ISidedInventory, ITicka
 	public int getInventoryStackLimit() {
 		return 64;
 	}
-
-	public void readFromNBT(NBTTagCompound tagCompound) {
-		super.readFromNBT(tagCompound);
-		NBTTagList tagList = tagCompound.getTagList("Items", 10);
-		this.itemStacksASC = new ItemStack[this.getSizeInventory()];
-		
-
-		for (int i = 0; i < tagList.tagCount(); ++i) {
-			NBTTagCompound tabCompound1 = tagList.getCompoundTagAt(i);
-			byte byte0 = tabCompound1.getByte("Slot");
-			
-
-			if (byte0 >= 0 && byte0 < this.itemStacksASC.length) {
-				this.itemStacksASC[byte0] = ItemStack.loadItemStackFromNBT(tabCompound1);
-			}
-		}
-
-		//this.speedASC = tagCompound.getShort("SpeedASC");
-		this.inputTime = tagCompound.getShort("InputTime");
-
-		if (tagCompound.hasKey("CustomName", 8)) {
-			this.nameFIM = tagCompound.getString("CustomName");
-		}
-	}
-	
-	public void writeToNBT(NBTTagCompound tagCompound) {
-		super.writeToNBT(tagCompound);
-		//tagCompound.setShort("SpeedASC", (short) this.speedASC);
-		tagCompound.setShort("InputTime", (short) this.inputTime);
-		//tagCompound.setTag("world", world1);
-		
-		//tagCompound.
-		NBTTagList tagList = new NBTTagList();
-
-		for (int i = 0; i < this.itemStacksASC.length; ++i) {
-			if (this.itemStacksASC[i] != null) {
-				NBTTagCompound tagCompound1 = new NBTTagCompound();
-				tagCompound1.setByte("Slot", (byte) i);
-				this.itemStacksASC[i].writeToNBT(tagCompound1);
-				tagList.appendTag(tagCompound1);
-			}
-		}
-
-		tagCompound.setTag("Items", tagList);
-
-		if (this.hasCustomName()) {
-			tagCompound.setString("CustomName", this.nameFIM);
-		}
-	}
 	
 	@SideOnly(Side.CLIENT)
 	public int getCookProgressScaled(int par1) {
@@ -176,16 +127,24 @@ public class FIMTileEntity extends TileEntity implements ISidedInventory, ITicka
 		return false;
 	}
 	
-	int tick = 0;
+	protected int tick = 0;
+	
 	@Override
 	public void update() {
+		boolean dirtyFlag = false;
 		try {
 			if (!this.worldObj.isRemote) {
 				++tick;
 				if (tick % 20 == 0) {
 					this.checkConnection();
-					System.out.println(connection);
-					System.out.println(this.smelteryController_blockPos != null? this.smelteryController_blockPos.toString():"null");
+//					System.out.println(connection);
+//					System.out.println(this.smelteryController_blockPos != null? this.smelteryController_blockPos.toString():"null");
+					if (this.smelteryController_blockPos != null) {
+						TileSmeltery tile = (TileSmeltery) worldObj.getTileEntity(smelteryController_blockPos);
+						tile.updateTemperatureFromPacket(10000);
+						System.out.println(tile.getTemperature());
+						System.out.println(tile.getTemperature(0));
+					}
 				}
 			}
 		}catch(Throwable ex) {
@@ -338,43 +297,6 @@ public class FIMTileEntity extends TileEntity implements ISidedInventory, ITicka
 					++error;
 				}
 			}
-			
-//			if(world.getBlockState(this.pos.west()).getBlock() == TinkerSmeltery.smelteryController){
-//				connection = 1;
-//				amount = amount+1;
-//			}else{
-//				error++;
-//			}
-//			if(world.getBlockState(this.pos.east()).getBlock() == TinkerSmeltery.smelteryController){
-//				connection = 2;
-//				amount = amount+1;
-//			}else{
-//				error++;
-//			}
-//			if(world.getBlockState(this.pos.north()).getBlock() == TinkerSmeltery.smelteryController){
-//				connection = 3;
-//				amount = amount+1;
-//			}else{
-//				error++;
-//			}
-//			if(world.getBlockState(this.pos.south()).getBlock() == TinkerSmeltery.smelteryController){
-//				connection = 4;
-//				amount = amount+1;
-//			}else{
-//				error++;
-//			}
-//			if(world.getBlockState(this.pos.up()).getBlock() == TinkerSmeltery.smelteryController){
-//				connection = 5;
-//				amount = amount+1;
-//			}else{
-//				error++;
-//			}
-//			if(world.getBlockState(this.pos.down()).getBlock() == TinkerSmeltery.smelteryController){
-//				connection = 6;
-//				amount = amount+1;
-//			}else{
-//				error++;
-//			}
 			if (error == 5 && amount == 1 || connection != 0) {
 				canConnect = true;
 			}else{
@@ -540,8 +462,8 @@ public class FIMTileEntity extends TileEntity implements ISidedInventory, ITicka
      */
 	@Override
 	public boolean isUseableByPlayer(EntityPlayer player) {
-		return false;
-//		return this.worldObj.getTileEntity(this.pos) != this ? false : player.getDistanceSq((double) this.xCoord + 0.5D, (double) this.yCoord + 0.5D, (double) this.zCoord + 0.5D) <= 64.0D;
+		return this.worldObj.getTileEntity(this.pos) != this ? false :
+			player.getDistanceSq(this.pos.add(0.5D, 0.5D, 0.5D)) <= 64.0D;
 	}
 
 //	@Override
@@ -643,7 +565,59 @@ public class FIMTileEntity extends TileEntity implements ISidedInventory, ITicka
 		//return par3 != 0 || par1 != 1 || itemstack.getItem() == Items.bucket;
 		return false;
 	}
-
 	
+	/**
+	 *  loading and saving
+	 */
+	
+	@Override
+	public void readFromNBT(NBTTagCompound tagCompound) {
+		super.readFromNBT(tagCompound);
+		NBTTagList tagList = tagCompound.getTagList("Items", 10);
+		this.itemStacksASC = new ItemStack[this.getSizeInventory()];
+		
 
+		for (int i = 0; i < tagList.tagCount(); ++i) {
+			NBTTagCompound tabCompound1 = tagList.getCompoundTagAt(i);
+			byte byte0 = tabCompound1.getByte("Slot");
+			
+
+			if (byte0 >= 0 && byte0 < this.itemStacksASC.length) {
+				this.itemStacksASC[byte0] = ItemStack.loadItemStackFromNBT(tabCompound1);
+			}
+		}
+
+		//this.speedASC = tagCompound.getShort("SpeedASC");
+		this.inputTime = tagCompound.getShort("InputTime");
+
+		if (tagCompound.hasKey("CustomName", 8)) {
+			this.nameFIM = tagCompound.getString("CustomName");
+		}
+	}
+	
+	@Override
+	public void writeToNBT(NBTTagCompound tagCompound) {
+		super.writeToNBT(tagCompound);
+		//tagCompound.setShort("SpeedASC", (short) this.speedASC);
+		tagCompound.setShort("InputTime", (short) this.inputTime);
+		//tagCompound.setTag("world", world1);
+		
+		//tagCompound.
+		NBTTagList tagList = new NBTTagList();
+
+		for (int i = 0; i < this.itemStacksASC.length; ++i) {
+			if (this.itemStacksASC[i] != null) {
+				NBTTagCompound tagCompound1 = new NBTTagCompound();
+				tagCompound1.setByte("Slot", (byte) i);
+				this.itemStacksASC[i].writeToNBT(tagCompound1);
+				tagList.appendTag(tagCompound1);
+			}
+		}
+
+		tagCompound.setTag("Items", tagList);
+
+		if (this.hasCustomName()) {
+			tagCompound.setString("CustomName", this.nameFIM);
+		}
+	}
 }
