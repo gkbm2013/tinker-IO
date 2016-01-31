@@ -1,13 +1,19 @@
 package tinker_io.TileEntity;
 
-import scala.reflect.internal.Trees.This;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import slimeknights.tconstruct.smeltery.TinkerSmeltery;
 import slimeknights.tconstruct.smeltery.tileentity.TileSmeltery;
 import tinker_io.mainRegistry.ItemRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraft.block.Block;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
@@ -41,75 +47,8 @@ public class FIMTileEntity extends TileEntity implements ISidedInventory, ITicka
 	
 	public ItemStack fuel = new ItemStack(ItemRegistry.SolidFuel);
 	
-	public boolean canConnect = false;
-	public int connection;
-	
 	public int inputTime;
-
-	@Override
-	public int getSizeInventory() {
-		return this.itemStacksASC.length;
-	}
-
-	@Override
-	public ItemStack getStackInSlot(int slot) {
-		return this.itemStacksASC[slot];
-	}
-
-	@Override
-	public ItemStack decrStackSize(int par1, int par2) {
-		if (this.itemStacksASC[par1] != null) {
-			ItemStack itemstack;
-			if (this.itemStacksASC[par1].stackSize <= par2) {
-				itemstack = this.itemStacksASC[par1];
-				this.itemStacksASC[par1] = null;
-				return itemstack;
-			} else {
-				itemstack = this.itemStacksASC[par1].splitStack(par2);
-
-				if (this.itemStacksASC[par1].stackSize == 0) {
-					this.itemStacksASC[par1] = null;
-				}
-				return itemstack;
-			}
-		} else {
-			return null;
-		}
-	}
-
-//	@Override
-//	public ItemStack getStackInSlotOnClosing(int slot) {
-//		if (this.itemStacksASC[slot] != null) {
-//			ItemStack itemstack = this.itemStacksASC[slot];
-//			this.itemStacksASC[slot] = null;
-//			return itemstack;
-//		} else {
-//			return null;
-//		}
-//	}
-
-	@Override
-	public void setInventorySlotContents(int slot, ItemStack itemstack) {
-		this.itemStacksASC[slot] = itemstack;
-
-		if (itemstack != null && itemstack.stackSize > this.getInventoryStackLimit()) {
-			itemstack.stackSize = this.getInventoryStackLimit();
-		}
-		
-	}
-
-//	1.7
-//	@Override
-//	public String getInventoryName() {
-//		return this.hasCustomInventoryName() ? this.nameFIM : I18n.format("tile.FuelInputMachine.name", new Object[0]);
-//	}
-
-//	1.7
-//	@Override
-//	public boolean hasCustomInventoryName() {
-//		return this.nameFIM != null && this.nameFIM.length() > 0;
-//	}
-
+	
 	@Override
 	public int getInventoryStackLimit() {
 		return 64;
@@ -127,289 +66,164 @@ public class FIMTileEntity extends TileEntity implements ISidedInventory, ITicka
 		return false;
 	}
 	
+	protected SmelteryControllerInfo scInfo;
+	protected FuelFSM fuelFSM;
+	
+	@Override
+	public void onLoad() {
+		scInfo = SCInfoFactory.getSmelyeryControllerInfo(this);
+		fuelFSM = new FuelFSM(isActive);
+	}
+	
+	protected int heatingTemp = 1000;
 	protected int tick = 0;
 	
 	@Override
 	public void update() {
-		boolean dirtyFlag = false;
+		boolean isDirty = false;
 		try {
-			if (!this.worldObj.isRemote) {
+			if (!this.worldObj.isRemote && scInfo != null) {
 				++tick;
-				if (tick % 20 == 0) {
-					this.checkConnection();
-//					System.out.println(connection);
-//					System.out.println(this.smelteryController_blockPos != null? this.smelteryController_blockPos.toString():"null");
-					if (this.smelteryController_blockPos != null) {
-						TileSmeltery tile = (TileSmeltery) worldObj.getTileEntity(smelteryController_blockPos);
-						tile.updateTemperatureFromPacket(10000);
-						System.out.println(tile.getTemperature());
-						System.out.println(tile.getTemperature(0));
+				if (tick % 4 == 0) {
+					this.scInfo.update();
+					if (this.scInfo.pos != null) {
+						this.fuelFSM.update();
+						if (isActive) {
+							int x = getStackSize(this.itemStacksASC[0]) * 200 + 1000;
+							this.scInfo.tile.updateTemperatureFromPacket(x);
+	//						System.out.println(scInfo.tile.getTemperature());
+	//						System.out.println(scInfo.tile.getTemperature(0));
+						} else {
+							this.scInfo.tile.updateTemperatureFromPacket(1000);
+						}
+					} else {
+						this.fuelFSM.revert();
 					}
 				}
 			}
 		}catch(Throwable ex) {
-			System.out.println(ex.toString());
+				ex.printStackTrace();
 		}
-	}
-	
-	public void updateEntity() {
-		boolean dirtyFlag = false;		
-		if (!this.worldObj.isRemote) {//server do it
-			if (this.canSmelt()) {
-					dirtyFlag = true;
-					if (this.itemStacksASC[1] != null) {
-
-						if (this.itemStacksASC[1].stackSize == 0) {
-							this.itemStacksASC[1] = itemStacksASC[1].getItem().getContainerItem(this.itemStacksASC[1]);
-						}
-					}
-					
-				speedUPG();
-				++this.inputTime;
-				if (this.inputTime >= speed) {
-					this.inputTime = 0;
-					this.smeltItem();
-					dirtyFlag = true;
-					connectToTConstruct();
-				}
-
-			}
-			
-			if (dirtyFlag) {
-				// this is like : Don't forge save the game.
-				this.markDirty();
-			}
-		}
-	}
-	
-	private void speedUPG(){
-		ItemStack stackSpeedUPG = new ItemStack(ItemRegistry.SpeedUPG);
 		
-		if(this.itemStacksASC[0] == null){
-
-		}else{
-			if(this.itemStacksASC[0].isItemEqual(stackSpeedUPG)){
-				inputTime = inputTime+(this.itemStacksASC[0].stackSize/3/2);
-			}
+		if (isDirty) {
+			this.markDirty();
 		}
-		//System.out.println(inputTime);
-	}
-
-	private boolean canSmelt() {
-		this.checkConnection();
-		if(canConnect == true){
-			if(checkTemps() == true){
-				if (this.itemStacksASC[1] == null) return false;
-				if (this.itemStacksASC[1].isItemEqual(this.fuel)) return true;
-			}else{
-				return false;
-			}
-		}else{
-			return false;
-		}
-		return false;
 	}
 	
-	private void connectToTConstruct(){
-		World world = worldObj;
+	private boolean isActive;
+	
+	/**
+	 * finite-state machine
+	 */
+	protected class FuelFSM {
+		private boolean state;		
+		FuelFSM(boolean state) {
+			this.state = state;
+		}
 		
-		if(canConnect == true){
-//			TileSmeltery smeltery = null;
-//			if(connection == 6){
-//				smeltery = (TileSmeltery) world.getTileEntity(this.pos.up());
-//			}else if(connection == 5){
-//				smeltery = (TileSmeltery) world.getTileEntity(this.pos.down());
-//			}else if(connection == 1){
-//				smeltery = (TileSmeltery) world.getTileEntity(this.pos.west());
-//			}else if(connection == 2){
-//				smeltery = (TileSmeltery) world.getTileEntity(this.pos.east());
-//			}else if(connection == 3){
-//				smeltery = (TileSmeltery) world.getTileEntity(this.pos.north());
-//			}else if(connection == 4){
-//				smeltery = (TileSmeltery) world.getTileEntity(this.pos.south());
+		 void update() {
+//			System.out.println(inputTime);
+			if (state) {
+				heat();
+			} else {
+				waitFuel();
+			}
+		}
+		
+		 void revert() {
+			if (state) {
+				heat();
+			}
+		}
+		
+		 void heat() {
+			isActive = true;
+			inputTime -= 10;
+			if (inputTime == 0) {
+				state = false;
+			}
+		}
+		
+		 void waitFuel() {
+			isActive = false;
+			if (getStackSize(itemStacksASC[1]) > 0) {
+				cousumeFuel();
+				inputTime = 300;
+				
+				state = true;
+			}
+		}
+		
+		 void cousumeFuel() {
+			itemStacksASC[1].stackSize -= 1;
+			if (itemStacksASC[1].stackSize == 0) {
+				itemStacksASC[1] = itemStacksASC[1].getItem().getContainerItem(itemStacksASC[1]);
+			}
+		}
+	}
+	
+	
+	
+//	public void updateEntity() {
+//		boolean dirtyFlag = false;		
+//		if (!this.worldObj.isRemote) {//server do it
+//			if (this.canSmelt()) {
+//					dirtyFlag = true;
+//					if (this.itemStacksASC[1] != null) {
+//
+//						if (this.itemStacksASC[1].stackSize == 0) {
+//							this.itemStacksASC[1] = itemStacksASC[1].getItem().getContainerItem(this.itemStacksASC[1]);
+//						}
+//					}
+//					
+//				speedUPG();
+//				++this.inputTime;
+//				if (this.inputTime >= speed) {
+//					this.inputTime = 0;
+//					this.smeltItem();
+//					dirtyFlag = true;
+//					connectToTConstruct();
+//				}
+//
 //			}
 //			
-//			if(smeltery != null){
-//				int[] activeTemps = smeltery.activeTemps;
-//				int fuelAmount = smeltery.fuelAmount;
-//				int[] meltingTemps = smeltery.meltingTemps;
-//				//activeTemps
-//				if(activeTemps != null && fuelAmount >= 120){
-//					for(int i = 0; i < activeTemps.length; i++){
-//						if(activeTemps[i] < 200 || activeTemps[i] == meltingTemps[i]){
-//							
-//						}else{
-//							if(this.getInputSize() == 2048){
-//								activeTemps[i] = meltingTemps[i];
-//							}else if(this.getInputSize() >= i){
-//								activeTemps[i] = meltingTemps[i];
-//							}
-//							//System.out.println(activeTemps[i]);	
-//						}
-//						
-//					}
-//				}				
+//			if (dirtyFlag) {
+//				// this is like : Don't forge save the game.
+//				this.markDirty();
 //			}
-			
-		}else{
-			System.out.println("[Tinker I/O] Error! (Maybe I will fix it ...)");
-		}
-		
+//		}
+//	}
+	
+	public int getStackSize(ItemStack stack) {
+		return stack == null ? 0 : stack.stackSize;
 	}
 	
-	public void smeltItem() {
-		if (this.canSmelt() && this.checkTemps()) {
-			ItemStack itemstack = new ItemStack(ItemRegistry.SolidFuel);
-
-			if (this.itemStacksASC[1] == null) {
-				this.itemStacksASC[1] = itemstack.copy();
-			} else if (this.itemStacksASC[1].getItem() == itemstack.getItem()) {
-				--this.itemStacksASC[1].stackSize;
-			}
-		}
-	}
-	
-	private BlockPos smelteryController_blockPos ;
-	
-	public void checkConnection(){
-		int amount = 0;
-		connection = 0;
-		smelteryController_blockPos = null;
-		int error = 0;
-		
-		if(worldObj != null && !worldObj.isRemote){
-			/*
-			 * the value of connection : 
-			 * 0 = not found
-			 * 1 = x-1 w
-			 * 2 = x+1 e
-			 * 3 = z-1 s
-			 * 4 = z+1 n
-			 * 5 = y+1 u
-			 */
-			EnumFacing[] facings = EnumFacing.values();
-			for (EnumFacing facing : facings) { //d-u-n-s-w-e
-				if(worldObj.getBlockState(this.pos.offset(facing)).getBlock() == TinkerSmeltery.smelteryController) {
-					this.smelteryController_blockPos = new BlockPos(this.pos.offset(facing));
-					this.connection = facing.getIndex();
-					amount += 1;
-				} else {
-					++error;
-				}
-			}
-			if (error == 5 && amount == 1 || connection != 0) {
-				canConnect = true;
-			}else{
-				canConnect = false;
-			}
-		}else{
-			canConnect = false;
-		}
-	}
-	
-	private boolean checkTemps(){
-		int start = 0;
-		int stop = 0;
-		
-		if(!worldObj.isRemote){
-			if(canConnect){
-				TileSmeltery smeltery = (TileSmeltery) worldObj.getTileEntity(smelteryController_blockPos);
-//				if(connection == 6){
-//					if(world.getTileEntity(x, y -1, z) instanceof TileSmeltery){
-//						smeltery = (TileSmeltery) world.getTileEntity(x, y -1, z);
-//					}		
-//				}else if(connection == 5){
-//					if(world.getTileEntity(x, y +1, z) instanceof TileSmeltery){
-//						smeltery = (TileSmeltery) world.getTileEntity(x, y +1, z);
-//					}					
-//				}else if(connection == 1){
-//					if(world.getTileEntity(x -1, y, z) instanceof TileSmeltery){
-//						smeltery = (TileSmeltery) world.getTileEntity(x -1, y, z);
-//					}		
-//				}else if(connection == 2){
-//					if(world.getTileEntity(x +1, y, z) instanceof TileSmeltery){
-//						smeltery = (TileSmeltery) world.getTileEntity(x +1, y, z);
-//					}		
-//				}else if(connection == 3){
-//					if(world.getTileEntity(x, y, z -1) instanceof TileSmeltery){
-//						smeltery = (TileSmeltery) world.getTileEntity(x, y, z -1);
-//					}		
-//				}else if(connection == 4){
-//					if(world.getTileEntity(x, y, z +1) instanceof TileSmeltery){
-//						smeltery = (TileSmeltery) world.getTileEntity(x, y, z +1);
-//					}		
-//				}
-				
-//				if(smeltery != null){
-//					int[] activeTemps = smeltery.activeTemps;
-//					int fuelAmount = smeltery.fuelAmount;
-//					int[] meltingTemps = smeltery.meltingTemps;
-//					
-//					//activeTemps
-//					if(activeTemps != null && fuelAmount >= 120){
-//						
-//						if(this.getInputSize() == 2048){
-//							for(int i = 0; i < activeTemps.length; i++){
-//								if(activeTemps[i] > 200 && activeTemps[i] < meltingTemps[i]){
-//									start++;
-//								}
-//							}							
-//						}else{
-//							int num = 0;
-//							if(activeTemps.length > this.getInputSize()){
-//								num = this.getInputSize();
-//							}else{
-//								num = activeTemps.length;
-//							}
-//							
-//							for(int i = 0; i < num; i++){
-//								if(activeTemps[i] > 200 && activeTemps[i] < meltingTemps[i]){
-//									start++;
-//								}
-//							}
-//						}
-//					}				
-//				}
-				
-			}else{
-				System.out.println("[Tinker I/O] Error! (Maybe I will fix it ...)");
-			}
-
-			if(start > 0){
-				return true;
-			}else{
-				return false;
-			}
-		}else{
-			return false;
-		}
-	}
-	
-	/*public String getDirection(){
-		this.checkConnection();
-		String dir;
-		if(canConnect == true){
-			if(connection == 6){
-				dir = "y - 1";
-			}else if(connection == 5){
-				dir = "y + 1";
-			}else if(connection == 1){
-				dir = "x - 1";
-			}else if(connection == 2){
-				dir = "x + 1";
-			}else if(connection == 3){
-				dir = "z - 1";
-			}else if(connection == 4){
-				dir = "z + 1";
-			}else{
-				dir = "Not Found";
-			}
-		}else{
-			dir = "Not Found";
-		}
-		
-		return dir;
-	}*/
+//	private boolean canSmelt() {
+//		this.checkConnection();
+//		if(canConnect == true){
+//			if(checkTemps() == true){
+//				if (this.itemStacksASC[1] == null) return false;
+//				if (this.itemStacksASC[1].isItemEqual(this.fuel)) return true;
+//			}else{
+//				return false;
+//			}
+//		}else{
+//			return false;
+//		}
+//		return false;
+//	}
+//	
+//	public void smeltItem() {
+//		if (this.canSmelt() && this.checkTemps()) {
+//			ItemStack itemstack = new ItemStack(ItemRegistry.SolidFuel);
+//
+//			if (this.itemStacksASC[1] == null) {
+//				this.itemStacksASC[1] = itemstack.copy();
+//			} else if (this.itemStacksASC[1].getItem() == itemstack.getItem()) {
+//				--this.itemStacksASC[1].stackSize;
+//			}
+//		}
+//	}
 	
 	public int getInputSize(){
 		int size = 1;
@@ -455,34 +269,49 @@ public class FIMTileEntity extends TileEntity implements ISidedInventory, ITicka
 			return size * 30;
 
 	}
-
-
-    /**
-     * Do not make give this method the name canInteractWith because it clashes with Container
-     */
+	
+	/**
+	 * interface
+	 */
+	
+	/**
+	 * Returns the number of slots in the inventory.
+	 */
 	@Override
-	public boolean isUseableByPlayer(EntityPlayer player) {
-		return this.worldObj.getTileEntity(this.pos) != this ? false :
-			player.getDistanceSq(this.pos.add(0.5D, 0.5D, 0.5D)) <= 64.0D;
+	public int getSizeInventory() {
+		return this.itemStacksASC.length;
 	}
-
-//	@Override
-//	public void openInventory() {
-//				
-//	}
-//
-//	@Override
-//	public void closeInventory() {
-//				
-//	}
-
+	
+	/**
+	 * Returns the stack in the given slot.
+	 */
 	@Override
-	public boolean isItemValidForSlot(int par1, ItemStack itemstack) {
-		if(itemstack.isItemEqual(fuel)){
-			return true;
-		}else{
-			return false;
-		}		
+	public ItemStack getStackInSlot(int index) {
+		return this.itemStacksASC[index];
+	}
+	
+	/**
+	 * Removes up to a specified number of items from an inventory slot and returns them in a new stack.
+	 */
+	@Override
+	public ItemStack decrStackSize(int index, int count) {
+		if (this.itemStacksASC[index] != null) {
+			ItemStack itemstack;
+			if (this.itemStacksASC[index].stackSize <= count) {
+				itemstack = this.itemStacksASC[index];
+				this.itemStacksASC[index] = null;
+				return itemstack;
+			} else {
+				itemstack = this.itemStacksASC[index].splitStack(count);
+
+				if (this.itemStacksASC[index].stackSize == 0) {
+					this.itemStacksASC[index] = null;
+				}
+				return itemstack;
+			}
+		} else {
+			return null;
+		}
 	}
 	
 	/**
@@ -490,8 +319,37 @@ public class FIMTileEntity extends TileEntity implements ISidedInventory, ITicka
 	 */
 	@Override
 	public ItemStack removeStackFromSlot(int index) {
-		// TODO 自動產生的方法 Stub
-		return null;
+		if (this.itemStacksASC[index] != null) {
+			ItemStack itemstack = this.itemStacksASC[index];
+			this.itemStacksASC[index] = null;
+			return itemstack;
+		} else {
+			return null;
+		}
+	}
+	
+	/**
+	 * Sets the given item stack to the specified slot in the inventory
+	 * (can be crafting or armor sections).
+	 */
+	@Override
+	public void setInventorySlotContents(
+			int slot, ItemStack itemstack) {
+		this.itemStacksASC[slot] = itemstack;
+
+		if (itemstack != null && itemstack.stackSize > this.getInventoryStackLimit()) {
+			itemstack.stackSize = this.getInventoryStackLimit();
+		}
+		
+	}
+	
+	/**
+     * Do not make give this method the name canInteractWith because it clashes with Container
+     */
+	@Override
+	public boolean isUseableByPlayer(EntityPlayer player) {
+		return this.worldObj.getTileEntity(this.pos) != this ? false :
+			player.getDistanceSq(this.pos.add(0.5D, 0.5D, 0.5D)) <= 64.0D;
 	}
 
 	@Override
@@ -505,7 +363,21 @@ public class FIMTileEntity extends TileEntity implements ISidedInventory, ITicka
 		// TODO 自動產生的方法 Stub
 		
 	}
-
+	
+	/**
+	 * Returns true if automation is allowed to insert the given stack
+	 * (ignoring stack size) into the given slot.
+	 */
+	@Override
+	public boolean isItemValidForSlot(
+			int index, ItemStack itemstack) {
+		if(itemstack.isItemEqual(fuel)){
+			return true;
+		}else{
+			return false;
+		}		
+	}
+	
 	@Override
 	public int getField(int id) {
 		// TODO 自動產生的方法 Stub
@@ -530,18 +402,24 @@ public class FIMTileEntity extends TileEntity implements ISidedInventory, ITicka
 		
 	}
 
+	 /**
+     * Get the name of this object.
+     * For players this returns their username
+     */
 	@Override
 	public String getName() {
-		// TODO 自動產生的方法 Stub
-		return null;
+		return this.hasCustomName() ?
+				this.nameFIM : I18n.format("tile.FuelInputMachine.name", new Object[0]);
 	}
-
+	
 	@Override
 	public boolean hasCustomName() {
-		// TODO 自動產生的方法 Stub
-		return false;
+		return this.nameFIM != null && this.nameFIM.length() > 0;
 	}
-
+	
+	/**
+     * Get the formatted ChatComponent that will be used for the sender's username in chat
+     */
 	@Override
 	public IChatComponent getDisplayName() {
 		// TODO 自動產生的方法 Stub
@@ -553,12 +431,20 @@ public class FIMTileEntity extends TileEntity implements ISidedInventory, ITicka
 		return slotsFuel;
 	}
 
+	/**
+     * Returns true if automation can insert the given item in the given slot from the given side.
+     * Args: slot, item, side
+     */
 	@Override
-	public boolean canInsertItem(int index, ItemStack itemStackIn,
+	public boolean canInsertItem(int index, ItemStack itemStackIn, 
 			EnumFacing direction) {
 		return this.isItemValidForSlot(index, itemStackIn);
 	}
 	
+	/**
+     * Returns true if automation can extract the given item in the given slot from the given side.
+     * Args: slot, item, side
+     */
 	@Override
 	public boolean canExtractItem(int index, ItemStack stack,
 			EnumFacing direction) {
@@ -589,6 +475,7 @@ public class FIMTileEntity extends TileEntity implements ISidedInventory, ITicka
 
 		//this.speedASC = tagCompound.getShort("SpeedASC");
 		this.inputTime = tagCompound.getShort("InputTime");
+		this.isActive = tagCompound.getBoolean("isActive");
 
 		if (tagCompound.hasKey("CustomName", 8)) {
 			this.nameFIM = tagCompound.getString("CustomName");
@@ -600,6 +487,7 @@ public class FIMTileEntity extends TileEntity implements ISidedInventory, ITicka
 		super.writeToNBT(tagCompound);
 		//tagCompound.setShort("SpeedASC", (short) this.speedASC);
 		tagCompound.setShort("InputTime", (short) this.inputTime);
+		tagCompound.setBoolean("isActive", isActive);
 		//tagCompound.setTag("world", world1);
 		
 		//tagCompound.
@@ -619,5 +507,102 @@ public class FIMTileEntity extends TileEntity implements ISidedInventory, ITicka
 		if (this.hasCustomName()) {
 			tagCompound.setString("CustomName", this.nameFIM);
 		}
+	}
+}
+
+class SCInfoFactory {
+	public static SmelteryControllerInfo getSmelyeryControllerInfo(
+			FIMTileEntity tile) {
+		return new SmelteryControllerInfo(tile.getPos(), tile.getWorld());
+	}
+}
+
+class SmelteryControllerInfo {
+	final private BlockPos FIMBlockPos;
+	final private World worldObj;
+	
+	public EnumFacing facing;
+	public BlockPos pos;
+	public TileSmeltery tile;
+	public boolean connectionSuccess;
+	
+	public SmelteryControllerInfo(
+			BlockPos FIMBlockPos, World worldObj) {
+		this.FIMBlockPos = FIMBlockPos;
+		this.worldObj = worldObj;
+	}
+	
+	protected void update() {
+		if (isOnlyOneSmelteryController()) {
+			updateInfo();
+			connectionSuccess = true;
+		} else {
+			initInfo();
+			connectionSuccess = false;
+		}
+	}
+	
+	private void updateInfo() {
+		EnumFacing[] facings = EnumFacing.values();
+		for (EnumFacing facing : facings) {
+			setInfo(facing);
+		}
+	}
+	
+	private void setInfo(EnumFacing facing) {
+		Block block = getBlock(facing);
+		if (isSmelteryController(block)) {
+			this.facing = facing;
+			this.pos = FIMBlockPos.offset(facing);
+			this.tile = getTileSmeltery(pos);
+		}
+	}
+	
+	private void initInfo() {
+		this.facing = null;
+		this.pos = null;
+		this.tile = null;
+	}
+	
+	private boolean isOnlyOneSmelteryController() {
+		int num = checkSmelteryControllerAmount();
+		if (num == 1) {
+			return true;
+		} else  {
+			return false;
+		}
+	}
+	
+	private int checkSmelteryControllerAmount() {
+		int amount = 0;
+		ArrayList<Block> blocks = getAllAroundBlocks();
+		amount = blocks.stream()
+				.filter(SmelteryControllerInfo::isSmelteryController)
+				.collect(Collectors.toList())
+				.size();
+		return amount;
+	}
+
+	private ArrayList<Block> getAllAroundBlocks() {
+		ArrayList<Block> blocks = new ArrayList<Block>(6);
+		List<EnumFacing> facings = Arrays.asList(EnumFacing.values());
+		for (EnumFacing facing : facings) {
+			blocks.add(getBlock(facing));
+		}
+		return blocks;
+	}
+
+	static  boolean isSmelteryController(Block block) {
+		return block == TinkerSmeltery.smelteryController;
+	}
+	
+	private Block getBlock(EnumFacing facing) {
+		Block block = worldObj.getBlockState(
+				this.FIMBlockPos.offset(facing)).getBlock();
+		return block != null ? block : Blocks.air;
+	}
+	
+	private TileSmeltery getTileSmeltery(BlockPos pos) {
+		return (TileSmeltery) this.worldObj.getTileEntity(pos);
 	}
 }

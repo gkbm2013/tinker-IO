@@ -13,6 +13,8 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.stats.StatList;
@@ -160,52 +162,11 @@ public class FuelInputMachine extends BlockContainer {
 		
 	}
 	
-	
 	@Override
 	public TileEntity createNewTileEntity(World world, int meta) { //Called on placing the block.
 		return new FIMTileEntity();
 	}
 	
-//	@SideOnly(Side.CLIENT)
-//	public void onBlockAdded(World world, int x, int y, int z) {
-//		super.onBlockAdded(world, x, y, z);
-//		this.direction(world, x, y, z);
-//		
-//		FIMTileEntity te = (FIMTileEntity) world.getTileEntity(x, y, z);
-//		te.checkConnection();
-//	}
-//	
-//	private void direction(World world, int x, int y, int z) {
-//		if (!world.isRemote) {
-//			Block direction = world.getBlock(x, y, z - 1);
-//			Block direction1 = world.getBlock(x, y, z + 1);
-//			Block direction2 = world.getBlock(x - 1, y, z);
-//			Block direction3 = world.getBlock(x + 1, y, z);
-//			byte byte0 = 5;
-//
-//			if (direction.func_149730_j() && direction.func_149730_j()) {
-//				byte0 = 3;
-//			}
-//
-//			if (direction1.func_149730_j() && direction1.func_149730_j()) {
-//				byte0 = 2;
-//			}
-//
-//			if (direction2.func_149730_j() && direction2.func_149730_j()) {
-//				byte0 = 5;
-//			}
-//
-//			if (direction3.func_149730_j() && direction3.func_149730_j()) {
-//				byte0 = 4;
-//			}
-//
-//			world.setBlockMetadataWithNotify(x, y, z, byte0, 3);
-//			
-//			
-//			
-//		}
-//	}
-
 	@Override
 	public void onBlockAdded(World worldIn, BlockPos pos, IBlockState state)
     {
@@ -281,82 +242,15 @@ public class FuelInputMachine extends BlockContainer {
         return this.getDefaultState().withProperty(FACING, EnumFacing.SOUTH);
     }
 	
-//	public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entity, ItemStack itemstack) {
-//		byte b0 = 5;
-//		int direction = MathHelper.floor_double((double) (entity.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
-//
-//		   if (direction == 0)
-//	        {
-//	            b0 = 2;
-//	        }
-//
-//	        if (direction == 1)
-//	        {
-//	            b0 = 5;
-//	        }
-//
-//	        if (direction == 2)
-//	        {
-//	            b0 = 3;
-//	        }
-//
-//	        if (direction == 3)
-//	        {
-//	            b0 = 4;
-//	        }
-//	        world.setBlockMetadataWithNotify(x, y, z, b0, 2);
-//
-//		if (itemstack.hasDisplayName()) {
-//			((FIMTileEntity) world.getTileEntity(x, y, z)).nameFIM(itemstack.getDisplayName());
-//		}
-//	}
-	
+	@Override
+	public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
+	    TileEntity tile = worldIn.getTileEntity(pos);
 
-    @Override
-    public void breakBlock(World world, BlockPos pos, IBlockState state)
-    {
-        if (hasTileEntity(state)) {
-            world.removeTileEntity(pos);
-        }
-        super.breakBlock(world, pos, state);
-    }
-	
-//	public void breakBlock(World world, int x, int y, int z, Block block, int meta) {
-//			FIMTileEntity tileentitytutfurnace = (FIMTileEntity) world.getTileEntity(x, y, z);
-//
-//			if (tileentitytutfurnace != null) {
-//				for (int i = 0; i < tileentitytutfurnace.getSizeInventory(); ++i) {
-//					ItemStack itemstack = tileentitytutfurnace.getStackInSlot(i);
-//
-//					if (itemstack != null) {
-//						float f = this.random.nextFloat() * 0.6F + 0.1F;
-//						float f1 = this.random.nextFloat() * 0.6F + 0.1F;
-//						float f2 = this.random.nextFloat() * 0.6F + 0.1F;
-//
-//						while (itemstack.stackSize > 0) {
-//							int j = this.random.nextInt(21) + 10;
-//
-//							if (j > itemstack.stackSize) {
-//								j = itemstack.stackSize;
-//							}
-//
-//							itemstack.stackSize -= j;
-//							EntityItem entityitem = new EntityItem(world, (double) ((float) x + f), (double) ((float) y + f1), (double) ((float) z + f2), new ItemStack(itemstack.getItem(), j, itemstack.getItemDamage()));
-//
-//							if (itemstack.hasTagCompound()) {
-//								entityitem.getEntityItem().setTagCompound(((NBTTagCompound) itemstack.getTagCompound().copy()));
-//							}
-//
-//							float f3 = 0.025F;
-//							entityitem.motionX = (double) ((float) this.random.nextGaussian() * f3);
-//							entityitem.motionY = (double) ((float) this.random.nextGaussian() * f3 + 0.1F);
-//							entityitem.motionZ = (double) ((float) this.random.nextGaussian() * f3);
-//							world.spawnEntityInWorld(entityitem);
-//						}
-//					}
-//				}
-//				world.func_147453_f(x, y, z, block);
-//			}
-//		super.breakBlock(world, x, y, z, block, meta);
-//	}
+	    if(tile instanceof FIMTileEntity) {
+	      InventoryHelper.dropInventoryItems(worldIn, pos, (IInventory) tile);
+	      worldIn.updateComparatorOutputLevel(pos, this);
+	    }
+
+	    super.breakBlock(worldIn, pos, state);
+	  }
 }
