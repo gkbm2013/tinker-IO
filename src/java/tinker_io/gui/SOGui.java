@@ -1,6 +1,6 @@
 package tinker_io.gui;
 
-/*import java.util.ArrayList;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Iterator;
@@ -9,30 +9,30 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
-import slimeknights.tconstruct.TConstruct;*/
+import slimeknights.tconstruct.TConstruct;
 import tinker_io.TileEntity.SOTileEntity;
 import tinker_io.inventory.ContainerSO;
 import tinker_io.main.Main;
-/*import tinker_io.packet.PacketDispatcher;
-import tinker_io.packet.VoidLiquidPacket;*/
+import tinker_io.packet.PacketDispatcher;
+import tinker_io.packet.VoidLiquidPacket;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
-/*import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureMap;
-import net.minecraft.client.resources.I18n;*/
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.InventoryPlayer;
-/*import net.minecraft.init.Blocks;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
-import net.minecraft.util.EnumChatFormatting;*/
+import net.minecraft.util.EnumChatFormatting;
 //import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
-/*import net.minecraft.util.StatCollector;
-import net.minecraft.world.World;*/
+import net.minecraft.util.StatCollector;
+import net.minecraft.world.World;
 //import net.minecraftforge.common.util.ForgeDirection;
-/*import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidTankInfo;*/
+import net.minecraftforge.fluids.FluidTankInfo;
 
 public class SOGui extends GuiContainer{
 
@@ -61,10 +61,10 @@ public class SOGui extends GuiContainer{
 	@Override
 	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY){
 		
-		/*this.mc.getTextureManager().bindTexture(SOGuiTextures);
+		this.mc.getTextureManager().bindTexture(SOGuiTextures);
         btn0.drawTexturedModalRect(-20,  15, 178, 82, 20, 20);
 		
-		String string = this.tileSO.hasCustomInventoryName() ? this.tileSO.getInventoryName() : I18n.format(this.tileSO.getInventoryName(), new Object[0]);
+		String string = this.tileSO.hasCustomName() ? this.tileSO.getName() : I18n.format(this.tileSO.getName(), new Object[0]);
         int outputSize = tileSO.getOutputSize();
 		
 		this.fontRendererObj.drawString(string, (this.xSize - this.fontRendererObj.getStringWidth(string))/2, 6, 4210752);
@@ -72,32 +72,32 @@ public class SOGui extends GuiContainer{
 		
 		this.fontRendererObj.drawString(EnumChatFormatting.DARK_GREEN + "Max : " + outputSize, 120, 17, 4210752);
 		
-		FluidTankInfo[] info = tileSO.getTankInfo(ForgeDirection.UNKNOWN);
-		FluidStack Wliquid = info[0].fluid;*/
+		FluidTankInfo[] info = tileSO.getTankInfo();
+		FluidStack Wliquid = info[0].fluid;
 		
-		//Tool Tips (For tank)
-		//FluidStack liquid = info[0].fluid;
-		//int cornerX = (width - xSize) / 2;
-        //int cornerY = (height - ySize) / 2;
-        //if (liquid != null){
-        //	if(mouseX >= cornerX + 26 && mouseX <= cornerX + 38 && mouseY <= cornerY + 67 && mouseY >= cornerY + 67 - 52/*liquidAmount*/){
-	    //    	drawFluidStackTooltip(liquid, mouseX-cornerX, mouseY-cornerY);
-	    //    }
-        //}
+//		Tool Tips (For tank)
+		FluidStack liquid = info[0].fluid;
+		int cornerX = (width - xSize) / 2;
+        int cornerY = (height - ySize) / 2;
+        if (liquid != null){
+        	if(mouseX >= cornerX + 26 && mouseX <= cornerX + 38 && mouseY <= cornerY + 67 && mouseY >= cornerY + 67 - 52/*liquidAmount*/){
+	        	drawFluidStackTooltip(liquid, mouseX-cornerX, mouseY-cornerY);
+	        }
+        }
         
       //Tool Tips (For button)
-        /*if (btn0.func_146115_a()) { // Tells you if the button is hovered by mouse
+        if (btn0.isMouseOver()) { // Tells you if the button is hovered by mouse
             String[] desc = { EnumChatFormatting.RED + StatCollector.translateToLocal("tio.gui.SO.toolTips.button_head"), EnumChatFormatting.GRAY + StatCollector.translateToLocal("tio.gui.SO.toolTips.button_info") };
             @SuppressWarnings("rawtypes")
             List temp = Arrays.asList(desc);
             drawHoveringText(temp, mouseX - cornerX + 10, mouseY - cornerY + 10, fontRendererObj);
-        }*/
+        }
 		
 	}
 
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float var1, int mouseX, int mouseY) {
-		/*FluidTankInfo[] info = tileSO.getTankInfo(ForgeDirection.UNKNOWN);
+		FluidTankInfo[] info = tileSO.getTankInfo();
 		FluidStack liquid = info[0].fluid;
 
         int cornerX = (width - xSize) / 2;
@@ -114,16 +114,23 @@ public class SOGui extends GuiContainer{
 	        this.drawTexturedModalRect(k + 93, l + 33, 176, 0, i1 + 1, 17);
 	        
 	        //Redstone icon
-	        int power = tileSO.getWorldObj().getBlockPowerInput(tileSO.xCoord, tileSO.yCoord, tileSO.zCoord);
-        	int strongestsPower = tileSO.getWorldObj().getStrongestIndirectPower(tileSO.xCoord, tileSO.yCoord, tileSO.zCoord);
+//	        int power = tileSO.getWorldObj().getBlockPowerInput(tileSO.xCoord, tileSO.yCoord, tileSO.zCoord);
+//        	int strongestsPower = tileSO.getWorldObj().getStrongestIndirectPower(tileSO.xCoord, tileSO.yCoord, tileSO.zCoord);
+	        boolean hasPower = tileSO.getWorld().isBlockPowered(tileSO.getPos());
         	
         	if(tileSO.hasRedstoneUPG()){
-        		if(power != 0 && strongestsPower != 0){
+//        		if(power != 0 && strongestsPower != 0){
+//            		this.drawTexturedModalRect(k + 119, l + 55, 176, 18, 22, 20);
+//            		this.drawTexturedModalRect(k + 92, l + 32, 176, 60, 26, 20);
+//            	}else{
+//            		this.drawTexturedModalRect(k + 120, l + 55, 177, 39, 21, 20);
+//            	}
+        		if(hasPower) {
             		this.drawTexturedModalRect(k + 119, l + 55, 176, 18, 22, 20);
             		this.drawTexturedModalRect(k + 92, l + 32, 176, 60, 26, 20);
-            	}else{
+        		} else {
             		this.drawTexturedModalRect(k + 120, l + 55, 177, 39, 21, 20);
-            	}
+        		}
         	}
         	
         	
@@ -133,7 +140,7 @@ public class SOGui extends GuiContainer{
 			//Get Liquid Icon
 			IIcon renderIndex = Blocks.lava.getIcon(0, 0);
 			if (liquid != null){
-				 renderIndex = liquid.getFluid().getStillIcon();
+				 renderIndex = liquid.getFluid().getStill();
 	        }
 	        
 	        //Draw Liquid (For tank)
@@ -145,26 +152,27 @@ public class SOGui extends GuiContainer{
 	        	btn0.enabled = true;
 	        }else{
 	        	btn0.enabled = false;
-	        }*/
+	        }
 	        
 	        
 	}
-
+	
+	@Override
 	public void actionPerformed(GuiButton button){
-		/*switch(button.id){
+		switch(button.id){
 		case 0:
 			
 			int[] coord = new int[3];
 			
-			coord[0] = tileSO.xCoord;
-			coord[1] = tileSO.yCoord;
-			coord[2] = tileSO.zCoord;
+			coord[0] = tileSO.getPos().getX();
+			coord[1] = tileSO.getPos().getY();
+			coord[2] = tileSO.getPos().getZ();
 			
 			tileSO.voidLiquid();
 			PacketDispatcher.sendToServer(new VoidLiquidPacket(coord));
 			break;
 		default:
-		}*/
+		}
 		
 	}
 	
@@ -181,7 +189,7 @@ public class SOGui extends GuiContainer{
 	 *2015/3/29
 	 */
 	
-	/*protected void drawFluidStackTooltip (FluidStack par1ItemStack, int par2, int par3)
+	protected void drawFluidStackTooltip (FluidStack par1ItemStack, int par2, int par3)
     {
         this.zLevel = 100;
         List list = getLiquidTooltip(par1ItemStack, this.mc.gameSettings.advancedItemTooltips);
@@ -197,7 +205,7 @@ public class SOGui extends GuiContainer{
 	
 	public void drawLiquidRect (int startU, int startV, IIcon par3Icon, int endU, int endV)
     {
-        Tessellator tessellator = Tessellator.instance;
+        Tessellator tessellator = Tessellator.getInstance();
         tessellator.startDrawingQuads();
         tessellator.addVertexWithUV(startU + 0, startV + endV, this.zLevel, par3Icon.getMinU(), par3Icon.getMaxV());// Bottom left
         tessellator.addVertexWithUV(startU + endU, startV + endV, this.zLevel, par3Icon.getMaxU(), par3Icon.getMaxV());// Bottom right
@@ -341,10 +349,6 @@ public class SOGui extends GuiContainer{
             this.zLevel = 0.0F;
             itemRender.zLevel = 0.0F;
         }
-    }*/
-	
-	
-	
-
+    }
 }
 
