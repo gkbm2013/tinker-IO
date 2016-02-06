@@ -1,7 +1,7 @@
 package tinker_io.handler;
 
-import tinker_io.TileEntity.FIMTileEntity;
 import tinker_io.TileEntity.SOTileEntity;
+import tinker_io.TileEntity.fim.FIMTileEntity;
 import tinker_io.gui.FIMGui;
 import tinker_io.gui.SOGui;
 import tinker_io.inventory.ContainerFIM;

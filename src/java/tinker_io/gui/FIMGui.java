@@ -13,7 +13,7 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-import tinker_io.TileEntity.FIMTileEntity;
+import tinker_io.TileEntity.fim.FIMTileEntity;
 import tinker_io.inventory.ContainerFIM;
 import tinker_io.main.Main;
 

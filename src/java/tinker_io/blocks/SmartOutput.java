@@ -22,12 +22,12 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import tinker_io.TileEntity.FIMTileEntity;
 /*import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;*/
 //import slimeknights.tconstruct.smeltery.logic.LavaTankLogic;1.7
 import tinker_io.TileEntity.SOTileEntity;
+import tinker_io.TileEntity.fim.FIMTileEntity;
 import tinker_io.main.Main;
 
 public class SmartOutput extends BlockContainer {

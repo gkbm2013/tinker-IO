@@ -4,7 +4,7 @@ package tinker_io.main;
 //import tconstruct.plugins.te4.TinkerTE4;
 import slimeknights.tconstruct.smeltery.TinkerSmeltery;
 import slimeknights.tconstruct.tools.TinkerTools;
-import tinker_io.TileEntity.FIMTileEntity;
+import tinker_io.TileEntity.fim.FIMTileEntity;
 import tinker_io.blocks.FuelInputMachine;
 import tinker_io.handler.GuiHandler;
 import tinker_io.handler.SORecipes;

@@ -2,9 +2,9 @@ package tinker_io.proxy;
 
 import net.minecraft.entity.player.EntityPlayer;
 //import tconstruct.util.config.PHConstruct;
-import tinker_io.TileEntity.FIMTileEntity;
 import tinker_io.TileEntity.SOTileEntity;
 import tinker_io.TileEntity.TileEntityWhatABeautifulBlockEntity;
+import tinker_io.TileEntity.fim.FIMTileEntity;
 import tinker_io.handler.GuiHandler;
 import tinker_io.main.Main;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
