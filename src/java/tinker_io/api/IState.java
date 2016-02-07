@@ -1,5 +1,9 @@
 package tinker_io.api;
 
-public interface IState {
-	void change(IStateMachine machine);
+import java.util.function.Consumer;
+
+import tinker_io.TileEntity.fim.FuelFSM;
+
+public interface IState<T> extends Consumer<T> {
+	void change(IStateMachine m);
 }

@@ -51,7 +51,7 @@ public class FIMTileEntity extends TileEntityContainerAdapter implements  ITicka
 	@Override
 	public void onLoad() {
 		scInfo = SCInfoFactory.getSmelyeryControllerInfo(this);
-		fuelFSM = new FuelFSM(this, isActive);
+		fuelFSM = FuelFSMFactory.getNewFuelFSM(this);
 	}
 	
 	protected int tick = 0;
@@ -91,7 +91,6 @@ public class FIMTileEntity extends TileEntityContainerAdapter implements  ITicka
 			x = getStackSize(this.getSlots()[0]) * 200 + 1000;
 		}
 		SCInfo.getTileSmeltery(worldObj, this.scInfo.pos).updateTemperatureFromPacket(x);
-		markDirty();
 	}
 	
 //	public void updateEntity() {

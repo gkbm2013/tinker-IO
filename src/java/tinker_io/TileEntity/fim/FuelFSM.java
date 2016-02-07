@@ -3,45 +3,43 @@ package tinker_io.TileEntity.fim;
 import tinker_io.api.IState;
 import tinker_io.api.IStateMachine;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ITickable;
 
-public class FuelFSM {
-	private boolean state;
+public class FuelFSM implements IStateMachine, ITickable {
+	
+	private IState currentState;
 	FIMTileEntity tile;
+	
 	FuelFSM(FIMTileEntity tile, boolean state) {
-		this.state = state;
+		this.currentState = (state)?
+				new ProcessSpeedUp() : new ProcessWaitFuel();
 		this.tile = tile;
 	}
 	
-	 void update() {
-//		System.out.println(inputTime);
-		if (state) {
-			heat();
-		} else {
-			waitFuel();
-		}
+	@Override
+	 public void update() {
+		 this.currentState.accept(this);
 	}
 	
-	 void revert() {
-		if (state) {
-			heat();
-		}
+	 public void revert() {
+		 this.revertWhenNotFindSC();
 	}
-	
+	 
+	 private void revertWhenNotFindSC() {
+		 if (currentState instanceof ProcessSpeedUp) {
+			 this.update();
+		 }
+	 }
+	 
 	 void heat() {
 		tile.isActive = true;
 		tile.inputTime -= 10;
-		if (tile.inputTime == 0) {
-			state = false;
-		}
 	}
 	
 	 void waitFuel() {
 		tile.isActive = false;
 		if (FuelFSM.getStackSize(tile.getSlots()[1]) > 0) {
-			cousumeFuel();
 			tile.inputTime = 300;
-			
-			state = true;
 		}
 	}
 	
@@ -52,29 +50,21 @@ public class FuelFSM {
 		}
 	}
 	 
+	 public boolean isSpeedingUp() {
+		 return tile.inputTime > 0;
+	 }
+	 
+	 public int getFuelStackSize() {
+		 ItemStack stack = tile.getSlots()[1];
+		 return FuelFSM.getStackSize(stack);
+	 }
+	 
 	public static int getStackSize(ItemStack stack) {
 		return stack == null ? 0 : stack.stackSize;
 	}
-}
 
-abstract class Process implements IState {
 	@Override
-	abstract public void change(IStateMachine m);
-}
-
-class ProcessSpeedUp extends Process {
-	@Override
-	public void change(IStateMachine m){
-		
+	public void setState(IState state) {
+		this.currentState = state;
 	}
 }
-
-class ProcessWait extends Process {
-	@Override
-	public void change(IStateMachine m) {
-		
-	}
-}
-
-
-
