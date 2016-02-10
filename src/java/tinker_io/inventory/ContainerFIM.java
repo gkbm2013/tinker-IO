@@ -11,10 +11,9 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
-//import net.minecraft.inventory.SlotFurnace;
 import net.minecraft.item.ItemStack;
 
-public class ContainerFIM extends Container {
+public class ContainerFIM extends ContainerTemplate {
 	
 	private FIMTileEntity tileFIM;
 	private int lastInputTime;
@@ -25,26 +24,12 @@ public class ContainerFIM extends Container {
 		INV1_UPG = 2,
 		INV2_UPG = 3;  
 	public ContainerFIM(InventoryPlayer player, FIMTileEntity tileEntityASC){
+		super(player, tileEntityASC);
 		this.tileFIM = tileEntityASC;
 		this.addSlotToContainer(new SlotFIMSpeedUPG(tileEntityASC, SPEED_UPG, 25, 20)); // Speed UPG.
 		this.addSlotToContainer(new SlotFIMFuel(tileEntityASC, FUEL, 79, 34)); // catalyst
 		this.addSlotToContainer(new Slot(tileEntityASC, INV1_UPG, 25, 34)); // Speed UPG.
 		this.addSlotToContainer(new Slot(tileEntityASC, INV2_UPG, 25, 48)); // Speed UPG.
-		
-		//this.addSlotToContainer(new SlotFurnace(player.player, tileEntityASC, 0, 25, 34));
-		
-		//player's inventory
-		int i;
-		for(i = 0; i < 3; ++i){
-			for(int j = 0; j < 9; ++j){
-				this.addSlotToContainer(new Slot(player, j + i * 9 + 9, 8 + j * 18, 84 + i * 18));
-			}
-		}
-		
-		//action bar
-		for(i = 0; i < 9; ++i){
-			this.addSlotToContainer(new Slot(player, i , 8 + i * 18 , 142));
-		}
 	}
 	
 	/**
@@ -56,7 +41,7 @@ public class ContainerFIM extends Container {
 	}
 	
 	/**
-	 * Called when a player shift-clicks on a slot.
+	 * Called it when a player shift-clicks on a slot.
 	 */
 	@Override
     public ItemStack transferStackInSlot(EntityPlayer player, int slot) {

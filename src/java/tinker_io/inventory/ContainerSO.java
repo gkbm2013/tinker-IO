@@ -13,7 +13,7 @@ import tinker_io.TileEntity.SOTileEntity;
 import tinker_io.handler.SORecipes;
 import tinker_io.items.Upgrade;
 
-public class ContainerSO extends Container{
+public class ContainerSO extends ContainerTemplate{
 	private SOTileEntity tileSO;
 	
 	private int lastFrozenTime;
@@ -22,26 +22,12 @@ public class ContainerSO extends Container{
 	public static final int PATTERN_SLOT = 0, PRODUCT_SLOT = 1;
 	public static final int  UPG_UP_SLOT = 2, UPG_DOWN_SLOT = 3;
 	public ContainerSO(InventoryPlayer player, SOTileEntity tileEntitySO){
+		super(player, tileEntitySO);
 		this.tileSO = tileEntitySO;
 		this.addSlotToContainer(new Slot(tileEntitySO, PATTERN_SLOT, 68, 33)); //Pattern
 		this.addSlotToContainer(new Slot(tileEntitySO, PRODUCT_SLOT, 128, 34)); //Product
 		this.addSlotToContainer(new Slot(tileEntitySO, UPG_UP_SLOT, 153, 25)); //UPG. up
 		this.addSlotToContainer(new Slot(tileEntitySO, UPG_DOWN_SLOT, 153, 43)); //UPG. down
-		//this.addSlotToContainer(new SlotFurnace(player.player, tileEntitySO, 1, 128, 34)); //Product
-		
-		//this.addSlotToContainer(new Slot(tileEntitySO, 1, 79, 34));
-		
-		int i;
-		
-		for(i = 0; i < 3; ++i){
-			for(int j = 0; j < 9; ++j){
-				this.addSlotToContainer(new Slot(player, j + i * 9 + 9, 8 + j * 18, 84 + i * 18));
-			}
-		}
-		
-		for(i = 0; i < 9; ++i){
-			this.addSlotToContainer(new Slot(player, i , 8 + i * 18 , 142));
-		}
 	}
 	
 	@Override
