@@ -5,8 +5,9 @@ import tinker_io.api.IStateMachine;
 public class ProcessWaitFuel extends Process {
 	
 	@Override public void accept(FuelFSM m) {
-		m.waitFuel();
+		m.tile.isActive = false;
 		if (m.getFuelStackSize() > 0) {
+			m.tile.inputTime = 300;
 			m.cousumeFuel();
 			change(m);
 		}

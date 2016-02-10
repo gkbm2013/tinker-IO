@@ -36,13 +36,6 @@ public class FuelFSM implements IStateMachine, ITickable {
 		tile.inputTime -= 10;
 	}
 	
-	 void waitFuel() {
-		tile.isActive = false;
-		if (FuelFSM.getStackSize(tile.getSlots()[1]) > 0) {
-			tile.inputTime = 300;
-		}
-	}
-	
 	 void cousumeFuel() {
 		tile.getSlots()[1].stackSize -= 1;
 		if (tile.getSlots()[1].stackSize == 0) {
