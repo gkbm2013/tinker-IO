@@ -58,7 +58,6 @@ public class FIMTileEntity extends TileEntityContainerAdapter implements  ITicka
 	
 	@Override
 	public void update() {
-		try {
 			if (!this.worldObj.isRemote && this.scInfo != null) {
 				++tick;
 				if (tick % 4 == 0)
@@ -66,9 +65,6 @@ public class FIMTileEntity extends TileEntityContainerAdapter implements  ITicka
 					ToUpdateSCInfoAndSpeedSC();
 				}
 			}
-		}catch(Throwable ex) {
-				ex.printStackTrace();
-		}
 	}
 	
 	public void ToUpdateSCInfoAndSpeedSC() {
