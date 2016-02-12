@@ -22,12 +22,13 @@ public class ContainerSO extends ContainerTemplate{
 	public static final int PATTERN_SLOT = 0, PRODUCT_SLOT = 1;
 	public static final int  UPG_UP_SLOT = 2, UPG_DOWN_SLOT = 3;
 	public ContainerSO(InventoryPlayer player, SOTileEntity tileEntitySO){
-		super(player, tileEntitySO);
 		this.tileSO = tileEntitySO;
 		this.addSlotToContainer(new Slot(tileEntitySO, PATTERN_SLOT, 68, 33)); //Pattern
 		this.addSlotToContainer(new Slot(tileEntitySO, PRODUCT_SLOT, 128, 34)); //Product
 		this.addSlotToContainer(new Slot(tileEntitySO, UPG_UP_SLOT, 153, 25)); //UPG. up
 		this.addSlotToContainer(new Slot(tileEntitySO, UPG_DOWN_SLOT, 153, 43)); //UPG. down
+		
+		this.addPlayerInventorySlotToContainer(player);
 	}
 	
 	@Override

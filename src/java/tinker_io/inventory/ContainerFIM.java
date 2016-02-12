@@ -24,12 +24,13 @@ public class ContainerFIM extends ContainerTemplate {
 		INV1_UPG = 2,
 		INV2_UPG = 3;  
 	public ContainerFIM(InventoryPlayer player, FIMTileEntity tileEntityASC){
-		super(player, tileEntityASC);
 		this.tileFIM = tileEntityASC;
 		this.addSlotToContainer(new SlotFIMSpeedUPG(tileEntityASC, SPEED_UPG, 25, 20)); // Speed UPG.
 		this.addSlotToContainer(new SlotFIMFuel(tileEntityASC, FUEL, 79, 34)); // catalyst
 		this.addSlotToContainer(new Slot(tileEntityASC, INV1_UPG, 25, 34)); // Speed UPG.
 		this.addSlotToContainer(new Slot(tileEntityASC, INV2_UPG, 25, 48)); // Speed UPG.
+		
+		this.addPlayerInventorySlotToContainer(player);
 	}
 	
 	/**
@@ -48,7 +49,7 @@ public class ContainerFIM extends ContainerTemplate {
 		final int fimINV_SIZE = tileFIM.getSizeInventory();
 		ItemStack stack = null;
         Slot slotObject = (Slot) inventorySlots.get(slot);
-
+        
         //null checks and checks if the item can be stacked (maxStackSize > 1)
         if (slotObject != null && slotObject.getHasStack()) {
             ItemStack stackInSlot = slotObject.getStack();
