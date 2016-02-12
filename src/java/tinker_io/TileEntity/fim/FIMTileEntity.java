@@ -62,17 +62,17 @@ public class FIMTileEntity extends TileEntityContainerAdapter implements  ITicka
 				++tick;
 				if (tick % 4 == 0)
 				{
-					ToUpdateSCInfoAndSpeedSC();
+					toUpdateSCInfoAndSpeedUpSC();
 				}
 			}
 	}
 	
-	public void ToUpdateSCInfoAndSpeedSC() {
+	public void toUpdateSCInfoAndSpeedUpSC() {
 		int x = 1000;
 		this.scInfo.update();
 		if (this.scInfo.pos != null && scInfo.isSCHeatingItem())
 		{
-			ToSpeedSC(x);
+			toSpeedUpSC(x);
 		}
 		else
 		{
@@ -80,7 +80,7 @@ public class FIMTileEntity extends TileEntityContainerAdapter implements  ITicka
 		}
 	}
 	
-	public void ToSpeedSC(int x) {
+	public void toSpeedUpSC(int x) {
 		this.fuelFSM.update();
 		if (isActive)
 		{
