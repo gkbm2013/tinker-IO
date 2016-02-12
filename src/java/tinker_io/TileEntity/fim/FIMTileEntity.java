@@ -62,17 +62,17 @@ public class FIMTileEntity extends TileEntityContainerAdapter implements  ITicka
 				++tick;
 				if (tick % 4 == 0)
 				{
-					ToUpdateSCInfoAndSpeedSC();
+					toUpdateSCInfoAndSpeedUpSC();
 				}
 			}
 	}
 	
-	public void ToUpdateSCInfoAndSpeedSC() {
+	public void toUpdateSCInfoAndSpeedUpSC() {
 		int x = 1000;
 		this.scInfo.update();
 		if (this.scInfo.pos != null && scInfo.isSCHeatingItem())
 		{
-			ToSpeedSC(x);
+			toSpeedUpSC(x);
 		}
 		else
 		{
@@ -80,7 +80,7 @@ public class FIMTileEntity extends TileEntityContainerAdapter implements  ITicka
 		}
 	}
 	
-	public void ToSpeedSC(int x) {
+	public void toSpeedUpSC(int x) {
 		this.fuelFSM.update();
 		if (isActive)
 		{
@@ -204,9 +204,8 @@ public class FIMTileEntity extends TileEntityContainerAdapter implements  ITicka
 			int index, ItemStack itemstack) {
 		if(itemstack.isItemEqual(fuel)){
 			return true;
-		}else{
-			return false;
-		}		
+		}
+		return false;
 	}
 
 	@Override
@@ -240,16 +239,16 @@ public class FIMTileEntity extends TileEntityContainerAdapter implements  ITicka
 	 */
 	
 	@Override
-	public void readFromNBT(NBTTagCompound tagCompound) {
-		super.readFromNBT(tagCompound);
-		this.inputTime = tagCompound.getShort("InputTime");
-		this.isActive = tagCompound.getBoolean("isActive");
+	public void readFromNBT(NBTTagCompound tag) {
+		super.readFromNBT(tag);
+		this.inputTime = tag.getShort("InputTime");
+		this.isActive = tag.getBoolean("isActive");
 	}
 	
 	@Override
-	public void writeToNBT(NBTTagCompound tagCompound) {
-		super.writeToNBT(tagCompound);
-		tagCompound.setShort("InputTime", (short) this.inputTime);
-		tagCompound.setBoolean("isActive", isActive);
+	public void writeToNBT(NBTTagCompound tag) {
+		super.writeToNBT(tag);
+		tag.setShort("InputTime", (short) this.inputTime);
+		tag.setBoolean("isActive", isActive);
 	}
 }
