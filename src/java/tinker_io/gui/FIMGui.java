@@ -14,6 +14,7 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import tinker_io.TileEntity.fim.FIMTileEntity;
+import tinker_io.TileEntity.fim.FIMTileEntity.SpeedUpRatio;
 import tinker_io.inventory.ContainerFIM;
 import tinker_io.main.Main;
 
@@ -36,9 +37,9 @@ public class FIMGui extends GuiContainer {
 		//String connectInfo = I18n.format("tio.gui.fim.direction", new Object[0]) + " :";
 		//String connectInfoDiraction = tileASC.getDirection();
 		String warn = EnumChatFormatting.RED+I18n.format("tio.gui.fim.error_message", new Object[0]);
-//		int max = tileASC.getInputSize();
-		int max = 0;
-		String msgMax = EnumChatFormatting.DARK_GREEN + "Max : " + max;
+		
+		double ratio = this.getSpeedUpTimes();
+		String msgRatio = EnumChatFormatting.DARK_GREEN + "Ratio : " + ratio;
 		
 		/*int cornerX = (width - xSize) / 2;
         int cornerY = (height - ySize) / 2;*/
@@ -50,16 +51,11 @@ public class FIMGui extends GuiContainer {
 		
 		//this.fontRendererObj.drawString(connectInfo, (-55 - (this.fontRendererObj.getStringWidth(connectInfo))/2), 14, 4210752);
 		//this.fontRendererObj.drawString(connectInfoDiraction, (-55 - (this.fontRendererObj.getStringWidth(connectInfoDiraction))/2), 26, 4210752);
-		if(max == 2048){
-			msgMax = EnumChatFormatting.DARK_GREEN + "Max : \u221e";
-		}
-		this.fontRendererObj.drawString(msgMax, (-55 - (this.fontRendererObj.getStringWidth(msgMax))/2), 37, 4210752);
+		this.fontRendererObj.drawString(msgRatio, (-55 - (this.fontRendererObj.getStringWidth(msgRatio))/2), 37, 4210752);
 		
 		if(!tile.hasFuel()){
 			this.fontRendererObj.drawString(warn, (-55 - (this.fontRendererObj.getStringWidth(warn))/2), 49, 4210752);			
 		}
-		
-		
 		
 		/*if(!tileASC.hasFuel() && par1 >= cornerX +159 && par1 <= cornerX + 170 && par2 >= cornerY + 4 && par2 <= cornerY + 15 ){
 			String[] info = {EnumChatFormatting.RED+I18n.format("tio.gui.fim.error_message", new Object[0])};
@@ -88,4 +84,12 @@ public class FIMGui extends GuiContainer {
 	        }*/
 	        this.drawTexturedModalRect(k - 110, l + 10, 146, 170, 110, 60);
 	}
+	
+	private double getSpeedUpTimes()
+	{
+		SpeedUpRatio info = tile.getSpeedUpInfo();
+		
+		return info.ratio;
+	}
+	
 }

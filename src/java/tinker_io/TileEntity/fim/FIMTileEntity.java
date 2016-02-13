@@ -31,19 +31,6 @@ public class FIMTileEntity extends TileEntityContainerAdapter implements  ITicka
 	public int inputTime;
 	boolean isActive;
 
-	
-	@SideOnly(Side.CLIENT)
-	public int getCookProgressScaled(int par1) {
-		return this.inputTime * par1 / speed;
-	}
-	
-	public boolean hasFuel(){
-		if(slots[1]!= null && this.getSlots()[1].isItemEqual(fuel)){
-			return true;
-		}
-		return false;
-	}
-	
 	protected SCInfo scInfo;
 	protected FuelFSM fuelFSM;
 	
@@ -85,9 +72,14 @@ public class FIMTileEntity extends TileEntityContainerAdapter implements  ITicka
 		this.fuelFSM.update();
 		if (isActive)
 		{
-			fuelTemp = getStackSize(this.getSlots()[0]) * 200 + 1000;
+			fuelTemp = getSpeedUpTemp(fuelTemp);
 		}
 		SCInfo.getTileSmeltery(worldObj, this.scInfo.pos).updateTemperatureFromPacket(fuelTemp);
+	}
+	
+	public int getSpeedUpTemp(int fuelTemp)
+	{
+		return getStackSize(this.getSlots()[0]) * 200 + fuelTemp;
 	}
 	
 //	public void updateEntity() {
@@ -207,4 +199,40 @@ public class FIMTileEntity extends TileEntityContainerAdapter implements  ITicka
 		tag.setShort("InputTime", (short) this.inputTime);
 		tag.setBoolean("isActive", isActive);
 	}
+	
+	/*
+	 * GUI
+	 */
+	
+	@SideOnly(Side.CLIENT)
+	public int getCookProgressScaled(int par1) {
+		return this.inputTime * par1 / speed;
+	}
+	
+	public boolean hasFuel(){
+		if(slots[1]!= null && this.getSlots()[1].isItemEqual(fuel)){
+			return true;
+		}
+		return false;
+	}
+	
+	public SpeedUpRatio getSpeedUpInfo()
+	{
+		double temp = this.getStackSize(slots[0]) * 0.2 + 1.0;
+		return new SpeedUpRatio(temp);
+	}
+	
+	/*
+	 * Data
+	 */
+	
+	public static class SpeedUpRatio {
+		public double ratio;
+		
+		public SpeedUpRatio(double temp) {
+			this.ratio = temp;
+		}
+		
+	}
+	
 }
