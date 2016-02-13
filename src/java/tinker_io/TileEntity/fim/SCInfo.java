@@ -4,6 +4,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.BlockPos;
@@ -79,7 +81,12 @@ public class SCInfo{
 	}
 	
 	public boolean isSCHeatingItem() {
-		final Adapter adap = new SCTileAdapter(SCInfo.getTileSmeltery(worldObj, pos));
+		final Adapter adap = this.getAdapter();
 		return adap.isHeatingItem() && !adap.isAllItemFinishHeating();
 	}
+
+	public Adapter getAdapter(){
+		return  new SCTileAdapter(SCInfo.getTileSmeltery(worldObj, pos));
+	}
+	
 }

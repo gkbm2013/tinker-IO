@@ -13,7 +13,7 @@ import slimeknights.tconstruct.library.smeltery.SmelteryTank;
 import slimeknights.tconstruct.smeltery.tileentity.TileSmeltery;
 import slimeknights.tconstruct.smeltery.tileentity.TileTank;
 
-public class SCTileAdapter extends TileSmeltery implements Adapter
+public class SCTileAdapter implements Adapter
 {
 	public static final String ITEM_TEMP = "itemTemperatures";
 	public static final String ITEM_TEMP_REQ = "itemTempRequired";
@@ -112,11 +112,6 @@ public class SCTileAdapter extends TileSmeltery implements Adapter
 		final NBTTagCompound nbt = new NBTTagCompound();
 		tile.writeToNBT(nbt);
 		return nbt;
-	}
-	
-	private SmelteryTank getLiquids()
-	{
-		return this.liquids;
 	}
 
 }

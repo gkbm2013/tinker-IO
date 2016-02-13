@@ -68,11 +68,12 @@ public class FIMTileEntity extends TileEntityContainerAdapter implements  ITicka
 	}
 	
 	public void toUpdateSCInfoAndSpeedUpSC() {
-		int x = 1000;
 		this.scInfo.update();
 		if (this.scInfo.pos != null && scInfo.isSCHeatingItem())
 		{
-			toSpeedUpSC(x);
+			Adapter adap = scInfo.getAdapter();
+			final int fuelTemp = adap.getFuelTemp();
+			toSpeedUpSC(fuelTemp);
 		}
 		else
 		{
