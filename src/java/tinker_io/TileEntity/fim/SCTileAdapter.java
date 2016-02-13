@@ -7,8 +7,11 @@ import java.util.List;
 import org.apache.commons.lang3.ArrayUtils;
 
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.BlockPos;
+import net.minecraftforge.fluids.FluidStack;
 import slimeknights.tconstruct.library.smeltery.SmelteryTank;
 import slimeknights.tconstruct.smeltery.tileentity.TileSmeltery;
+import slimeknights.tconstruct.smeltery.tileentity.TileTank;
 
 public class SCTileAdapter extends TileSmeltery implements Adapter
 {
@@ -20,6 +23,16 @@ public class SCTileAdapter extends TileSmeltery implements Adapter
 	public SCTileAdapter(TileSmeltery tile)
 	{
 		this.tile = tile;
+	}
+	
+	@Override public int getFuelTemp()
+	{
+		final FluidStack fluid = tile.currentFuel.copy();
+		if (fluid != null)
+		{
+			return fluid.getFluid().getTemperature() - 300;  //CONVERT_TO_C_FROM_TILE_SMELTERY_CLASS
+		}
+		return 0;
 	}
 	
 	@Override public boolean isAllItemFinishHeating()

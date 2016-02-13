@@ -8,4 +8,5 @@ interface Adapter
 	boolean canFuelTempHeatThisItem(int index);
 	boolean isStructureActive();
 	boolean isAllItemFinishHeating();
+	int getFuelTemp();
 }
