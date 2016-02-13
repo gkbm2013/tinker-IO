@@ -128,9 +128,9 @@ public class ContainerFIM extends ContainerTemplate {
 	}
 	
 	@SideOnly(Side.CLIENT)
-	public void updateProgressBar(int par1, int par2){
-		if(par1 == 0){
-			this.tileFIM.inputTime = par2;
+	public void updateProgressBar(int ID, int data){
+		if(ID == 0){
+			this.tileFIM.inputTime = data;
 		}
 	}
 }

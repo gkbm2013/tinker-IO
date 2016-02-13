@@ -81,13 +81,13 @@ public class FIMTileEntity extends TileEntityContainerAdapter implements  ITicka
 		}
 	}
 	
-	public void toSpeedUpSC(int x) {
+	public void toSpeedUpSC(int fuelTemp) {
 		this.fuelFSM.update();
 		if (isActive)
 		{
-			x = getStackSize(this.getSlots()[0]) * 200 + 1000;
+			fuelTemp = getStackSize(this.getSlots()[0]) * 200 + 1000;
 		}
-		SCInfo.getTileSmeltery(worldObj, this.scInfo.pos).updateTemperatureFromPacket(x);
+		SCInfo.getTileSmeltery(worldObj, this.scInfo.pos).updateTemperatureFromPacket(fuelTemp);
 	}
 	
 //	public void updateEntity() {

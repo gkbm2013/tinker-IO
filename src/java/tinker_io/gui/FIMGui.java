@@ -19,25 +19,25 @@ import tinker_io.main.Main;
 
 public class FIMGui extends GuiContainer {
 	private static final ResourceLocation ASCGuiTextures = new ResourceLocation(Main.MODID, "textures/gui/ASC.png");
-	private FIMTileEntity tileASC;
+	private FIMTileEntity tile;
 	public World world;
 
 	public FIMGui(InventoryPlayer invPlayer, FIMTileEntity tile) {
 		super(new ContainerFIM(invPlayer, tile));
-		this.tileASC = tile;
+		this.tile = tile;
 	}
 
 	@Override
 	protected void drawGuiContainerForegroundLayer(int par1, int par2){
-		String string = "FuelInputMachine"; // :p
-//		String string = this.tileASC.hasCustomInventoryName() ? this.tileASC.getInventoryName() : I18n.format(this.tileASC.getInventoryName(), new Object[0]);
+		String string = this.tile.hasCustomName() ? this.tile.getName() : I18n.format(this.tile.getName(), new Object[0]);
 		//String tip1 = I18n.format("tio.gui.fim.slot1", new Object[0]);
 		String tip2 = I18n.format("tio.gui.fim.slot2", new Object[0]);
 		
 		//String connectInfo = I18n.format("tio.gui.fim.direction", new Object[0]) + " :";
 		//String connectInfoDiraction = tileASC.getDirection();
 		String warn = EnumChatFormatting.RED+I18n.format("tio.gui.fim.error_message", new Object[0]);
-		int max = tileASC.getInputSize();
+//		int max = tileASC.getInputSize();
+		int max = 0;
 		String msgMax = EnumChatFormatting.DARK_GREEN + "Max : " + max;
 		
 		/*int cornerX = (width - xSize) / 2;
@@ -55,7 +55,7 @@ public class FIMGui extends GuiContainer {
 		}
 		this.fontRendererObj.drawString(msgMax, (-55 - (this.fontRendererObj.getStringWidth(msgMax))/2), 37, 4210752);
 		
-		if(!tileASC.hasFuel()){
+		if(!tile.hasFuel()){
 			this.fontRendererObj.drawString(warn, (-55 - (this.fontRendererObj.getStringWidth(warn))/2), 49, 4210752);			
 		}
 		
@@ -80,7 +80,7 @@ public class FIMGui extends GuiContainer {
 	        this.drawTexturedModalRect(k, l, 0, 0, this.xSize, this.ySize);
 	        
 	        int i1;
-	        i1 = this.tileASC.getCookProgressScaled(24);
+	        i1 = this.tile.getCookProgressScaled(24);
 	        this.drawTexturedModalRect(k + 98, l + 34, 176, 14, i1 + 1, 16);
 	        
 	        /*if(!tileASC.hasFuel()){
