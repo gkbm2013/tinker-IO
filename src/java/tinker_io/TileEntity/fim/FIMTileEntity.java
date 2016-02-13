@@ -25,10 +25,9 @@ public class FIMTileEntity extends TileEntityContainerAdapter implements  ITicka
 		super(null, 4);
 	}
 	
-	public int speed = 300;
-	
 	public ItemStack fuel = new ItemStack(ItemRegistry.SolidFuel);
 	
+	public int speed = 300;
 	public int inputTime;
 	boolean isActive;
 
@@ -58,12 +57,13 @@ public class FIMTileEntity extends TileEntityContainerAdapter implements  ITicka
 	
 	@Override
 	public void update() {
-			if (!this.worldObj.isRemote && this.scInfo != null) {
-				++tick;
+			if (!this.worldObj.isRemote && this.scInfo != null)
+			{
 				if (tick % 4 == 0)
 				{
 					toUpdateSCInfoAndSpeedUpSC();
 				}
+				tick = (tick + 1) % 20;
 			}
 	}
 	
@@ -149,51 +149,6 @@ public class FIMTileEntity extends TileEntityContainerAdapter implements  ITicka
 //			}
 //		}
 //	}
-	
-	public int getInputSize(){
-		int size = 1;
-		boolean infinity = false;
-		
-		ItemStack slotUPG1 = new ItemStack(ItemRegistry.Upgrade, 1, 1);
-		ItemStack slotUPG2 = new ItemStack(ItemRegistry.Upgrade, 1, 2);
-		ItemStack slotUPG3 = new ItemStack(ItemRegistry.Upgrade, 1, 3);
-		ItemStack slotUPG4 = new ItemStack(ItemRegistry.Upgrade, 1, 4);
-		ItemStack slotUPGinfinity = new ItemStack(ItemRegistry.Upgrade, 1, 6);
-		
-		if(this.getSlots()[2] != null){
-			if(this.getSlots()[2].isItemEqual(slotUPG1)){
-				size = size+(getSlots()[2].stackSize)*1;
-			}else if(this.getSlots()[2].isItemEqual(slotUPG2)){
-				size = size+(getSlots()[2].stackSize)*2;
-			}else if(this.getSlots()[2].isItemEqual(slotUPG3)){
-				size = size+(getSlots()[2].stackSize)*3;
-			}else if(this.getSlots()[2].isItemEqual(slotUPG4)){
-				size = size+(getSlots()[2].stackSize)*4;
-			}else if(this.getSlots()[2].isItemEqual(slotUPGinfinity)){
-				infinity = true;
-			}
-		}
-		
-		if(this.getSlots()[3] != null){
-			if(this.getSlots()[3].isItemEqual(slotUPG1)){
-				size = size+(getSlots()[3].stackSize)*1;
-			}else if(this.getSlots()[3].isItemEqual(slotUPG2)){
-				size = size+(getSlots()[3].stackSize)*2;
-			}else if(this.getSlots()[3].isItemEqual(slotUPG3)){
-				size = size+(getSlots()[3].stackSize)*3;
-			}else if(this.getSlots()[3].isItemEqual(slotUPG4)){
-				size = size+(getSlots()[3].stackSize)*4;
-			}else if(this.getSlots()[3].isItemEqual(slotUPGinfinity)){
-				infinity = true;
-			}
-		}
-		
-		if(infinity == true){
-			return 2048;
-		}
-			return size * 30;
-
-	}
 	
 	/**
 	 * Returns true if automation is allowed to insert the given stack
