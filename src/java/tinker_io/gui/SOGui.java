@@ -2,15 +2,27 @@ package tinker_io.gui;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Iterator;
+import java.util.Map;
 
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+
 import slimeknights.tconstruct.TConstruct;
+import slimeknights.tconstruct.library.TinkerRegistry;
+import slimeknights.tconstruct.library.Util;
+import slimeknights.tconstruct.library.client.RenderUtil;
+import slimeknights.tconstruct.library.smeltery.CastingRecipe;
+import slimeknights.tconstruct.smeltery.TinkerSmeltery;
 import tinker_io.TileEntity.SOTileEntity;
+import tinker_io.handler.SORecipes;
 import tinker_io.inventory.ContainerSO;
 import tinker_io.main.Main;
 import tinker_io.packet.PacketDispatcher;
@@ -24,11 +36,13 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumChatFormatting;
 //import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
+import net.minecraftforge.fluids.Fluid;
 //import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
@@ -80,8 +94,13 @@ public class SOGui extends GuiContainer{
 		int cornerX = (width - xSize) / 2;
         int cornerY = (height - ySize) / 2;
         if (liquid != null){
+        	List<String> text = Lists.newArrayList();
+        	text.add(EnumChatFormatting.WHITE.toString() + liquid.getLocalizedName());
+        	liquidToString(liquid, text);
+            //text.add(EnumChatFormatting.GRAY.toString() + liquid.amount + " " + Util.translate("gui.smeltery.liquid.millibucket"));
         	if(mouseX >= cornerX + 26 && mouseX <= cornerX + 38 && mouseY <= cornerY + 67 && mouseY >= cornerY + 67 - 52/*liquidAmount*/){
-	        	drawFluidStackTooltip(liquid, mouseX-cornerX, mouseY-cornerY);
+	        	//1.7.10 // drawFluidStackTooltip(liquid, mouseX-cornerX, mouseY-cornerY);
+        		this.drawHoveringText(text, mouseX-cornerX, mouseY-cornerY);
 	        }
         }
         
@@ -138,15 +157,19 @@ public class SOGui extends GuiContainer{
 			int liquidAmount = tileSO.getLiquidAmount(52);
 			
 			//Get Liquid Icon
-			IIcon renderIndex = Blocks.lava.getIcon(0, 0);
+			//1.7.10 No longer use
+			/*IIcon renderIndex = Blocks.lava.getIcon(0, 0);
 			if (liquid != null){
 				 renderIndex = liquid.getFluid().getStill();
-	        }
+	        }*/
 	        
+			
 	        //Draw Liquid (For tank)
 			this.mc.getTextureManager().bindTexture(TextureMap.locationBlocksTexture); 
-	        this.drawLiquidRect(cornerX + 26, cornerY + 15 + 52 - liquidAmount, renderIndex, 12, liquidAmount);
-	        
+	        //this.drawLiquidRect(cornerX + 26, cornerY + 15 + 52 - liquidAmount, renderIndex, 12, liquidAmount);
+			if(liquid != null){
+				RenderUtil.renderTiledFluid(cornerX + 26, cornerY + 15 + 52 - liquidAmount, 12, liquidAmount, this.zLevel, liquid);
+			}
 	        //Control the button of void liquid
 	        if(isShiftKeyDown()){
 	        	btn0.enabled = true;
@@ -184,171 +207,97 @@ public class SOGui extends GuiContainer{
     }
 	
 	
-	//The code below are copy from Tinker's Construct AdptiveSmelteryGui.class
+	//The code below were copied from Tinker's Construct SmelteryGui.class
 	/*
-	 *2015/3/29
+	 * Copied by GKB
+	 * 2016/2/11
 	 */
 	
-	protected void drawFluidStackTooltip (FluidStack par1ItemStack, int par2, int par3)
-    {
-        this.zLevel = 100;
-        List list = getLiquidTooltip(par1ItemStack, this.mc.gameSettings.advancedItemTooltips);
+	/* Fluid amount displays */
+	  private static Map<Fluid, List<FluidGuiEntry>> fluidGui = Maps.newHashMap();
 
-        for (int k = 0; k < list.size(); ++k)
-        {
-            list.set(k, EnumChatFormatting.GRAY + (String) list.get(k));
-        }
+	  public void liquidToString(FluidStack fluid, List<String> text) {
+	    int amount = fluid.amount;
+	    if(!Util.isShiftKeyDown()) {
+	      List<FluidGuiEntry> entries = fluidGui.get(fluid.getFluid());
+	      if(entries == null) {
+	        entries = calcFluidGuiEntries(fluid.getFluid());
+	        fluidGui.put(fluid.getFluid(), entries);
+	      }
 
-        this.drawToolTip(list, par2, par3);
-        this.zLevel = 0;
-    }
-	
-	public void drawLiquidRect (int startU, int startV, IIcon par3Icon, int endU, int endV)
-    {
-        Tessellator tessellator = Tessellator.getInstance();
-        tessellator.startDrawingQuads();
-        tessellator.addVertexWithUV(startU + 0, startV + endV, this.zLevel, par3Icon.getMinU(), par3Icon.getMaxV());// Bottom left
-        tessellator.addVertexWithUV(startU + endU, startV + endV, this.zLevel, par3Icon.getMaxU(), par3Icon.getMaxV());// Bottom right
-        tessellator.addVertexWithUV(startU + endU, startV + 0, this.zLevel, par3Icon.getMaxU(), par3Icon.getMinV());// Top right
-        tessellator.addVertexWithUV(startU + 0, startV + 0, this.zLevel, par3Icon.getMinU(), par3Icon.getMinV()); // Top left
-        tessellator.draw();
-    }
-	
-	public List getLiquidTooltip (FluidStack liquid, boolean par2)
-    {
-        ArrayList list = new ArrayList();
-        if (liquid.getFluidID() == -37)
-        {
-            //list.add("\u00A7f" + StatCollector.translateToLocal("gui.smeltery1"));
-        	list.add("\u00A7f" + I18n.format("gui.smeltery1", new Object[0]));
-            list.add("mB: " + liquid.amount);
-        }
-        else
-        {
-            //String name = StatCollector.translateToLocal(FluidRegistry.getFluidName(liquid));
-        	String name = I18n.format("fluid."+FluidRegistry.getFluidName(liquid), new Object[0]);
-            list.add("\u00A7f" + name);
-            if (name.equals("liquified emerald"))
-            {
-                list.add("Emeralds: " + liquid.amount / 320f);
-            }
-            else if (name.contains("Molten"))
-            {
-                int ingots = liquid.amount / TConstruct.ingotLiquidValue;
-                if (ingots > 0)
-                    list.add("Ingots: " + ingots);
-                int mB = liquid.amount % TConstruct.ingotLiquidValue;
-                if (mB > 0)
-                {
-                    int nuggets = mB / TConstruct.nuggetLiquidValue;
-                    int junk = (mB % TConstruct.nuggetLiquidValue);
-                    if (nuggets > 0)
-                        list.add("Nuggets: " + nuggets);
-                    if (junk > 0)
-                        list.add("mB: " + junk);
-                }
-            }
-            else if (name.equals("Seared Stone"))
-            {
-                int ingots = liquid.amount / TConstruct.ingotLiquidValue;
-                if (ingots > 0)
-                    list.add("Blocks: " + ingots);
-                int mB = liquid.amount % TConstruct.ingotLiquidValue;
-                if (mB > 0)
-                    list.add("mB: " + mB);
-            }
-            else if (name.equals("Molten Glass"))
-            {
-                int blocks = liquid.amount / 1000;
-                if (blocks > 0)
-                    list.add("Blocks: " + blocks);
-                int panels = (liquid.amount % 1000) / 250;
-                if (panels > 0)
-                    list.add("Panels: " + panels);
-                int mB = (liquid.amount % 1000) % 250;
-                if (mB > 0)
-                    list.add("mB: " + mB);
-            }
-            else
-            {
-                list.add("mB: " + liquid.amount);
-            }
-        }
-        return list;
-    }
-	
-	protected void drawToolTip (List par1List, int par2, int par3)
-    {
-        if (!par1List.isEmpty())
-        {
-            GL11.glDisable(GL12.GL_RESCALE_NORMAL);
-            RenderHelper.disableStandardItemLighting();
-            GL11.glDisable(GL11.GL_LIGHTING);
-            GL11.glDisable(GL11.GL_DEPTH_TEST);
-            int k = 0;
-            Iterator iterator = par1List.iterator();
+	      for(FluidGuiEntry entry : entries) {
+	        amount = calcLiquidText(amount, entry.amount, entry.getText(), text);
+	      }
+	    }
 
-            while (iterator.hasNext())
-            {
-                String s = (String) iterator.next();
-                int l = this.fontRendererObj.getStringWidth(s);
+	    // standard display: bucket amounts
+	    // we go up to kiloBuckets because we can
+	    amount = calcLiquidText(amount, 1000000, Util.translate("gui.smeltery.liquid.kilobucket"), text);
+	    amount = calcLiquidText(amount, 1000, Util.translate("gui.smeltery.liquid.bucket"), text);
+	    calcLiquidText(amount, 1, Util.translate("gui.smeltery.liquid.millibucket"), text);
+	  }
 
-                if (l > k)
-                {
-                    k = l;
-                }
-            }
+	  private List<FluidGuiEntry> calcFluidGuiEntries(Fluid fluid) {
+	    List<FluidGuiEntry> list = Lists.newArrayList();
 
-            int i1 = par2 + 12;
-            int j1 = par3 - 12;
-            int k1 = 8;
+	    // go through all casting recipes for the fluids and check for known "units" like blocks, ingots,...
+	    for(CastingRecipe recipe : TinkerRegistry.getAllBasinCastingRecipes()) {
+	      // search for a block recipe
+	      if(recipe.getFluid().getFluid() == fluid && recipe.cast == null) {
+	        // it's a block that is cast solely from the material, using no cast, therefore it's a block made out of the material
+	        list.add(new FluidGuiEntry(recipe.getFluid().amount, "gui.smeltery.liquid.block"));
+	      }
+	    }
+	    // table casting
+	    for(CastingRecipe recipe : TinkerRegistry.getAllTableCastingRecipes()) {
+	      if(recipe.getFluid().getFluid() == fluid && recipe.cast != null) {
+	        // nugget
+	        if(recipe.cast.matches(new ItemStack[]{TinkerSmeltery.castNugget}) != null) {
+	          list.add(new FluidGuiEntry(recipe.getFluid().amount, "gui.smeltery.liquid.nugget"));
+	        }
+	        // ingot
+	        if(recipe.cast.matches(new ItemStack[]{TinkerSmeltery.castIngot}) != null) {
+	          list.add(new FluidGuiEntry(recipe.getFluid().amount, "gui.smeltery.liquid.ingot"));
+	        }
+	        // gem
+	        if(recipe.cast.matches(new ItemStack[]{TinkerSmeltery.castGem}) != null) {
+	          list.add(new FluidGuiEntry(recipe.getFluid().amount, "gui.smeltery.liquid.gem"));
+	        }
+	      }
+	    }
 
-            if (par1List.size() > 1)
-            {
-                k1 += 2 + (par1List.size() - 1) * 10;
-            }
+	    // sort by amount descending because the order in which they're accessed is important since it changes the remaining value during processing
+	    list.sort(new Comparator<FluidGuiEntry>() {
+	      @Override
+	      public int compare(FluidGuiEntry o1, FluidGuiEntry o2) {
+	        return o2.amount - o1.amount;
+	      }
+	    });
 
-            if (i1 + k > this.width)
-            {
-                i1 -= 28 + k;
-            }
+	    return ImmutableList.copyOf(list);
+	  }
 
-            if (j1 + k1 + 6 > this.height)
-            {
-                j1 = this.height - k1 - 6;
-            }
+	  private int calcLiquidText(int amount, int divider, String unit, List<String> text) {
+	    int full = amount/divider;
+	    if(full > 0) {
+	      text.add(String.format("%d %s%s", full, EnumChatFormatting.GRAY, unit));
+	    }
 
-            this.zLevel = 300.0F;
-            itemRender.zLevel = 300.0F;
-            int l1 = -267386864;
-            this.drawGradientRect(i1 - 3, j1 - 4, i1 + k + 3, j1 - 3, l1, l1);
-            this.drawGradientRect(i1 - 3, j1 + k1 + 3, i1 + k + 3, j1 + k1 + 4, l1, l1);
-            this.drawGradientRect(i1 - 3, j1 - 3, i1 + k + 3, j1 + k1 + 3, l1, l1);
-            this.drawGradientRect(i1 - 4, j1 - 3, i1 - 3, j1 + k1 + 3, l1, l1);
-            this.drawGradientRect(i1 + k + 3, j1 - 3, i1 + k + 4, j1 + k1 + 3, l1, l1);
-            int i2 = 1347420415;
-            int j2 = (i2 & 16711422) >> 1 | i2 & -16777216;
-            this.drawGradientRect(i1 - 3, j1 - 3 + 1, i1 - 3 + 1, j1 + k1 + 3 - 1, i2, j2);
-            this.drawGradientRect(i1 + k + 2, j1 - 3 + 1, i1 + k + 3, j1 + k1 + 3 - 1, i2, j2);
-            this.drawGradientRect(i1 - 3, j1 - 3, i1 + k + 3, j1 - 3 + 1, i2, i2);
-            this.drawGradientRect(i1 - 3, j1 + k1 + 2, i1 + k + 3, j1 + k1 + 3, j2, j2);
+	    return amount % divider;
+	  }
 
-            for (int k2 = 0; k2 < par1List.size(); ++k2)
-            {
-                String s1 = (String) par1List.get(k2);
-                this.fontRendererObj.drawStringWithShadow(s1, i1, j1, -1);
+	  private static class FluidGuiEntry {
+	    public final int amount;
+	    public final String unlocName;
 
-                if (k2 == 0)
-                {
-                    j1 += 2;
-                }
+	    private FluidGuiEntry(int amount, String unlocName) {
+	      this.amount = amount;
+	      this.unlocName = unlocName;
+	    }
 
-                j1 += 10;
-            }
-
-            this.zLevel = 0.0F;
-            itemRender.zLevel = 0.0F;
-        }
-    }
+	    public String getText() {
+	      return Util.translate(unlocName);
+	    }
+	  }
 }
 

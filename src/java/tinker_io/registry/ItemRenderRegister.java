@@ -19,6 +19,7 @@ public class ItemRenderRegister {
 		reg(ItemRegistry.SpeedUPG);
 		reg(ItemRegistry.SolidFuel);
 		reg(ItemRegistry.Lonesome_Avenue);
+		reg(ItemRegistry.CrushedOre);
 		
 		ModelBakery.registerItemVariants(ItemRegistry.Upgrade,
 				getModelResourceLocation("upg_0"), 

@@ -1,6 +1,7 @@
 package tinker_io.proxy;
 
 import net.minecraft.entity.player.EntityPlayer;
+import tinker_io.TileEntity.OreCrusherTileEntity;
 //import tconstruct.util.config.PHConstruct;
 import tinker_io.TileEntity.SOTileEntity;
 import tinker_io.TileEntity.TileEntityWhatABeautifulBlockEntity;
@@ -20,6 +21,7 @@ public class ServerProxy{
 	public void registerTileEntities(){
 		GameRegistry.registerTileEntity(FIMTileEntity.class, Main.MODID+"TileEntityFIM");
 		GameRegistry.registerTileEntity(SOTileEntity.class, Main.MODID+"SOTileEntity");
+		GameRegistry.registerTileEntity(OreCrusherTileEntity.class, Main.MODID+"OreCrusherTileEntity");
 		//GameRegistry.registerTileEntity(TileEntityWhatABeautifulBlockEntity.class, Main.MODID+"WABTileEntity");
 	}
 	public EntityPlayer getPlayerEntity(MessageContext ctx) {

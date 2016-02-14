@@ -43,7 +43,7 @@ public class VoidLiquidPacket implements IMessage{
 		
 		@Override
 		public IMessage handleServerMessage(EntityPlayer player, VoidLiquidPacket message, MessageContext ctx) {
-			MovingObjectPosition mop = Minecraft.getMinecraft().renderViewEntity.rayTrace(200, 1.0F);
+			/*MovingObjectPosition mop = Minecraft.getMinecraft().renderViewEntity.rayTrace(200, 1.0F);
 			if(mop != null){
 				int blockHitSide = mop.sideHit;
 				int x = mop.blockX;
@@ -61,7 +61,7 @@ public class VoidLiquidPacket implements IMessage{
 				}
 			}else{
 				System.out.println("[Tinker I/O] [Error] Failed to get the coord of the block !");
-			}
+			}*/
 			
 			int x = message.data.getIntArray("Coord")[0];
 			int y = message.data.getIntArray("Coord")[1];
