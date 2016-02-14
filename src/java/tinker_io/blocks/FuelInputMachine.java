@@ -34,7 +34,7 @@ public class FuelInputMachine extends BlockContainerAdapter {
 	{
 		super();
 		setUnlocalizedName(unlocalizedName);
-		this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
+		setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
 	}
 	
 	@Override
@@ -125,12 +125,9 @@ public class FuelInputMachine extends BlockContainerAdapter {
      	   			 player.addChatMessage(new ChatComponentText(EnumChatFormatting.GOLD + "\u4f60\u597d~ (\u4e0d\u8981\u61f7\u7591...\u5c31\u662f\u4f60\u597d...)"));
      	   			 player.addChatMessage(new ChatComponentText(EnumChatFormatting.GOLD + "\u5c0d\u4e86\uff0c\u6211\u7d55\u5c0d\u4e0d\u6703\u8aaa\u662f\u9999\u8349\u8981\u6211\u52a0\u7206\u70b8\u97f3\u6548\u4f86\u5687\u4eba\u7684..."));
      	   			 player.playSound("random.explode", 2f, 1f); 
-     	   		 }/*else if(name.equals("nightmare9913256")){
-     	   			 player.addChatMessage(new ChatComponentText(EnumChatFormatting.GOLD + "\u54ce\u5440~\u9019\u4e0d\u662fcode\u55ce?\u8a71\u8aaa\u9019\u4e32\u6587\u5b57\u7de8\u78bc\u7a76\u7adf\u662fGBK\u9084\u662fGKB\u5462?"));
-     	   			 player.playSound("random.explode", 2f, 1f); 
-     	   		 }*/
+     	   		 	}
+     			}
      		}
-     	}
 	}
 	
 	
@@ -140,45 +137,59 @@ public class FuelInputMachine extends BlockContainerAdapter {
 		
 	}
 	
-//	@Override
-	public TileEntity createNewTileEntity(World world, int meta) { //Called on placing the block.
+	/**
+	 *  createNewTileEntity() & onBlockAdded()
+	 *  Called on different:
+	 * 	createNewTileEntity() was call Client and Server,
+	 * but onBlockAdded() was call only Server.
+	 */
+	
+	/**
+	 * Returns a new instance of a block's tile entity class. Called on placing the block.
+	 */
+	@Override
+	public TileEntity createNewTileEntity(World world, int meta)
+	{
 		return new FIMTileEntity();
 	}
 	
+	/**
+	 * Called on placing the block.
+	 */
 	@Override
 	public void onBlockAdded(World worldIn, BlockPos pos, IBlockState state)
     {
-        this.setDefaultFacing(worldIn, pos, state);
+        this.setFacing(worldIn, pos, state);
     }
 	
-	private void setDefaultFacing(World worldIn, BlockPos pos, IBlockState state)
+	private void setFacing(World worldIn, BlockPos pos, IBlockState state)
     {
         if (!worldIn.isRemote)
         {
-            Block block = worldIn.getBlockState(pos.north()).getBlock();
-            Block block1 = worldIn.getBlockState(pos.south()).getBlock();
-            Block block2 = worldIn.getBlockState(pos.west()).getBlock();
-            Block block3 = worldIn.getBlockState(pos.east()).getBlock();
-            EnumFacing enumfacing = (EnumFacing)state.getValue(FACING);
+        Block blockNorth = worldIn.getBlockState(pos.north()).getBlock();
+        Block blockSouth = worldIn.getBlockState(pos.south()).getBlock();
+        Block blockWest = worldIn.getBlockState(pos.west()).getBlock();
+        Block blockEast = worldIn.getBlockState(pos.east()).getBlock();
+        EnumFacing facing = (EnumFacing)state.getValue(FACING);
 
-            if (enumfacing == EnumFacing.NORTH && block.isFullBlock() && !block1.isFullBlock())
+        if (facing == EnumFacing.NORTH && blockNorth.isFullBlock() && !blockSouth.isFullBlock())
             {
-                enumfacing = EnumFacing.SOUTH;
+                facing = EnumFacing.SOUTH;
             }
-            else if (enumfacing == EnumFacing.SOUTH && block1.isFullBlock() && !block.isFullBlock())
+            else if (facing == EnumFacing.SOUTH && blockSouth.isFullBlock() && !blockNorth.isFullBlock())
             {
-                enumfacing = EnumFacing.NORTH;
+                facing = EnumFacing.NORTH;
             }
-            else if (enumfacing == EnumFacing.WEST && block2.isFullBlock() && !block3.isFullBlock())
+            else if (facing == EnumFacing.WEST && blockWest.isFullBlock() && !blockEast.isFullBlock())
             {
-                enumfacing = EnumFacing.EAST;
+                facing = EnumFacing.EAST;
             }
-            else if (enumfacing == EnumFacing.EAST && block3.isFullBlock() && !block2.isFullBlock())
+            else if (facing == EnumFacing.EAST && blockEast.isFullBlock() && !blockWest.isFullBlock())
             {
-                enumfacing = EnumFacing.WEST;
+                facing = EnumFacing.WEST;
             }
 
-            worldIn.setBlockState(pos, state.withProperty(FACING, enumfacing), 2);
+            worldIn.setBlockState(pos, state.withProperty(FACING, facing), 2);
         }
     }
 	
