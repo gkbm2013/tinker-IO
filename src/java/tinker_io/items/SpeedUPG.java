@@ -22,6 +22,9 @@ public class SpeedUPG extends Item {
         return Keyboard.isKeyDown(42) || Keyboard.isKeyDown(54);
     }
 	
+	/**
+	 * when mouseover
+	 */
 	@Override
 	public void addInformation(ItemStack itemStack, EntityPlayer player, List list, boolean par4) {
 		if(this.isShiftKeyDown()){

@@ -2,7 +2,7 @@ package tinker_io.inventory;
 
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import tinker_io.TileEntity.FIMTileEntity;
+import tinker_io.TileEntity.fim.FIMTileEntity;
 import tinker_io.items.SolidFuel;
 import tinker_io.items.SpeedUPG;
 import tinker_io.items.Upgrade;
@@ -19,11 +19,15 @@ public class ContainerFIM extends Container {
 	private FIMTileEntity tileFIM;
 	private int lastInputTime;
 	
-	public static final int SPEED_UPG = 0, FUEL = 1, INV1_UPG = 2, INV2_UPG = 3;  
+	public static final int
+		SPEED_UPG = 0,
+		FUEL = 1,
+		INV1_UPG = 2,
+		INV2_UPG = 3;  
 	public ContainerFIM(InventoryPlayer player, FIMTileEntity tileEntityASC){
 		this.tileFIM = tileEntityASC;
-		this.addSlotToContainer(new Slot(tileEntityASC, SPEED_UPG, 25, 20)); // Speed UPG.
-		this.addSlotToContainer(new Slot(tileEntityASC, FUEL, 79, 34)); // catalyst
+		this.addSlotToContainer(new SlotFIMSpeedUPG(tileEntityASC, SPEED_UPG, 25, 20)); // Speed UPG.
+		this.addSlotToContainer(new SlotFIMFuel(tileEntityASC, FUEL, 79, 34)); // catalyst
 		this.addSlotToContainer(new Slot(tileEntityASC, INV1_UPG, 25, 34)); // Speed UPG.
 		this.addSlotToContainer(new Slot(tileEntityASC, INV2_UPG, 25, 48)); // Speed UPG.
 		

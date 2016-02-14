@@ -27,14 +27,14 @@ public class VoidLiquidPacket implements IMessage{
 	
 	
 	public void fromBytes(ByteBuf buf) {
-		// TODO �۰ʲ��ͪ���k Stub
+		// TODO
 		//amount = buf.readInt();
 		data = ByteBufUtils.readTag(buf);
 
 	}
 
 	public void toBytes(ByteBuf buf) {
-		// TODO �۰ʲ��ͪ���k Stub
+		// TODO
 		//buf.writeInt(amount);
 		 ByteBufUtils.writeTag(buf, data);
 	}

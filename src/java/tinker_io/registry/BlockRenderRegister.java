@@ -13,6 +13,7 @@ public class BlockRenderRegister {
 		reg(BlockRegistry.whatABeautifulBlock);
 		reg(BlockRegistry.fuelInputMachine);
 		reg(BlockRegistry.smartOutput);
+		reg(BlockRegistry.oreCrusher);
 	}
 	
 	public static void reg(Block block) {
