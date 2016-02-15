@@ -529,7 +529,6 @@ public class SOTileEntity extends MultiServantLogic implements IFluidHandler , I
 		}else{
 			canStart = true;
 		}
-		
 		if(info != null && liquid != null && this.itemStacksSO[0] != null && canStart == true){
 			if(recipes.getCastingFluidCost(liquid, itemStacksSO[0]) != null && recipes.getCastingFluidCost(liquid, itemStacksSO[0]).amount <= liquid.amount){
 				if(recipes.getCastingRecipes(liquid, this.itemStacksSO[0]) != null){
@@ -687,8 +686,8 @@ public class SOTileEntity extends MultiServantLogic implements IFluidHandler , I
     	//System.out.println(mode);
     	//checkMode();
     	//voidLiquid();
-    	if(canFrozen()){
-    		if(currentFrozenTime >= frozenTimeMax){
+	if(canFrozen()){
+		if(currentFrozenTime >= frozenTimeMax){
     			currentFrozenTime = 0;
     			frozen();
     			//notifyMasterOfChange();

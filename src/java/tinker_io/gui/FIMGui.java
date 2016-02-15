@@ -29,7 +29,7 @@ public class FIMGui extends GuiContainer {
 	}
 
 	@Override
-	protected void drawGuiContainerForegroundLayer(int par1, int par2){
+	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY){
 		String string = this.tile.hasCustomName() ? this.tile.getName() : I18n.format(this.tile.getName(), new Object[0]);
 		//String tip1 = I18n.format("tio.gui.fim.slot1", new Object[0]);
 		String tip2 = I18n.format("tio.gui.fim.slot2", new Object[0]);

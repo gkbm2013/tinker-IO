@@ -29,7 +29,8 @@ public class SORecipes{
 		
 //		LiquidCasting tableCasting = TConstructRegistry.instance.getTableCasting();
 //		CastingRecipe tableRecipe = tableCasting.getCastingRecipe(fluid, itemStack);
-		CastingRecipe tableRecipe = TinkerRegistry.getTableCasting(basin, null);
+//		CastingRecipe tableRecipe = TinkerRegistry.getTableCasting(basin, null);
+		CastingRecipe tableRecipe = TinkerRegistry.getTableCasting(itemStack, fluid.getFluid());
 		
 		if(tableRecipe != null){
 			return tableRecipe.getResult();
@@ -43,11 +44,12 @@ public class SORecipes{
 //		if(fluid != null && fluid.isFluidEqual(new FluidStack(TinkerSmeltery.moltenGlassFluid, FluidContainerRegistry.BUCKET_VOLUME)) && itemStack != null && itemStack.isItemEqual(basin)){
 //			return new FluidStack(TinkerSmeltery.moltenGlassFluid, FluidContainerRegistry.BUCKET_VOLUME);
 //		}
-		
+		// NOT FIND CLEAR GLASS RECIPE
 		
 //		LiquidCasting tableCasting = TinkerRegistry.getTableCasting();		
 //		CastingRecipe tableRecipe = tableCasting.getCastingRecipe(fluid, itemStack);
-		CastingRecipe tableRecipe = TinkerRegistry.getTableCasting(basin, null);
+		CastingRecipe tableRecipe = TinkerRegistry.getTableCasting(itemStack, fluid.getFluid());
+//		CastingRecipe tableRecipe = TinkerRegistry.getBasinCasting(basin, null);
 	
 		if(tableRecipe != null){
 			FluidStack tableFluid = tableRecipe.getFluid();
