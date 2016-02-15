@@ -94,4 +94,14 @@ public class SCInfo{
 		return  new SCTileAdapter(SCInfo.getTileSmeltery(worldObj, pos));
 	}
 	
+	public String getFacing()
+	{
+		String facing = PosInfo.getFacingList().stream()
+				.filter(f -> isSmelteryController(FIMBlockPos, f))
+				.map(EnumFacing::name)
+				.reduce(((f, b) -> String.join(", ", f, b)))
+				.orElse("NONE");
+		return facing;
+	}
+	
 }

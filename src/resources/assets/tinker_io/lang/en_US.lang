@@ -23,7 +23,8 @@ item.CD_Lonesome_Avenue.desc=Lonesome Avenue (YouTube Audio Library)
 tio.gui.fim.slot1=UPG.
 tio.gui.fim.slot2=Solid Fuel
 tio.gui.fim.error_message=Lack of solid fuel
-tio.gui.fim.direction=Controller Direction
+#tio.gui.fim.direction=Controller Direction
+tio.gui.fim.direction=Direction
 
 tio.gui.SO.toolTips.button_head=Empty the tank.
 tio.gui.SO.toolTips.button_info=Hold shift to unlock the button.

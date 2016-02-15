@@ -222,6 +222,12 @@ public class FIMTileEntity extends TileEntityContainerAdapter implements  ITicka
 		return new SpeedUpRatio(temp);
 	}
 	
+	@SideOnly(Side.CLIENT)
+	public String getDirection()
+	{
+		return this.scInfo.getFacing();
+	}
+	
 	/*
 	 * Data
 	 */
