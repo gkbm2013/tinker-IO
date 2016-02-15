@@ -27,24 +27,25 @@ public class FIMTileEntity extends TileEntityContainerAdapter implements  ITicka
 	
 	public ItemStack fuel = new ItemStack(ItemRegistry.SolidFuel);
 	
+	@Deprecated
 	public int speed = 300;
+	@Deprecated
 	public int inputTime;
-	boolean isActive;
 
 	protected SCInfo scInfo;
-	protected FuelFSM fuelFSM;
+	protected FuelFSM fuelFSM = FuelFSMFactory.getNewFuelFSM(this);
 	
 	@Override
 	public void onLoad() {
 		scInfo = SCInfoFactory.getSmelyeryControllerInfo(this);
-		fuelFSM = FuelFSMFactory.getNewFuelFSM(this);
+		fuelFSM.init();
 	}
 	
 	protected int tick = 0;
 	
 	@Override
 	public void update() {
-			if (!this.worldObj.isRemote && this.scInfo != null)
+			if (!this.worldObj.isRemote)
 			{
 				if (tick % 4 == 0)
 				{
@@ -56,25 +57,22 @@ public class FIMTileEntity extends TileEntityContainerAdapter implements  ITicka
 	
 	public void toUpdateSCInfoAndSpeedUpSC() {
 		this.scInfo.update();
-		if (this.scInfo.pos != null && scInfo.isSCHeatingItem())
+		this.fuelFSM.update();
+		if (scInfo.canFindSCPos() && scInfo.isSCHeatingItem())
 		{
+			fuelFSM.startChangeState();
 			Adapter adap = scInfo.getAdapter();
 			final int fuelTemp = adap.getFuelTemp();
-			toSpeedUpSC(fuelTemp);
-		}
-		else
-		{
-			this.fuelFSM.revert();
+			toSpeedUpSC(fuelTemp, adap);
 		}
 	}
 	
-	public void toSpeedUpSC(int fuelTemp) {
-		this.fuelFSM.update();
-		if (isActive)
+	public void toSpeedUpSC(int fuelTemp, Adapter adap) {
+		if (fuelFSM.isActive)
 		{
 			fuelTemp = getSpeedUpTemp(fuelTemp);
 		}
-		SCInfo.getTileSmeltery(worldObj, this.scInfo.pos).updateTemperatureFromPacket(fuelTemp);
+		adap.setFuelTemp(fuelTemp);
 	}
 	
 	public int getSpeedUpTemp(int fuelTemp)
@@ -190,14 +188,16 @@ public class FIMTileEntity extends TileEntityContainerAdapter implements  ITicka
 	public void readFromNBT(NBTTagCompound tag) {
 		super.readFromNBT(tag);
 		this.inputTime = tag.getShort("InputTime");
-		this.isActive = tag.getBoolean("isActive");
+		
+		this.fuelFSM.readFromNBT(tag);
 	}
 	
 	@Override
 	public void writeToNBT(NBTTagCompound tag) {
 		super.writeToNBT(tag);
 		tag.setShort("InputTime", (short) this.inputTime);
-		tag.setBoolean("isActive", isActive);
+		
+		this.fuelFSM.writeToNBT(tag);
 	}
 	
 	/*

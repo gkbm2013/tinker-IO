@@ -25,6 +25,11 @@ public class SCTileAdapter implements Adapter
 		this.tile = tile;
 	}
 	
+	@Override public void setFuelTemp(int temp)
+	{
+		tile.updateTemperatureFromPacket(temp);
+	}
+	
 	@Override public int getFuelTemp()
 	{
 		final FluidStack fluid = tile.currentFuel.copy();

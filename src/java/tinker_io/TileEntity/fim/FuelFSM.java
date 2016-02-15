@@ -3,17 +3,24 @@ package tinker_io.TileEntity.fim;
 import tinker_io.api.IState;
 import tinker_io.api.IStateMachine;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ITickable;
 
-public class FuelFSM implements IStateMachine, ITickable {
+public class FuelFSM implements IStateMachine, ITickable, NBTable {
 	
 	private IState currentState;
+	public boolean isActive = false;
+	public boolean canChangeState = false;
 	FIMTileEntity tile;
 	
-	FuelFSM(FIMTileEntity tile, boolean state) {
-		this.currentState = (state)?
-				new ProcessSpeedUp() : new ProcessWaitFuel();
+	public FuelFSM(FIMTileEntity tile)
+	{
 		this.tile = tile;
+	}
+	
+	public void init()
+	{
+		this.currentState = this.isActive? new ProcessSpeedUp() : new ProcessWaitFuel();
 	}
 	
 	@Override
@@ -21,28 +28,6 @@ public class FuelFSM implements IStateMachine, ITickable {
 		 this.currentState.accept(this);
 	}
 	
-	 public void revert() {
-		 this.revertWhenNotFindSC();
-	}
-	 
-	 private void revertWhenNotFindSC() {
-		 if (currentState instanceof ProcessSpeedUp) {
-			 this.update();
-		 }
-	 }
-	 
-	 void heat() {
-		tile.isActive = true;
-		tile.inputTime -= 10;
-	}
-	
-	 void cousumeFuel() {
-		tile.getSlots()[1].stackSize -= 1;
-		if (tile.getSlots()[1].stackSize == 0) {
-			tile.getSlots()[1] = tile.getSlots()[1].getItem().getContainerItem(tile.getSlots()[1]);
-		}
-	}
-	 
 	 public boolean isSpeedingUp() {
 		 return tile.inputTime > 0;
 	 }
@@ -59,5 +44,20 @@ public class FuelFSM implements IStateMachine, ITickable {
 	@Override
 	public void setState(IState state) {
 		this.currentState = state;
+	}
+	
+	public void startChangeState()
+	{
+		this.canChangeState = true;
+	}
+
+	@Override
+	public void readFromNBT(NBTTagCompound tag) {
+		this.isActive = tag.getBoolean("isActive");
+	}
+
+	@Override
+	public void writeToNBT(NBTTagCompound tag) {
+		tag.setBoolean("isActive", isActive);
 	}
 }

@@ -29,6 +29,11 @@ public class SCInfo{
 		this.worldObj = worldObj;
 	}
 	
+	public boolean canFindSCPos()
+	{
+		return pos != null;
+	}
+	
 	protected void update() {
 		posList = findSCPos(FIMBlockPos);
 		if (isOnlyOneSmelteryController(posList)) {
