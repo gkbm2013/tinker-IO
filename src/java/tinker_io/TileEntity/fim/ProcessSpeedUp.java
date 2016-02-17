@@ -5,7 +5,7 @@ import tinker_io.api.IStateMachine;
 public class ProcessSpeedUp extends Process {
 	
 	@Override public void accept(FuelFSM m) {
-		heat(m);
+		m.heat();
 		if (m.canChangeState && !m.isSpeedingUp())
 		{
 			change(m);
@@ -17,11 +17,4 @@ public class ProcessSpeedUp extends Process {
 		m.setState(new ProcessWaitFuel());
 	}
 	
-	 
-	 private void heat(FuelFSM m)
-	 {
-		 m.isActive = true;
-		m.tile.inputTime -= 10;
-	}
-
 }

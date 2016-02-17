@@ -50,7 +50,16 @@ public class FuelFSM implements IStateMachine, ITickable, NBTable {
 	{
 		this.canChangeState = true;
 	}
+	
+	 
+	 void heat()
+	 {
+		 isActive = true;
+		tile.inputTime -= 10;
+		tile.notifyObservers();
+	}
 
+	
 	@Override
 	public void readFromNBT(NBTTagCompound tag) {
 		this.isActive = tag.getBoolean("isActive");

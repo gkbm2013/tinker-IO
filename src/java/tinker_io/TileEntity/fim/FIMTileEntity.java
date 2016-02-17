@@ -1,6 +1,11 @@
 package tinker_io.TileEntity.fim;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import tinker_io.TileEntity.Observable;
 import tinker_io.TileEntity.TileEntityContainerAdapter;
+import tinker_io.inventory.Observer;
 import tinker_io.registry.ItemRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -14,7 +19,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.world.World;
 
-public class FIMTileEntity extends TileEntityContainerAdapter implements  ITickable  {
+public class FIMTileEntity extends TileEntityContainerAdapter implements  ITickable, Observable  {
 	
 	private static final int[] slotsSpeedUPG = new int[] { 0 };
 	private static final int[] slotsFuel = new int[] { 1 };
@@ -26,6 +31,7 @@ public class FIMTileEntity extends TileEntityContainerAdapter implements  ITicka
 	}
 	
 	public ItemStack fuel = new ItemStack(ItemRegistry.SolidFuel);
+	private List<Observer> obs = new ArrayList();
 	
 	@Deprecated
 	public int speed = 300;
@@ -112,6 +118,31 @@ public class FIMTileEntity extends TileEntityContainerAdapter implements  ITicka
 	
 	public int getStackSize(ItemStack stack) {
 		return stack == null ? 0 : stack.stackSize;
+	}
+	
+	@Override
+	public void addObserver(Observer o)
+	{
+		this.obs.add(o);
+	}
+	
+	@Override
+	public void removeObserver(Observer o)
+	{
+		int index = this.obs.indexOf(o);
+		if (index >= 0)
+		{
+			obs.remove(index);
+		}
+	}
+	
+	@Override
+	public void notifyObservers()
+	{
+		for (Observer o: this.obs)
+		{
+			o.receivedTopic();
+		}
 	}
 	
 //	private boolean canSmelt() {
@@ -228,6 +259,10 @@ public class FIMTileEntity extends TileEntityContainerAdapter implements  ITicka
 		return this.scInfo.getFacing();
 	}
 	
+	public int getInputTime()
+	{
+		return this.inputTime;
+	}
 	/*
 	 * Data
 	 */

@@ -2,6 +2,7 @@ package tinker_io.inventory;
 
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import tinker_io.TileEntity.Observable;
 import tinker_io.TileEntity.fim.FIMTileEntity;
 import tinker_io.items.SolidFuel;
 import tinker_io.items.SpeedUPG;
@@ -13,24 +14,26 @@ import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
-public class ContainerFIM extends ContainerTemplate {
+public class ContainerFIM extends ContainerTemplate implements Observer{
 	
 	private FIMTileEntity tileFIM;
-	private int lastInputTime;
 	
 	public static final int
 		SPEED_UPG = 0,
 		FUEL = 1,
 		INV1_UPG = 2,
 		INV2_UPG = 3;  
-	public ContainerFIM(InventoryPlayer player, FIMTileEntity tileEntityASC){
-		this.tileFIM = tileEntityASC;
-		this.addSlotToContainer(new SlotFIMSpeedUPG(tileEntityASC, SPEED_UPG, 25, 20)); // Speed UPG.
-		this.addSlotToContainer(new SlotFIMFuel(tileEntityASC, FUEL, 79, 34)); // catalyst
-		this.addSlotToContainer(new Slot(tileEntityASC, INV1_UPG, 25, 34)); // Speed UPG.
-		this.addSlotToContainer(new Slot(tileEntityASC, INV2_UPG, 25, 48)); // Speed UPG.
+	public ContainerFIM(InventoryPlayer player, FIMTileEntity tile){
+		this.tileFIM = tile;
+		
+		this.addSlotToContainer(new SlotFIMSpeedUPG(tile, SPEED_UPG, 25, 20)); // Speed UPG.
+		this.addSlotToContainer(new SlotFIMFuel(tile, FUEL, 79, 34)); // catalyst
+		this.addSlotToContainer(new Slot(tile, INV1_UPG, 25, 34)); // Speed UPG.
+		this.addSlotToContainer(new Slot(tile, INV2_UPG, 25, 48)); // Speed UPG.
 		
 		this.addPlayerInventorySlotToContainer(player);
+		
+		tile.addObserver(this);
 	}
 	
 	/**
@@ -112,19 +115,32 @@ public class ContainerFIM extends ContainerTemplate {
         }
         return stack;
     }
-	
+
 	@Override
 	public void detectAndSendChanges(){
 		super.detectAndSendChanges();
 		for(int i = 0; i < this.crafters.size(); ++i){
 			ICrafting craft = (ICrafting) this.crafters.get(i);
 			
-			if(this.lastInputTime != this.tileFIM.inputTime){
-				craft.sendProgressBarUpdate(this, 0, this.tileFIM.inputTime);
+			if(hasDifferentInputTime())
+			{
+				craft.sendProgressBarUpdate(this, 0, inputTime);
 			}
 		}
 		
-		this.lastInputTime = this.tileFIM.inputTime;
+		this.lastInputTime = inputTime;
+	}
+	
+	private boolean hasDifferentInputTime()
+	{
+		return this.lastInputTime != this.inputTime;
+	}
+	
+	@Override
+	public void onCraftGuiOpened(ICrafting listener)
+	{
+		super.onCraftGuiOpened(listener);
+		listener.sendProgressBarUpdate(this, 0, inputTime);
 	}
 	
 	@SideOnly(Side.CLIENT)
@@ -133,4 +149,14 @@ public class ContainerFIM extends ContainerTemplate {
 			this.tileFIM.inputTime = data;
 		}
 	}
+
+	private int inputTime = 0;
+	private int lastInputTime = 0;
+
+	@Override
+	public void receivedTopic()
+	{
+		this.inputTime = tileFIM.getInputTime();
+	}
+	
 }
