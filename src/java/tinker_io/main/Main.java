@@ -2,7 +2,7 @@ package tinker_io.main;
 
 //import tconstruct.plugins.mfr.TinkerMFR;
 //import tconstruct.plugins.te4.TinkerTE4;
-import slimeknights.tconstruct.smeltery.TinkerSmeltery;
+
 import slimeknights.tconstruct.tools.TinkerTools;
 import tinker_io.TileEntity.fim.FIMTileEntity;
 import tinker_io.blocks.FuelInputMachine;
@@ -135,6 +135,8 @@ public class Main
 	  @Mod.EventHandler
 	  public void postInit(FMLPostInitializationEvent event)
 	  {
-			proxy.registerNetworkStuff();
+		  BlockRegistry.postInit();
+		  
+		  proxy.registerNetworkStuff();
 	  }
 }

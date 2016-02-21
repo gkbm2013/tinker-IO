@@ -1,6 +1,9 @@
 package tinker_io.registry;
 
+import com.google.common.collect.ImmutableSet;
+
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import slimeknights.tconstruct.smeltery.TinkerSmeltery;
 import tinker_io.blocks.FuelInputMachine;
 import tinker_io.blocks.OreCrusher;
 import tinker_io.blocks.SmartOutput;
@@ -33,4 +36,15 @@ public class BlockRegistry {
     	GameRegistry.registerBlock(whatABeautifulBlock, "WhatABeautifulBlock");
     	GameRegistry.registerBlock(oreCrusher, "Ore_Crusher");
 	}
+    
+    public static void postInit()
+    {
+	  ImmutableSet.Builder<Block> builder = ImmutableSet.builder();
+	  for (Block b: TinkerSmeltery.validSmelteryBlocks)
+	  {
+		  builder.add(b);
+	  }
+	  builder.add(fuelInputMachine);
+	  TinkerSmeltery.validSmelteryBlocks = builder.build();
+    }
 }
