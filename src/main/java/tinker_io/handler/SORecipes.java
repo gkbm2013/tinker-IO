@@ -65,11 +65,35 @@ public class SORecipes{
 	 * @param output The item output form Smart Output.
 	 * @return This method will return ture when the ItemStack "output" is a pattern. *Note : Only if Main.iguanas_support == true, this method will active.
 	 */
-	public boolean isPattern(ItemStack output){
+	public boolean checkPatternForIguanasSupport(ItemStack output){
 		if(Main.iguanas_support == false){
 			return false;
 		}
 		
+		ItemStack pattern = new ItemStack(TinkerSmeltery.metalPattern, 1, 0);
+		String patternString = pattern.toString();
+		String outputStirng = output.toString();
+		String model = patternString.split("@")[0];
+		
+		//System.out.println(patternString.split("@")[0]);
+		
+		String itemPatternString = patternString.split("@")[0];
+		String itemOutputStirngString = outputStirng.split("@")[0];
+		//System.out.println(itemPatternString);
+		//System.out.println(itemOutputStirngString);
+		
+		if(itemPatternString.equals(itemOutputStirngString)){
+			return true;
+		}
+		return false;
+	}
+	
+	/**
+	 * 
+	 * @param output The item output form Smart Output.
+	 * @return This method will return ture when the ItemStack "output" is a pattern. *Note : Only if Main.iguanas_support == true, this method will active.
+	 */
+	public boolean isPattern(ItemStack output){		
 		ItemStack pattern = new ItemStack(TinkerSmeltery.metalPattern, 1, 0);
 		String patternString = pattern.toString();
 		String outputStirng = output.toString();

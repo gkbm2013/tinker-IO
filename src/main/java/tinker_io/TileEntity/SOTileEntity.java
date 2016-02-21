@@ -647,7 +647,7 @@ public class SOTileEntity extends MultiServantLogic implements IFluidHandler , I
 					}
 				}
 				
-				if(recipes.isPattern(itemStacksSO[1])){
+				if(recipes.checkPatternForIguanasSupport(itemStacksSO[1])){
 					if(itemStacksSO[0].stackSize == 1){
 						itemStacksSO[0] = null;
 					}else{

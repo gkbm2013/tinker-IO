@@ -1,6 +1,6 @@
 package tinker_io.mainRegistry;
 
-import net.minecraftforge.fml.common.registry.GameRegistry;
+import cpw.mods.fml.common.registry.GameRegistry;
 import tinker_io.blocks.FuelInputMachine;
 import tinker_io.blocks.SmartOutput;
 import tinker_io.blocks.WhatABeautifulBlock;
@@ -18,15 +18,15 @@ public class BlockRegistry {
 	
 	
 	private static void preLoadBlock() {
-		fuelInputMachine = new FuelInputMachine("fuel_input_machine");
-		smartOutput = new SmartOutput("smart_output");
-		whatABeautifulBlock = new WhatABeautifulBlock("WhatABeautifulBlock");
+		fuelInputMachine = new FuelInputMachine();
+		smartOutput = new SmartOutput();
+		whatABeautifulBlock = new WhatABeautifulBlock();
 		
 	}
 	
     private static void registerBlock() {
-    	GameRegistry.registerBlock(fuelInputMachine, "fuel_input_machine");
-    	GameRegistry.registerBlock(smartOutput, "smart_output");
+    	GameRegistry.registerBlock(fuelInputMachine, "fuelInputMachine");
+    	GameRegistry.registerBlock(smartOutput, "SmartOutput");
     	GameRegistry.registerBlock(whatABeautifulBlock, "WhatABeautifulBlock");
 	}
 }

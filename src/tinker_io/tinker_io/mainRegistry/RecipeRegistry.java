@@ -2,12 +2,12 @@ package tinker_io.mainRegistry;
 
 import java.util.ArrayList;
 
-import slimeknights.tconstruct.TConstruct;
-//import slimeknights.tconstruct.library.TConstructRegistry;
-//import slimeknights.tconstruct.library.crafting.LiquidCasting;
-import slimeknights.tconstruct.smeltery.TinkerSmeltery;
-import slimeknights.tconstruct.tools.TinkerTools;
-import net.minecraftforge.fml.common.registry.GameRegistry;
+import tconstruct.TConstruct;
+import tconstruct.library.TConstructRegistry;
+import tconstruct.library.crafting.LiquidCasting;
+import tconstruct.smeltery.TinkerSmeltery;
+import tconstruct.tools.TinkerTools;
+import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -24,10 +24,10 @@ public class RecipeRegistry {
 	static ItemStack sugar = new ItemStack(Items.sugar,1);
 	
 	static ItemStack FIM = new ItemStack(BlockRegistry.fuelInputMachine,1);
-	static ItemStack drain = new ItemStack(TinkerSmeltery.smelteryIO, 1, 1);
+	static ItemStack drain = new ItemStack(TinkerSmeltery.smeltery, 1, 1);
 	static ItemStack hopper = new ItemStack(Blocks.hopper, 1);
 	
-	static ItemStack searedBrick = new ItemStack(TinkerSmeltery.searedBlock, 1, 2);
+	static ItemStack searedBrick = new ItemStack(TinkerTools.materials, 1, 2);
 	static ItemStack SO = new ItemStack(BlockRegistry.smartOutput, 1);
 	static ItemStack ice = new ItemStack(Blocks.ice, 1);
 	
@@ -42,10 +42,10 @@ public class RecipeRegistry {
 	static ItemStack iron_ingot = new ItemStack(Items.iron_ingot, 1);
 	
 	static ItemStack slotUPG3 = new ItemStack(ItemRegistry.Upgrade, 1, 3);
-	static ItemStack alumite_nugget = new ItemStack(TinkerSmeltery.searedBlock, 1 , 32);
+	static ItemStack alumite_nugget = new ItemStack(TinkerTools.materials, 1 , 32);
 	
 	static ItemStack slotUPG4 = new ItemStack(ItemRegistry.Upgrade, 1, 4);
-	static ItemStack manyullyn_nugget = new ItemStack(TinkerSmeltery.searedBlock, 1 , 30);
+	static ItemStack manyullyn_nugget = new ItemStack(TinkerTools.materials, 1 , 30);
 	
 	
 	static ItemStack redstoneUPG = new ItemStack(ItemRegistry.Upgrade ,1 ,5);
@@ -59,6 +59,9 @@ public class RecipeRegistry {
 	static ItemStack slotUPGInfinity = new ItemStack(ItemRegistry.Upgrade ,1 ,6);
 	static ItemStack obsidian = new ItemStack(Blocks.obsidian ,1);
 	
+	static ItemStack brick_block = new ItemStack(Blocks.brick_block ,2);
+	static ItemStack clay = new ItemStack(Blocks.clay ,1);
+	static ItemStack solid_fuel = new ItemStack(ItemRegistry.SolidFuel);
 
 	private static void registerRecipe() {		
 		GameRegistry.addRecipe(FIM, new Object[]{"AAA", "ABA","AAA", 'A', searedBrick, 'B', hopper});
@@ -66,6 +69,7 @@ public class RecipeRegistry {
 		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(ItemRegistry.SolidFuel,16), "dustAluminium",Items.gunpowder,"dustCoal"));
 		GameRegistry.addRecipe(SO, new Object[]{"ABA", "B B","ABA", 'A', searedBrick, 'B', ice});
 		GameRegistry.addRecipe(new ShapedOreRecipe(whatABeautifulBlock, true, new Object[]{"AAA", "ABA","AAA", 'A', glowstone, 'B', nether_star}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(brick_block, true, new Object[]{"AAB", "AAB","BBB", 'A', clay, 'B', solid_fuel}));
 		
 		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(ItemRegistry.Lonesome_Avenue,1), BlockRegistry.smartOutput, BlockRegistry.fuelInputMachine, ItemRegistry.SolidFuel));
 		

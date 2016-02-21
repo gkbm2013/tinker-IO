@@ -1,7 +1,7 @@
 package tinker_io.inventory;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import tinker_io.TileEntity.FIMTileEntity;
 import tinker_io.items.SolidFuel;
 import tinker_io.items.SpeedUPG;
@@ -11,7 +11,7 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
-//import net.minecraft.inventory.SlotFurnace;
+import net.minecraft.inventory.SlotFurnace;
 import net.minecraft.item.ItemStack;
 
 public class ContainerFIM extends Container {
@@ -43,9 +43,6 @@ public class ContainerFIM extends Container {
 		}
 	}
 	
-	/**
-	 *  player move item with mouse;
-	 */
 	@Override
 	public boolean canInteractWith(EntityPlayer player) {
 		return this.tileFIM.isUseableByPlayer(player);
@@ -123,7 +120,6 @@ public class ContainerFIM extends Container {
         return stack;
     }
 	
-	@Override
 	public void detectAndSendChanges(){
 		super.detectAndSendChanges();
 		for(int i = 0; i < this.crafters.size(); ++i){
@@ -143,4 +139,5 @@ public class ContainerFIM extends Container {
 			this.tileFIM.inputTime = par2;
 		}
 	}
+
 }

@@ -4,9 +4,9 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
-//import net.minecraft.inventory.SlotFurnace;
+import net.minecraft.inventory.SlotFurnace;
 import net.minecraft.item.ItemStack;
-//import net.minecraftforge.common.util.ForgeDirection;1.7
+import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import tinker_io.TileEntity.SOTileEntity;
@@ -61,6 +61,7 @@ public class ContainerSO extends Container{
 	public ItemStack transferStackInSlot(EntityPlayer player, int slot) {
 		ItemStack stack = null;
 		Slot slotObject = (Slot) inventorySlots.get(slot);
+		SORecipes recipie = new SORecipes();
 
 		// null checks and checks if the item can be stacked (maxStackSize > 1)
 		if (slotObject != null && slotObject.getHasStack()) {
@@ -77,6 +78,10 @@ public class ContainerSO extends Container{
 			} else { // in inventory and bar
 				if (stackInSlot.getItem() instanceof Upgrade) {
 					if (!mergeItemStack(stackInSlot, UPG_UP_SLOT, UPG_DOWN_SLOT+1, false)) {
+						return null;
+					}
+				} else if(recipie.isPattern(stackInSlot)){
+					if (!mergeItemStack(stackInSlot, PATTERN_SLOT, PATTERN_SLOT+1, false)) {
 						return null;
 					}
 				} else if(slot >= INV_START && slot < HOTBAR_START){ // inv -> bar

@@ -38,7 +38,7 @@ public class FIMTileEntity extends TileEntity implements ISidedInventory  {
 	//public int catalystASC;
 	public int speed = 300;
 	
-	private ItemStack fuel = new ItemStack(ItemRegistry.SolidFuel);
+	public ItemStack fuel = new ItemStack(ItemRegistry.SolidFuel);
 	
 	public boolean canConnect = false;
 	public int connection;

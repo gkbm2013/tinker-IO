@@ -10,11 +10,11 @@ import tinker_io.handler.GuiHandler;
 import tinker_io.handler.SORecipes;
 import tinker_io.mainRegistry.BlockRegistry;
 import tinker_io.mainRegistry.ItemRegistry;
-import tinker_io.mainRegistry.PartRegister;
+//import tinker_io.mainRegistry.PartRegister;
 import tinker_io.mainRegistry.RecipeRegistry;
 import tinker_io.packet.PacketDispatcher;
 import tinker_io.plugins.ee3.EE3Main;
-import tinker_io.plugins.fmp.MainFmp;
+//import tinker_io.plugins.fmp.MainFmp;
 import tinker_io.plugins.waila.MainWaila;
 import tinker_io.proxy.ClientProxy;
 import tinker_io.proxy.ServerProxy;
@@ -54,7 +54,7 @@ import cpw.mods.fml.common.network.NetworkRegistry;
 public class Main
 {
     public static final String MODID = "tinker_io";
-    public static final String VERSION = "beta 1.4.2 a2";
+    public static final String VERSION = "release 1.5.0";
     public static final String Name = "Tinker I/O";
     
     public static boolean iguanas_support;

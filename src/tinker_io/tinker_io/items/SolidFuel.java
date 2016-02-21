@@ -4,9 +4,11 @@ import tinker_io.main.Main;
 import net.minecraft.item.Item;
 
 public class SolidFuel extends Item {
-	public SolidFuel(String unlocalizedName){
+	public SolidFuel(){
 		super();
-		setUnlocalizedName(unlocalizedName);
+		setUnlocalizedName("SolidFuel");
 		setCreativeTab(Main.TinkerIOTabs);
+		setTextureName(Main.MODID + ":" + "solidFuel");
 	}
+
 }

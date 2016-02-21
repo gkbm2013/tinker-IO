@@ -9,7 +9,7 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
-import slimeknights.tconstruct.TConstruct;
+import tconstruct.TConstruct;
 import tinker_io.TileEntity.SOTileEntity;
 import tinker_io.inventory.ContainerSO;
 import tinker_io.main.Main;
@@ -25,7 +25,7 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.util.EnumChatFormatting;
-//import net.minecraft.util.IIcon;
+import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;

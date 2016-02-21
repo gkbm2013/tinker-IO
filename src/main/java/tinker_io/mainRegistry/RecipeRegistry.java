@@ -59,6 +59,9 @@ public class RecipeRegistry {
 	static ItemStack slotUPGInfinity = new ItemStack(ItemRegistry.Upgrade ,1 ,6);
 	static ItemStack obsidian = new ItemStack(Blocks.obsidian ,1);
 	
+	static ItemStack brick_block = new ItemStack(Blocks.brick_block ,2);
+	static ItemStack clay = new ItemStack(Blocks.clay ,1);
+	static ItemStack solid_fuel = new ItemStack(ItemRegistry.SolidFuel);
 
 	private static void registerRecipe() {		
 		GameRegistry.addRecipe(FIM, new Object[]{"AAA", "ABA","AAA", 'A', searedBrick, 'B', hopper});
@@ -66,6 +69,7 @@ public class RecipeRegistry {
 		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(ItemRegistry.SolidFuel,16), "dustAluminium",Items.gunpowder,"dustCoal"));
 		GameRegistry.addRecipe(SO, new Object[]{"ABA", "B B","ABA", 'A', searedBrick, 'B', ice});
 		GameRegistry.addRecipe(new ShapedOreRecipe(whatABeautifulBlock, true, new Object[]{"AAA", "ABA","AAA", 'A', glowstone, 'B', nether_star}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(brick_block, true, new Object[]{"AAB", "AAB","BBB", 'A', clay, 'B', solid_fuel}));
 		
 		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(ItemRegistry.Lonesome_Avenue,1), BlockRegistry.smartOutput, BlockRegistry.fuelInputMachine, ItemRegistry.SolidFuel));
 		
