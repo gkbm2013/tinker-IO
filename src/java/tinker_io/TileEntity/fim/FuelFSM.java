@@ -6,9 +6,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ITickable;
 
-public class FuelFSM implements IStateMachine, ITickable, NBTable {
+public class FuelFSM implements ITickable, NBTable {
+    
+    public final Process speedup = new ProcessSpeedUp();
+    public final Process waitFuel = new ProcessWaitFuel();
 	
-	private IState currentState;
+	private Process currentState;
 	public boolean isActive = false;
 	public boolean canChangeState = false;
 	FIMTileEntity tile;
@@ -20,7 +23,7 @@ public class FuelFSM implements IStateMachine, ITickable, NBTable {
 	
 	public void init()
 	{
-		this.currentState = this.isActive? new ProcessSpeedUp() : new ProcessWaitFuel();
+		this.currentState = this.isActive? this.speedup : this.waitFuel;
 	}
 	
 	@Override
@@ -41,9 +44,9 @@ public class FuelFSM implements IStateMachine, ITickable, NBTable {
 		return stack == null ? 0 : stack.stackSize;
 	}
 
-	@Override
-	public void setState(IState state) {
-		this.currentState = state;
+	public void setProcess(Process state)
+	{
+	    this.currentState = state;
 	}
 	
 	public void startChangeState()

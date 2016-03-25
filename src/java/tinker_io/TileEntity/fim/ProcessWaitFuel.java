@@ -2,20 +2,16 @@ package tinker_io.TileEntity.fim;
 
 import tinker_io.api.IStateMachine;
 
-public class ProcessWaitFuel extends Process {
+public class ProcessWaitFuel implements Process {
 	
 	@Override public void accept(FuelFSM m) {
 		m.isActive = false;
 		if (m.canChangeState && m.getFuelStackSize() > 0)
 		{
 			m.tile.inputTime = 300;
-			cousumeFuel(m);
-			change(m);
+			this.cousumeFuel(m);
+			m.setProcess(m.speedup);
 		}
-	}
-	
-	@Override public void change(IStateMachine m) {
-		m.setState(new ProcessSpeedUp());
 	}
 	
 	 private void cousumeFuel(FuelFSM m)
