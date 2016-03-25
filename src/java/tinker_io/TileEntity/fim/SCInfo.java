@@ -22,11 +22,15 @@ public class SCInfo{
 	public BlockPos pos;
 	public List<BlockPos> posList;
 	
+	public FIMNeighborBlocksManager manager;
+	
 	public SCInfo(
 			BlockPos FIMBlockPos, World worldObj)
 	{
 		this.FIMBlockPos = FIMBlockPos;
 		this.worldObj = worldObj;
+		
+		this.manager = new FIMNeighborBlocksManager(worldObj, FIMBlockPos);
 	}
 	
 	public boolean canFindSCPos()
@@ -34,7 +38,10 @@ public class SCInfo{
 		return pos != null;
 	}
 	
-	protected void update() {
+	private boolean initFlag = false;
+	
+	protected void update()
+	{
 		posList = findSCPos(FIMBlockPos);
 		if (isOnlyOneSmelteryController(posList)) {
 			pos = posList.get(0);
@@ -68,7 +75,7 @@ public class SCInfo{
 		return isSmelteryController(getBlock(pos, facing));
 	}
 	
-	private  boolean isSmelteryController(Block block) {
+	public static boolean isSmelteryController(Block block) {
 		return block == TinkerSmeltery.smelteryController;
 	}
 	

@@ -2,7 +2,10 @@ package tinker_io.blocks;
 
 //import java.util.Random;
 
+import java.util.ArrayList;
+
 import net.minecraft.block.Block;
+import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockState;
@@ -21,11 +24,16 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import tinker_io.TileEntity.fim.FIMNeighborBlocksManager;
 import tinker_io.TileEntity.fim.FIMTileEntity;
+import tinker_io.api.NeighborBlockChange;
+import tinker_io.api.NeighborBlocksManager;
+import tinker_io.api.Observable;
+import tinker_io.api.Observer;
 import tinker_io.main.Main;
 
-public class FuelInputMachine extends BlockContainerAdapter {
-	
+public class FuelInputMachine extends BlockContainerAdapter
+{
 	 public static final PropertyDirection FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
 	
 	//private final Random random = new Random();
@@ -130,11 +138,10 @@ public class FuelInputMachine extends BlockContainerAdapter {
      		}
 	}
 	
-	
 	@Override
 	 public void onNeighborChange(IBlockAccess world, BlockPos pos, BlockPos neighbor)
 	{
-		
+		((FIMTileEntity) world.getTileEntity(pos)).onNeighborChange(world, neighbor);
 	}
 	
 	/**
