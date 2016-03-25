@@ -2,8 +2,9 @@ package tinker_io.inventory;
 
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import tinker_io.TileEntity.Observable;
 import tinker_io.TileEntity.fim.FIMTileEntity;
+import tinker_io.api.Observable;
+import tinker_io.api.Observer;
 import tinker_io.items.SolidFuel;
 import tinker_io.items.SpeedUPG;
 import tinker_io.items.Upgrade;
@@ -126,9 +127,15 @@ public class ContainerFIM extends ContainerTemplate implements Observer{
 			{
 				craft.sendProgressBarUpdate(this, 0, inputTime);
 			}
+			
+			if(this.lastfueltemp != this.fueltemp)
+			{
+			    craft.sendProgressBarUpdate(this, 1, fueltemp);
+			}
 		}
 		
 		this.lastInputTime = inputTime;
+		this.lastfueltemp = fueltemp;
 	}
 	
 	private boolean hasDifferentInputTime()
@@ -147,16 +154,22 @@ public class ContainerFIM extends ContainerTemplate implements Observer{
 	public void updateProgressBar(int ID, int data){
 		if(ID == 0){
 			this.tileFIM.inputTime = data;
+		} else if (ID == 1) {
+		    this.tileFIM.fuelTemp = data;
 		}
 	}
 
 	private int inputTime = 0;
 	private int lastInputTime = 0;
+	
+	private int fueltemp = 0;
+	private int lastfueltemp = 0;
 
 	@Override
 	public void receivedTopic()
 	{
 		this.inputTime = tileFIM.getInputTime();
+		this.fueltemp = tileFIM.fuelTemp;
 	}
 	
 }

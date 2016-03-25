@@ -8,7 +8,7 @@ public class ProcessWaitFuel implements Process {
 		m.isActive = false;
 		if (m.canChangeState && m.getFuelStackSize() > 0)
 		{
-			m.tile.inputTime = 300;
+			m.tile.fuelTemp = m.tile.inputTime = m.getFuelBurnTime();
 			this.cousumeFuel(m);
 			m.setProcess(m.speedup);
 		}

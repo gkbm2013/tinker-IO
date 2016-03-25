@@ -3,9 +3,9 @@ package tinker_io.TileEntity.fim;
 import java.util.ArrayList;
 import java.util.List;
 
-import tinker_io.TileEntity.Observable;
 import tinker_io.TileEntity.TileEntityContainerAdapter;
-import tinker_io.inventory.Observer;
+import tinker_io.api.Observable;
+import tinker_io.api.Observer;
 import tinker_io.registry.ItemRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -14,12 +14,14 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-public class FIMTileEntity extends TileEntityContainerAdapter implements  ITickable, Observable  {
+public class FIMTileEntity extends TileEntityContainerAdapter implements  ITickable, Observable<Observer>  {
 	
 	private static final int[] slotsSpeedUPG = new int[] { 0 };
 	private static final int[] slotsFuel = new int[] { 1 };
@@ -49,6 +51,8 @@ public class FIMTileEntity extends TileEntityContainerAdapter implements  ITicka
 	
 	protected int tick = 0;
 	
+	public int fuelTemp;
+	
 	@Override
 	public void update() {
 			if (!this.worldObj.isRemote)
@@ -61,7 +65,7 @@ public class FIMTileEntity extends TileEntityContainerAdapter implements  ITicka
 			}
 	}
 	
-	public void toUpdateSCInfoAndSpeedUpSC() {
+	private void toUpdateSCInfoAndSpeedUpSC() {
 		this.scInfo.update();
 		this.fuelFSM.update();
 		if (scInfo.canFindSCPos() && scInfo.isSCHeatingItem())
@@ -73,48 +77,26 @@ public class FIMTileEntity extends TileEntityContainerAdapter implements  ITicka
 		}
 	}
 	
-	public void toSpeedUpSC(int fuelTemp, Adapter adap) {
-		if (fuelFSM.isActive)
-		{
-			fuelTemp = getSpeedUpTemp(fuelTemp);
-		}
-		adap.setFuelTemp(fuelTemp);
-	}
-	
-	public int getSpeedUpTemp(int fuelTemp)
-	{
-		return getStackSize(this.getSlots()[0]) * 200 + fuelTemp;
-	}
-	
-//	public void updateEntity() {
-//		boolean dirtyFlag = false;		
-//		if (!this.worldObj.isRemote) {//server do it
-//			if (this.canSmelt()) {
-//					dirtyFlag = true;
-//					if (this.itemStacksASC[1] != null) {
-//
-//						if (this.itemStacksASC[1].stackSize == 0) {
-//							this.itemStacksASC[1] = itemStacksASC[1].getItem().getContainerItem(this.itemStacksASC[1]);
-//						}
-//					}
-//					
-//				speedUPG();
-//				++this.inputTime;
-//				if (this.inputTime >= speed) {
-//					this.inputTime = 0;
-//					this.smeltItem();
-//					dirtyFlag = true;
-//					connectToTConstruct();
-//				}
-//
-//			}
-//			
-//			if (dirtyFlag) {
-//				// this is like : Don't forge save the game.
-//				this.markDirty();
-//			}
+	private void toSpeedUpSC(final int originFuelTemp, Adapter adap) {
+//	    int fuelTemp = 1000;
+//		if (fuelFSM.isActive)
+//		{
+//			fuelTemp = getSpeedUpTemp(originFuelTemp);
 //		}
-//	}
+	    int f = fuelTemp / 2 + originFuelTemp;
+		adap.setFuelTemp(f);
+	}
+	
+	public int getSpeedUpTemp(final int originFuelTemp)
+	{
+//		return getStackSize(this.getSlots()[0]) * 200 + originFuelTemp;
+	    return TileEntityFurnace.getItemBurnTime(this.getSlots()[1]) + originFuelTemp;
+	}
+	
+	public void onNeighborChange(IBlockAccess world, BlockPos neighbor)
+	{
+		scInfo.manager.onNeighborChange(world, neighbor);
+	}
 	
 	public int getStackSize(ItemStack stack) {
 		return stack == null ? 0 : stack.stackSize;
@@ -144,33 +126,6 @@ public class FIMTileEntity extends TileEntityContainerAdapter implements  ITicka
 			o.receivedTopic();
 		}
 	}
-	
-//	private boolean canSmelt() {
-//		this.checkConnection();
-//		if(canConnect == true){
-//			if(checkTemps() == true){
-//				if (this.itemStacksASC[1] == null) return false;
-//				if (this.itemStacksASC[1].isItemEqual(this.fuel)) return true;
-//			}else{
-//				return false;
-//			}
-//		}else{
-//			return false;
-//		}
-//		return false;
-//	}
-//	
-//	public void smeltItem() {
-//		if (this.canSmelt() && this.checkTemps()) {
-//			ItemStack itemstack = new ItemStack(ItemRegistry.SolidFuel);
-//
-//			if (this.itemStacksASC[1] == null) {
-//				this.itemStacksASC[1] = itemstack.copy();
-//			} else if (this.itemStacksASC[1].getItem() == itemstack.getItem()) {
-//				--this.itemStacksASC[1].stackSize;
-//			}
-//		}
-//	}
 	
 	/**
 	 * Returns true if automation is allowed to insert the given stack
@@ -236,8 +191,19 @@ public class FIMTileEntity extends TileEntityContainerAdapter implements  ITicka
 	 */
 	
 	@SideOnly(Side.CLIENT)
-	public int getCookProgressScaled(int par1) {
-		return this.inputTime * par1 / speed;
+	public int getCookProgressScaled(int pixels) {
+	    final int n = (this.inputTime<0)?0:this.inputTime;
+	    
+	    int i = this.fuelTemp;
+	    if (i==0)
+	    {
+	        i = 1000;
+	    }
+	    
+	    System.out.printf("temp: %d ", this.fuelTemp);
+	    System.out.printf("time: %d%n", this.inputTime);
+	    
+		return n * pixels / i;
 	}
 	
 	public boolean hasFuel(){
