@@ -17,7 +17,7 @@ import net.minecraft.item.ItemStack;
 
 public class ContainerFIM extends ContainerTemplate implements Observer{
 	
-	private FIMTileEntity tileFIM;
+	private FIMTileEntity tile;
 	
 	public static final int
 		SPEED_UPG = 0,
@@ -25,7 +25,7 @@ public class ContainerFIM extends ContainerTemplate implements Observer{
 		INV1_UPG = 2,
 		INV2_UPG = 3;  
 	public ContainerFIM(InventoryPlayer player, FIMTileEntity tile){
-		this.tileFIM = tile;
+		this.tile = tile;
 		
 		this.addSlotToContainer(new SlotFIMSpeedUPG(tile, SPEED_UPG, 25, 20)); // Speed UPG.
 		this.addSlotToContainer(new SlotFIMFuel(tile, FUEL, 79, 34)); // catalyst
@@ -33,8 +33,6 @@ public class ContainerFIM extends ContainerTemplate implements Observer{
 		this.addSlotToContainer(new Slot(tile, INV2_UPG, 25, 48)); // Speed UPG.
 		
 		this.addPlayerInventorySlotToContainer(player);
-		
-		tile.addObserver(this);
 	}
 	
 	/**
@@ -42,7 +40,7 @@ public class ContainerFIM extends ContainerTemplate implements Observer{
 	 */
 	@Override
 	public boolean canInteractWith(EntityPlayer player) {
-		return this.tileFIM.isUseableByPlayer(player);
+		return this.tile.isUseableByPlayer(player);
 	}
 	
 	/**
@@ -50,7 +48,7 @@ public class ContainerFIM extends ContainerTemplate implements Observer{
 	 */
 	@Override
     public ItemStack transferStackInSlot(EntityPlayer player, int slot) {
-		final int fimINV_SIZE = tileFIM.getSizeInventory();
+		final int fimINV_SIZE = tile.getSizeInventory();
 		ItemStack stack = null;
         Slot slotObject = (Slot) inventorySlots.get(slot);
         
@@ -148,28 +146,48 @@ public class ContainerFIM extends ContainerTemplate implements Observer{
 	{
 		super.onCraftGuiOpened(listener);
 		listener.sendProgressBarUpdate(this, 0, inputTime);
+		
+		tile.addObserver(this);
 	}
 	
-	@SideOnly(Side.CLIENT)
-	public void updateProgressBar(int ID, int data){
-		if(ID == 0){
-			this.tileFIM.inputTime = data;
-		} else if (ID == 1) {
-		    this.tileFIM.fuelTemp = data;
-		}
-	}
-
-	private int inputTime = 0;
-	private int lastInputTime = 0;
-	
-	private int fueltemp = 0;
-	private int lastfueltemp = 0;
-
+    /**
+     * Called when the container is closed.
+     */
 	@Override
-	public void receivedTopic()
-	{
-		this.inputTime = tileFIM.getInputTime();
-		this.fueltemp = tileFIM.fuelTemp;
-	}
+    public void onContainerClosed(EntityPlayer playerIn)
+    {
+	    super.onContainerClosed(playerIn);
+	    
+	    tile.removeObserver(this);
+    }
+	
+
+    @SideOnly(Side.CLIENT)
+    public void updateProgressBar(int ID, int data)
+    {
+        switch (ID)
+        {
+            case 0:
+                this.tile.inputTime = data;
+                return;
+            case 1:
+                this.tile.keepInputTime = data;
+                return;
+        }
+    }
+
+    private int inputTime = 0;
+    private int lastInputTime = 0;
+
+    private int fueltemp = 0;
+    private int lastfueltemp = 0;
+
+
+    @Override
+    public void receivedTopic()
+    {
+        this.inputTime = tile.getInputTime();
+        this.fueltemp = tile.keepInputTime;
+    }
 	
 }
