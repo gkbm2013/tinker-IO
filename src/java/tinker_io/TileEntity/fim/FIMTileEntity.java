@@ -78,6 +78,7 @@ public class FIMTileEntity extends TileEntityContainerAdapter implements ITickab
         {
             fuelFSM.startChangeState();
             Adapter adap = scInfo.getAdapter();
+            
             final int fuelTemp = adap.getFuelTemp();
 
             this.toSpeedUpSC(fuelTemp, adap);
