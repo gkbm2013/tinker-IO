@@ -35,11 +35,6 @@ public class FIMTileEntity extends TileEntityContainerAdapter implements  ITicka
 	public ItemStack fuel = new ItemStack(ItemRegistry.SolidFuel);
 	private List<Observer> obs = new ArrayList();
 	
-	@Deprecated
-	public int speed = 300;
-	@Deprecated
-	public int inputTime;
-
 	protected SCInfo scInfo;
 	protected FuelFSM fuelFSM = FuelFSMFactory.getNewFuelFSM(this);
 	
@@ -51,6 +46,8 @@ public class FIMTileEntity extends TileEntityContainerAdapter implements  ITicka
 	
 	protected int tick = 0;
 	
+	public int keepInputTime;
+	public int inputTime;
 	public int fuelTemp;
 	
 	@Override
@@ -65,27 +62,34 @@ public class FIMTileEntity extends TileEntityContainerAdapter implements  ITicka
 			}
 	}
 	
-	private void toUpdateSCInfoAndSpeedUpSC() {
-		this.scInfo.update();
-		this.fuelFSM.update();
-		if (scInfo.canFindSCPos() && scInfo.isSCHeatingItem())
-		{
-			fuelFSM.startChangeState();
-			Adapter adap = scInfo.getAdapter();
-			final int fuelTemp = adap.getFuelTemp();
-			toSpeedUpSC(fuelTemp, adap);
-		}
-	}
-	
-	private void toSpeedUpSC(final int originFuelTemp, Adapter adap) {
-//	    int fuelTemp = 1000;
-//		if (fuelFSM.isActive)
-//		{
-//			fuelTemp = getSpeedUpTemp(originFuelTemp);
-//		}
-	    int f = fuelTemp / 2 + originFuelTemp;
-		adap.setFuelTemp(f);
-	}
+
+    private void toUpdateSCInfoAndSpeedUpSC()
+    {
+        this.scInfo.update();
+        this.fuelFSM.update();
+        
+        if (scInfo.canFindSCPos() && scInfo.isSCHeatingItem())
+        {
+            fuelFSM.startChangeState();
+            Adapter adap = scInfo.getAdapter();
+            final int fuelTemp = adap.getFuelTemp();
+
+            this.toSpeedUpSC(fuelTemp, adap);
+        }
+        
+        if (fuelFSM.isActive)
+        {
+        this.notifyObservers();
+        }
+    }
+
+
+    private void toSpeedUpSC(final int originFuelTemp, Adapter adap)
+    {
+        int f = fuelTemp / 2 + originFuelTemp;
+
+        adap.setFuelTemp(f);
+    }
 	
 	public int getSpeedUpTemp(final int originFuelTemp)
 	{
@@ -174,6 +178,7 @@ public class FIMTileEntity extends TileEntityContainerAdapter implements  ITicka
 	public void readFromNBT(NBTTagCompound tag) {
 		super.readFromNBT(tag);
 		this.inputTime = tag.getShort("InputTime");
+		this.keepInputTime = tag.getShort("keepInputTime");
 		
 		this.fuelFSM.readFromNBT(tag);
 	}
@@ -182,6 +187,7 @@ public class FIMTileEntity extends TileEntityContainerAdapter implements  ITicka
 	public void writeToNBT(NBTTagCompound tag) {
 		super.writeToNBT(tag);
 		tag.setShort("InputTime", (short) this.inputTime);
+		tag.setShort("keepInputTime", (short) this.keepInputTime);
 		
 		this.fuelFSM.writeToNBT(tag);
 	}
@@ -194,14 +200,11 @@ public class FIMTileEntity extends TileEntityContainerAdapter implements  ITicka
 	public int getCookProgressScaled(int pixels) {
 	    final int n = (this.inputTime<0)?0:this.inputTime;
 	    
-	    int i = this.fuelTemp;
+	    int i = this.keepInputTime;
 	    if (i==0)
 	    {
 	        i = 1000;
 	    }
-	    
-	    System.out.printf("temp: %d ", this.fuelTemp);
-	    System.out.printf("time: %d%n", this.inputTime);
 	    
 		return n * pixels / i;
 	}

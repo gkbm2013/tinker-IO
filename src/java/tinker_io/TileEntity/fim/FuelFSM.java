@@ -38,9 +38,22 @@ public class FuelFSM implements ITickable, NBTable {
 	 
 	 public int getFuelBurnTime()
 	 {
-	     final ItemStack stack = tile.getSlots()[1];
 	     
-	     return TileEntityFurnace.getItemBurnTime(stack);
+	     return 200;
+	 }
+	 
+
+    public int computeFuelTemp()
+    {
+        final ItemStack stack = tile.getSlots()[1];
+
+        return TileEntityFurnace.getItemBurnTime(stack);
+    }
+
+
+	 public int computeInputTime()
+	 {
+	     return 200;
 	 }
 	 
 	 public int getFuelStackSize() {
@@ -67,7 +80,6 @@ public class FuelFSM implements ITickable, NBTable {
 	 {
 		 isActive = true;
 		tile.inputTime -= 4;
-		tile.notifyObservers();
 	}
 
 	
