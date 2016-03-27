@@ -191,20 +191,21 @@ public abstract class TileEntityContainerAdapter extends TileEntity implements I
     @Override
     public int getField(int id)
     {
-        return 0;
+        throw new UnsupportedOperationException();
     }
 
 
     @Override
     public void setField(int id, int value)
     {
+        throw new UnsupportedOperationException();
     }
 
 
     @Override
     public int getFieldCount()
     {
-        return 0;
+        throw new UnsupportedOperationException();
     }
 
 
