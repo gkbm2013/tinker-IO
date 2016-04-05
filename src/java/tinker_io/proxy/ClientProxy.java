@@ -2,12 +2,22 @@ package tinker_io.proxy;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraftforge.fml.client.registry.ClientRegistry;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+import tinker_io.TileEntity.StirlingEngineTileEntity;
+import tinker_io.registry.FluidRenderRegister;
+import tinker_io.render.TileEntityStirlingEngineRender;
 
-public class ClientProxy extends ServerProxy{
+public class ClientProxy extends CommonProxy{
 	public void registerRenderThings() {
-		//ClientRegistry.bindTileEntitySpecialRenderer(TileEntityWhatABeautifulBlockEntity.class, new TileEntityWhatABeautifulBlockRenderer());
+		System.out.println("[Tinker I/O] Render Started!");
+		ClientRegistry.bindTileEntitySpecialRenderer(StirlingEngineTileEntity.class, new TileEntityStirlingEngineRender());
+		FluidRenderRegister.fluidModelRegister();
 	}
+	
 	@Override
 	public EntityPlayer getPlayerEntity(MessageContext ctx) {
 	 // Note that if you simply return 'Minecraft.getMinecraft().thePlayer',
@@ -16,5 +26,17 @@ public class ClientProxy extends ServerProxy{
 
 	 // Solution is to double-check side before returning the player:
 	 return (ctx.side.isClient() ? Minecraft.getMinecraft().thePlayer : super.getPlayerEntity(ctx));
+	}
+	
+	@Override
+	public void preInit(FMLPreInitializationEvent e) {
+	}
+	@Override
+	public void init(FMLInitializationEvent e) {
+		this.registerRenderThings();
+	}
+
+	@Override
+	public void postInit(FMLPostInitializationEvent e) {
 	}
 }

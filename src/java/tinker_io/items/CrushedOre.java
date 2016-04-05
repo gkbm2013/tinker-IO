@@ -20,17 +20,6 @@ public class CrushedOre extends Item {
 		setUnlocalizedName(unlocalizedName);
 		setCreativeTab(Main.TinkerIOTabs);
 	}
-	/*@Override
-	public ModelResourceLocation getModel(ItemStack itemStack, EntityPlayer player, int useRemaining){
-		ModelResourceLocation modelresourcelocation = new ModelResourceLocation(Main.MODID + ":" + this.getUnlocalizedName().substring(5), "inventory");
-		NBTTagCompound nbt = itemStack.getTagCompound();
-		if(nbt != null){
-			String oreDic = nbt.getString("oreDic");
-			if(oreDic.equals("oreIron")){modelresourcelocation = setLocation("oreIron");}
-		}
-		//System.out.println(useRemaining);
-		return modelresourcelocation;
-	}*/
 	
 	// when rendering, choose the colour multiplier based on the contents
 	  // we want layer 0 (the bottle glass) to be unaffected (return white as the multiplier)

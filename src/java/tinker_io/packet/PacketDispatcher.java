@@ -27,6 +27,7 @@ public class PacketDispatcher {
 		
 		//PacketDispatcher.registerMessage(OpenGuiMessage.OpenGuiMessageHandler.class, OpenGuiMessage.class, Side.SERVER);
 		PacketDispatcher.registerMessage(VoidLiquidPacket.Handler.class, VoidLiquidPacket.class, Side.SERVER);
+		PacketDispatcher.registerMessage(EnergySynchronizationPacket.Handler.class, EnergySynchronizationPacket.class, Side.SERVER);
 	}
 	
 	private static final void registerMessage(Class handlerClass, Class messageClass, Side side) {

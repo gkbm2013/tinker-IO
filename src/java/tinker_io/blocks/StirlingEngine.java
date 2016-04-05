@@ -1,7 +1,5 @@
 package tinker_io.blocks;
 
-import tinker_io.TileEntity.OreCrusherTileEntity;
-import tinker_io.main.Main;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
@@ -12,6 +10,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.ChatComponentText;
@@ -19,13 +18,18 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import slimeknights.tconstruct.smeltery.tileentity.TileTank;
+import tinker_io.TileEntity.StirlingEngineTileEntity;
+import tinker_io.main.Main;
 
-public class OreCrusher extends BlockContainer {
+public class StirlingEngine extends BlockContainer {
+	
 	public static final PropertyDirection FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
 	
-	public OreCrusher(String unlocalizedName){
+	public StirlingEngine(String unlocalizedName){
 		super(Material.rock);
 		setUnlocalizedName(unlocalizedName);
 		setCreativeTab(Main.TinkerIOTabs);
@@ -33,7 +37,6 @@ public class OreCrusher extends BlockContainer {
 		setHardness(3);
 		this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
 	}
-	
 	@Override
 	protected BlockState createBlockState()
 	{
@@ -41,7 +44,7 @@ public class OreCrusher extends BlockContainer {
 	}
 
 	public TileEntity createNewTileEntity(World worldIn, int meta) {
-		return new OreCrusherTileEntity();
+		return new StirlingEngineTileEntity();
 	}
 	
 	@Override
@@ -74,14 +77,30 @@ public class OreCrusher extends BlockContainer {
     {
 	    if(playerIn.isSneaking()) {
 	        return false;
-	      }
-	    /*OreCrusherTileEntity te = (OreCrusherTileEntity) worldIn.getTileEntity(pos);
-	    if(te != null && !worldIn.isRemote){
-	    	playerIn.addChatMessage(new ChatComponentText(EnumChatFormatting.WHITE + "" + te.getEnergyStored(null)));
-	    }*/
-		if (!worldIn.isRemote) {
-		    playerIn.openGui(Main.instance, 2, worldIn, pos.getX(), pos.getY(), pos.getZ());
-		}
+	    }
+	    BlockPos tankPos = new BlockPos(pos.getX(), pos.getY() - 1, pos.getZ());
+	    TileEntity teUnknow = worldIn.getTileEntity(tankPos);
+	    if(teUnknow instanceof TileTank){
+	    	TileTank teTank = (TileTank) worldIn.getTileEntity(tankPos);
+		    if(teTank != null){
+		    	int liquidAmount = teTank.tank.getFluidAmount();
+		    	FluidStack fluid = teTank.tank.getFluid();
+		    	int fuildTemp = 0;
+		    	if(fluid != null){
+		    		fuildTemp = fluid.getFluid().getTemperature();
+		    	}
+		    	if(worldIn.isRemote){
+		    		playerIn.addChatMessage(new ChatComponentText(EnumChatFormatting.WHITE + "Liquid Amount : " + liquidAmount));
+		    		playerIn.addChatMessage(new ChatComponentText(EnumChatFormatting.WHITE + "Liquid Temp : " + fuildTemp));
+		    	}
+		    }
+	    }
+	    StirlingEngineTileEntity te = (StirlingEngineTileEntity) worldIn.getTileEntity(pos);
+	    int energy = te.getEnergyStored(null);
+	    if(worldIn.isRemote){
+    		playerIn.addChatMessage(new ChatComponentText(EnumChatFormatting.WHITE + "Energy : " + energy + " / " + te.getMaxEnergyStored(null) + " RF"));
+    		playerIn.addChatMessage(new ChatComponentText(EnumChatFormatting.YELLOW + "-----"));
+    	}
         return true;
     }
 	
@@ -134,10 +153,24 @@ public class OreCrusher extends BlockContainer {
 		worldIn.setBlockState(pos, state.withProperty(FACING, placer.getHorizontalFacing().getOpposite()), 2);
     }
 	
+	//Render
+	
+	@Override
+	public boolean isOpaqueCube()
+	{
+	   return false;
+	}
+	
+	@Override
+	public boolean shouldSideBeRendered(IBlockAccess worldIn, BlockPos pos, EnumFacing side)
+    {
+		return false;
+    }
+	
 	@Override
     public int getRenderType()
     {
-        return 3 ;//number 3 for standrd block models
+        return -1 ;//number 3 for standard block models
     }
 	
 	@Override

@@ -1,0 +1,34 @@
+I will use my mother language in this changelog...
+
+抱歉，我一直忘了push我的更動到git上面，導致兩個版本紀錄間產生極為巨大的差異...
+
+========================================
+
+Changelog不會是常態，我以後會定時push文件上去git的...
+
+========================================
+
+[Add]
+ 。新增Redstone flux Energy API
+ 。新增Ore Crusher 的合成限制與電力消耗機制
+ 。新增發電機 Stirling Engine (* Model無法解決，求助)
+ 。新增API : BlockFinder用以尋找六面之相鄰方塊
+ 。新增API : MeshDefinitionFix . Written by diesieben07 in this thread: http://www.minecraftforge.net/forum/index.php/topic,34034.0.html
+ 。新增Pure Metal液體 (* Model無法解決，求助)
+ 。新增Crushed Ore貼圖自動顏色判定
+ 。新增Crushed Ore之Smeltery合成配方 (融化為Pure Metal)
+ 。新增Pure Metal之Smart Output Casting合成配方 (使用Smart Output輸出為金屬錠)
+ 。新增Smart Output Fluid Stack casting recipe以彌補TConstruct的Casting recipe不支援Fluid Stack
+ 。新增FluidRegister
+ 。新增FluidRenderRegister  (失敗，待修)
+ 。新增OreCrusherBanList，禁止無法燒成金屬錠的原礦
+ 。新增SmelteryRecipeRegistry，用來方便加入Smeltery和Casting的recipe
+ 。新增Stirling Engine的Model file  (* Model無法解決，求助)
+ 。新增fluid.json用以決定fluid的model  (失敗，無法解決)
+ 。新增Ore Crusher貼圖中的能量條
+
+[Fix]
+ 。Smart Output的Packet同步
+ 。TileEntityContainerAdapter.java的getName()通用化修正
+ 。Smart Output Shift+右鍵修復  (*修復失敗，待修)
+ 。修正語言檔的部分名稱

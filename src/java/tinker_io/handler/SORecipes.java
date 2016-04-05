@@ -3,12 +3,16 @@ package tinker_io.handler;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+
+import com.google.common.collect.Lists;
 
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import slimeknights.tconstruct.smeltery.TinkerSmeltery;
@@ -21,36 +25,49 @@ import tinker_io.registry.ItemRegistry;
 
 public class SORecipes{
 	
+	private static List<CastingRecipe> tableCastRegistryWithFluidStack = Lists.newLinkedList();
+	
 	public ItemStack getCastingRecipes(FluidStack fluid, ItemStack itemStack){	
-		ItemStack basin = new ItemStack(TinkerSmeltery.searedBlock ,1 ,2);
-//		if(fluid != null && fluid.isFluidEqual(new FluidStack(TinkerSmeltery.moltenGlassFluid, FluidContainerRegistry.BUCKET_VOLUME)) && itemStack != null && itemStack.isItemEqual(basin)){
-//			return new ItemStack(TinkerSmeltery.clearGlass ,1);
-//		}
+		/*ItemStack basin = new ItemStack(TinkerSmeltery.searedBlock ,1 ,2);
+		if(fluid != null && fluid.isFluidEqual(new FluidStack(TinkerSmeltery.moltenGlassFluid, FluidContainerRegistry.BUCKET_VOLUME)) && itemStack != null && itemStack.isItemEqual(basin)){
+			return new ItemStack(TinkerSmeltery.clearGlass ,1);
+		}*/
 		
-//		LiquidCasting tableCasting = TConstructRegistry.instance.getTableCasting();
-//		CastingRecipe tableRecipe = tableCasting.getCastingRecipe(fluid, itemStack);
-		CastingRecipe tableRecipe = TinkerRegistry.getTableCasting(basin, null);
+		CastingRecipe tableRecipe = TinkerRegistry.getTableCasting(itemStack, fluid.getFluid());
+		CastingRecipe tableRecipeWithFluidStack = getTableCastingWithFluidStack(itemStack, fluid);
 		
 		if(tableRecipe != null){
 			return tableRecipe.getResult();
+		}else if(tableRecipeWithFluidStack != null){
+			return tableRecipeWithFluidStack.getResult();
 		}else{
 			return null;
 		}
 	}
 	
 	public FluidStack getCastingFluidCost(FluidStack fluid, ItemStack itemStack){
-		ItemStack basin = new ItemStack(TinkerSmeltery.searedBlock ,1 ,2);
+		//ItemStack basin = new ItemStack(TinkerSmeltery.searedBlock ,1 ,2);
 //		if(fluid != null && fluid.isFluidEqual(new FluidStack(TinkerSmeltery.moltenGlassFluid, FluidContainerRegistry.BUCKET_VOLUME)) && itemStack != null && itemStack.isItemEqual(basin)){
 //			return new FluidStack(TinkerSmeltery.moltenGlassFluid, FluidContainerRegistry.BUCKET_VOLUME);
 //		}
 		
 		
-//		LiquidCasting tableCasting = TinkerRegistry.getTableCasting();		
-//		CastingRecipe tableRecipe = tableCasting.getCastingRecipe(fluid, itemStack);
-		CastingRecipe tableRecipe = TinkerRegistry.getTableCasting(basin, null);
-	
+		//Fluid
+		
+		CastingRecipe tableRecipe = TinkerRegistry.getTableCasting(itemStack, fluid.getFluid());
+		CastingRecipe tableRecipeWithFluidStack = getTableCastingWithFluidStack(itemStack, fluid);
+		
+		CastingRecipe useAbleTableRecipe = null;
+		
 		if(tableRecipe != null){
-			FluidStack tableFluid = tableRecipe.getFluid();
+			useAbleTableRecipe = tableRecipe;
+		}else if(tableRecipeWithFluidStack != null){
+			useAbleTableRecipe = tableRecipeWithFluidStack;
+		}
+		
+		if(useAbleTableRecipe != null){
+			FluidStack tableFluid = useAbleTableRecipe.getFluid();
+			
 			
 			if(tableFluid != null){
 				return tableFluid;
@@ -69,26 +86,6 @@ public class SORecipes{
 	 * @return This method will return ture when the ItemStack "output" is a pattern. *Note : Only if Main.iguanas_support == true, this method will active.
 	 */
 	public boolean isPattern(ItemStack output){
-		if(Main.iguanas_support == false){
-			return false;
-		}
-//		
-//		ItemStack pattern = new ItemStack(TinkerSmeltery.metalPattern, 1, 0);
-//		String patternString = pattern.toString();
-//		String outputStirng = output.toString();
-//		String model = patternString.split("@")[0];
-//		
-//		//System.out.println(patternString.split("@")[0]);
-//		
-//		String itemPatternString = patternString.split("@")[0];
-//		String itemOutputStirngString = outputStirng.split("@")[0];
-//		//System.out.println(itemPatternString);
-//		//System.out.println(itemOutputStirngString);
-//		
-//		if(itemPatternString.equals(itemOutputStirngString)){
-//			return true;
-//		}
-//		return false;
 		Collection<Item> items = TinkerRegistry.getPatternItems();
 		Item item = output.getItem();
 		for (Item i : items) {
@@ -99,10 +96,14 @@ public class SORecipes{
 		return false;
 	}
 	
+	public boolean isPatternWithIguana(ItemStack itemStack){
+		if(Main.iguanas_support == false){
+			return false;
+		}
+		return isPattern(itemStack);
+	}
+	
 	public FluidStack getBasinFluid(FluidStack fluid, ItemStack itemStack){
-		
-//		LiquidCasting basinCasting = TinkerRegistry.getBasinCasting();
-//		CastingRecipe basinRecipe = basinCasting.getCastingRecipe(fluid, itemStack);
 		CastingRecipe basinRecipe = TinkerRegistry.getBasinCasting(itemStack, fluid.getFluid());
 
 		
@@ -117,6 +118,34 @@ public class SORecipes{
 			return null;
 		}
 		
+	}
+	
+	/*
+	 * ============================================================
+	 * Because TConStuct's casting table didn't support FluidStack,
+	 *  I build these method to process the output of pure metal.
+	 *  -GKB 2016/4/5 14:31
+	 * ============================================================
+	 * */
+	
+	public static void registerTableCastingWithFluidStack(CastingRecipe recipe) {
+		tableCastRegistryWithFluidStack.add(recipe);
+	}
+	
+	public static CastingRecipe getTableCastingWithFluidStack(ItemStack cast, FluidStack fluidstack) {
+	    for(CastingRecipe recipe : tableCastRegistryWithFluidStack) {
+	      if(matches(cast, fluidstack, recipe)) {
+	        return recipe;
+	      }
+	    }
+	    return null;
+	}
+	
+	public static boolean matches(ItemStack cast, FluidStack fluidStack, CastingRecipe recipe) {
+	    if((cast == null && recipe.cast == null) || (recipe.cast != null && recipe.cast.matches(new ItemStack[]{cast}) != null)) {
+	      return recipe.getFluid().isFluidEqual(fluidStack);
+	    }
+	    return false;
 	}
 	
 }

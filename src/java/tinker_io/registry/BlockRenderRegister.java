@@ -14,6 +14,10 @@ public class BlockRenderRegister {
 		reg(BlockRegistry.fuelInputMachine);
 		reg(BlockRegistry.smartOutput);
 		reg(BlockRegistry.oreCrusher);
+		reg(BlockRegistry.stirlingEngine);
+		
+		//pureOre
+		//reg(FluidRegister.blockPureMetal);
 	}
 	
 	public static void reg(Block block) {

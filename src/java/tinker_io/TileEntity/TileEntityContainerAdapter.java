@@ -8,6 +8,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IChatComponent;
+import net.minecraft.util.StatCollector;
 
 public abstract class TileEntityContainerAdapter extends TileEntity  implements ISidedInventory{
 	
@@ -31,8 +32,9 @@ public abstract class TileEntityContainerAdapter extends TileEntity  implements 
      */
 	@Override
 	public String getName() {
+		String langFileName = "tile." + this.getBlockType().getUnlocalizedName().substring(5) + ".name";
 		return this.hasCustomName() ?
-				this.name : I18n.format("tile.FuelInputMachine.name", new Object[0]);
+				this.name : StatCollector.translateToLocal(langFileName);
 	}
 	
 	@Override
