@@ -1,11 +1,9 @@
 package tinker_io.TileEntity.fim;
 
-import java.util.function.Consumer;
-
 import tinker_io.api.IState;
 
-public interface Process extends Consumer<FuelFSM>  {
+public abstract class Process implements IState<FuelFSM>  {
 	
-	 void accept(FuelFSM m);
+	 abstract public void accept(FuelFSM m);
 	 
 }

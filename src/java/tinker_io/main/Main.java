@@ -14,11 +14,15 @@ import tinker_io.packet.PacketDispatcher;
 //import tinker_io.plugins.fmp.MainFmp;
 //import tinker_io.plugins.waila.MainWaila;
 import tinker_io.proxy.ClientProxy;
+import tinker_io.proxy.CommonProxy;
 import tinker_io.proxy.ServerProxy;
 import tinker_io.registry.BlockRegistry;
 import tinker_io.registry.BlockRenderRegister;
+import tinker_io.registry.FluidRegister;
 import tinker_io.registry.ItemRegistry;
 import tinker_io.registry.ItemRenderRegister;
+import tinker_io.registry.OreCrusherBanLiatRegistry;
+import tinker_io.registry.SmelteryRecipeRegistry;
 import tinker_io.registry.RecipeRegistry;
 import slimeknights.mantle.pulsar.config.ForgeCFG;
 import slimeknights.mantle.pulsar.control.PulseManager;
@@ -68,7 +72,7 @@ public class Main
     
     //Proxy
     @SidedProxy(modId=Main.MODID, clientSide="tinker_io.proxy.ClientProxy", serverSide="tinker_io.proxy.ServerProxy")
-	public static ServerProxy proxy;
+	public static CommonProxy proxy;
     
     //MOD
     @Instance(Main.MODID)
@@ -89,6 +93,7 @@ public class Main
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event)
     {
+    	proxy.preInit(event);
 		Configuration config = new Configuration(event.getSuggestedConfigurationFile());
 	  	
     	config.load();
@@ -103,14 +108,17 @@ public class Main
     	}
     	
 		//magma heater
+		FluidRegister.mainRegistry();
     	BlockRegistry.mainRegistry();
     	ItemRegistry.mainRegistry();
 
     	PacketDispatcher.registerPackets();
     	
+    	
 		proxy.registerTileEntities();
+		//These was moved to ClientProxy
+		//proxy.registerRenderThings();
 		
-		//MainFmp.startPlugin(); // Developing...
 //		*** no waila
 //		MainWaila.startPlugin();
 //    	***
@@ -123,6 +131,7 @@ public class Main
 	@Mod.EventHandler
 	public static void init(FMLInitializationEvent event)
 	{
+		proxy.init(event);
 		BlockRenderRegister.registerBlockRenderer();
 		ItemRenderRegister.registerItemRenderer();
     	RecipeRegistry.mainRegistry();
@@ -135,6 +144,9 @@ public class Main
 	  @Mod.EventHandler
 	  public void postInit(FMLPostInitializationEvent event)
 	  {
-			proxy.registerNetworkStuff();
+		  proxy.postInit(event);
+		  proxy.registerNetworkStuff();
+		  SmelteryRecipeRegistry.registerMeltingCasting();
+		  OreCrusherBanLiatRegistry.registry();
 	  }
 }

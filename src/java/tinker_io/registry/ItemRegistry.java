@@ -8,7 +8,6 @@ import tinker_io.items.Upgrade;
 import tinker_io.items.CrushedOre;
 
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 
 public class ItemRegistry {
 	public static void mainRegistry() {
@@ -38,7 +37,5 @@ public class ItemRegistry {
 		GameRegistry.registerItem(Upgrade, "Upgrade");
 		GameRegistry.registerItem(Lonesome_Avenue, "CD_Lonesome_Avenue");
 		GameRegistry.registerItem(CrushedOre, "Crushed_ore");
-		
-		GameRegistry.registerFuelHandler(itemstack -> itemstack.isItemEqual(new ItemStack(SolidFuel))? 40000 : 0);
 	}
 }
