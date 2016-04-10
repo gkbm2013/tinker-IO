@@ -1,5 +1,7 @@
 package tinker_io.blocks;
 
+import java.util.List;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
@@ -9,6 +11,9 @@ import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.InventoryHelper;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -151,6 +156,14 @@ public class StirlingEngine extends BlockContainer {
     public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack)
     {
 		worldIn.setBlockState(pos, state.withProperty(FACING, placer.getHorizontalFacing().getOpposite()), 2);
+		TileEntity te = worldIn.getTileEntity(pos);
+		if(te != null){
+			StirlingEngineTileEntity engine = (StirlingEngineTileEntity) te;
+			NBTTagCompound nbt = stack.getTagCompound();
+			if(nbt != null){
+				engine.getStorage().setEnergyStored(nbt.getInteger("energy"));
+			}
+		}
     }
 	
 	//Render
@@ -180,12 +193,50 @@ public class StirlingEngine extends BlockContainer {
         return this.getDefaultState().withProperty(FACING, EnumFacing.SOUTH);
     }
 	
-	@Override
+	/*@Override
     public void breakBlock(World world, BlockPos pos, IBlockState state)
     {
+		super.breakBlock(world, pos, state);
+		
         if (hasTileEntity(state)) {
             world.removeTileEntity(pos);
         }
-        super.breakBlock(world, pos, state);
-    }
+    }*/
+	
+	@Override
+	public boolean removedByPlayer(World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
+		if(world.isRemote){
+			 return false;
+		 }
+		
+	    IBlockState state = world.getBlockState(pos);
+	    this.onBlockDestroyedByPlayer(world, pos, state);
+	    if(willHarvest) {
+	      this.harvestBlock(world, player, pos, state, world.getTileEntity(pos));
+	    }
+
+	    world.setBlockToAir(pos);
+	    return false;
+	}
+	
+	@Override
+	public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
+		
+	    List<ItemStack> items = super.getDrops(world, pos, state, fortune);
+	    
+	    TileEntity te = world.getTileEntity(pos);
+	    
+	    if(te != null && te instanceof StirlingEngineTileEntity) {
+	    	StirlingEngineTileEntity engine = (StirlingEngineTileEntity) te;
+	    	for(ItemStack item : items) {
+		        if(item.getItem() == Item.getItemFromBlock(this)) {
+		          NBTTagCompound tag = new NBTTagCompound();
+		          tag.setInteger("energy", engine.getStorage().getEnergyStored());
+		          item.setTagCompound(tag);
+		          
+		        }
+		      }
+	    }
+	    return items;
+	}
 }

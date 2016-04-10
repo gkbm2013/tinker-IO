@@ -2,17 +2,12 @@ package tinker_io.TileEntity;
 
 import cofh.api.energy.EnergyStorage;
 import cofh.api.energy.IEnergyReceiver;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.IChatComponent;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.fml.relauncher.Side;
@@ -158,7 +153,7 @@ public class OreCrusherTileEntity extends TileEntityContainerAdapter implements 
 	}
 	
 	private ItemStack getProduce(){
-		ItemStack produce = new ItemStack(ItemRegistry.CrushedOre);
+		ItemStack produce = new ItemStack(ItemRegistry.CrushedOre, 3);
 		produce.setTagCompound(new NBTTagCompound());
 		NBTTagCompound nbt = produce.getTagCompound();
 		if(isOreInOreDic(getSlots()[1])){
@@ -182,13 +177,16 @@ public class OreCrusherTileEntity extends TileEntityContainerAdapter implements 
 		if(getSlots()[2] == null && this.storage.getEnergyStored() > speed){
 			return true;
 		}else if(getSlots()[2] != null && getSlots()[2].isItemEqual(produce) && isOreDicNBTTagEqual(getSlots()[2], produce) && this.storage.getEnergyStored() > speed){
-			return true;
+			if(this.getSlots()[2].stackSize + produce.stackSize <= produce.getMaxStackSize()){
+				return true;
+			}
 		}
 		return false;
 	}
 	
 	public void crush(){
 		ItemStack produce = this.getProduce();
+		
 		if(canCrush()){
 			if(crushTime >= speed){
 				crushTime = 0;
@@ -205,7 +203,7 @@ public class OreCrusherTileEntity extends TileEntityContainerAdapter implements 
 			}else{
 				crushTime++;
 				speedUPG();
-				this.storage.setEnergyStored(this.storage.getEnergyStored() - 15);
+				this.storage.setEnergyStored(this.storage.getEnergyStored() - 45);
 			}
 		}else{
 			crushTime = 0;
@@ -304,6 +302,10 @@ public class OreCrusherTileEntity extends TileEntityContainerAdapter implements 
 	@Override
 	public int receiveEnergy(EnumFacing from, int maxReceive, boolean simulate) {
 		return this.storage.receiveEnergy(Math.min(storage.getMaxReceive(), maxReceive), simulate);
+	}
+	
+	public EnergyStorage getStorage(){
+		return this.storage;
 	}
 		
 }

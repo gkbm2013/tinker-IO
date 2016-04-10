@@ -1,5 +1,9 @@
 {
     "variants": {
-        "normal": { "model": "tinker_io:stirling_engine" }
+        "facing=north": { "model": "tinker_io:Stirling_Engine" },
+        "facing=south": { "model": "tinker_io:Stirling_Engine", "y": 180 },
+        "facing=west":  { "model": "tinker_io:Stirling_Engine", "y": 270 },
+        "facing=east":  { "model": "tinker_io:Stirling_Engine", "y": 90 },
+        "inventory":  { "model": "tinker_io:Stirling_Engine" }
     }
 }

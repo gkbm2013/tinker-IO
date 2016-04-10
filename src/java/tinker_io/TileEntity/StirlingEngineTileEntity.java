@@ -31,7 +31,7 @@ public class StirlingEngineTileEntity extends TileEntity implements  ITickable, 
 	protected EnergyStorage storage = new EnergyStorage(500000, 0, 2000);
 	
 	public StirlingEngineTileEntity() {
-		// TODO 自動產生的建構子 Stub
+		// TODO
 	}	
 
 	private void generateEnergy(){
@@ -132,6 +132,7 @@ public class StirlingEngineTileEntity extends TileEntity implements  ITickable, 
 		generateEnergy();
 		extraEnergyToSurroundingMechine();
 		//System.out.println(angel);
+		//System.out.println(this.pos);
 	}
 	
 	//Packet
@@ -183,5 +184,9 @@ public class StirlingEngineTileEntity extends TileEntity implements  ITickable, 
 	@Override
 	public int extractEnergy(EnumFacing from, int maxExtract, boolean simulate) {
 		return this.storage.receiveEnergy(Math.min(storage.getMaxExtract(), maxExtract), simulate);
+	}
+	
+	public EnergyStorage getStorage(){
+		return this.storage;
 	}
 }
