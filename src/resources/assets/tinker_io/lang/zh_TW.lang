@@ -2,11 +2,9 @@
 itemGroup.TinkerIO_Tabs=Tinker I/O
 
 #Blocks
-tile.fuel_input_machine.name=燃料輸入機
+tile.FuelInputMachine.name=燃料輸入機
 tile.SmartOutput.name=智慧輸出
 tile.WhatABeautifulBlock.name=好漂亮的方塊
-tile.Ore_Crusher.name=礦物粉碎機
-tile.Stirling_Engine.name=史特林引擎
 
 #Items
 item.speedUPG.name=速度升級
@@ -20,10 +18,6 @@ item.upg_5.name=紅石控制升級
 item.upg_6.name=插槽空間升級 無限
 item.CD_Lonesome_Avenue.name=唱片
 item.CD_Lonesome_Avenue.desc=Lonesome Avenue (YouTube音效庫)
-item.Crushed_ore.name=礦物碎片
-
-#Fluid
-fluid.pure_metal=純化金屬
 
 #GUI
 tio.gui.fim.slot1=速度升級
@@ -65,8 +59,6 @@ tio.toolTips.redstoneUPG.usage1=使智慧輸出可以被紅石控制
 
 tio.toolTips.CD_Lonesome_Avenue=紀念Tinker I/O的開發經過
 
-tio.toolTips.oreCrusher.energy=儲存的能量
-tio.toolTips.oreCrusher.rf=RF
 
 #Waila
 tio.plugin.waila.tankEmpty=(空)

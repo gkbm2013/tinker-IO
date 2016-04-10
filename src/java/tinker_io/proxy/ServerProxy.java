@@ -1,28 +1,30 @@
 package tinker_io.proxy;
 
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.common.network.NetworkRegistry;
-import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraft.entity.player.EntityPlayer;
 import tinker_io.TileEntity.OreCrusherTileEntity;
 //import tconstruct.util.config.PHConstruct;
 import tinker_io.TileEntity.SOTileEntity;
-import tinker_io.TileEntity.StirlingEngineTileEntity;
+import tinker_io.TileEntity.TileEntityWhatABeautifulBlockEntity;
 import tinker_io.TileEntity.fim.FIMTileEntity;
 import tinker_io.handler.GuiHandler;
 import tinker_io.main.Main;
+import net.minecraftforge.fml.common.network.NetworkRegistry;
+import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 
-public class ServerProxy extends CommonProxy{
+public class ServerProxy{
 	
-	@Override
-	public void preInit(FMLPreInitializationEvent e) {
+	public void registerNetworkStuff(){
+		NetworkRegistry.INSTANCE.registerGuiHandler(Main.instance, new GuiHandler());
 	}
-	@Override
-	public void init(FMLInitializationEvent e) {
+	
+	public void registerTileEntities(){
+		GameRegistry.registerTileEntity(FIMTileEntity.class, Main.MODID+"TileEntityFIM");
+		GameRegistry.registerTileEntity(SOTileEntity.class, Main.MODID+"SOTileEntity");
+		GameRegistry.registerTileEntity(OreCrusherTileEntity.class, Main.MODID+"OreCrusherTileEntity");
+		//GameRegistry.registerTileEntity(TileEntityWhatABeautifulBlockEntity.class, Main.MODID+"WABTileEntity");
 	}
-
-	@Override
-	public void postInit(FMLPostInitializationEvent e) {
+	public EntityPlayer getPlayerEntity(MessageContext ctx) {
+		 return ctx.getServerHandler().playerEntity;
 	}
 }

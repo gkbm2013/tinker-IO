@@ -3,68 +3,103 @@ package tinker_io.TileEntity.fim;
 import tinker_io.api.IState;
 import tinker_io.api.IStateMachine;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.util.ITickable;
 
-public class FuelFSM implements IStateMachine, ITickable {
-	
-	private IState currentState;
-	FIMTileEntity tile;
-	
-	FuelFSM(FIMTileEntity tile, boolean state) {
-		this.currentState = (state)?
-				new ProcessSpeedUp() : new ProcessWaitFuel();
-		this.tile = tile;
-	}
-	
-	@Override
-	 public void update() {
-		 this.currentState.accept(this);
-	}
-	
-	 public void revert() {
-		 this.revertWhenNotFindSC();
-	}
-	 
-	 private void revertWhenNotFindSC() {
-		 if (currentState instanceof ProcessSpeedUp) {
-			 this.update();
-		 }
-	 }
-	 
-	 void heat() {
-		tile.isActive = true;
-		tile.inputTime -= 10;
-	}
-	
-	 void waitFuel() {
-		tile.isActive = false;
-		if (FuelFSM.getStackSize(tile.getSlots()[1]) > 0) {
-			tile.inputTime = 300;
-		}
-	}
-	
-	 void cousumeFuel() {
-		tile.getSlots()[1].stackSize -= 1;
-		if (tile.getSlots()[1].stackSize == 0) {
-			tile.getSlots()[1] = tile.getSlots()[1].getItem().getContainerItem(tile.getSlots()[1]);
-		}
-	}
-	 
-	 public boolean isSpeedingUp() {
-		 return tile.inputTime > 0;
-	 }
-	 
-	 public int getFuelStackSize() {
-		 ItemStack stack = tile.getSlots()[1];
-		 return FuelFSM.getStackSize(stack);
-	 }
-	 
-	public static int getStackSize(ItemStack stack) {
-		return stack == null ? 0 : stack.stackSize;
-	}
+public class FuelFSM implements ITickable, NBTable
+{
 
-	@Override
-	public void setState(IState state) {
-		this.currentState = state;
-	}
+    public final Process speedup = new ProcessSpeedUp();
+    public final Process waitFuel = new ProcessWaitFuel();
+
+    private Process currentState;
+    public boolean isActive = false;
+    public boolean canChangeState = false;
+    FIMTileEntity tile;
+
+
+    public FuelFSM(FIMTileEntity tile)
+    {
+        this.tile = tile;
+    }
+
+
+    public void init()
+    {
+        this.currentState = this.isActive ? this.speedup : this.waitFuel;
+    }
+
+
+    @Override
+    public void update()
+    {
+        this.currentState.accept(this);
+    }
+
+
+    public boolean isSpeedingUp()
+    {
+        return tile.inputTime > 0;
+    }
+
+
+    public int computeFuelTemp()
+    {
+        final ItemStack stack = tile.getSlots()[1];
+
+        return TileEntityFurnace.getItemBurnTime(stack);
+    }
+
+
+    public int computeInputTime()
+    {
+        return 200;
+    }
+
+
+    public int getFuelStackSize()
+    {
+        ItemStack stack = tile.getSlots()[1];
+        return FuelFSM.getStackSize(stack);
+    }
+
+
+    public static int getStackSize(ItemStack stack)
+    {
+        return stack == null ? 0 : stack.stackSize;
+    }
+
+
+    public void setProcess(Process state)
+    {
+        this.currentState = state;
+    }
+
+
+    public void startChangeState()
+    {
+        this.canChangeState = true;
+    }
+
+
+    void heat()
+    {
+        isActive = true;
+        tile.inputTime -= 4;
+    }
+
+
+    @Override
+    public void readFromNBT(NBTTagCompound tag)
+    {
+        this.isActive = tag.getBoolean("isActive");
+    }
+
+
+    @Override
+    public void writeToNBT(NBTTagCompound tag)
+    {
+        tag.setBoolean("isActive", isActive);
+    }
 }

@@ -52,6 +52,10 @@ public class SOTileEntity extends MultiServantLogic implements IFluidHandler , I
 	
 	private String nameSO;
 	
+	public void nameASC(String string){
+		this.nameSO = string;
+	}
+	
 	public SOTileEntity(){
 		tank = new FluidTank(FluidContainerRegistry.BUCKET_VOLUME * 10);
 	}
@@ -204,19 +208,27 @@ public class SOTileEntity extends MultiServantLogic implements IFluidHandler , I
 		tags.setTag("Items", tagList);
 		//tags.setInteger("Mode", mode);
     }
-    
-	//Packet
-	 @Override
-	 public Packet getDescriptionPacket() {	 
-	     NBTTagCompound tag = new NBTTagCompound();
-	     this.writeToNBT(tag);
-	     return new S35PacketUpdateTileEntity(pos, 1, tag);
-	 }
-	 
-	 @Override
-	 public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity packet) {
-	     readFromNBT(packet.getNbtCompound());
-	 }
+
+    /* Packets */
+    @Override
+    public Packet getDescriptionPacket ()
+    {
+        NBTTagCompound tag = new NBTTagCompound();
+        writeCustomNBT(tag);
+        return new S35PacketUpdateTileEntity(this.pos, 1, tag);
+    }
+
+    /**
+     * Called when you receive a TileEntityData packet for the location this TileEntity is currently in.
+     * On the client, the NetworkManager will always be the remote server.
+     * On the server, it will be whomever is responsible for sending the packet.
+     */
+//    @Override
+//    public void onDataPacket (NetworkManager net, S35PacketUpdateTileEntity packet)
+//    {
+//        readCustomNBT(packet.func_148857_g());
+//        worldObj.func_147479_m(xCoord, yCoord, zCoord);
+//    }
     
     @Override
 	public int getSizeInventory() {
@@ -517,7 +529,6 @@ public class SOTileEntity extends MultiServantLogic implements IFluidHandler , I
 		}else{
 			canStart = true;
 		}
-		
 		if(info != null && liquid != null && this.itemStacksSO[0] != null && canStart == true){
 			if(recipes.getCastingFluidCost(liquid, itemStacksSO[0]) != null && recipes.getCastingFluidCost(liquid, itemStacksSO[0]).amount <= liquid.amount){
 				if(recipes.getCastingRecipes(liquid, this.itemStacksSO[0]) != null){
@@ -584,7 +595,7 @@ public class SOTileEntity extends MultiServantLogic implements IFluidHandler , I
 					}
 				}
 				
-				if(recipes.isPatternWithIguana(itemStacksSO[1])){
+				if(recipes.isPattern(itemStacksSO[1])){
 					if(itemStacksSO[0].stackSize == 1){
 						itemStacksSO[0] = null;
 					}else{
@@ -668,11 +679,15 @@ public class SOTileEntity extends MultiServantLogic implements IFluidHandler , I
     
     
     public void update() {
-    	if (worldObj.isRemote) return;
-    	worldObj.markBlockForUpdate(pos);
-    	
-    	if(canFrozen()){
-    		if(currentFrozenTime >= frozenTimeMax){
+    	//checkConnection();
+    	//setLiquid();
+    	//liquidIO();
+
+    	//System.out.println(mode);
+    	//checkMode();
+    	//voidLiquid();
+	if(canFrozen()){
+		if(currentFrozenTime >= frozenTimeMax){
     			currentFrozenTime = 0;
     			frozen();
     			//notifyMasterOfChange();
@@ -685,6 +700,48 @@ public class SOTileEntity extends MultiServantLogic implements IFluidHandler , I
     		currentFrozenTime = 0;
     	}
     }
+    
+//    @Override
+//    public void updateEntity ()
+//    {   	
+//    	//checkConnection();
+//    	//setLiquid();
+//    	//liquidIO();
+//
+//    	//System.out.println(mode);
+//    	//checkMode();
+//    	//voidLiquid();
+//    	if(canFrozen()){
+//    		if(currentFrozenTime >= frozenTimeMax){
+//    			currentFrozenTime = 0;
+//    			frozen();
+//    			//notifyMasterOfChange();
+//    		}else{
+//    				currentFrozenTime++;
+//    		}
+//    		
+//    		this.markDirty();
+//    	}else{
+//    		currentFrozenTime = 0;
+//    	}
+    	
+//    	if(canBasin() || canFrozen()){
+//    		if(currentFrozenTime == frozenTimeMax){
+//    			currentFrozenTime = 0;
+//    			if(hasPowered && canBasin){
+//    				basin();
+//    			}else{
+//    				frozen();
+//    			}
+//    			notifyMasterOfChange();
+//    		}else{
+//    			currentFrozenTime++;
+//    		}
+//    		this.markDirty();
+//    	}else{
+//    		currentFrozenTime = 0;
+//    	}
+//    }
 
 	@Override
 	public ItemStack removeStackFromSlot(int index) {
