@@ -2,20 +2,24 @@ package tinker_io.blocks;
 
 import tinker_io.TileEntity.OreCrusherTileEntity;
 import tinker_io.main.Main;
+
+import java.util.List;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -24,6 +28,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class OreCrusher extends BlockContainer {
 	public static final PropertyDirection FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
+	//public static PropertyBool ACTIVE = PropertyBool.create("active");
 	
 	public OreCrusher(String unlocalizedName){
 		super(Material.rock);
@@ -39,7 +44,21 @@ public class OreCrusher extends BlockContainer {
 	{
 		return new BlockState(this, new IProperty[] { FACING });
 	}
-
+	
+	/*@Override
+	public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
+		return state.withProperty(ACTIVE, isActive(worldIn, pos));
+	}
+	
+	public boolean isActive(IBlockAccess world, BlockPos pos) {
+		TileEntity te = world.getTileEntity(pos);
+		if(te != null && te instanceof OreCrusherTileEntity){
+			OreCrusherTileEntity crusher = (OreCrusherTileEntity) te;
+			return crusher.isActive();
+		}
+		return false;
+	}*/
+	
 	public TileEntity createNewTileEntity(World worldIn, int meta) {
 		return new OreCrusherTileEntity();
 	}
@@ -132,6 +151,14 @@ public class OreCrusher extends BlockContainer {
     public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack)
     {
 		worldIn.setBlockState(pos, state.withProperty(FACING, placer.getHorizontalFacing().getOpposite()), 2);
+		TileEntity te = worldIn.getTileEntity(pos);
+		if(te != null){
+			OreCrusherTileEntity engine = (OreCrusherTileEntity) te;
+			NBTTagCompound nbt = stack.getTagCompound();
+			if(nbt != null){
+				engine.getStorage().setEnergyStored(nbt.getInteger("energy"));
+			}
+		}
     }
 	
 	@Override
@@ -147,12 +174,49 @@ public class OreCrusher extends BlockContainer {
         return this.getDefaultState().withProperty(FACING, EnumFacing.SOUTH);
     }
 	
-	@Override
+	/*@Override
     public void breakBlock(World world, BlockPos pos, IBlockState state)
     {
         if (hasTileEntity(state)) {
             world.removeTileEntity(pos);
         }
         super.breakBlock(world, pos, state);
-    }
+    }*/
+	
+	@Override
+	public boolean removedByPlayer(World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
+		if(world.isRemote){
+			 return false;
+		 }
+		
+	    IBlockState state = world.getBlockState(pos);
+	    this.onBlockDestroyedByPlayer(world, pos, state);
+	    if(willHarvest) {
+	      this.harvestBlock(world, player, pos, state, world.getTileEntity(pos));
+	    }
+
+	    world.setBlockToAir(pos);
+	    return false;
+	}
+	
+	@Override
+	public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
+		
+	    List<ItemStack> items = super.getDrops(world, pos, state, fortune);
+	    
+	    TileEntity te = world.getTileEntity(pos);
+	    
+	    if(te != null && te instanceof OreCrusherTileEntity) {
+	    	OreCrusherTileEntity engine = (OreCrusherTileEntity) te;
+	    	for(ItemStack item : items) {
+		        if(item.getItem() == Item.getItemFromBlock(this)) {
+		          NBTTagCompound tag = new NBTTagCompound();
+		          tag.setInteger("energy", engine.getStorage().getEnergyStored());
+		          item.setTagCompound(tag);
+		          
+		        }
+		      }
+	    }
+	    return items;
+	}
 }

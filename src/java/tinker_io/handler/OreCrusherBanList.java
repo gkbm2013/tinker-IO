@@ -1,6 +1,8 @@
 package tinker_io.handler;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import net.minecraft.item.ItemStack;
@@ -27,7 +29,7 @@ public class OreCrusherBanList {
 	}
 	
 	/**
-	 * The ore dictionary added by this method will be removed when ore crusher want crush it. 
+	 * The ore dictionary added by this method will be removed when ore crusher want to crush it. 
 	 * 
 	 * @param oreDic The ore dictionary to ban.
 	 */
@@ -46,5 +48,10 @@ public class OreCrusherBanList {
 			oreDicName = OreDictionary.getOreName(oreID);
 		}
 		return oreDicName;
+	}
+	
+	public static List<String> getBanList(){
+		List<String> list = new ArrayList<String>(banedOreDicList.values());
+		return list;
 	}
 }

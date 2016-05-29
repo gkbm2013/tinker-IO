@@ -33,6 +33,9 @@ public class OreCrusherBanLiatRegistry {
 		OreCrusherBanList.addBanOreDic("oreCrystal");
 		OreCrusherBanList.addBanOreDic("oreZimphnode");
 		OreCrusherBanList.addBanOreDic("oreSalt");
+		OreCrusherBanList.addBanOreDic("oreKnightslime");
+		OreCrusherBanList.addBanOreDic("orePigiron");
+		OreCrusherBanList.addBanOreDic("oreManyullyn");
 		
 		banItemCannotSmelt();
 	}
@@ -41,10 +44,20 @@ public class OreCrusherBanLiatRegistry {
 		String[] oreDicts = OreDictionary.getOreNames();
 		
 		for(int i = 0; i < oreDicts.length; i++){
-			if(!hasFurnaceResult(oreDicts[i])){
+			if(!hasFurnaceResult(oreDicts[i]) || !isAccepted(oreDicts[i])){
 				OreCrusherBanList.addBanOreDic(oreDicts[i]);
 			}
 		}
+	}
+	
+	private static boolean isAccepted(String oreDic){
+		String title = oreDic.substring(0, 3);
+		List<String> banList = OreCrusherBanList.getBanList();
+		
+		if(title.equals("ore") && !banList.contains(oreDic)){
+			return true;
+		}
+		return false;
 	}
 	
 	private static boolean hasFurnaceResult(String oreDic){

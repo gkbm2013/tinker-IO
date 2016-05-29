@@ -1,9 +1,13 @@
 package tinker_io.inventory;
 
 import tinker_io.TileEntity.OreCrusherTileEntity;
-import tinker_io.items.SolidFuel;
 import tinker_io.items.SpeedUPG;
-import tinker_io.items.Upgrade;
+import tinker_io.registry.ItemRegistry;
+
+import java.util.List;
+
+import com.google.common.collect.Lists;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -17,12 +21,25 @@ public class ContainerOreCrusher extends Container{
 
 	OreCrusherTileEntity tileOC;
 	
-	public static final int SPEED_UPG = 0, ORE = 1, produce = 2;  
+	public static final int SPEED_UPG = 0, ORE = 1, product = 2, slotsFortuneUPG1 = 3, slotsFortuneUPG2 = 4, slotsFortuneUPG3 = 5;  
 	public ContainerOreCrusher(InventoryPlayer player, OreCrusherTileEntity tileEntityOC){
+		List<Integer> banList = Lists.newLinkedList();
+		banList.add(0);
+		banList.add(1);
+		banList.add(2);
+		banList.add(3);
+		banList.add(4);
+		banList.add(5);
+		
 		this.tileOC = tileEntityOC;
 		this.addSlotToContainer(new Slot(tileEntityOC, SPEED_UPG, 38, 34)); // Speed UPG.
 		this.addSlotToContainer(new Slot(tileEntityOC, ORE, 62, 34)); // ore
-		this.addSlotToContainer(new Slot(tileEntityOC, produce, 113, 34)); // produce.
+		this.addSlotToContainer(new SlotProduct(tileEntityOC, product, 113, 34)); // product.
+		
+		this.addSlotToContainer(new SlotFortuneEnchantedBook(tileEntityOC, slotsFortuneUPG1, 44, 62)); // enchanted book
+		this.addSlotToContainer(new SlotFortuneEnchantedBook(tileEntityOC, slotsFortuneUPG2, 62, 62)); // enchanted book
+		this.addSlotToContainer(new SlotUPG(tileEntityOC, slotsFortuneUPG3, 81, 62, banList, 1)); // Infinity UPG.
+		
 		
 		//this.addSlotToContainer(new SlotFurnace(player.player, tileEntityASC, 0, 25, 34));
 		
@@ -75,6 +92,18 @@ public class ContainerOreCrusher extends Container{
             	//spUPG is in player
             	else if (stackInSlot.getItem() instanceof SpeedUPG){
             		if (!this.mergeItemStack(stackInSlot, SPEED_UPG, SPEED_UPG+1, false)){
+            			return null;
+            		}
+            	}
+            	//enchanted book is in player
+            	else if (tileOC.isFortuenEnchantedBook(stackInSlot)){
+            		if (!this.mergeItemStack(stackInSlot, slotsFortuneUPG1, slotsFortuneUPG1+2, false)){
+            			return null;
+            		}
+            	}
+            	//slot UPG. infinity is in player
+            	else if (stackInSlot.isItemEqual(new ItemStack(ItemRegistry.Upgrade, 1, 6))){
+            		if (!this.mergeItemStack(stackInSlot, slotsFortuneUPG3, slotsFortuneUPG3+1, false)){
             			return null;
             		}
             	}

@@ -21,15 +21,17 @@ public class CrushedOreMeltingRegistry {
 		long startTime = System.currentTimeMillis();
 		
 		for(int i = 0; i < oreDicts.length; i++){
-			Fluid pureMetal = FluidRegister.pureMetal;
-			FluidStack pureMetalStack = new FluidStack(pureMetal, Material.VALUE_Ingot);
-			
-			ItemStack crushedOreStack = new ItemStack(ItemRegistry.CrushedOre);
-			
-			crushedOreStack.setTagCompound(new NBTTagCompound());
-			crushedOreStack.getTagCompound().setString("oreDic", oreDicts[i]);
-			
-			SmelteryRecipeRegistry.registerMeltingWithNBT(crushedOreStack, itemNBTtoFluidNBT(pureMetalStack, crushedOreStack), 350);
+			if(OreCrusherRecipe.isOreDicAccepted(oreDicts[i])){
+				Fluid pureMetal = FluidRegister.pureMetal;
+				FluidStack pureMetalStack = new FluidStack(pureMetal, Material.VALUE_Ingot);
+				
+				ItemStack crushedOreStack = new ItemStack(ItemRegistry.CrushedOre);
+				
+				crushedOreStack.setTagCompound(new NBTTagCompound());
+				crushedOreStack.getTagCompound().setString("oreDic", oreDicts[i]);
+				
+				SmelteryRecipeRegistry.registerMeltingWithNBT(crushedOreStack, itemNBTtoFluidNBT(pureMetalStack, crushedOreStack), 350);
+			}
 		}
 		
 		long endTime   = System.currentTimeMillis();

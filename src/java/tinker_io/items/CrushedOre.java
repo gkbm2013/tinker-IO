@@ -45,6 +45,7 @@ public class CrushedOre extends Item {
 		return new ModelResourceLocation(Main.MODID + ":" + this.getUnlocalizedName().substring(5)+ "_" + filename, "inventory");
 	}
 	
+	@Override
 	public void addInformation(ItemStack itemStack, EntityPlayer player, List list, boolean par4) {
 		if (itemStack.getTagCompound() != null) {
             String oreDic = itemStack.getTagCompound().getString("oreDic");

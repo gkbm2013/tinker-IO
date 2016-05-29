@@ -19,7 +19,7 @@ public class FluidRegister {
 	public static BlockPureMetal blockPureMetal;
 	
 	private static void fluidPreload(){
-		pureMetal = new PureMetal("pure_metal");
+		pureMetal = new PureMetal("pureMetal");
 	}
 	
 	private static void registerFluids() {
@@ -27,10 +27,10 @@ public class FluidRegister {
 	}
 	
 	private static void fluidBlockPreload(){
-		blockPureMetal = new BlockPureMetal(FluidRegister.pureMetal, "pure_metal");
+		blockPureMetal = new BlockPureMetal(FluidRegister.pureMetal, "blockPureMetal");
 	}
 	
 	private static void registerFluidBlocks(){
-		GameRegistry.registerBlock(blockPureMetal, "pure_metal");
+		GameRegistry.registerBlock(blockPureMetal, "blockPureMetal");
 	}
 }

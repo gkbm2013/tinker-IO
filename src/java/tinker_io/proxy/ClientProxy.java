@@ -8,7 +8,9 @@ import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import tinker_io.TileEntity.StirlingEngineTileEntity;
+import tinker_io.registry.BlockRenderRegister;
 import tinker_io.registry.FluidRenderRegister;
+import tinker_io.registry.ItemRenderRegister;
 import tinker_io.render.TileEntityStirlingEngineRender;
 
 public class ClientProxy extends CommonProxy{
@@ -34,6 +36,8 @@ public class ClientProxy extends CommonProxy{
 	@Override
 	public void init(FMLInitializationEvent e) {
 		this.registerRenderThings();
+		BlockRenderRegister.registerBlockRenderer();
+		ItemRenderRegister.registerItemRenderer();
 	}
 
 	@Override

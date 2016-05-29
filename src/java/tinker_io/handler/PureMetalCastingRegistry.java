@@ -2,7 +2,6 @@ package tinker_io.handler;
 
 import java.util.List;
 
-import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.nbt.NBTTagCompound;
@@ -20,14 +19,15 @@ public class PureMetalCastingRegistry {
 		long startTime = System.currentTimeMillis();
 		
 		for(int i = 0; i < oreDicts.length; i++){
-			FluidStack fluidStack = new FluidStack(FluidRegister.pureMetal, Material.VALUE_Ingot, new NBTTagCompound());
-			fluidStack.tag.setString("oreDic", oreDicts[i]);
-			
-			if(getOutput(fluidStack) != null){
-				SmelteryRecipeRegistry.registerSmaetOutputCasting(getOutput(fluidStack), TinkerSmeltery.castIngot, fluidStack);
-				//SmelteryRecipeRegistry.registerTableCasting(getOutput(fluidStack), casting, fluidStack);
+			if(OreCrusherRecipe.isOreDicAccepted(oreDicts[i])){
+				FluidStack fluidStack = new FluidStack(FluidRegister.pureMetal, Material.VALUE_Ingot, new NBTTagCompound());
+				fluidStack.tag.setString("oreDic", oreDicts[i]);
+				
+				if(getOutput(fluidStack) != null){
+					SmelteryRecipeRegistry.registerSmaetOutputCasting(getOutput(fluidStack), TinkerSmeltery.castIngot, fluidStack);
+					//SmelteryRecipeRegistry.registerTableCasting(getOutput(fluidStack), casting, fluidStack);
+				}
 			}
-			
 		}
 		
 		long endTime   = System.currentTimeMillis();

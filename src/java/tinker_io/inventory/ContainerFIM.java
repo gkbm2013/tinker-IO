@@ -14,6 +14,7 @@ import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntityFurnace;
 
 public class ContainerFIM extends ContainerTemplate implements Observer{
 	
@@ -21,16 +22,16 @@ public class ContainerFIM extends ContainerTemplate implements Observer{
 	
 	public static final int
 		SPEED_UPG = 0,
-		FUEL = 1,
-		INV1_UPG = 2,
-		INV2_UPG = 3;  
+		FUEL = 1;
+		/*INV1_UPG = 2,
+		INV2_UPG = 3;*/  
 	public ContainerFIM(InventoryPlayer player, FIMTileEntity tile){
 		this.tile = tile;
 		
-		this.addSlotToContainer(new SlotFIMSpeedUPG(tile, SPEED_UPG, 25, 20)); // Speed UPG.
+		this.addSlotToContainer(new SlotFIMSpeedUPG(tile, SPEED_UPG, 25, 34)); // Speed UPG.
 		this.addSlotToContainer(new SlotFIMFuel(tile, FUEL, 79, 34)); // catalyst
-		this.addSlotToContainer(new Slot(tile, INV1_UPG, 25, 34)); // Speed UPG.
-		this.addSlotToContainer(new Slot(tile, INV2_UPG, 25, 48)); // Speed UPG.
+		/*this.addSlotToContainer(new Slot(tile, INV1_UPG, 25, 34)); // Speed UPG.
+		this.addSlotToContainer(new Slot(tile, INV2_UPG, 25, 48)); // Speed UPG.*/
 		
 		this.addPlayerInventorySlotToContainer(player);
 	}
@@ -66,7 +67,13 @@ public class ContainerFIM extends ContainerTemplate implements Observer{
             //itemstack is in player
             else {
             	//fuel is in player
-            	if(stackInSlot.getItem() instanceof SolidFuel){
+            	/*if(stackInSlot.getItem() instanceof SolidFuel){
+            		if (!this.mergeItemStack(stackInSlot, FUEL, FUEL+1, false)){
+            			return null;
+            		}
+            	}*/
+            	
+            	if(TileEntityFurnace.getItemBurnTime(stackInSlot) > 0){
             		if (!this.mergeItemStack(stackInSlot, FUEL, FUEL+1, false)){
             			return null;
             		}
@@ -78,11 +85,11 @@ public class ContainerFIM extends ContainerTemplate implements Observer{
             		}
             	}
             	//upg is in player
-            	else if (stackInSlot.getItem() instanceof Upgrade){
+            	/*else if (stackInSlot.getItem() instanceof Upgrade){
             		if (!this.mergeItemStack(stackInSlot, INV1_UPG, INV2_UPG+1, false)){
             			return null;
             		}
-            	}
+            	}*/
             	// place in action bar
     			else if (slot < fimINV_SIZE+27) {
     				if (!this.mergeItemStack(stackInSlot, fimINV_SIZE+27, fimINV_SIZE+36, false)){

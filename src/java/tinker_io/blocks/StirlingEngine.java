@@ -1,5 +1,7 @@
 package tinker_io.blocks;
 
+import java.util.List;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
@@ -7,8 +9,10 @@ import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -78,11 +82,16 @@ public class StirlingEngine extends BlockContainer {
 	    if(playerIn.isSneaking()) {
 	        return false;
 	    }
-	    BlockPos tankPos = new BlockPos(pos.getX(), pos.getY() - 1, pos.getZ());
-	    TileEntity teUnknow = worldIn.getTileEntity(tankPos);
-	    if(teUnknow instanceof TileTank){
-	    	TileTank teTank = (TileTank) worldIn.getTileEntity(tankPos);
-		    if(teTank != null){
+	    String fuelAmountText = I18n.format("tio.toolTips.StirlingEngine.liquidAmount", new Object[0]);
+	    String fuelTempText = I18n.format("tio.toolTips.StirlingEngine.liquidTemp", new Object[0]);
+	    String energyStoredText = I18n.format("tio.toolTips.StirlingEngine.energyStored", new Object[0]);
+	    String generatePerTickText = I18n.format("tio.toolTips.StirlingEngine.generatePerTick", new Object[0]);
+	    
+	    StirlingEngineTileEntity te = (StirlingEngineTileEntity) worldIn.getTileEntity(pos);
+	    
+	    if(te != null){
+	    	TileTank teTank = te.getTETank();
+	    	if(teTank != null){
 		    	int liquidAmount = teTank.tank.getFluidAmount();
 		    	FluidStack fluid = teTank.tank.getFluid();
 		    	int fuildTemp = 0;
@@ -90,17 +99,18 @@ public class StirlingEngine extends BlockContainer {
 		    		fuildTemp = fluid.getFluid().getTemperature();
 		    	}
 		    	if(worldIn.isRemote){
-		    		playerIn.addChatMessage(new ChatComponentText(EnumChatFormatting.WHITE + "Liquid Amount : " + liquidAmount));
-		    		playerIn.addChatMessage(new ChatComponentText(EnumChatFormatting.WHITE + "Liquid Temp : " + fuildTemp));
+		    		playerIn.addChatMessage(new ChatComponentText(EnumChatFormatting.WHITE + fuelAmountText + " : " + liquidAmount));
+		    		playerIn.addChatMessage(new ChatComponentText(EnumChatFormatting.WHITE + fuelTempText + " : " + fuildTemp));
 		    	}
 		    }
+	    	
+	    	int energy = te.getEnergyStored(null);
+		    if(worldIn.isRemote){
+	    		playerIn.addChatMessage(new ChatComponentText(EnumChatFormatting.WHITE + energyStoredText + " : " + energy + " / " + te.getMaxEnergyStored(null) + " RF"));
+	    		playerIn.addChatMessage(new ChatComponentText(EnumChatFormatting.WHITE + generatePerTickText + " : " + te.getGeneratePetTick() + " RF"));
+	    		playerIn.addChatMessage(new ChatComponentText(EnumChatFormatting.YELLOW + "-----"));
+	    	}
 	    }
-	    StirlingEngineTileEntity te = (StirlingEngineTileEntity) worldIn.getTileEntity(pos);
-	    int energy = te.getEnergyStored(null);
-	    if(worldIn.isRemote){
-    		playerIn.addChatMessage(new ChatComponentText(EnumChatFormatting.WHITE + "Energy : " + energy + " / " + te.getMaxEnergyStored(null) + " RF"));
-    		playerIn.addChatMessage(new ChatComponentText(EnumChatFormatting.YELLOW + "-----"));
-    	}
         return true;
     }
 	
@@ -151,6 +161,14 @@ public class StirlingEngine extends BlockContainer {
     public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack)
     {
 		worldIn.setBlockState(pos, state.withProperty(FACING, placer.getHorizontalFacing().getOpposite()), 2);
+		TileEntity te = worldIn.getTileEntity(pos);
+		if(te != null){
+			StirlingEngineTileEntity engine = (StirlingEngineTileEntity) te;
+			NBTTagCompound nbt = stack.getTagCompound();
+			if(nbt != null){
+				engine.getStorage().setEnergyStored(nbt.getInteger("energy"));
+			}
+		}
     }
 	
 	//Render
@@ -180,12 +198,50 @@ public class StirlingEngine extends BlockContainer {
         return this.getDefaultState().withProperty(FACING, EnumFacing.SOUTH);
     }
 	
-	@Override
+	/*@Override
     public void breakBlock(World world, BlockPos pos, IBlockState state)
     {
+		super.breakBlock(world, pos, state);
+		
         if (hasTileEntity(state)) {
             world.removeTileEntity(pos);
         }
-        super.breakBlock(world, pos, state);
-    }
+    }*/
+	
+	@Override
+	public boolean removedByPlayer(World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
+		if(world.isRemote){
+			 return false;
+		 }
+		
+	    IBlockState state = world.getBlockState(pos);
+	    this.onBlockDestroyedByPlayer(world, pos, state);
+	    if(willHarvest) {
+	      this.harvestBlock(world, player, pos, state, world.getTileEntity(pos));
+	    }
+
+	    world.setBlockToAir(pos);
+	    return false;
+	}
+	
+	@Override
+	public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
+		
+	    List<ItemStack> items = super.getDrops(world, pos, state, fortune);
+	    
+	    TileEntity te = world.getTileEntity(pos);
+	    
+	    if(te != null && te instanceof StirlingEngineTileEntity) {
+	    	StirlingEngineTileEntity engine = (StirlingEngineTileEntity) te;
+	    	for(ItemStack item : items) {
+		        if(item.getItem() == Item.getItemFromBlock(this)) {
+		          NBTTagCompound tag = new NBTTagCompound();
+		          tag.setInteger("energy", engine.getStorage().getEnergyStored());
+		          item.setTagCompound(tag);
+		          
+		        }
+		      }
+	    }
+	    return items;
+	}
 }

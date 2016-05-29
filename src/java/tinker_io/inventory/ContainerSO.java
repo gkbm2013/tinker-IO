@@ -1,17 +1,23 @@
 package tinker_io.inventory;
 
+import java.util.List;
+
+import com.google.common.collect.Lists;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
+import net.minecraft.item.Item;
 //import net.minecraft.inventory.SlotFurnace;
 import net.minecraft.item.ItemStack;
 //import net.minecraftforge.common.util.ForgeDirection;1.7
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import tinker_io.TileEntity.SOTileEntity;
-import tinker_io.handler.SORecipes;
+import tinker_io.handler.SORecipe;
 import tinker_io.items.Upgrade;
+import tinker_io.registry.ItemRegistry;
 
 public class ContainerSO extends ContainerTemplate{
 	private SOTileEntity tileSO;
@@ -22,11 +28,15 @@ public class ContainerSO extends ContainerTemplate{
 	public static final int PATTERN_SLOT = 0, PRODUCT_SLOT = 1;
 	public static final int  UPG_UP_SLOT = 2, UPG_DOWN_SLOT = 3;
 	public ContainerSO(InventoryPlayer player, SOTileEntity tileEntitySO){
+		List<Integer> banList = Lists.newLinkedList();
+		banList.add(0);
+		banList.add(6);
+		
 		this.tileSO = tileEntitySO;
 		this.addSlotToContainer(new Slot(tileEntitySO, PATTERN_SLOT, 68, 33)); //Pattern
-		this.addSlotToContainer(new Slot(tileEntitySO, PRODUCT_SLOT, 128, 34)); //Product
-		this.addSlotToContainer(new Slot(tileEntitySO, UPG_UP_SLOT, 153, 25)); //UPG. up
-		this.addSlotToContainer(new Slot(tileEntitySO, UPG_DOWN_SLOT, 153, 43)); //UPG. down
+		this.addSlotToContainer(new SlotProduct(tileEntitySO, PRODUCT_SLOT, 128, 34)); //Product
+		this.addSlotToContainer(new SlotUPG(tileEntitySO, UPG_UP_SLOT, 153, 25, banList)); //UPG. up
+		this.addSlotToContainer(new SlotUPG(tileEntitySO, UPG_DOWN_SLOT, 153, 43, banList)); //UPG. down
 		
 		this.addPlayerInventorySlotToContainer(player);
 	}
@@ -48,7 +58,7 @@ public class ContainerSO extends ContainerTemplate{
 	public ItemStack transferStackInSlot(EntityPlayer player, int slot) {
 		ItemStack stack = null;
 		Slot slotObject = (Slot) inventorySlots.get(slot);
-		SORecipes recipie = new SORecipes();
+		SORecipe recipie = new SORecipe();
 
 		// null checks and checks if the item can be stacked (maxStackSize > 1)
 		if (slotObject != null && slotObject.getHasStack()) {
@@ -81,6 +91,7 @@ public class ContainerSO extends ContainerTemplate{
 					}
 				}
 			}
+			recipie.isPattern(stackInSlot);
 			// places it into the tileEntity is possible since its in the player
 			// inventory
 //			else if (!this.mergeItemStack(stackInSlot, 0,

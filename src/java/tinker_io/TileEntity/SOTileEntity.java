@@ -2,7 +2,7 @@ package tinker_io.TileEntity;
 
 //import tconstruct.smeltery.TinkerSmeltery;
 import tinker_io.handler.SOEliminateList;
-import tinker_io.handler.SORecipes;
+import tinker_io.handler.SORecipe;
 import tinker_io.registry.ItemRegistry;
 import slimeknights.mantle.multiblock.MultiServantLogic;
 import net.minecraft.entity.player.EntityPlayer;
@@ -48,7 +48,7 @@ public class SOTileEntity extends MultiServantLogic implements IFluidHandler , I
 	public int currentFrozenTime = 0;
 	public int frozenTimeMax = 2; //Ticks
 	
-	SORecipes recipes = new SORecipes();
+	SORecipe recipes = new SORecipe();
 	
 	private String nameSO;
 	
@@ -496,11 +496,9 @@ public class SOTileEntity extends MultiServantLogic implements IFluidHandler , I
 		boolean canStart = false;
 		
 		if(!worldObj.isRemote){
-//        	int power = worldObj.getBlockPowerInput(this.pos);
-//        	int strongestsPower = worldObj.getRedstonePower(this.pos);
+
         	boolean hasPower = worldObj.isBlockPowered(this.pos);
-        	
-//        	if(power != 0 || strongestsPower != 0){
+
         	if(hasPower) {
         		hasPowered = true;
         	}else{
@@ -576,7 +574,7 @@ public class SOTileEntity extends MultiServantLogic implements IFluidHandler , I
 					this.itemStacksSO[1].stackSize += itemstack.stackSize;
 				}
 				
-				if(SOEliminateList.eliminatedList().itemNeedToEliminate(itemStacksSO[0].toString())){
+				if(recipes.isConsumeCast(liquid, itemStacksSO[0])){
 					if(itemStacksSO[0].stackSize == 1){
 						itemStacksSO[0] = null;
 					}else{
@@ -584,21 +582,21 @@ public class SOTileEntity extends MultiServantLogic implements IFluidHandler , I
 					}
 				}
 				
-				if(recipes.isPatternWithIguana(itemStacksSO[1])){
+				/*if(recipes.isPatternWithIguana(itemStacksSO[1])){
 					if(itemStacksSO[0].stackSize == 1){
 						itemStacksSO[0] = null;
 					}else{
 						--itemStacksSO[0].stackSize;
 					}
-				}
+				}*/
 				
-				if(itemStacksSO[0].isItemEqual(bucket)){
+				/*if(itemStacksSO[0].isItemEqual(bucket)){
 					if(itemStacksSO[0].stackSize == 1){
 						itemStacksSO[0] = null;
 					}else{
 						--itemStacksSO[0].stackSize;
 					}
-				}
+				}*/
 			}
 		}
 	}
@@ -736,7 +734,7 @@ public class SOTileEntity extends MultiServantLogic implements IFluidHandler , I
 
 	@Override
 	public String getName() {
-		return this.hasCustomName() ? this.nameSO : StatCollector.translateToLocal("tile.SmartOutput.name");
+		return this.hasCustomName() ? this.nameSO : StatCollector.translateToLocal("tile.smart_output.name");
 	}
 
 	@Override

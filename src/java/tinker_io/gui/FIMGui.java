@@ -78,8 +78,8 @@ public class FIMGui extends GuiContainer {
 	        this.drawTexturedModalRect(k, l, 0, 0, this.xSize, this.ySize);
 	        
 	        int i1;
-	        i1 = this.tile.getCookProgressScaled(24);
-	        this.drawTexturedModalRect(k + 98, l + 34, 176, 14, i1 + 1, 16);
+	        i1 = this.tile.getCookProgressScaled(13);
+	        this.drawTexturedModalRect(k + 103, l + 36 + i1, 176, 33 + i1, 13, 13 - i1);
 	        
 	        /*if(!tile.hasFuel()){
 	        	this.drawTexturedModalRect(k + 159, l + 4, 177, 33, 11, 11);	

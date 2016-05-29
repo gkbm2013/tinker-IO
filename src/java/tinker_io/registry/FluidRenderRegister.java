@@ -19,17 +19,17 @@ public class FluidRenderRegister {
 	private static final String FLUID_MODEL_PATH = Main.MODID + ":" + "fluid";
 	
 	public static void fluidModelRegister(){
-		//registerFluid(FluidRegister.blockPureMetal);
+		registerFluid(FluidRegister.blockPureMetal);
 		//registerFluidModel(FluidRegister.blockPureMetal);
 		System.out.println("[Tinker I/O] Fluid Model loaded!");
 	}
 	
-	public static void registerFluid(BlockFluidClassic blackFluid){
-		Item item = Item.getItemFromBlock(blackFluid);
-		String name = blackFluid.getFluid().getName();
+	public static void registerFluid(BlockFluidClassic blockFluid){
+		Item item = Item.getItemFromBlock(blockFluid);
+		String name = blockFluid.getFluid().getName();
 		
-		ModelResourceLocation modleLoc = new ModelResourceLocation(Main.MODID+ ":" +"fluid", name);
-		System.out.println("MRSL:" + modleLoc.toString());
+		ModelResourceLocation modleLoc = new ModelResourceLocation(Main.MODID+ ":" +"fluid"/*, name*/);
+		//System.out.println("MRSL:" + modleLoc.toString());
 		
 		ModelBakery.registerItemVariants(item);
 		ModelLoader.setCustomMeshDefinition(item, new ItemMeshDefinition(){
@@ -40,7 +40,7 @@ public class FluidRenderRegister {
 			}
 			
 		});
-		ModelLoader.setCustomStateMapper(blackFluid, new StateMapperBase(){
+		ModelLoader.setCustomStateMapper(blockFluid, new StateMapperBase(){
 
 			@Override
 			protected ModelResourceLocation getModelResourceLocation(IBlockState state) {
@@ -48,13 +48,15 @@ public class FluidRenderRegister {
 			}
 			
 		});
-		
+		System.out.println("TIO/TIO");
 	}
 	
 	public static void registerFluidModel(IFluidBlock fluidBlock) {
 		Item item = Item.getItemFromBlock((Block) fluidBlock);
 
 		//ModelBakery.addVariantName(item);
+		ModelBakery.registerItemVariants(item, new ResourceLocation(FLUID_MODEL_PATH ,fluidBlock.getFluid().getName()));
+		System.out.println("[TIO] " + fluidBlock.getFluid().getName());
 
 		ModelResourceLocation modelResourceLocation = new ModelResourceLocation(FLUID_MODEL_PATH, fluidBlock.getFluid().getName());
 

@@ -18,17 +18,21 @@ public class GuiHandler implements IGuiHandler {
 public GuiHandler (){
 		
 	}
-	
+
+public final int GUI_ID_FuelInputMechine = 0;
+public final int GUI_ID_SmartOutput = 1;
+public final int GUI_ID_OreCrusher = 2;
+
 public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
-	if(ID == 0){
+	if(ID == GUI_ID_FuelInputMechine){
 		FIMTileEntity tileFIM = (FIMTileEntity) world.getTileEntity(new BlockPos(x, y, z));
 		return new ContainerFIM(player.inventory, tileFIM);
 	}
-	if(ID == 1){
+	if(ID == GUI_ID_SmartOutput){
 		SOTileEntity tileEntitySO = (SOTileEntity) world.getTileEntity(new BlockPos(x, y, z));
 		return new ContainerSO(player.inventory, tileEntitySO);
 	}
-	if(ID == 2){
+	if(ID == GUI_ID_OreCrusher){
 		OreCrusherTileEntity tileEntityOreCrusher = (OreCrusherTileEntity) world.getTileEntity(new BlockPos(x, y, z));
 		return new ContainerOreCrusher(player.inventory, tileEntityOreCrusher);
 	}
@@ -36,15 +40,15 @@ public Object getServerGuiElement(int ID, EntityPlayer player, World world, int 
 }
 
 public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
-	if(ID == 0){
+	if(ID == GUI_ID_FuelInputMechine){
 		FIMTileEntity tileFIMContainer = (FIMTileEntity) world.getTileEntity(new BlockPos(x, y, z));
 		return new FIMGui(player.inventory, tileFIMContainer);
 	}
-	if(ID == 1){
+	if(ID == GUI_ID_SmartOutput){
 		SOTileEntity tileEntitySOContainer = (SOTileEntity) world.getTileEntity(new BlockPos(x, y, z));
 		return new SOGui(player.inventory, tileEntitySOContainer);
 	}
-	if(ID == 2){
+	if(ID == GUI_ID_OreCrusher){
 		OreCrusherTileEntity tileEntityOreCrusherContainer = (OreCrusherTileEntity) world.getTileEntity(new BlockPos(x, y, z));
 		return new OreCrusherGui(player.inventory, tileEntityOreCrusherContainer);
 	}

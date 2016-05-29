@@ -37,6 +37,10 @@ public class OreCrusherGui extends GuiContainer{
 		
 		this.fontRendererObj.drawString(string, (this.xSize - this.fontRendererObj.getStringWidth(string))/2, 6, 4210752);
 		
+		String rate = tileOC.getRate() + "% + 1";
+		
+		this.fontRendererObj.drawString(rate, (this.xSize - this.fontRendererObj.getStringWidth(string))/2 + 50, 66, 4210752);
+		
 		//ToolTip
 		List<String> text = Lists.newArrayList();
     	text.add(EnumChatFormatting.WHITE.toString() + StatCollector.translateToLocal("tio.toolTips.oreCrusher.energy"));

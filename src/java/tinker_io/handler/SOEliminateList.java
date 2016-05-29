@@ -1,16 +1,16 @@
 package tinker_io.handler;
 
-import java.util.Collection;
+/*import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
 import tinker_io.main.Main;
 import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemStack;*/
 
 public class SOEliminateList {
-private Map<String, ItemStack> eliminateItemList = new HashMap();
+/*private Map<String, ItemStack> eliminateItemList = new HashMap();
 private Map eliminateItemListControlledByConfig = new HashMap();
 	
 	public static SOEliminateList eliminatedList(){
@@ -42,7 +42,7 @@ private Map eliminateItemListControlledByConfig = new HashMap();
 	 * @param name The name to identify item to eliminate.
 	 * @param itemstack The item to eliminate.
 	 * @param followConfig If true, the item will be remove when "Main.iguanas_support" is true
-	 */
+	 *//*
 	public void addEliminateItemRecipie(String name, ItemStack itemstack, boolean followConfig){
 		this.addItemLists(name, itemstack);
 		this.addBooleanLists(name, followConfig);
@@ -54,5 +54,5 @@ private Map eliminateItemListControlledByConfig = new HashMap();
 	
 	private void addBooleanLists(String name, boolean followConfig) {
 		eliminateItemListControlledByConfig.put(name, followConfig);
-	}
+	}*/
 }

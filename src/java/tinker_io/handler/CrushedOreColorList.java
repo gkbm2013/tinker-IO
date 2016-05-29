@@ -4,13 +4,9 @@ import java.awt.Color;
 import java.util.List;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.texture.ITextureObject;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.resources.model.ModelResourceLocation;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
 
@@ -32,7 +28,13 @@ public class CrushedOreColorList {
 		  NBTTagCompound nbt = itemStack.getTagCompound();
 			if(nbt != null){
 				String oreDicName = nbt.getString("oreDic");
-				ItemStack oreItem = this.getOreByOreDic(oreDicName).get(0);
+				ItemStack oreItem;
+				
+				if(this.getOreByOreDic(oreDicName) != null && !this.getOreByOreDic(oreDicName).isEmpty()){
+					oreItem = this.getOreByOreDic(oreDicName).get(0);
+				}else{
+					return colorRGB;
+				}
 				
 				TextureAtlasSprite particleIcon = mc.getRenderItem().getItemModelMesher().getParticleIcon(oreItem.getItem());
 				if(particleIcon != null){					
@@ -57,7 +59,13 @@ public class CrushedOreColorList {
 		  NBTTagCompound nbt = fluidStack.tag;
 			if(nbt != null){
 				String oreDicName = nbt.getString("oreDic");
-				ItemStack oreItem = this.getOreByOreDic(oreDicName).get(0);
+				ItemStack oreItem;
+				
+				if(this.getOreByOreDic(oreDicName) != null && !this.getOreByOreDic(oreDicName).isEmpty()){
+					oreItem = this.getOreByOreDic(oreDicName).get(0);
+				}else{
+					return colorRGB;
+				}
 				
 				TextureAtlasSprite particleIcon = mc.getRenderItem().getItemModelMesher().getParticleIcon(oreItem.getItem());
 				if(particleIcon != null){					

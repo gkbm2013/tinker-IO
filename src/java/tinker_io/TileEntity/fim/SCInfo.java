@@ -111,4 +111,8 @@ public class SCInfo{
 		return facing;
 	}
 	
+	public BlockPos getSCpos(){
+		return this.pos;
+	}
+	
 }

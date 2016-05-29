@@ -5,17 +5,12 @@ import java.util.List;
 import cofh.api.energy.EnergyStorage;
 import cofh.api.energy.IEnergyProvider;
 import cofh.api.energy.IEnergyReceiver;
-import net.minecraft.block.Block;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraftforge.fluids.FluidStack;
@@ -30,8 +25,10 @@ public class StirlingEngineTileEntity extends TileEntity implements  ITickable, 
 	
 	protected EnergyStorage storage = new EnergyStorage(500000, 0, 2000);
 	
+	protected int generatePerTick;
+	
 	public StirlingEngineTileEntity() {
-		// TODO 自動產生的建構子 Stub
+		// TODO
 	}	
 
 	private void generateEnergy(){
@@ -50,14 +47,25 @@ public class StirlingEngineTileEntity extends TileEntity implements  ITickable, 
 		    	if(fulid != null && this.getEnergyStored(null) < storage.getMaxEnergyStored()){
 		    		fuildTemp = fulid.getFluid().getTemperature();
 		    		generateEnergy = (fuildTemp - 300)*30/100;
-		    		storage.setEnergyStored(storage.getEnergyStored() + generateEnergy);
-		    		if(canDrain != null){
-			    		toDrain.drain(EnumFacing.DOWN, 1, true);
-			    	}
+		    		if(generateEnergy > 0){
+		    			generatePerTick = generateEnergy;
+			    		storage.setEnergyStored(storage.getEnergyStored() + generateEnergy);
+			    		if(canDrain != null){
+				    		toDrain.drain(EnumFacing.DOWN, 1, true);
+				    	}
+		    		}
+		    	}else{
+		    		generatePerTick = 0;
 		    	}
+		    }else{
+		    	generatePerTick = 0;
 		    }
 	    }
 	    //System.out.println(storedEnergy);
+	}
+	
+	public int getGeneratePetTick(){
+		return generatePerTick;
 	}
 	
 	private void angel(){
@@ -132,6 +140,19 @@ public class StirlingEngineTileEntity extends TileEntity implements  ITickable, 
 		generateEnergy();
 		extraEnergyToSurroundingMechine();
 		//System.out.println(angel);
+		//System.out.println(this.pos);
+	}
+	
+	public TileTank getTETank(){
+		BlockPos tankPos = new BlockPos(pos.getX(), pos.getY() - 1, pos.getZ());
+	    TileEntity teUnknow = worldObj.getTileEntity(tankPos);
+	    if(teUnknow instanceof TileTank){
+	    	TileTank teTank = (TileTank) worldObj.getTileEntity(tankPos);
+	    	if(teTank != null){
+	    		return teTank;
+	    	}
+	    }
+	    return null;
 	}
 	
 	//Packet
@@ -154,6 +175,7 @@ public class StirlingEngineTileEntity extends TileEntity implements  ITickable, 
 	public void readFromNBT(NBTTagCompound tagCompound) {
 		super.readFromNBT(tagCompound);
 		this.angel = tagCompound.getDouble("Angel");
+		this.generatePerTick = tagCompound.getInteger("generatePerTick");
 		this.storage.readFromNBT(tagCompound);
 	}
 	
@@ -161,6 +183,7 @@ public class StirlingEngineTileEntity extends TileEntity implements  ITickable, 
 	public void writeToNBT(NBTTagCompound tagCompound) {
 		super.writeToNBT(tagCompound);
 		tagCompound.setDouble("Angel", (short) this.angel);
+		tagCompound.setInteger("generatePerTick", this.generatePerTick);
 		this.storage.writeToNBT(tagCompound);
 	}
 
@@ -182,6 +205,10 @@ public class StirlingEngineTileEntity extends TileEntity implements  ITickable, 
 
 	@Override
 	public int extractEnergy(EnumFacing from, int maxExtract, boolean simulate) {
-		return this.storage.receiveEnergy(Math.min(storage.getMaxExtract(), maxExtract), simulate);
+		return this.storage.extractEnergy(Math.min(storage.getMaxExtract(), maxExtract), simulate);
+	}
+	
+	public EnergyStorage getStorage(){
+		return this.storage;
 	}
 }

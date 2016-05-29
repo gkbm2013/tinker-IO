@@ -12,7 +12,7 @@ import slimeknights.tconstruct.library.smeltery.CastingRecipe;
 import slimeknights.tconstruct.library.smeltery.MeltingRecipe;
 import tinker_io.handler.CrushedOreMeltingRegistry;
 import tinker_io.handler.PureMetalCastingRegistry;
-import tinker_io.handler.SORecipes;
+import tinker_io.handler.SORecipe;
 
 public class SmelteryRecipeRegistry {
 	
@@ -38,12 +38,12 @@ public class SmelteryRecipeRegistry {
 	}
 	
 	public static void registerTableCasting(ItemStack output, ItemStack cast, FluidStack fluid){
-		TinkerRegistry.registerTableCasting(new CastingRecipe(output, RecipeMatch.of(cast.getItem()), fluid, true, true));
+		TinkerRegistry.registerTableCasting(new CastingRecipe(output, RecipeMatch.of(cast.getItem()), fluid, false, true));
 		//ItemStack output, RecipeMatch cast, FluidStack fluid, boolean consumesCast, boolean switchOutputs
 	}
 	
 	public static void registerSmaetOutputCasting(ItemStack output, ItemStack cast, FluidStack fluid){
-		SORecipes.registerTableCastingWithFluidStack(new CastingRecipe(output, RecipeMatch.of(cast.getItem()), fluid, true, true));
+		SORecipe.registerTableCastingWithFluidStack(new CastingRecipe(output, RecipeMatch.of(cast.getItem()), fluid, false, true));
 		//ItemStack output, RecipeMatch cast, FluidStack fluid, boolean consumesCast, boolean switchOutputs
 	}
 	

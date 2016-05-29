@@ -6,32 +6,29 @@ import java.util.List;
 import tinker_io.TileEntity.TileEntityContainerAdapter;
 import tinker_io.api.Observable;
 import tinker_io.api.Observer;
+import tinker_io.reflection.TempField;
 import tinker_io.registry.ItemRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraft.block.Block;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
 
 public class FIMTileEntity extends TileEntityContainerAdapter implements ITickable, Observable<Observer>
 {
     private static final int[] slotsSpeedUPG = new int[] { 0 };
     private static final int[] slotsFuel = new int[] { 1 };
-    private static final int[] slotsUPG1 = new int[] { 2 };
-    private static final int[] slotsUPG2 = new int[] { 3 };
+    /*private static final int[] slotsUPG1 = new int[] { 2 };
+    private static final int[] slotsUPG2 = new int[] { 3 };*/
 
 
     public FIMTileEntity()
     {
-        super(null, 4);
+        super(null, 2);
     }
 
     public ItemStack fuel = new ItemStack(ItemRegistry.SolidFuel);
@@ -92,10 +89,22 @@ public class FIMTileEntity extends TileEntityContainerAdapter implements ITickab
 
 
     private void toSpeedUpSC(final int originFuelTemp, Adapter adap)
-    {
-        int f = fuelTemp / 2 + originFuelTemp;
-
-        adap.setFuelTemp(f);
+    {    	
+    	double ratio = this.getSpeedUpInfo().ratio;
+    	int fuelTempWithRatio = fuelTemp * (int) ratio;
+    	
+    	int f = fuelTempWithRatio / 2 + originFuelTemp;
+    	
+    	if(fuelTempWithRatio <= 20000){
+    		f = (fuelTempWithRatio * 6) / 100  + originFuelTemp;
+    	}
+    	if(f >= 200000){
+    		f = 200000;
+    	}
+    	
+    	//I am reluctant to use reflection. However to preserve Fuel Input Machine, I have to do this.
+    	TempField field = new TempField(worldObj, scInfo.getSCpos());
+    	field.setTemp(f);
     }
 
 
@@ -153,7 +162,7 @@ public class FIMTileEntity extends TileEntityContainerAdapter implements ITickab
     @Override
     public boolean isItemValidForSlot(int index, ItemStack itemstack)
     {
-        if (itemstack.isItemEqual(fuel))
+        if (TileEntityFurnace.getItemBurnTime(itemstack) > 0)
         {
             return true;
         }
@@ -232,13 +241,13 @@ public class FIMTileEntity extends TileEntityContainerAdapter implements ITickab
             i = 1000;
         }
 
-        return n * pixels / i;
+        return pixels - (n * pixels / i);
     }
 
 
     public boolean hasFuel()
     {
-        if (slots[1] != null && this.getSlots()[1].isItemEqual(fuel))
+        if (slots[1] != null && TileEntityFurnace.getItemBurnTime(slots[1]) > 0)
         {
             return true;
         }
@@ -248,7 +257,7 @@ public class FIMTileEntity extends TileEntityContainerAdapter implements ITickab
 
     public SpeedUpRatio getSpeedUpInfo()
     {
-        double temp = this.getStackSize(slots[0]) * 0.2 + 1.0;
+        double temp = this.getStackSize(slots[0]) * 0.1 + 1.0;
         return new SpeedUpRatio(temp);
     }
 

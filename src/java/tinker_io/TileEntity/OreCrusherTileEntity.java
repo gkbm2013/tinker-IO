@@ -2,17 +2,15 @@ package tinker_io.TileEntity;
 
 import cofh.api.energy.EnergyStorage;
 import cofh.api.energy.IEnergyReceiver;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.init.Items;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemEnchantedBook;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.IChatComponent;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.fml.relauncher.Side;
@@ -23,12 +21,15 @@ import tinker_io.registry.ItemRegistry;
 
 public class OreCrusherTileEntity extends TileEntityContainerAdapter implements ITickable, IEnergyReceiver  {
 	public OreCrusherTileEntity() {
-		super(null, 3);
+		super(null, 6);
 	}
 
 	private final int[] slotsSpeedUPG = new int[] { 0 };
 	private final int[] slotsOre = new int[] { 1 };
-	private final int[] slotsProduce = new int[] { 2 };
+	private final int[] slotsProduct = new int[] { 2 };
+	private final int[] slotsFortuneUPG1 = new int[] { 3 };
+	private final int[] slotsFortuneUPG2 = new int[] { 4 };
+	private final int[] slotsFortuneUPG3 = new int[] { 5 };
 	
 	protected EnergyStorage storage = new EnergyStorage(100000, 2000, 0);
 	
@@ -37,6 +38,8 @@ public class OreCrusherTileEntity extends TileEntityContainerAdapter implements 
 	private int crushTime = 0;
 	
 	//private ItemStack[] getSlots() = this.getSlots();
+	
+	private int doubleProductRate;
 	
 	private String nameOreCrusher;
 	
@@ -60,7 +63,7 @@ public class OreCrusherTileEntity extends TileEntityContainerAdapter implements 
 	public int[] getSlotsForFace(EnumFacing side) {
 		int[] slot = null;
 		if(side == EnumFacing.DOWN){
-			slot = this.slotsProduce;
+			slot = this.slotsProduct;
 		}else{
 			slot = this.slotsOre;
 		}
@@ -157,18 +160,73 @@ public class OreCrusherTileEntity extends TileEntityContainerAdapter implements 
 		return false;
 	}
 	
-	private ItemStack getProduce(){
-		ItemStack produce = new ItemStack(ItemRegistry.CrushedOre);
-		produce.setTagCompound(new NBTTagCompound());
-		NBTTagCompound nbt = produce.getTagCompound();
+	private ItemStack getProduct(){
+		int productAmount = 2;
+		
+		if(canGetMoreProduct()){
+			productAmount = 3;
+		}
+		ItemStack product = new ItemStack(ItemRegistry.CrushedOre, productAmount);
+		product.setTagCompound(new NBTTagCompound());
+		NBTTagCompound nbt = product.getTagCompound();
 		if(isOreInOreDic(getSlots()[1])){
 			nbt.setString("oreDic", getOreDicName(getSlots()[1]));
 		}
-		return produce;
+		return product;
+	}
+	
+	private boolean canGetMoreProduct(){
+		int bookAmount = 0;
+		
+		ItemStack slotForutne1 = this.getSlots()[3];
+		ItemStack slotForutne2 = this.getSlots()[4];
+		ItemStack slotForutne3 = this.getSlots()[5];
+		
+		if(isFortuenEnchantedBook(slotForutne1)){
+			bookAmount = bookAmount+2;
+		}
+		
+		if(isFortuenEnchantedBook(slotForutne2)){
+			bookAmount = bookAmount+2;
+		}
+		
+		if(slotForutne3 != null && slotForutne3.isItemEqual(new ItemStack(ItemRegistry.Upgrade, 1, 6))){
+			bookAmount = bookAmount + 3;
+		}
+		
+		doubleProductRate = 30 + bookAmount * 10;
+		
+		int rate = (int)(Math.random()*99);
+		
+		if(rate <= doubleProductRate){
+			return true;
+		}
+		
+		return false;
+	}
+	
+	public boolean isFortuenEnchantedBook(ItemStack itemstack){
+		if(itemstack != null){
+			if(getEnchantID(itemstack) == 35){
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	private int getEnchantID(ItemStack itemstack){
+		if(itemstack != null && itemstack.getItem() instanceof ItemEnchantedBook){
+			ItemEnchantedBook book = (ItemEnchantedBook) itemstack.getItem();
+			NBTTagCompound tag = (NBTTagCompound) book.getEnchantments(itemstack).get(0);
+			if(tag != null){
+				return tag.getInteger("id");
+			}
+		}
+		return 0;
 	}
 	
 	private boolean canCrush(){
-		ItemStack produce = this.getProduce();
+		ItemStack product = this.getProduct();
 		OreCrusherBanList banList = OreCrusherBanList.banedOreDicList();
 		
 		if(getSlots()[1] == null){
@@ -181,21 +239,28 @@ public class OreCrusherTileEntity extends TileEntityContainerAdapter implements 
 		
 		if(getSlots()[2] == null && this.storage.getEnergyStored() > speed){
 			return true;
-		}else if(getSlots()[2] != null && getSlots()[2].isItemEqual(produce) && isOreDicNBTTagEqual(getSlots()[2], produce) && this.storage.getEnergyStored() > speed){
-			return true;
+		}else if(getSlots()[2] != null && getSlots()[2].isItemEqual(product) && isOreDicNBTTagEqual(getSlots()[2], product) && this.storage.getEnergyStored() > speed){
+			if(this.getSlots()[2].stackSize <= product.getMaxStackSize() - 3){
+				return true;
+			}
 		}
 		return false;
 	}
 	
+	public int getRate(){
+		return doubleProductRate;
+	}
+	
 	public void crush(){
-		ItemStack produce = this.getProduce();
+		ItemStack product = this.getProduct();
+		
 		if(canCrush()){
 			if(crushTime >= speed){
 				crushTime = 0;
 				if (this.getSlots()[2] == null) {
-					this.getSlots()[2] = produce.copy();
-				} else if (this.getSlots()[2].getItem() == produce.getItem()) {
-					this.getSlots()[2].stackSize += produce.stackSize;
+					this.getSlots()[2] = product.copy();
+				} else if (this.getSlots()[2].getItem() == product.getItem()) {
+					this.getSlots()[2].stackSize += product.stackSize;
 				}
 				if(getSlots()[1].stackSize == 1){
 					getSlots()[1] = null;
@@ -205,7 +270,7 @@ public class OreCrusherTileEntity extends TileEntityContainerAdapter implements 
 			}else{
 				crushTime++;
 				speedUPG();
-				this.storage.setEnergyStored(this.storage.getEnergyStored() - 15);
+				this.storage.setEnergyStored(this.storage.getEnergyStored() - 45);
 			}
 		}else{
 			crushTime = 0;
@@ -224,11 +289,16 @@ public class OreCrusherTileEntity extends TileEntityContainerAdapter implements 
 		}
 	}
 	
+	public boolean isActive(){
+		return this.canCrush();
+	}
+	
 	//NBT
 	@Override
 	public void readFromNBT(NBTTagCompound tagCompound) {
 		super.readFromNBT(tagCompound);
 		this.crushTime = tagCompound.getShort("CrushTime");
+		this.doubleProductRate = tagCompound.getInteger("Rate");
 		
 		/*NBTTagList tagList = tagCompound.getTagList("Items", 10);
 		this.getSlots() = new ItemStack[this.getSizeInventory()];
@@ -252,6 +322,7 @@ public class OreCrusherTileEntity extends TileEntityContainerAdapter implements 
 	public void writeToNBT(NBTTagCompound tagCompound) {
 		super.writeToNBT(tagCompound);
 		tagCompound.setShort("CrushTime", (short) this.crushTime);
+		tagCompound.setInteger("Rate", this.doubleProductRate);
 		
 		/*NBTTagList tagList = new NBTTagList();
 
@@ -304,6 +375,10 @@ public class OreCrusherTileEntity extends TileEntityContainerAdapter implements 
 	@Override
 	public int receiveEnergy(EnumFacing from, int maxReceive, boolean simulate) {
 		return this.storage.receiveEnergy(Math.min(storage.getMaxReceive(), maxReceive), simulate);
+	}
+	
+	public EnergyStorage getStorage(){
+		return this.storage;
 	}
 		
 }

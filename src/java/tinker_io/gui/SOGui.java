@@ -22,7 +22,7 @@ import slimeknights.tconstruct.library.client.RenderUtil;
 import slimeknights.tconstruct.library.smeltery.CastingRecipe;
 import slimeknights.tconstruct.smeltery.TinkerSmeltery;
 import tinker_io.TileEntity.SOTileEntity;
-import tinker_io.handler.SORecipes;
+import tinker_io.handler.SORecipe;
 import tinker_io.inventory.ContainerSO;
 import tinker_io.main.Main;
 import tinker_io.packet.PacketDispatcher;

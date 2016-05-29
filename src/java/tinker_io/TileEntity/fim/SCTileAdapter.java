@@ -2,16 +2,12 @@ package tinker_io.TileEntity.fim;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
-
-import org.apache.commons.lang3.ArrayUtils;
 
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.BlockPos;
 import net.minecraftforge.fluids.FluidStack;
-import slimeknights.tconstruct.library.smeltery.SmelteryTank;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import slimeknights.tconstruct.smeltery.tileentity.TileSmeltery;
-import slimeknights.tconstruct.smeltery.tileentity.TileTank;
 
 public class SCTileAdapter implements Adapter
 {
@@ -25,7 +21,7 @@ public class SCTileAdapter implements Adapter
 		this.tile = tile;
 	}
 	
-	@Override public void setFuelTemp(int temp)
+	@Override @SideOnly(Side.CLIENT) public void setFuelTemp(int temp)
 	{
 		tile.updateTemperatureFromPacket(temp);
 	}
