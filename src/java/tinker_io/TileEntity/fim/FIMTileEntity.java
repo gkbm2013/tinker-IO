@@ -27,13 +27,9 @@ public class FIMTileEntity extends TileSmelteryComponent implements ITickable, O
 {
     private static final int[] slotsSpeedUPG = new int[] { 0 };
     private static final int[] slotsFuel = new int[] { 1 };
-    /*private static final int[] slotsUPG1 = new int[] { 2 };
-    private static final int[] slotsUPG2 = new int[] { 3 };*/
-
 
     public FIMTileEntity()
     {
-//        super(null, 2);
     }
 
     public ItemStack fuel = new ItemStack(ItemRegistry.SolidFuel);
@@ -70,22 +66,17 @@ public class FIMTileEntity extends TileSmelteryComponent implements ITickable, O
         }
     }
 
-
     private void toUpdateSCInfoAndSpeedUpSC()
     {
-        this.scInfo.update();
+        this.scInfo.update(this.getSmeltery());
         this.fuelFSM.update();
-
+        
         if (scInfo.canFindSCPos() && scInfo.isSCHeatingItem())
         {
             fuelFSM.startChangeState();
             Adapter adap = scInfo.getAdapter();
-            
-            final int fuelTemp = adap.getFuelTemp();
-
-            this.toSpeedUpSC(fuelTemp, adap);
+            this.toSpeedUpSC(adap.getFuelTemp(), adap);
         }
-
         if (fuelFSM.isActive)
         {
             this.notifyObservers();
@@ -108,7 +99,7 @@ public class FIMTileEntity extends TileSmelteryComponent implements ITickable, O
         }
         
         //I am reluctant to use reflection. However to preserve Fuel Input Machine, I have to do this.
-        TempField field = new TempField(worldObj, scInfo.getSCpos());
+        TempField field = new TempField(worldObj, adap.getPos());
         field.setTemp(f);
     }
 
@@ -122,7 +113,8 @@ public class FIMTileEntity extends TileSmelteryComponent implements ITickable, O
 
     public void onNeighborChange(IBlockAccess world, BlockPos neighbor)
     {
-        scInfo.manager.onNeighborChange(world, neighbor);
+//        TODO
+//        scInfo.manager.onNeighborChange(world, neighbor);
     }
 
 
@@ -227,7 +219,9 @@ public class FIMTileEntity extends TileSmelteryComponent implements ITickable, O
     @SideOnly(Side.CLIENT)
     public String getDirection()
     {
-        return this.scInfo.getFacing();
+//        TODO
+//        return this.scInfo.getFacing();
+        return "NONE";
     }
 
 
