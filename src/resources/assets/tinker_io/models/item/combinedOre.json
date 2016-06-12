@@ -1,6 +1,0 @@
-{
-    "parent":"tinker_io:item/combinedOre",
-    "textures": {
-        "layer0":"tinker_io:items/combinedOre"
-    }
-}

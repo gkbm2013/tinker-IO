@@ -1,6 +1,0 @@
-{
-    "parent":"tinker_io:item/standard_item",
-    "textures": {
-        "layer0":"tinker_io:blocks/stirling_engine"
-    }
-}
