@@ -6,10 +6,7 @@ import tinker_io.main.Main;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.StatCollector;
-import net.minecraft.world.World;
+import net.minecraft.util.text.TextFormatting;
 
 public class CombinedOre extends Item {
 	public CombinedOre(String unlocalizedName){
@@ -22,7 +19,7 @@ public class CombinedOre extends Item {
 	public void addInformation(ItemStack itemStack, EntityPlayer player, List list, boolean par4) {
 		if (itemStack.getTagCompound() != null) {
             String oreDic = itemStack.getTagCompound().getString("oreDic");
-            list.add(EnumChatFormatting.RED + "oreDic : "+oreDic);   
+            list.add(TextFormatting.RED + "oreDic : "+oreDic);   
         }
 	}
 }

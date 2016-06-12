@@ -3,13 +3,12 @@ package tinker_io.registry;
 import java.util.ArrayList;
 import java.util.List;
 
-import scala.reflect.internal.Trees.This;
-import tinker_io.main.Main;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.resources.model.ModelBakery;
-import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.minecraft.client.renderer.block.model.ModelBakery;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import tinker_io.main.Main;
 
 public class ItemRenderRegister {
 	

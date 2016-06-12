@@ -8,8 +8,8 @@ import tinker_io.main.Main;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.translation.I18n;
 
 public class SpeedUPG extends Item {
 	public SpeedUPG(String unlocalizedName){
@@ -28,9 +28,9 @@ public class SpeedUPG extends Item {
 	@Override
 	public void addInformation(ItemStack itemStack, EntityPlayer player, List list, boolean par4) {
 		if(this.isShiftKeyDown()){
-			list.add(EnumChatFormatting.GRAY + StatCollector.translateToLocal("tio.toolTips.UpgSpeed"));
+			list.add(TextFormatting.GRAY + I18n.translateToLocalFormatted("tio.toolTips.UpgSpeed"));
 		}else{
-			list.add(EnumChatFormatting.GOLD + StatCollector.translateToLocal("tio.toolTips.common.holdShift"));			
+			list.add(TextFormatting.GOLD + I18n.translateToLocalFormatted("tio.toolTips.common.holdShift"));			
 		}
 		
 	}

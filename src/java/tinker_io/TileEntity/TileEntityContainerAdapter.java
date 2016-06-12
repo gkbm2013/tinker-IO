@@ -1,14 +1,13 @@
 package tinker_io.TileEntity;
 
-import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.IChatComponent;
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.translation.I18n;
 
 public abstract class TileEntityContainerAdapter extends TileEntity  implements ISidedInventory{
 	
@@ -34,7 +33,7 @@ public abstract class TileEntityContainerAdapter extends TileEntity  implements 
 	public String getName() {
 		String langFileName = "tile." + this.getBlockType().getUnlocalizedName().substring(5) + ".name";
 		return this.hasCustomName() ?
-				this.name : StatCollector.translateToLocal(langFileName);
+				this.name : I18n.translateToLocal(langFileName);
 	}
 	
 	@Override
@@ -46,7 +45,7 @@ public abstract class TileEntityContainerAdapter extends TileEntity  implements 
      * Get the formatted ChatComponent that will be used for the sender's username in chat
      */
 	@Override
-	public IChatComponent getDisplayName() {
+	public ITextComponent getDisplayName() {
 		// TODO 
 		return null;
 	}

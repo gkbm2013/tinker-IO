@@ -7,7 +7,7 @@ import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyDirection;
-import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.EntityLivingBase;
@@ -16,10 +16,12 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidStack;
@@ -41,10 +43,11 @@ public class StirlingEngine extends BlockContainer {
 		setHardness(3);
 		this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
 	}
+	
 	@Override
-	protected BlockState createBlockState()
+	protected BlockStateContainer createBlockState()
 	{
-		return new BlockState(this, new IProperty[] { FACING });
+		return new BlockStateContainer(this, new IProperty[] { FACING });
 	}
 
 	public TileEntity createNewTileEntity(World worldIn, int meta) {
@@ -77,7 +80,7 @@ public class StirlingEngine extends BlockContainer {
     }
 	
 	@Override
-    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumFacing side, float hitX, float hitY, float hitZ)
+	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ)
     {
 	    if(playerIn.isSneaking()) {
 	        return false;
@@ -99,16 +102,16 @@ public class StirlingEngine extends BlockContainer {
 		    		fuildTemp = fluid.getFluid().getTemperature();
 		    	}
 		    	if(worldIn.isRemote){
-		    		playerIn.addChatMessage(new ChatComponentText(EnumChatFormatting.WHITE + fuelAmountText + " : " + liquidAmount));
-		    		playerIn.addChatMessage(new ChatComponentText(EnumChatFormatting.WHITE + fuelTempText + " : " + fuildTemp));
+		    		playerIn.addChatMessage(new TextComponentString(TextFormatting.WHITE + fuelAmountText + " : " + liquidAmount));
+		    		playerIn.addChatMessage(new TextComponentString(TextFormatting.WHITE + fuelTempText + " : " + fuildTemp));
 		    	}
 		    }
 	    	
 	    	int energy = te.getEnergyStored(null);
 		    if(worldIn.isRemote){
-	    		playerIn.addChatMessage(new ChatComponentText(EnumChatFormatting.WHITE + energyStoredText + " : " + energy + " / " + te.getMaxEnergyStored(null) + " RF"));
-	    		playerIn.addChatMessage(new ChatComponentText(EnumChatFormatting.WHITE + generatePerTickText + " : " + te.getGeneratePetTick() + " RF"));
-	    		playerIn.addChatMessage(new ChatComponentText(EnumChatFormatting.YELLOW + "-----"));
+	    		playerIn.addChatMessage(new TextComponentString(TextFormatting.WHITE + energyStoredText + " : " + energy + " / " + te.getMaxEnergyStored(null) + " RF"));
+	    		playerIn.addChatMessage(new TextComponentString(TextFormatting.WHITE + generatePerTickText + " : " + te.getGeneratePetTick() + " RF"));
+	    		playerIn.addChatMessage(new TextComponentString(TextFormatting.YELLOW + "-----"));
 	    	}
 	    }
         return true;
@@ -136,19 +139,19 @@ public class StirlingEngine extends BlockContainer {
             Block block3 = worldIn.getBlockState(pos.east()).getBlock();
             EnumFacing enumfacing = (EnumFacing)state.getValue(FACING);
 
-            if (enumfacing == EnumFacing.NORTH && block.isFullBlock() && !block1.isFullBlock())
+            if (enumfacing == EnumFacing.NORTH && block.isFullBlock(state) && !block1.isFullBlock(state))
             {
                 enumfacing = EnumFacing.SOUTH;
             }
-            else if (enumfacing == EnumFacing.SOUTH && block1.isFullBlock() && !block.isFullBlock())
+            else if (enumfacing == EnumFacing.SOUTH && block1.isFullBlock(state) && !block.isFullBlock(state))
             {
                 enumfacing = EnumFacing.NORTH;
             }
-            else if (enumfacing == EnumFacing.WEST && block2.isFullBlock() && !block3.isFullBlock())
+            else if (enumfacing == EnumFacing.WEST && block2.isFullBlock(state) && !block3.isFullBlock(state))
             {
                 enumfacing = EnumFacing.EAST;
             }
-            else if (enumfacing == EnumFacing.EAST && block3.isFullBlock() && !block2.isFullBlock())
+            else if (enumfacing == EnumFacing.EAST && block3.isFullBlock(state) && !block2.isFullBlock(state))
             {
                 enumfacing = EnumFacing.WEST;
             }
@@ -174,29 +177,29 @@ public class StirlingEngine extends BlockContainer {
 	//Render
 	
 	@Override
-	public boolean isOpaqueCube()
+	public boolean isOpaqueCube(IBlockState state)
 	{
 	   return false;
 	}
 	
 	@Override
-	public boolean shouldSideBeRendered(IBlockAccess worldIn, BlockPos pos, EnumFacing side)
+	public boolean shouldSideBeRendered(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side)
     {
 		return false;
     }
 	
 	@Override
-    public int getRenderType()
+    public EnumBlockRenderType getRenderType(IBlockState state)
     {
-        return -1 ;//number 3 for standard block models
+        return EnumBlockRenderType.INVISIBLE;//number 3 for standard block models
     }
 	
-	@Override
+	/*@Override
     @SideOnly(Side.CLIENT)
     public IBlockState getStateForEntityRender(IBlockState state)
     {
         return this.getDefaultState().withProperty(FACING, EnumFacing.SOUTH);
-    }
+    }*/
 	
 	/*@Override
     public void breakBlock(World world, BlockPos pos, IBlockState state)
@@ -209,15 +212,15 @@ public class StirlingEngine extends BlockContainer {
     }*/
 	
 	@Override
-	public boolean removedByPlayer(World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
+	public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player, boolean willHarvest){
 		if(world.isRemote){
 			 return false;
 		 }
 		
-	    IBlockState state = world.getBlockState(pos);
+	    //IBlockState state = world.getBlockState(pos);
 	    this.onBlockDestroyedByPlayer(world, pos, state);
 	    if(willHarvest) {
-	      this.harvestBlock(world, player, pos, state, world.getTileEntity(pos));
+	      this.harvestBlock(world, player, pos, state, world.getTileEntity(pos), null);
 	    }
 
 	    world.setBlockToAir(pos);

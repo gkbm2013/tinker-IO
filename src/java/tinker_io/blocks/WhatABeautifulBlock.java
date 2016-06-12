@@ -7,9 +7,11 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 //import tinker_io.TileEntity.TileEntityWhatABeautifulBlockEntity;
 import tinker_io.main.Main;
 import net.minecraft.block.Block;
+import net.minecraft.block.SoundType;
 //import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 //import net.minecraft.item.EnumRarity;
 import net.minecraft.item.ItemStack;
 //import net.minecraft.tileentity.TileEntity;
@@ -24,13 +26,13 @@ public class WhatABeautifulBlock extends Block{
 		setHardness(3F);
         setResistance(20F);
         setCreativeTab(Main.TinkerIOTabs);
-        setStepSound(soundTypeGlass);
+        setStepSound(SoundType.GLASS);
         setLightLevel(1.0F);
         this.setUnlocalizedName(unlocalizedName);
 	}
 	
 	 @Override
-     public boolean isOpaqueCube() {
+     public boolean isOpaqueCube(IBlockState state) {
              return false;
      }
 	 

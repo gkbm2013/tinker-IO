@@ -19,7 +19,7 @@ import net.minecraft.enchantment.Enchantment;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.text.translation.I18n;
 import tinker_io.main.Main;
 import tinker_io.registry.ItemRegistry;
 
@@ -47,7 +47,7 @@ public class OreCrusherRecipeCategory implements IRecipeCategory {
 	@Nonnull
 	@Override
 	public String getTitle() {
-		return StatCollector.translateToLocal("tile.Ore_Crusher.name");
+		return I18n.translateToLocal("tile.Ore_Crusher.name");
 	}
 
 	@Nonnull
@@ -83,7 +83,7 @@ public class OreCrusherRecipeCategory implements IRecipeCategory {
 		    items.setFromRecipe(2, speedUpg);
 		    
 		    ItemStack enchantedBook = new ItemStack(Items.enchanted_book);
-		    enchantedBook.addEnchantment(Enchantment.fortune, 3);
+		    enchantedBook.addEnchantment(Enchantment.enchantmentRegistry.getObjectById(35), 3);
 	    	
 	    	items.init(3, false, 40, 42);
 		    items.setFromRecipe(3, enchantedBook);

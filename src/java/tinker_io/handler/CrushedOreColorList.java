@@ -24,6 +24,9 @@ public class CrushedOreColorList {
 	 */
 	public int getColor(ItemStack itemStack){
 		  int colorRGB = Color.gray.getRGB();
+		  if(itemStack == null){
+			  return colorRGB;
+		  }
 		  
 		  NBTTagCompound nbt = itemStack.getTagCompound();
 			if(nbt != null){

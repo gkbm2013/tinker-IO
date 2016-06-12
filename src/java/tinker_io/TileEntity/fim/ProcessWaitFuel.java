@@ -23,10 +23,10 @@ public class ProcessWaitFuel implements Process
 
     private void cousumeFuel(FuelFSM m)
     {
-        m.tile.getSlot(1).stackSize -= 1;
-        if (m.tile.getSlot(1).stackSize == 0)
+        m.tile.getSlots()[1].stackSize -= 1;
+        if (m.tile.getSlots()[1].stackSize == 0)
         {
-            m.tile.setSlot(1, m.tile.getSlot(1).getItem().getContainerItem(m.tile.getSlot(1)));
+            m.tile.getSlots()[1] = m.tile.getSlots()[1].getItem().getContainerItem(m.tile.getSlots()[1]);
         }
     }
 }

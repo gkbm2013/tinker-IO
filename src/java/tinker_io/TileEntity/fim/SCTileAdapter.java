@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.BlockPos;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -29,15 +28,12 @@ public class SCTileAdapter implements Adapter
 	
 	@Override public int getFuelTemp()
 	{
-        if (tile.currentFuel != null)
-        {
-            final FluidStack fluid = tile.currentFuel.copy();
-            if (fluid != null)
-            {
-                return fluid.getFluid().getTemperature() - 300; //CONVERT_TO_C_FROM_TILE_SMELTERY_CLASS
-            }
-        }
-        return 0;
+		final FluidStack fluid = tile.currentFuel.copy();
+		if (fluid != null)
+		{
+			return fluid.getFluid().getTemperature() - 300;  //CONVERT_TO_C_FROM_TILE_SMELTERY_CLASS
+		}
+		return 0;
 	}
 	
 	@Override public boolean isAllItemFinishHeating()
@@ -118,11 +114,5 @@ public class SCTileAdapter implements Adapter
 		tile.writeToNBT(nbt);
 		return nbt;
 	}
-
-    @Override
-    public BlockPos getPos()
-    {
-        return tile.getPos();
-    }
 
 }

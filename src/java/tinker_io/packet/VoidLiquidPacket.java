@@ -1,16 +1,13 @@
 package tinker_io.packet;
 
-import net.minecraft.client.Minecraft;
+import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.MovingObjectPosition;
-import tinker_io.TileEntity.SOTileEntity;
-import tinker_io.main.Main;
-import io.netty.buffer.ByteBuf;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+import tinker_io.TileEntity.SOTileEntity;
 
 public class VoidLiquidPacket implements IMessage{
 	

@@ -1,64 +1,49 @@
 package tinker_io.TileEntity.fim;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import javax.annotation.Nullable;
-
 import net.minecraft.block.Block;
-import net.minecraft.init.Blocks;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import slimeknights.tconstruct.smeltery.TinkerSmeltery;
 import slimeknights.tconstruct.smeltery.tileentity.TileSmeltery;
 import tinker_io.api.vanilla.PosInfo;
 
-interface ISCInfo
-{
-    
-}
-
 public class SCInfo{
-    final private FIMTileEntity fim;
 	final private BlockPos FIMBlockPos;
 	final private World worldObj;
 	
-	@Deprecated
 	public BlockPos pos;
-	@Deprecated
 	public List<BlockPos> posList;
 	
-	public TileSmeltery sc;
-	public Adapter adap;
+	public FIMNeighborBlocksManager manager;
 	
-	public SCInfo(FIMTileEntity tile)
+	public SCInfo(
+			BlockPos FIMBlockPos, World worldObj)
 	{
-	    this.fim = tile;
-	    this.FIMBlockPos = tile.getPos();
-	    this.worldObj = tile.getWorld();
+		this.FIMBlockPos = FIMBlockPos;
+		this.worldObj = worldObj;
+		
+		this.manager = new FIMNeighborBlocksManager(worldObj, FIMBlockPos);
 	}
 	
 	public boolean canFindSCPos()
 	{
-		return sc != null;
+		return pos != null;
 	}
+	
+	private boolean initFlag = false;
 	
 	protected void update()
 	{
-//		posList = findSCPos(FIMBlockPos);
-//		if (isOnlyOneSmelteryController(posList)) {
-//			pos = posList.get(0);
-//		} else {
-//			pos = null;
-//		}
-	}
-	
-	protected void update(TileSmeltery tile)
-	{
-	    this.sc = tile;
-	    this.adap = SCInfo.getAdapter(tile);
+		posList = findSCPos(FIMBlockPos);
+		if (isOnlyOneSmelteryController(posList)) {
+			pos = posList.get(0);
+		} else {
+			pos = null;
+		}
 	}
 	
 	private List<BlockPos> findSCPos(BlockPos pos) {
@@ -104,16 +89,12 @@ public class SCInfo{
 	}
 	
 	public boolean isSCHeatingItem() {
+		final Adapter adap = this.getAdapter();
 		return adap.isHeatingItem() && !adap.isAllItemFinishHeating();
 	}
 
 	public Adapter getAdapter(){
-		return this.adap;
-	}
-	
-	public static Adapter getAdapter(TileSmeltery tile)
-	{
-	    return new SCTileAdapter(tile);
+		return  new SCTileAdapter(SCInfo.getTileSmeltery(worldObj, pos));
 	}
 	
 	public String getFacing()

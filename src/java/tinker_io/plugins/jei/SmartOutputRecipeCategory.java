@@ -18,7 +18,7 @@ import mezz.jei.api.recipe.IRecipeWrapper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.text.translation.I18n;
 import slimeknights.tconstruct.library.materials.Material;
 import tinker_io.main.Main;
 import tinker_io.registry.ItemRegistry;
@@ -46,7 +46,7 @@ public class SmartOutputRecipeCategory implements IRecipeCategory {
 	@Nonnull
 	@Override
 	public String getTitle() {
-		return StatCollector.translateToLocal("tile.smart_output.name");
+		return I18n.translateToLocal("tile.smart_output.name");
 	}
 
 	@Nonnull

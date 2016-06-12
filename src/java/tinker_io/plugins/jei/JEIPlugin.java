@@ -10,12 +10,10 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 import mezz.jei.api.IGuiHelper;
-import mezz.jei.api.IItemRegistry;
 import mezz.jei.api.IJeiHelpers;
 import mezz.jei.api.IJeiRuntime;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.IModRegistry;
-import mezz.jei.api.IRecipeRegistry;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntityFurnace;
@@ -34,19 +32,11 @@ import tinker_io.handler.SORecipe;
 public class JEIPlugin implements IModPlugin {
 
 	public static IJeiHelpers jeiHelpers;
-	
-	@Override
-	public void onJeiHelpersAvailable(IJeiHelpers jeiHelpers) {
-		JEIPlugin.jeiHelpers = jeiHelpers;
-		System.out.println("TIO JEI Started!");
-	}
-
-	@Override
-	public void onItemRegistryAvailable(IItemRegistry itemRegistry) {}
 
 	@Override
 	public void register(IModRegistry registry) {
-		IGuiHelper guiHelper = jeiHelpers.getGuiHelper();
+		jeiHelpers = registry.getJeiHelpers();
+	    IGuiHelper guiHelper = jeiHelpers.getGuiHelper();
 		
 		OreCrusherRecipeCategory OCCategory = new OreCrusherRecipeCategory(guiHelper);
 		OreCrusherRecipeHandler OCRecipeHandler = new OreCrusherRecipeHandler();
@@ -60,20 +50,20 @@ public class JEIPlugin implements IModPlugin {
 		registry.addRecipeCategories(OCCategory, SOCategory, FIMCategory);
 		registry.addRecipeHandlers(OCRecipeHandler, SORecipeHandler, FIMRecipeHandler);
 		
-		//Fuel Input Machine
-		List<FuelInputMachineRecipeWrapper> FIMrecipeList = Lists.newLinkedList();
-		Item.itemRegistry.forEach(item ->{
-			ItemStack itemstack = new ItemStack(item);
-			if(TileEntityFurnace.isItemFuel(itemstack)){
-				FIMrecipeList.add(new FuelInputMachineRecipeWrapper(itemstack));
-			}
-		});
-		registry.addRecipes(FIMrecipeList);
-		
-		//Ore Crusher
 		String[] oreDicArray = OreDictionary.getOreNames();
 		List<String> oreDicList = Lists.newArrayList(oreDicArray);
 		
+		//Fuel Input Machine
+				List<FuelInputMachineRecipeWrapper> FIMrecipeList = Lists.newLinkedList();
+				Item.itemRegistry.forEach(item ->{
+					ItemStack itemstack = new ItemStack(item);
+					if(TileEntityFurnace.isItemFuel(itemstack)){
+						FIMrecipeList.add(new FuelInputMachineRecipeWrapper(itemstack));
+					}
+				});
+				registry.addRecipes(FIMrecipeList);
+		
+		//Ore Crusher
 		List<OreCrusherRecipeWrapper> OCrecipeList = Lists.newLinkedList();
 		oreDicList.stream().forEach(oreDic ->{
 			if(OreCrusherRecipe.isOreDicAccepted(oreDic)){
@@ -106,15 +96,11 @@ public class JEIPlugin implements IModPlugin {
 	    castingRecipeWithNBT.stream()
 	    	.forEach(nbtRecipe -> registry.addRecipes(ImmutableList.of(new SmartOutputRecipeWrapper(nbtRecipe))));
 	    
-	    //Click area
+	  //Click area
 	    registry.addRecipeClickArea(SOGui.class, 94, 34, 24, 15, SmartOutputRecipeCategory.CATEGORY);
 	    registry.addRecipeClickArea(OreCrusherGui.class, 82, 35, 24, 15, OreCrusherRecipeCategory.CATEGORY);
 	    registry.addRecipeClickArea(FIMGui.class, 102, 35, 18, 18, FuelInputMachineRecipeCategory.CATEGORY);
-	    
 	}
-
-	@Override
-	public void onRecipeRegistryAvailable(IRecipeRegistry recipeRegistry) {}
 
 	@Override
 	public void onRuntimeAvailable(IJeiRuntime jeiRuntime) {}

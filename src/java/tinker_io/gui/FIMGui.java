@@ -9,9 +9,8 @@ import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.resources.I18n;
 //import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
-//import net.minecraft.inventory.Container;
-import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import tinker_io.TileEntity.fim.FIMTileEntity;
 import tinker_io.TileEntity.fim.FIMTileEntity.SpeedUpRatio;
@@ -35,7 +34,7 @@ public class FIMGui extends GuiContainer {
 		String tip2 = I18n.format("tio.gui.fim.slot2", new Object[0]);
 		
 
-		String warn = EnumChatFormatting.RED+I18n.format("tio.gui.fim.error_message", new Object[0]);
+		String warn = TextFormatting.RED+I18n.format("tio.gui.fim.error_message", new Object[0]);
 		
 		/*int cornerX = (width - xSize) / 2;
         int cornerY = (height - ySize) / 2;*/
@@ -52,7 +51,7 @@ public class FIMGui extends GuiContainer {
 		this.fontRendererObj.drawString(connectInfoDiraction, (-55 - (this.fontRendererObj.getStringWidth(connectInfoDiraction))/2), 26, 4210752);
 		
 		double ratio = this.getSpeedUpTimes();
-		String msgRatio = EnumChatFormatting.DARK_GREEN + "Ratio : " + ratio;
+		String msgRatio = TextFormatting.DARK_GREEN + "Ratio : " + ratio;
 		this.fontRendererObj.drawString(msgRatio, (-55 - (this.fontRendererObj.getStringWidth(msgRatio))/2), 37, 4210752);
 		
 		if(!tile.hasFuel()){

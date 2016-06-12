@@ -2,17 +2,16 @@ package tinker_io.TileEntity;
 
 import cofh.api.energy.EnergyStorage;
 import cofh.api.energy.IEnergyReceiver;
-import net.minecraft.init.Items;
-import net.minecraft.item.Item;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemEnchantedBook;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
-import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
+import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
@@ -43,14 +42,13 @@ public class OreCrusherTileEntity extends TileEntityContainerAdapter implements 
 	
 	private String nameOreCrusher;
 	
-	
 	public void nameOreCrusher(String string){
 		this.nameOreCrusher = string;
 	}
 
 	@Override
 	public String getName() {
-		return this.hasCustomName() ? this.nameOreCrusher : StatCollector.translateToLocal("tile.Ore_Crusher.name");
+		return this.hasCustomName() ? this.nameOreCrusher : I18n.translateToLocal("tile.Ore_Crusher.name");
 	}
 
 	@Override
@@ -107,7 +105,7 @@ public class OreCrusherTileEntity extends TileEntityContainerAdapter implements 
 	public void update() {
 		if (worldObj.isRemote) return;
 		crush();
-		worldObj.markBlockForUpdate(pos);
+		this.notifyBlockUpdate();
 	}
 	public void updateEntity() {
 		//crush();
@@ -252,15 +250,15 @@ public class OreCrusherTileEntity extends TileEntityContainerAdapter implements 
 	}
 	
 	public void crush(){
-		ItemStack product = this.getProduct();
+		ItemStack Product = this.getProduct();
 		
 		if(canCrush()){
 			if(crushTime >= speed){
 				crushTime = 0;
 				if (this.getSlots()[2] == null) {
-					this.getSlots()[2] = product.copy();
-				} else if (this.getSlots()[2].getItem() == product.getItem()) {
-					this.getSlots()[2].stackSize += product.stackSize;
+					this.getSlots()[2] = Product.copy();
+				} else if (this.getSlots()[2].getItem() == Product.getItem()) {
+					this.getSlots()[2].stackSize += Product.stackSize;
 				}
 				if(getSlots()[1].stackSize == 1){
 					getSlots()[1] = null;
@@ -348,11 +346,11 @@ public class OreCrusherTileEntity extends TileEntityContainerAdapter implements 
 	 public Packet getDescriptionPacket() {	 
 	     NBTTagCompound tag = new NBTTagCompound();
 	     this.writeToNBT(tag);
-	     return new S35PacketUpdateTileEntity(pos, 1, tag);
+	     return new SPacketUpdateTileEntity(pos, 1, tag);
 	 }
 	 
 	 @Override
-	 public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity packet) {
+	 public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity packet) {
 	     readFromNBT(packet.getNbtCompound());
 	 }
 
@@ -379,6 +377,13 @@ public class OreCrusherTileEntity extends TileEntityContainerAdapter implements 
 	
 	public EnergyStorage getStorage(){
 		return this.storage;
+	}
+	
+	private void notifyBlockUpdate(){
+		if(worldObj!=null && pos != null){
+			IBlockState state = worldObj.getBlockState(pos);
+			worldObj.notifyBlockUpdate(pos, state, state, 3);
+		}
 	}
 		
 }

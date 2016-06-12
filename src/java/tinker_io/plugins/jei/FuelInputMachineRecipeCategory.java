@@ -15,11 +15,9 @@ import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.recipe.IRecipeCategory;
 import mezz.jei.api.recipe.IRecipeWrapper;
 import net.minecraft.client.Minecraft;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.text.translation.I18n;
 import tinker_io.main.Main;
 import tinker_io.registry.ItemRegistry;
 
@@ -47,7 +45,7 @@ public class FuelInputMachineRecipeCategory implements IRecipeCategory {
 	@Nonnull
 	@Override
 	public String getTitle() {
-		return StatCollector.translateToLocal("tile.fuel_input_machine.name");
+		return I18n.translateToLocal("tile.fuel_input_machine.name");
 	}
 
 	@Nonnull

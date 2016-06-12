@@ -5,14 +5,15 @@ import java.util.List;
 import cofh.api.energy.EnergyStorage;
 import cofh.api.energy.IEnergyProvider;
 import cofh.api.energy.IEnergyReceiver;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
-import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
+import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidHandler;
 import slimeknights.tconstruct.smeltery.tileentity.TileTank;
@@ -136,7 +137,8 @@ public class StirlingEngineTileEntity extends TileEntity implements  ITickable, 
 	public void update() {
 		if (worldObj.isRemote) return;
 		angel();
-		worldObj.markBlockForUpdate(pos);
+		//worldObj.markBlockForUpdate(pos);
+		this.notifyBlockUpdate();
 		generateEnergy();
 		extraEnergyToSurroundingMechine();
 		//System.out.println(angel);
@@ -161,11 +163,11 @@ public class StirlingEngineTileEntity extends TileEntity implements  ITickable, 
     {
 		NBTTagCompound nbtTag = new NBTTagCompound();
 		this.writeToNBT(nbtTag);
-		return new S35PacketUpdateTileEntity(this.pos, 1, nbtTag);
+		return new SPacketUpdateTileEntity(this.pos, 1, nbtTag);
     }
 	
 	@Override
-	public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity packet){
+	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity packet){
 		readFromNBT(packet.getNbtCompound());
     }
 	 
@@ -210,5 +212,12 @@ public class StirlingEngineTileEntity extends TileEntity implements  ITickable, 
 	
 	public EnergyStorage getStorage(){
 		return this.storage;
+	}
+	
+	private void notifyBlockUpdate(){
+		if(worldObj!=null && pos != null){
+			IBlockState state = worldObj.getBlockState(pos);
+			worldObj.notifyBlockUpdate(pos, state, state, 3);
+		}
 	}
 }

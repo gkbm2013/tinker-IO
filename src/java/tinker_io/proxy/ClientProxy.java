@@ -10,6 +10,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import tinker_io.TileEntity.StirlingEngineTileEntity;
 import tinker_io.registry.BlockRenderRegister;
 import tinker_io.registry.FluidRenderRegister;
+import tinker_io.registry.ItemColorRegister;
 import tinker_io.registry.ItemRenderRegister;
 import tinker_io.render.TileEntityStirlingEngineRender;
 
@@ -38,6 +39,7 @@ public class ClientProxy extends CommonProxy{
 		this.registerRenderThings();
 		BlockRenderRegister.registerBlockRenderer();
 		ItemRenderRegister.registerItemRenderer();
+		ItemColorRegister.regItemColor();
 	}
 
 	@Override

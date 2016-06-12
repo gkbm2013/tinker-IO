@@ -1,11 +1,10 @@
 package tinker_io.registry;
 
-import tinker_io.blocks.FuelInputMachine;
-import tinker_io.main.Main;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
+import tinker_io.main.Main;
 
 public class BlockRenderRegister {
 	public static String modid = Main.MODID;

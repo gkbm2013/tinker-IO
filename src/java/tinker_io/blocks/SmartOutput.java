@@ -1,10 +1,5 @@
 package tinker_io.blocks;
 
-//import java.util.Random;
-
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-import slimeknights.mantle.multiblock.IServantLogic;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
@@ -18,16 +13,18 @@ import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.ItemStack;
 //import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import slimeknights.mantle.multiblock.IServantLogic;
 /*import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;*/
 //import slimeknights.tconstruct.smeltery.logic.LavaTankLogic;1.7
 import tinker_io.TileEntity.SOTileEntity;
-import tinker_io.TileEntity.fim.FIMTileEntity;
 import tinker_io.main.Main;
 
 public class SmartOutput extends BlockContainer {
@@ -41,19 +38,19 @@ public class SmartOutput extends BlockContainer {
 	}
 	
 	@Override
-    public int getRenderType()
+    public EnumBlockRenderType getRenderType(IBlockState state)
     {
-        return 3 ;//number 3 for standrd block models
+        return EnumBlockRenderType.MODEL;//number 3 for standrd block models
     }
 	
 	@Override
-    public boolean isOpaqueCube ()
+    public boolean isOpaqueCube(IBlockState state)
     {
         return false;
     }
 	
 	@Override
-	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumFacing side, float hitX, float hitY, float hitZ)
+	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ)
     {
 //		fillAndDrain(worldIn, pos.getX(), pos.getY(), pos.getZ(), playerIn);
 		if (!worldIn.isRemote) {

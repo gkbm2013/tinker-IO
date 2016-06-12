@@ -43,12 +43,12 @@ public class OreCrusherRecipeWrapper extends BlankRecipeWrapper {
 	}
 	
 	@Override
-	public void drawInfo(@Nonnull Minecraft minecraft, int recipeWidth, int recipeHeight) {
+	public void drawInfo(@Nonnull Minecraft minecraft, int recipeWidth, int recipeHeight, int mouseX, int mouseY) {
 		String s = "45 RF/tick";
 	    int x = 15;
 	    x -= minecraft.fontRendererObj.getStringWidth(s)/2;
 
-	    /*String s2 = "30% + 1";
+	   /* String s2 = "30% + 1";
 	    int x2 = 118;
 	    x2 -= minecraft.fontRendererObj.getStringWidth(s2)/2;*/
 

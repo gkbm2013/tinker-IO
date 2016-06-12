@@ -6,9 +6,9 @@ import java.util.Map;
 
 import org.lwjgl.input.Keyboard;
 
-import tinker_io.main.Main;
 import net.minecraft.block.BlockJukebox;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.EnumRarity;
@@ -16,21 +16,23 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemRecord;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.StatList;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.SoundEvent;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
+import tinker_io.main.Main;
 
 public class CD_Lonesome_Avenue extends ItemRecord {
 
 	private static final Map records = new HashMap();
 	
 	public final String recordName;
+	public final static SoundEvent sound_CD = new SoundEvent(new ResourceLocation(Main.MODID, "records.Lonesome_Avenue"));
 	
 	public CD_Lonesome_Avenue(String recordname) {
-		super(recordname);
+		super(recordname, sound_CD);
 		this.recordName = recordname;
 		this.maxStackSize = 1;
 		records.put(recordName, this);
@@ -56,7 +58,7 @@ public class CD_Lonesome_Avenue extends ItemRecord {
                 ((BlockJukebox)Blocks.jukebox).insertRecord(worldIn, pos, iblockstate, stack);
                 worldIn.playAuxSFXAtEntity((EntityPlayer)null, 1005, pos, Item.getIdFromItem(this));
                 --stack.stackSize;
-                playerIn.triggerAchievement(StatList.field_181740_X);
+                playerIn.addStat(StatList.recordPlayed);
                 return true;
             }
         }
@@ -95,9 +97,9 @@ public class CD_Lonesome_Avenue extends ItemRecord {
 	 par3List.add(this.getRecordNameLocal());
 
 	 if(this.isShiftKeyDown()){
-			par3List.add(EnumChatFormatting.GRAY + StatCollector.translateToLocal("tio.toolTips.CD_Lonesome_Avenue"));
+			par3List.add(TextFormatting.GRAY + I18n.format("tio.toolTips.CD_Lonesome_Avenue"));
 		}else{
-			par3List.add(EnumChatFormatting.GOLD + StatCollector.translateToLocal("tio.toolTips.common.holdShift"));			
+			par3List.add(TextFormatting.GOLD + I18n.format("tio.toolTips.common.holdShift"));			
 		}
 	 }
 	 
@@ -105,7 +107,7 @@ public class CD_Lonesome_Avenue extends ItemRecord {
 	 //TODO: getRecordTitle()
 	 public String getRecordNameLocal()
 	 {
-	 return StatCollector.translateToLocal(this.getUnlocalizedName() + ".desc");
+	 return I18n.format(this.getUnlocalizedName() + ".desc");
 	 }
 
 

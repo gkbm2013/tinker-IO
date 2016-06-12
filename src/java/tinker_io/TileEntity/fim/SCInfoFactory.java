@@ -4,6 +4,6 @@ public class SCInfoFactory {
 	public static SCInfo getSmelyeryControllerInfo(
 			FIMTileEntity tile)
 	{
-		return new SCInfo(tile);
+		return new SCInfo(tile.getPos(), tile.getWorld());
 	}
 }

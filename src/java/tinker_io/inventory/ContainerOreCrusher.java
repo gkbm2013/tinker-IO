@@ -40,7 +40,6 @@ public class ContainerOreCrusher extends Container{
 		this.addSlotToContainer(new SlotFortuneEnchantedBook(tileEntityOC, slotsFortuneUPG2, 62, 62)); // enchanted book
 		this.addSlotToContainer(new SlotUPG(tileEntityOC, slotsFortuneUPG3, 81, 62, banList, 1)); // Infinity UPG.
 		
-		
 		//this.addSlotToContainer(new SlotFurnace(player.player, tileEntityASC, 0, 25, 34));
 		
 		//player's inventory

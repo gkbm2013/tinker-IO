@@ -11,8 +11,8 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidStack;
 import slimeknights.tconstruct.smeltery.tileentity.TileTank;
@@ -50,13 +50,13 @@ public class StirlingEngineInfo implements IWailaDataProvider{
 			    	if(fluid != null){
 			    		fuildTemp = fluid.getFluid().getTemperature();
 			    	}
-			    	currenttip.add(SpecialChars.ITALIC + EnumChatFormatting.GRAY + fuelAmountText + " : " + liquidAmount);
-		    		currenttip.add(SpecialChars.ITALIC + EnumChatFormatting.GRAY + fuelTempText + " : " + fuildTemp);
+			    	currenttip.add(SpecialChars.ITALIC + TextFormatting.GRAY + fuelAmountText + " : " + liquidAmount);
+		    		currenttip.add(SpecialChars.ITALIC + TextFormatting.GRAY + fuelTempText + " : " + fuildTemp);
 			    }
 		    	
 		    	int energy = te.getEnergyStored(null);
-		    	currenttip.add(SpecialChars.ITALIC + EnumChatFormatting.GRAY + energyStoredText + " : " + energy + " / " + te.getMaxEnergyStored(null) + " RF");
-		    	currenttip.add(SpecialChars.ITALIC + EnumChatFormatting.GRAY + generatePerTickText + " : " + te.getGeneratePetTick() + " RF");
+		    	currenttip.add(SpecialChars.ITALIC + TextFormatting.GRAY + energyStoredText + " : " + energy + " / " + te.getMaxEnergyStored(null) + " RF");
+		    	currenttip.add(SpecialChars.ITALIC + TextFormatting.GRAY + generatePerTickText + " : " + te.getGeneratePetTick() + " RF");
 		    }
 		}
 		return currenttip;

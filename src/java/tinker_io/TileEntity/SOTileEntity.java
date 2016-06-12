@@ -5,6 +5,7 @@ import tinker_io.handler.SOEliminateList;
 import tinker_io.handler.SORecipe;
 import tinker_io.registry.ItemRegistry;
 import slimeknights.mantle.multiblock.MultiServantLogic;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.ISidedInventory;
@@ -13,12 +14,12 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
-import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
+import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.IChatComponent;
 import net.minecraft.util.ITickable;
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.translation.I18n;
 //import net.minecraftforge.common.util.ForgeDirection;1.7
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidContainerRegistry;
@@ -65,7 +66,8 @@ public class SOTileEntity extends MultiServantLogic implements IFluidHandler , I
 		int amount = tank.fill(resource, doFill);
         if (amount > 0 && doFill)
         {
-            worldObj.markBlockForUpdate(this.pos);
+            //worldObj.markBlockForUpdate(this.pos);
+        	this.notifyBlockUpdate();
         }
         return amount;
 	}
@@ -95,7 +97,8 @@ public class SOTileEntity extends MultiServantLogic implements IFluidHandler , I
 		FluidStack amount = tank.drain(maxDrain, doDrain);
         if (amount != null && doDrain)
         {
-            worldObj.markBlockForUpdate(this.pos);
+            //worldObj.markBlockForUpdate(this.pos);
+        	this.notifyBlockUpdate();
         }
         return amount;
 	}
@@ -210,11 +213,11 @@ public class SOTileEntity extends MultiServantLogic implements IFluidHandler , I
 	 public Packet getDescriptionPacket() {	 
 	     NBTTagCompound tag = new NBTTagCompound();
 	     this.writeToNBT(tag);
-	     return new S35PacketUpdateTileEntity(pos, 1, tag);
+	     return new SPacketUpdateTileEntity(pos, 1, tag);
 	 }
 	 
 	 @Override
-	 public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity packet) {
+	 public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity packet) {
 	     readFromNBT(packet.getNbtCompound());
 	 }
     
@@ -648,7 +651,7 @@ public class SOTileEntity extends MultiServantLogic implements IFluidHandler , I
 			int amount = liquid.amount;
 			int toVoid = this.tank.drain(amount, false).amount;
 			this.tank.drain(toVoid, true);
-			this.markDirty();
+			this.notifyBlockUpdate();
 		}
 	}
 	
@@ -667,7 +670,8 @@ public class SOTileEntity extends MultiServantLogic implements IFluidHandler , I
     
     public void update() {
     	if (worldObj.isRemote) return;
-    	worldObj.markBlockForUpdate(pos);
+    	//worldObj.markBlockForUpdate(pos);
+    	this.notifyBlockUpdate();
     	
     	if(canFrozen()){
     		if(currentFrozenTime >= frozenTimeMax){
@@ -678,7 +682,7 @@ public class SOTileEntity extends MultiServantLogic implements IFluidHandler , I
     				currentFrozenTime++;
     		}
     		
-    		this.markDirty();
+    		this.notifyBlockUpdate();
     	}else{
     		currentFrozenTime = 0;
     	}
@@ -734,7 +738,7 @@ public class SOTileEntity extends MultiServantLogic implements IFluidHandler , I
 
 	@Override
 	public String getName() {
-		return this.hasCustomName() ? this.nameSO : StatCollector.translateToLocal("tile.smart_output.name");
+		return this.hasCustomName() ? this.nameSO : I18n.translateToLocal("tile.smart_output.name");
 	}
 
 	@Override
@@ -743,7 +747,7 @@ public class SOTileEntity extends MultiServantLogic implements IFluidHandler , I
 	}
 	
 	@Override
-	public IChatComponent getDisplayName() {
+	public ITextComponent getDisplayName() {
 		// TODO
 		return null;
 	}
@@ -773,6 +777,13 @@ public class SOTileEntity extends MultiServantLogic implements IFluidHandler , I
 	@Override
 	public boolean isItemValidForSlot(int p_94041_1_, ItemStack p_94041_2_) {
 		return true;
+	}
+	
+	private void notifyBlockUpdate(){
+		if(worldObj!=null && pos != null){
+			IBlockState state = worldObj.getBlockState(pos);
+			worldObj.notifyBlockUpdate(pos, state, state, 3);
+		}
 	}
 }
 

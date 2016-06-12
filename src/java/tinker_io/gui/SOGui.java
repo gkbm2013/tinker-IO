@@ -37,10 +37,9 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumChatFormatting;
 //import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.Fluid;
 //import net.minecraftforge.common.util.ForgeDirection;
@@ -84,7 +83,7 @@ public class SOGui extends GuiContainer{
 		this.fontRendererObj.drawString(string, (this.xSize - this.fontRendererObj.getStringWidth(string))/2, 6, 4210752);
 		this.fontRendererObj.drawString(I18n.format("container.inventory", new Object[0]), 8, this.ySize - 94, 4210752);
 		
-		this.fontRendererObj.drawString(EnumChatFormatting.DARK_GREEN + "Max : " + outputSize, 120, 17, 4210752);
+		this.fontRendererObj.drawString(TextFormatting.DARK_GREEN + "Max : " + outputSize, 120, 17, 4210752);
 		
 		FluidTankInfo[] info = tileSO.getTankInfo();
 		FluidStack Wliquid = info[0].fluid;
@@ -95,9 +94,9 @@ public class SOGui extends GuiContainer{
         int cornerY = (height - ySize) / 2;
         if (liquid != null){
         	List<String> text = Lists.newArrayList();
-        	text.add(EnumChatFormatting.WHITE.toString() + liquid.getLocalizedName());
+        	text.add(TextFormatting.WHITE.toString() + liquid.getLocalizedName());
         	liquidToString(liquid, text);
-            //text.add(EnumChatFormatting.GRAY.toString() + liquid.amount + " " + Util.translate("gui.smeltery.liquid.millibucket"));
+            //text.add(TextFormatting.GRAY.toString() + liquid.amount + " " + Util.translate("gui.smeltery.liquid.millibucket"));
         	if(mouseX >= cornerX + 26 && mouseX <= cornerX + 38 && mouseY <= cornerY + 67 && mouseY >= cornerY + 67 - 52/*liquidAmount*/){
 	        	//1.7.10 // drawFluidStackTooltip(liquid, mouseX-cornerX, mouseY-cornerY);
         		this.drawHoveringText(text, mouseX-cornerX, mouseY-cornerY);
@@ -106,7 +105,7 @@ public class SOGui extends GuiContainer{
         
       //Tool Tips (For button)
         if (btn0.isMouseOver()) { // Tells you if the button is hovered by mouse
-            String[] desc = { EnumChatFormatting.RED + StatCollector.translateToLocal("tio.gui.SO.toolTips.button_head"), EnumChatFormatting.GRAY + StatCollector.translateToLocal("tio.gui.SO.toolTips.button_info") };
+            String[] desc = { TextFormatting.RED + I18n.format("tio.gui.SO.toolTips.button_head"), TextFormatting.GRAY + I18n.format("tio.gui.SO.toolTips.button_info") };
             @SuppressWarnings("rawtypes")
             List temp = Arrays.asList(desc);
             drawHoveringText(temp, mouseX - cornerX + 10, mouseY - cornerY + 10, fontRendererObj);
@@ -280,7 +279,7 @@ public class SOGui extends GuiContainer{
 	  private int calcLiquidText(int amount, int divider, String unit, List<String> text) {
 	    int full = amount/divider;
 	    if(full > 0) {
-	      text.add(String.format("%d %s%s", full, EnumChatFormatting.GRAY, unit));
+	      text.add(String.format("%d %s%s", full, TextFormatting.GRAY, unit));
 	    }
 
 	    return amount % divider;

@@ -6,16 +6,15 @@ import org.lwjgl.opengl.GL11;
 
 import com.google.common.collect.Lists;
 
-import tinker_io.TileEntity.OreCrusherTileEntity;
-import tinker_io.inventory.ContainerOreCrusher;
-import tinker_io.main.Main;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
+import tinker_io.TileEntity.OreCrusherTileEntity;
+import tinker_io.inventory.ContainerOreCrusher;
+import tinker_io.main.Main;
 
 public class OreCrusherGui extends GuiContainer{
 	private static final ResourceLocation OCGuiTextures = new ResourceLocation(Main.MODID, "textures/gui/OreCrusher.png");
@@ -40,11 +39,10 @@ public class OreCrusherGui extends GuiContainer{
 		String rate = tileOC.getRate() + "% + 1";
 		
 		this.fontRendererObj.drawString(rate, (this.xSize - this.fontRendererObj.getStringWidth(string))/2 + 50, 66, 4210752);
-		
 		//ToolTip
 		List<String> text = Lists.newArrayList();
-    	text.add(EnumChatFormatting.WHITE.toString() + StatCollector.translateToLocal("tio.toolTips.oreCrusher.energy"));
-    	text.add(EnumChatFormatting.WHITE.toString() + tileOC.getEnergyStored(null) + " / " + tileOC.getMaxEnergyStored(null)+ " " + StatCollector.translateToLocal("tio.toolTips.oreCrusher.rf"));
+    	text.add(TextFormatting.WHITE.toString() + I18n.format("tile.FuelInputMachine.name", new Object[0]));
+    	text.add(TextFormatting.WHITE.toString() + tileOC.getEnergyStored(null) + " / " + tileOC.getMaxEnergyStored(null)+ " " + I18n.format("tio.toolTips.oreCrusher.rf"));
     	
     	if(mouseX >= cornerX + 11 && mouseX <= cornerX + 21 && mouseY <= cornerY + 67 && mouseY >= cornerY + 67 - 54){
     		this.drawHoveringText(text, mouseX-cornerX, mouseY-cornerY);

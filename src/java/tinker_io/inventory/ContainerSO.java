@@ -8,7 +8,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
-import net.minecraft.item.Item;
 //import net.minecraft.inventory.SlotFurnace;
 import net.minecraft.item.ItemStack;
 //import net.minecraftforge.common.util.ForgeDirection;1.7
@@ -17,7 +16,6 @@ import net.minecraftforge.fluids.FluidTankInfo;
 import tinker_io.TileEntity.SOTileEntity;
 import tinker_io.handler.SORecipe;
 import tinker_io.items.Upgrade;
-import tinker_io.registry.ItemRegistry;
 
 public class ContainerSO extends ContainerTemplate{
 	private SOTileEntity tileSO;

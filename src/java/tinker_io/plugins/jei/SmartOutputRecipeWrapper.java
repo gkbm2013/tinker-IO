@@ -9,9 +9,8 @@ import com.google.common.collect.ImmutableList;
 import mezz.jei.api.recipe.BlankRecipeWrapper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.fluids.FluidStack;
-import slimeknights.tconstruct.library.Util;
 import slimeknights.tconstruct.library.smeltery.CastingRecipe;
 
 public class SmartOutputRecipeWrapper extends BlankRecipeWrapper{
@@ -75,9 +74,9 @@ public class SmartOutputRecipeWrapper extends BlankRecipeWrapper{
 	}
 	
 	@Override
-	public void drawInfo(@Nonnull Minecraft minecraft, int recipeWidth, int recipeHeight) {
+	public void drawInfo(@Nonnull Minecraft minecraft, int recipeWidth, int recipeHeight, int mouseX, int mouseY) {
 		if(recipe.consumesCast()) {
-			String s = StatCollector.translateToLocal("gui.jei.casting.consume");
+			String s = I18n.translateToLocal("gui.jei.casting.consume");
 		    int x = 55;
 		    x -= minecraft.fontRendererObj.getStringWidth(s)/2;
 		    minecraft.fontRendererObj.drawString(s, x, 40, 0xaa0000);
