@@ -1,0 +1,5 @@
+{
+    "variants": {
+        "inventory":  { "model": "tinker_io:upg_0" }
+    }
+}

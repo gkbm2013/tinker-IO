@@ -1,0 +1,11 @@
+{
+	"records.Lonesome_Avenue": {
+		"category": "record",
+		"sounds": [
+			{
+				"name": "tinker_io:Lonesome_Avenue",
+				"stream": true
+			}
+		]
+	}
+}

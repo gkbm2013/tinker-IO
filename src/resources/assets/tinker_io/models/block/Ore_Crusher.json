@@ -1,0 +1,8 @@
+{
+    "parent": "block/orientable",
+    "textures": {
+        "front": "tinker_io:blocks/Ore_Crusher_front",
+        "top":"tinker_io:blocks/Ore_Crusher_top",
+        "side": "tinker_io:blocks/Ore_Crusher_side"
+    }
+}
