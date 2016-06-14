@@ -29,4 +29,9 @@ public class OreCrusherRecipeHandler implements IRecipeHandler<OreCrusherRecipeW
 		return (recipe.outputList != null && !recipe.outputList.isEmpty() && recipe.outputList.get(0) != null);
 	}
 
+	@Override
+	public String getRecipeCategoryUid(OreCrusherRecipeWrapper recipe) {
+		return OreCrusherRecipeCategory.CATEGORY;
+	}
+
 }

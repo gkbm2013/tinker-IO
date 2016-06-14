@@ -159,7 +159,7 @@ public class StirlingEngineTileEntity extends TileEntity implements  ITickable, 
 	
 	//Packet
 	@Override
-	public Packet getDescriptionPacket()
+	public SPacketUpdateTileEntity getUpdatePacket()
     {
 		NBTTagCompound nbtTag = new NBTTagCompound();
 		this.writeToNBT(nbtTag);
@@ -182,11 +182,12 @@ public class StirlingEngineTileEntity extends TileEntity implements  ITickable, 
 	}
 	
 	@Override
-	public void writeToNBT(NBTTagCompound tagCompound) {
+	public NBTTagCompound writeToNBT(NBTTagCompound tagCompound) {
 		super.writeToNBT(tagCompound);
 		tagCompound.setDouble("Angel", (short) this.angel);
 		tagCompound.setInteger("generatePerTick", this.generatePerTick);
 		this.storage.writeToNBT(tagCompound);
+		return tagCompound;
 	}
 
 	//RF Energy

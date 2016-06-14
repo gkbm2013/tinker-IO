@@ -47,7 +47,7 @@ public class CD_Lonesome_Avenue extends ItemRecord {
     {
         IBlockState iblockstate = worldIn.getBlockState(pos);
 
-        if (iblockstate.getBlock() == Blocks.jukebox && !((Boolean)iblockstate.getValue(BlockJukebox.HAS_RECORD)).booleanValue())
+        if (iblockstate.getBlock() == Blocks.JUKEBOX && !((Boolean)iblockstate.getValue(BlockJukebox.HAS_RECORD)).booleanValue())
         {
             if (worldIn.isRemote)
             {
@@ -55,10 +55,10 @@ public class CD_Lonesome_Avenue extends ItemRecord {
             }
             else
             {
-                ((BlockJukebox)Blocks.jukebox).insertRecord(worldIn, pos, iblockstate, stack);
-                worldIn.playAuxSFXAtEntity((EntityPlayer)null, 1005, pos, Item.getIdFromItem(this));
+                ((BlockJukebox)Blocks.JUKEBOX).insertRecord(worldIn, pos, iblockstate, stack);
+                //worldIn.playAuxSFXAtEntity((EntityPlayer)null, 1005, pos, Item.getIdFromItem(this));
                 --stack.stackSize;
-                playerIn.addStat(StatList.recordPlayed);
+                playerIn.addStat(StatList.RECORD_PLAYED);
                 return true;
             }
         }

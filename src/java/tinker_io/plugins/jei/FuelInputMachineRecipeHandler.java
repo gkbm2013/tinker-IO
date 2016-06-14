@@ -25,4 +25,9 @@ public class FuelInputMachineRecipeHandler implements IRecipeHandler<FuelInputMa
 		return true;
 	}
 
+	@Override
+	public String getRecipeCategoryUid(FuelInputMachineRecipeWrapper recipe) {
+		return FuelInputMachineRecipeCategory.CATEGORY;
+	}
+
 }

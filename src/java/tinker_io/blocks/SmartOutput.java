@@ -30,7 +30,7 @@ import tinker_io.main.Main;
 public class SmartOutput extends BlockContainer {
 
 	public SmartOutput(String unlocalizedName) {
-		super(Material.rock);
+		super(Material.ROCK);
 		this.setHardness(3F);
         this.setResistance(20F);
         this.setCreativeTab(Main.TinkerIOTabs);
@@ -186,11 +186,10 @@ public class SmartOutput extends BlockContainer {
      * Called on both Client and Server when World#addBlockEvent is called
      */
 	@Override
-    public boolean onBlockEventReceived(World worldIn, BlockPos pos, IBlockState state, int eventID, int eventParam)
-    {
-        super.onBlockEventReceived(worldIn, pos, state, eventID, eventParam);
+    public boolean eventReceived(IBlockState state, World worldIn, BlockPos pos, int id, int param) {
+        super.eventReceived(state, worldIn, pos, id, param);
         TileEntity tileentity = worldIn.getTileEntity(pos);
-        return tileentity == null ? false : tileentity.receiveClientEvent(eventID, eventParam);
+        return tileentity == null ? false : tileentity.receiveClientEvent(id, param);
     }
 }
 

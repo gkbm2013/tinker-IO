@@ -184,11 +184,12 @@ public abstract class TileEntityContainerAdapter extends TileEntity  implements 
 	}
 	
 	@Override
-	public void writeToNBT(NBTTagCompound nbt)
+	public NBTTagCompound writeToNBT(NBTTagCompound nbt)
 	{
 		super.writeToNBT(nbt);
 		writeItems(nbt);
 		writeName(nbt);
+		return nbt;
 	}
 	
 	private void writeItems(NBTTagCompound nbt)

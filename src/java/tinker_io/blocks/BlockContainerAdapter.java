@@ -21,7 +21,7 @@ public abstract class BlockContainerAdapter extends BlockContainer{
 	public final static EnumBlockRenderType renderTypeForStandardBlockModels = EnumBlockRenderType.MODEL;
 	
 	protected BlockContainerAdapter() {
-		super(Material.rock);
+		super(Material.ROCK);
 		setHarvestLevel("pickaxe", 1);
 		setHardness(3);
 		setCreativeTab(Main.TinkerIOTabs);

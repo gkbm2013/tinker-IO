@@ -164,7 +164,7 @@ public class SOGui extends GuiContainer{
 	        
 			
 	        //Draw Liquid (For tank)
-			this.mc.getTextureManager().bindTexture(TextureMap.locationBlocksTexture); 
+			this.mc.getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE); 
 	        //this.drawLiquidRect(cornerX + 26, cornerY + 15 + 52 - liquidAmount, renderIndex, 12, liquidAmount);
 			if(liquid != null){
 				RenderUtil.renderTiledFluid(cornerX + 26, cornerY + 15 + 52 - liquidAmount, 12, liquidAmount, this.zLevel, liquid);

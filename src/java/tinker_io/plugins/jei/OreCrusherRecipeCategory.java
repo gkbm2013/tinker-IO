@@ -82,8 +82,8 @@ public class OreCrusherRecipeCategory implements IRecipeCategory {
 		    items.init(2, false, 34, 22);
 		    items.setFromRecipe(2, speedUpg);
 		    
-		    ItemStack enchantedBook = new ItemStack(Items.enchanted_book);
-		    enchantedBook.addEnchantment(Enchantment.enchantmentRegistry.getObjectById(35), 3);
+		    ItemStack enchantedBook = new ItemStack(Items.ENCHANTED_BOOK);
+		    enchantedBook.addEnchantment(Enchantment.REGISTRY.getObjectById(35), 3);
 	    	
 	    	items.init(3, false, 40, 42);
 		    items.setFromRecipe(3, enchantedBook);

@@ -317,7 +317,7 @@ public class OreCrusherTileEntity extends TileEntityContainerAdapter implements 
 	}
 	
 	@Override
-	public void writeToNBT(NBTTagCompound tagCompound) {
+	public NBTTagCompound writeToNBT(NBTTagCompound tagCompound) {
 		super.writeToNBT(tagCompound);
 		tagCompound.setShort("CrushTime", (short) this.crushTime);
 		tagCompound.setInteger("Rate", this.doubleProductRate);
@@ -339,11 +339,13 @@ public class OreCrusherTileEntity extends TileEntityContainerAdapter implements 
 		}*/
 		
 		storage.writeToNBT(tagCompound);
+		
+		return tagCompound;
 	}
 	
 	//Packet
 	 @Override
-	 public Packet getDescriptionPacket() {	 
+	 public SPacketUpdateTileEntity getUpdatePacket() {	 
 	     NBTTagCompound tag = new NBTTagCompound();
 	     this.writeToNBT(tag);
 	     return new SPacketUpdateTileEntity(pos, 1, tag);

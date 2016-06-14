@@ -8,7 +8,7 @@ import net.minecraftforge.fluids.Fluid;
 public class BlockPureMetal extends BlockFluidClassic{
 
 	public BlockPureMetal(Fluid fluid, String unlocalizedName) {
-		super(fluid, Material.lava);
+		super(fluid, Material.LAVA);
 		this.setUnlocalizedName(unlocalizedName);
 		//I am wandering why the model can not use...
 		//this.setCreativeTab(Main.TinkerIOTabs);

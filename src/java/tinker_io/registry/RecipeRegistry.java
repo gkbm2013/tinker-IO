@@ -22,25 +22,25 @@ public class RecipeRegistry {
 		registerRecipe();
 	}
 	static ItemStack speedUPG = new ItemStack(ItemRegistry.SpeedUPG,4);
-	static ItemStack sugar = new ItemStack(Items.sugar,1);
+	static ItemStack sugar = new ItemStack(Items.SUGAR,1);
 	
 	static ItemStack FIM = new ItemStack(BlockRegistry.fuelInputMachine,1);
 	static ItemStack drain = new ItemStack(TinkerSmeltery.smelteryIO, 1, 1);
-	static ItemStack hopper = new ItemStack(Blocks.hopper, 1);
+	static ItemStack hopper = new ItemStack(Blocks.HOPPER, 1);
 	
 	static ItemStack searedBrick = new ItemStack(TinkerSmeltery.searedBlock, 1, 0);
 	static ItemStack SO = new ItemStack(BlockRegistry.smartOutput, 1);
-	static ItemStack ice = new ItemStack(Blocks.ice, 1);
+	static ItemStack ice = new ItemStack(Blocks.ICE, 1);
 	
 	static ItemStack UpgBase = new ItemStack(ItemRegistry.Upgrade, 1, 0);
-	static ItemStack lapis = new ItemStack(Items.dye, 1, 4);
-	static ItemStack paper = new ItemStack(Items.paper, 1);
+	static ItemStack lapis = new ItemStack(Items.DYE, 1, 4);
+	static ItemStack paper = new ItemStack(Items.PAPER, 1);
 	
 	static ItemStack slotUPG1 = new ItemStack(ItemRegistry.Upgrade, 1, 1);
-	static ItemStack chest = new ItemStack(Blocks.chest, 1);
+	static ItemStack chest = new ItemStack(Blocks.CHEST, 1);
 	
 	static ItemStack slotUPG2 = new ItemStack(ItemRegistry.Upgrade, 1, 2);
-	static ItemStack iron_ingot = new ItemStack(Items.iron_ingot, 1);
+	static ItemStack iron_ingot = new ItemStack(Items.IRON_INGOT, 1);
 	
 	static ItemStack slotUPG3 = new ItemStack(ItemRegistry.Upgrade, 1, 3);
 	//static ItemStack alumite_nugget = new ItemStack(TinkerSmeltery.searedBlock, 1 , 32);
@@ -51,21 +51,21 @@ public class RecipeRegistry {
 	
 	
 	static ItemStack redstoneUPG = new ItemStack(ItemRegistry.Upgrade ,1 ,5);
-	static ItemStack comparator = new ItemStack(Items.comparator ,1);
-	static ItemStack repeater = new ItemStack(Items.repeater ,1);
+	static ItemStack comparator = new ItemStack(Items.COMPARATOR ,1);
+	static ItemStack repeater = new ItemStack(Items.REPEATER ,1);
 	
 	static ItemStack whatABeautifulBlock = new ItemStack(BlockRegistry.whatABeautifulBlock ,1);
-	static ItemStack glowstone = new ItemStack(Blocks.glowstone ,1);
-	static ItemStack nether_star = new ItemStack(Items.nether_star ,1);
+	static ItemStack glowstone = new ItemStack(Blocks.GLOWSTONE ,1);
+	static ItemStack nether_star = new ItemStack(Items.NETHER_STAR ,1);
 	
 	static ItemStack slotUPGInfinity = new ItemStack(ItemRegistry.Upgrade ,1 ,6);
-	static ItemStack obsidian = new ItemStack(Blocks.obsidian ,1);
+	static ItemStack obsidian = new ItemStack(Blocks.OBSIDIAN ,1);
 	
 	static ItemStack stirlingEngine = new ItemStack(BlockRegistry.stirlingEngine ,1);
 	static ItemStack searedBlock = new ItemStack(TinkerSmeltery.searedBlock, 1);
 	
 	static ItemStack oreCrusher = new ItemStack(BlockRegistry.oreCrusher ,1);
-	static ItemStack redstone_lamp = new ItemStack(Blocks.redstone_lamp ,1);
+	static ItemStack redstone_lamp = new ItemStack(Blocks.REDSTONE_LAMP ,1);
 	
 
 	private static void registerRecipe() {		
@@ -80,11 +80,11 @@ public class RecipeRegistry {
 		GameRegistry.addRecipe(new ShapedOreRecipe(stirlingEngine, true, new Object[]{"FAF", "BCB", "DED", 'A', "blockGold", 'B', "blockQuartz", 'C', "stickWood", 'D', searedBlock, 'E', "blockGlass", 'F', "ingotTin"}));
 		
 		GameRegistry.addRecipe(FIM, new Object[]{"AAA", "ABA","AAA", 'A', searedBrick, 'B', hopper});
-		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(ItemRegistry.SolidFuel,8), "ingotAluminum",Items.gunpowder,Items.coal));
-		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(ItemRegistry.SolidFuel,8), "dustAluminium",Items.gunpowder,"dustCoal"));
+		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(ItemRegistry.SolidFuel,8), "ingotAluminum",Items.GUNPOWDER,Items.COAL));
+		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(ItemRegistry.SolidFuel,8), "dustAluminium",Items.GUNPOWDER,"dustCoal"));
 		
-		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(ItemRegistry.SolidFuel,8), "ingotLead",Items.gunpowder,Items.coal));
-		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(ItemRegistry.SolidFuel,8), "dustLead",Items.gunpowder,"dustCoal"));
+		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(ItemRegistry.SolidFuel,8), "ingotLead",Items.GUNPOWDER,Items.COAL));
+		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(ItemRegistry.SolidFuel,8), "dustLead",Items.GUNPOWDER,"dustCoal"));
 		
 		GameRegistry.addRecipe(SO, new Object[]{"ABA", "B B","ABA", 'A', searedBrick, 'B', ice});
 		GameRegistry.addRecipe(new ShapedOreRecipe(whatABeautifulBlock, true, new Object[]{"AAA", "ABA","AAA", 'A', glowstone, 'B', nether_star}));

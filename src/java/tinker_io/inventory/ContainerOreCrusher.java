@@ -11,7 +11,7 @@ import com.google.common.collect.Lists;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
-import net.minecraft.inventory.ICrafting;
+//import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
@@ -141,13 +141,13 @@ public class ContainerOreCrusher extends Container{
 	@Override
 	public void detectAndSendChanges(){
 		super.detectAndSendChanges();
-		for(int i = 0; i < this.crafters.size(); ++i){
+		/*for(int i = 0; i < this.crafters.size(); ++i){
 			ICrafting craft = (ICrafting) this.crafters.get(i);
 			
-			/*if(this.lastInputTime != this.tileFIM.inputTime){
-				craft.sendProgressBarUpdate(this, 0, this.tileFIM.inputTime);
-			}*/
-		}
+			//if(this.lastInputTime != this.tileFIM.inputTime){
+				//craft.sendProgressBarUpdate(this, 0, this.tileFIM.inputTime);
+			//}
+		}*/
 		
 		//this.lastInputTime = this.tileFIM.inputTime;
 	}

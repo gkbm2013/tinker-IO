@@ -11,7 +11,7 @@ import tinker_io.items.Upgrade;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
-import net.minecraft.inventory.ICrafting;
+//import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntityFurnace;
@@ -125,7 +125,7 @@ public class ContainerFIM extends ContainerTemplate implements Observer{
 	@Override
 	public void detectAndSendChanges(){
 		super.detectAndSendChanges();
-		for(int i = 0; i < this.crafters.size(); ++i){
+		/*for(int i = 0; i < this.crafters.size(); ++i){
 			ICrafting craft = (ICrafting) this.crafters.get(i);
 			
 			if(hasDifferentInputTime())
@@ -137,7 +137,7 @@ public class ContainerFIM extends ContainerTemplate implements Observer{
 			{
 			    craft.sendProgressBarUpdate(this, 1, fueltemp);
 			}
-		}
+		}*/
 		
 		this.lastInputTime = inputTime;
 		this.lastfueltemp = fueltemp;
@@ -148,14 +148,14 @@ public class ContainerFIM extends ContainerTemplate implements Observer{
 		return this.lastInputTime != this.inputTime;
 	}
 	
-	@Override
+	/*@Override
 	public void onCraftGuiOpened(ICrafting listener)
 	{
 		super.onCraftGuiOpened(listener);
 		listener.sendProgressBarUpdate(this, 0, inputTime);
 		
 		tile.addObserver(this);
-	}
+	}*/
 	
     /**
      * Called when the container is closed.

@@ -229,13 +229,14 @@ public class FIMTileEntity extends TileEntityContainerAdapter implements ITickab
 
 
     @Override
-    public void writeToNBT(NBTTagCompound tag)
+    public NBTTagCompound writeToNBT(NBTTagCompound tag)
     {
         super.writeToNBT(tag);
         tag.setShort("InputTime", (short) this.inputTime);
         tag.setShort("keepInputTime", (short) this.keepInputTime);
 
         this.fuelFSM.writeToNBT(tag);
+        return tag;
     }
 
 

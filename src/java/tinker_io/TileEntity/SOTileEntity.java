@@ -133,10 +133,11 @@ public class SOTileEntity extends MultiServantLogic implements IFluidHandler , I
     }
 
     @Override
-    public void writeToNBT (NBTTagCompound tags)
+    public NBTTagCompound writeToNBT (NBTTagCompound tags)
     {
         super.writeToNBT(tags);
         writeCustomNBT(tags);
+        return tags;
     }
     
     //NBT
@@ -178,7 +179,7 @@ public class SOTileEntity extends MultiServantLogic implements IFluidHandler , I
     }
 
     @Override
-    public void writeCustomNBT (NBTTagCompound tags)
+    public NBTTagCompound writeCustomNBT (NBTTagCompound tags)
     {
         
         tags.setInteger("CurrentFrozenTime", currentFrozenTime);
@@ -206,11 +207,12 @@ public class SOTileEntity extends MultiServantLogic implements IFluidHandler , I
 
 		tags.setTag("Items", tagList);
 		//tags.setInteger("Mode", mode);
+		return tags;
     }
     
 	//Packet
 	 @Override
-	 public Packet getDescriptionPacket() {	 
+	 public SPacketUpdateTileEntity getUpdatePacket() {	 
 	     NBTTagCompound tag = new NBTTagCompound();
 	     this.writeToNBT(tag);
 	     return new SPacketUpdateTileEntity(pos, 1, tag);
@@ -565,7 +567,7 @@ public class SOTileEntity extends MultiServantLogic implements IFluidHandler , I
 		FluidStack liquid = info[0].fluid;
 		if(canFrozen() == true && info != null){
 			ItemStack itemstack = recipes.getCastingRecipes(liquid, this.itemStacksSO[0]); // Product
-			ItemStack bucket = new ItemStack(Items.bucket);
+			ItemStack bucket = new ItemStack(Items.BUCKET);
 			//ItemStack basin = new ItemStack(TinkerSmeltery.searedBlock ,1 ,2);
 			
 			if(recipes.getCastingFluidCost(liquid, itemStacksSO[0]) != null && recipes.getCastingFluidCost(liquid, itemStacksSO[0]).amount <= liquid.amount){

@@ -55,7 +55,7 @@ public class JEIPlugin implements IModPlugin {
 		
 		//Fuel Input Machine
 				List<FuelInputMachineRecipeWrapper> FIMrecipeList = Lists.newLinkedList();
-				Item.itemRegistry.forEach(item ->{
+				Item.REGISTRY.forEach(item ->{
 					ItemStack itemstack = new ItemStack(item);
 					if(TileEntityFurnace.isItemFuel(itemstack)){
 						FIMrecipeList.add(new FuelInputMachineRecipeWrapper(itemstack));

@@ -33,4 +33,9 @@ public class SmartOutputRecipeHandler  implements IRecipeHandler<SmartOutputReci
 		           (recipe.output != null && !recipe.output.isEmpty() && recipe.output.get(0) != null);
 	}
 
+	@Override
+	public String getRecipeCategoryUid(SmartOutputRecipeWrapper recipe) {
+		return SmartOutputRecipeCategory.CATEGORY;
+	}
+
 }

@@ -22,11 +22,11 @@ public class WhatABeautifulBlock extends Block{
 	//private static final String __OBFID = "CL_00000065";
 	
 	public WhatABeautifulBlock(String unlocalizedName) {
-		super(Material.grass);
+		super(Material.GLASS);
 		setHardness(3F);
         setResistance(20F);
         setCreativeTab(Main.TinkerIOTabs);
-        setStepSound(SoundType.GLASS);
+        this.setSoundType(SoundType.GLASS);
         setLightLevel(1.0F);
         this.setUnlocalizedName(unlocalizedName);
 	}
@@ -42,7 +42,7 @@ public class WhatABeautifulBlock extends Block{
 
 	 public MapColor getMapColor(int p_149728_1_)
 	    {
-	        return MapColor.sandColor;
+	        return MapColor.SAND;
 	    }
 	 
 	 @SideOnly(Side.CLIENT)
