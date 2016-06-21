@@ -1,5 +1,6 @@
 package tinker_io.main;
 
+import slimeknights.tconstruct.smeltery.TinkerSmeltery;
 import slimeknights.tconstruct.tools.TinkerTools;
 import tinker_io.packet.PacketDispatcher;
 import tinker_io.plugins.waila.MainWaila;
@@ -10,8 +11,13 @@ import tinker_io.registry.FluidRegister;
 import tinker_io.registry.ItemRegistry;
 import tinker_io.registry.ItemRenderRegister;
 import tinker_io.registry.OreCrusherBanLiatRegistry;
+import tinker_io.registry.OreDictionaryRegistry;
 import tinker_io.registry.SmelteryRecipeRegistry;
 import tinker_io.registry.RecipeRegistry;
+
+import com.google.common.collect.ImmutableSet;
+
+import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraftforge.fml.common.Mod;
@@ -32,7 +38,7 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 public class Main
 {
     public static final String MODID = "tinker_io";
-    public static final String VERSION = "beta 2.1.0a";
+    public static final String VERSION = "beta 2.2.1a";
     public static final String Name = "Tinker I/O";
     
     //public static boolean iguanas_support;
@@ -103,6 +109,7 @@ public class Main
 		//Register model in Client Proxy instead of here!
     	RecipeRegistry.mainRegistry();
     	OreCrusherBanLiatRegistry.registry();
+    	OreDictionaryRegistry.register();
 	}
     
 	/**
@@ -115,5 +122,15 @@ public class Main
 		  proxy.postInit(event);
 		  proxy.registerNetworkStuff();
 		  SmelteryRecipeRegistry.registerMeltingCasting();
+		  
+		  /* 1.9.4 Only :P
+		  ImmutableSet.Builder<Block> builder = ImmutableSet.builder();
+          for(Block block : TinkerSmeltery.validSmelteryBlocks)
+          {
+              builder.add(block);
+          }
+          builder.add(BlockRegistry.fuelInputMachine);
+          TinkerSmeltery.validSmelteryBlocks = builder.build();
+          */
 	  }
 }

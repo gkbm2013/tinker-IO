@@ -52,7 +52,7 @@ public abstract class BlockContainerAdapter extends BlockContainer{
 	public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
 	    TileEntity tile = worldIn.getTileEntity(pos);
 
-	    if(tile instanceof TileEntityContainerAdapter) {
+	    if(tile instanceof IInventory) {
 	      InventoryHelper.dropInventoryItems(worldIn, pos, (IInventory) tile);
 	      worldIn.updateComparatorOutputLevel(pos, this);
 	    }

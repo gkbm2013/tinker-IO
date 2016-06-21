@@ -24,6 +24,8 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import slimeknights.tconstruct.smeltery.tileentity.TileSmelteryComponent;
+import tinker_io.TileEntity.TileEntityContainerAdapter;
 import tinker_io.TileEntity.fim.FIMNeighborBlocksManager;
 import tinker_io.TileEntity.fim.FIMTileEntity;
 import tinker_io.api.NeighborBlockChange;
@@ -228,5 +230,18 @@ public class FuelInputMachine extends BlockContainerAdapter
     public IBlockState getStateForEntityRender(IBlockState state)
     {
         return this.getDefaultState().withProperty(FACING, EnumFacing.SOUTH);
+    }
+	
+	
+	
+    @Override
+    public void breakBlock(World worldIn, BlockPos pos, IBlockState state)
+    {
+        TileEntity te = worldIn.getTileEntity(pos);
+        if (te instanceof TileSmelteryComponent)
+        {
+            ((TileSmelteryComponent) te).notifyMasterOfChange();
+        }
+        super.breakBlock(worldIn, pos, state);
     }
 }

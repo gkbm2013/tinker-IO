@@ -96,12 +96,12 @@ public class SORecipes{
 		return false;
 	}
 	
-	public boolean isPatternWithIguana(ItemStack itemStack){
+	/*public boolean isPatternWithIguana(ItemStack itemStack){
 		if(Main.iguanas_support == false){
 			return false;
 		}
 		return isPattern(itemStack);
-	}
+	}*/
 	
 	public FluidStack getBasinFluid(FluidStack fluid, ItemStack itemStack){
 		CastingRecipe basinRecipe = TinkerRegistry.getBasinCasting(itemStack, fluid.getFluid());

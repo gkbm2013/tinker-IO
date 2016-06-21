@@ -232,7 +232,7 @@ public class OreCrusherTileEntity extends TileEntityContainerAdapter implements 
 		if(getSlots()[1] == null){
 			return false;
 		}
-		
+		//System.out.println(banList.canItemCrush(getSlots()[1]));
 		if(!isOreInOreDic(getSlots()[1]) || !banList.canItemCrush(getSlots()[1])){
 			return false;
 		}

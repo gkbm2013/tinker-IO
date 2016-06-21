@@ -4,9 +4,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.BlockPos;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import slimeknights.tconstruct.smeltery.tileentity.TileSmeltery;
 
 public class SCTileAdapter implements Adapter
@@ -21,19 +20,22 @@ public class SCTileAdapter implements Adapter
 		this.tile = tile;
 	}
 	
-	@Override @SideOnly(Side.CLIENT) public void setFuelTemp(int temp)
+	/*@Override @SideOnly(Side.CLIENT) public void setFuelTemp(int temp)
 	{
 		tile.updateTemperatureFromPacket(temp);
-	}
+	}*/
 	
 	@Override public int getFuelTemp()
 	{
-		final FluidStack fluid = tile.currentFuel.copy();
-		if (fluid != null)
-		{
-			return fluid.getFluid().getTemperature() - 300;  //CONVERT_TO_C_FROM_TILE_SMELTERY_CLASS
-		}
-		return 0;
+        if (tile.currentFuel != null)
+        {
+            final FluidStack fluid = tile.currentFuel.copy();
+            if (fluid != null)
+            {
+                return fluid.getFluid().getTemperature() - 300; //CONVERT_TO_C_FROM_TILE_SMELTERY_CLASS
+            }
+        }
+        return 0;
 	}
 	
 	@Override public boolean isAllItemFinishHeating()
@@ -114,5 +116,11 @@ public class SCTileAdapter implements Adapter
 		tile.writeToNBT(nbt);
 		return nbt;
 	}
+
+    @Override
+    public BlockPos getPos()
+    {
+        return tile.getPos();
+    }
 
 }

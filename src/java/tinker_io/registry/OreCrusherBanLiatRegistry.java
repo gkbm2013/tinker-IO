@@ -38,6 +38,9 @@ public class OreCrusherBanLiatRegistry {
 		OreCrusherBanList.addBanOreDic("oreManyullyn");
 		
 		banItemCannotSmelt();
+		
+		OreCrusherBanList.addExceptionOreDic("oreCobalt");
+		OreCrusherBanList.addExceptionOreDic("oreArdite");
 	}
 	
 	private static void banItemCannotSmelt(){
