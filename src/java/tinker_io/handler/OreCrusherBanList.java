@@ -40,7 +40,7 @@ public class OreCrusherBanList {
 	
 	/**
 	 * The ore dictionary added by this method will be unlock when ore crusher want to crush it.
-	 * Not : The method will UNLOCK an object instead of add recipe for ore crusher. 
+	 * Note : The method will UNLOCK an object instead of add recipe for ore crusher. 
 	 * 
 	 * @param oreDic The ore dictionary to ban.
 	 */

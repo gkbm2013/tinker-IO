@@ -184,8 +184,6 @@ public class SOTileEntity extends MultiServantLogic implements IFluidHandler , I
             tags.setInteger("amount", liquid.amount);
             if(this.tank.getFluid() != null && this.tank.getFluid().tag != null){
             	tags.setTag("fluidTag", this.tank.getFluid().tag);
-            }else{
-            	tags.setTag("fluidTag", null);
             }
         }
         
