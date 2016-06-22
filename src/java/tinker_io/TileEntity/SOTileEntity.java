@@ -122,38 +122,32 @@ public class SOTileEntity extends MultiServantLogic implements IFluidHandler , I
         return new FluidTankInfo[] { new FluidTankInfo(fluid, tank.getCapacity()) };
 	}
 
+	//NBT
 	@Override
-    public void readFromNBT (NBTTagCompound tags)
-    {
+    public void readFromNBT (NBTTagCompound tags){
         super.readFromNBT(tags);
         readCustomNBT(tags);
     }
 
     @Override
-    public void writeToNBT (NBTTagCompound tags)
-    {
+    public void writeToNBT (NBTTagCompound tags){
         super.writeToNBT(tags);
         writeCustomNBT(tags);
     }
-    
-    //NBT
 
     @Override
-    public void readCustomNBT (NBTTagCompound tags)
-    {   	
+    public void readCustomNBT (NBTTagCompound tags){   	
     	currentFrozenTime = tags.getInteger("CurrentFrozenTime");
-    	/*canBasin = tags.getBoolean("CanBasin");
-    	canFrozen = tags.getBoolean("CanFrozen");*/
     	
-        if (tags.getBoolean("hasFluid"))
-        {
-            if (tags.getInteger("itemID") != 0)
-            {
+        if (tags.getBoolean("hasFluid")){
+            if (tags.getInteger("itemID") != 0){
 //                tank.setFluid(new FluidStack(tags.getInteger("itemID"), tags.getInteger("amount")));
-            }
-            else
-            {
-                tank.setFluid(FluidRegistry.getFluidStack(tags.getString("fluidName"), tags.getInteger("amount")));
+            }else{
+            	FluidStack tankFluid = FluidRegistry.getFluidStack(tags.getString("fluidName"), tags.getInteger("amount"));
+                if(tags.getString("fluidTag") != null){
+                	tankFluid = new FluidStack(tankFluid.getFluid(), tankFluid.amount, (NBTTagCompound) tags.getTag("fluidTag"));
+                }
+                tank.setFluid(tankFluid);
             }
         }else{
         	tank.setFluid(null);
@@ -171,7 +165,7 @@ public class SOTileEntity extends MultiServantLogic implements IFluidHandler , I
 				this.itemStacksSO[byte0] = ItemStack.loadItemStackFromNBT(tabCompound1);
 			}
 		}
-		//mode = tags.getInteger("Mode");
+//mode = tags.getInteger("Mode");
     }
 
     @Override
@@ -188,6 +182,11 @@ public class SOTileEntity extends MultiServantLogic implements IFluidHandler , I
         {
             tags.setString("fluidName", liquid.getFluid().getName());
             tags.setInteger("amount", liquid.amount);
+            if(this.tank.getFluid() != null && this.tank.getFluid().tag != null){
+            	tags.setTag("fluidTag", this.tank.getFluid().tag);
+            }else{
+            	tags.setTag("fluidTag", null);
+            }
         }
         
         
