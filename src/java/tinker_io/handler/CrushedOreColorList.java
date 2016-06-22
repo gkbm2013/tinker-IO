@@ -39,7 +39,7 @@ public class CrushedOreColorList {
 					return colorRGB;
 				}
 				
-				TextureAtlasSprite particleIcon = mc.getRenderItem().getItemModelMesher().getParticleIcon(oreItem.getItem());
+				TextureAtlasSprite particleIcon = mc.getRenderItem().getItemModelMesher().getParticleIcon(oreItem.getItem(), oreItem.getMetadata());
 				if(particleIcon != null){					
 					int[] frameTextureData = particleIcon.getFrameTextureData(0)[0];
 					colorRGB = frameTextureData[151];
@@ -70,7 +70,7 @@ public class CrushedOreColorList {
 					return colorRGB;
 				}
 				
-				TextureAtlasSprite particleIcon = mc.getRenderItem().getItemModelMesher().getParticleIcon(oreItem.getItem());
+				TextureAtlasSprite particleIcon = mc.getRenderItem().getItemModelMesher().getParticleIcon(oreItem.getItem(), oreItem.getMetadata());
 				if(particleIcon != null){					
 					int[] frameTextureData = particleIcon.getFrameTextureData(0)[0];
 					colorRGB = frameTextureData[151];

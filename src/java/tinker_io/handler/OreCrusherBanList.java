@@ -36,6 +36,16 @@ public class OreCrusherBanList {
 	public static void addBanOreDic(String oreDic){
 		addOreDicLists(oreDic);
 	}
+	
+	/**
+	 * The ore dictionary added by this method will be unlock when ore crusher want to crush it.
+	 * Note : The method will UNLOCK an object instead of add recipe for ore crusher. 
+	 * 
+	 * @param oreDic The ore dictionary to ban.
+	 */
+	public static void addExceptionOreDic(String oreDic){
+		banedOreDicList.remove(oreDic);
+	}
 
 	private static void addOreDicLists(String oreDic) {
 		banedOreDicList.put(oreDic, oreDic);

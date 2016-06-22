@@ -91,15 +91,17 @@ public class FuelFSM implements ITickable, NBTable
 
 
     @Override
-    public void readFromNBT(NBTTagCompound tag)
+    public NBTTagCompound readFromNBT(NBTTagCompound tag)
     {
         this.isActive = tag.getBoolean("isActive");
+        return tag;
     }
 
 
     @Override
-    public void writeToNBT(NBTTagCompound tag)
+    public  NBTTagCompound writeToNBT(NBTTagCompound tag)
     {
         tag.setBoolean("isActive", isActive);
+        return tag;
     }
 }

@@ -95,8 +95,8 @@ public class StirlingEngine extends BlockContainer {
 	    if(te != null){
 	    	TileTank teTank = te.getTETank();
 	    	if(teTank != null){
-		    	int liquidAmount = teTank.tank.getFluidAmount();
-		    	FluidStack fluid = teTank.tank.getFluid();
+		    	int liquidAmount = teTank.getInternalTank().getFluidAmount();
+		    	FluidStack fluid = teTank.getInternalTank().getFluid();
 		    	int fuildTemp = 0;
 		    	if(fluid != null){
 		    		fuildTemp = fluid.getFluid().getTemperature();
