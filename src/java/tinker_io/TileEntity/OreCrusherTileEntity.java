@@ -124,7 +124,6 @@ public class OreCrusherTileEntity extends TileEntityContainerAdapter implements 
 				String oreName = OreDictionary.getOreName(oreID);
 				String title = oreName.substring(0, 3);
 				if(title.equals("ore")){
-					System.out.println(oreName);
 					return true;
 				}else{
 					

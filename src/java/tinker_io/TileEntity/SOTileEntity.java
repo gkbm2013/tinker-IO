@@ -69,11 +69,10 @@ public class SOTileEntity extends MultiServantLogic implements IFluidHandler, IF
 	public int fill(FluidStack resource, boolean doFill) {
 		//TODO
 		int amount = tank.fill(resource, doFill);
-        if (amount > 0 && doFill)
-        {
-            //worldObj.markBlockForUpdate(this.pos);
+        /*if (amount > 0 && doFill){
         	this.notifyBlockUpdate();
-        }
+        }*/
+		this.notifyBlockUpdate();
         return amount;
 	}
 
@@ -91,6 +90,7 @@ public class SOTileEntity extends MultiServantLogic implements IFluidHandler, IF
             return null;
         if (tank.getFluid().getFluid() != resource.getFluid())
             return null;
+        this.notifyBlockUpdate();
 		return this.drain(resource.amount, doDrain);
 	}
 
@@ -238,7 +238,7 @@ public class SOTileEntity extends MultiServantLogic implements IFluidHandler, IF
             if(this.tank.getFluid() != null && this.tank.getFluid().tag != null){
             	tags.setTag("fluidTag", this.tank.getFluid().tag);
             }else{
-            	tags.setTag("fluidTag", null);
+            	//tags.setTag("fluidTag", new NBTTagCompound());
             }
         }
         
