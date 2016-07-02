@@ -15,7 +15,9 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.IFluidHandler;
+import net.minecraftforge.fluids.IFluidTank;
 import slimeknights.tconstruct.smeltery.tileentity.TileTank;
 import tinker_io.api.BlockFinder;
 import tinker_io.registry.BlockRegistry;
@@ -41,10 +43,11 @@ public class StirlingEngineTileEntity extends TileEntity implements  ITickable, 
 	    TileEntity te = this.worldObj.getTileEntity(tankPos);
 	    if(te instanceof TileTank){
 	    	TileTank teTank = (TileTank) this.worldObj.getTileEntity(tankPos);
-	    	IFluidHandler toDrain = (IFluidHandler) teTank;
-	    	FluidStack canDrain = toDrain.drain(EnumFacing.DOWN, 1, false);
 		    if(teTank != null){
-		    	FluidStack fulid = teTank.tank.getFluid();
+		    	FluidTank toDrain = teTank.getInternalTank();
+		    	FluidStack canDrain = toDrain.drain(1, false);
+		    	
+		    	FluidStack fulid = teTank.getInternalTank().getFluid();
 		    	if(fulid != null && this.getEnergyStored(null) < storage.getMaxEnergyStored()){
 		    		fuildTemp = fulid.getFluid().getTemperature();
 		    		generateEnergy = (fuildTemp - 300)*30/100;
@@ -52,7 +55,7 @@ public class StirlingEngineTileEntity extends TileEntity implements  ITickable, 
 		    			generatePerTick = generateEnergy;
 			    		storage.setEnergyStored(storage.getEnergyStored() + generateEnergy);
 			    		if(canDrain != null){
-				    		toDrain.drain(EnumFacing.DOWN, 1, true);
+				    		toDrain.drain(1, true);
 				    	}
 		    		}
 		    	}else{
@@ -79,8 +82,8 @@ public class StirlingEngineTileEntity extends TileEntity implements  ITickable, 
 	    	TileTank teTank = (TileTank) this.worldObj.getTileEntity(tankPos);
 		    if(teTank != null){
 		    	//liquidAmount = teTank.tank.getFluidAmount();
-		    	FluidStack fulid = teTank.tank.getFluid();
-		    	teTank.tank.drain(1, true);
+		    	FluidStack fulid = teTank.getInternalTank().getFluid();
+		    	teTank.getInternalTank().drain(1, true);
 		    	if(fulid != null){
 		    		fuildTemp = fulid.getFluid().getTemperature();
 		    	}

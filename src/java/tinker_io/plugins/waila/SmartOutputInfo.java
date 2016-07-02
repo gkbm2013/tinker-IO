@@ -33,7 +33,7 @@ public class SmartOutputInfo implements IWailaDataProvider{
 	public List<String> getWailaBody(ItemStack itemStack, List<String> currenttip, IWailaDataAccessor accessor, IWailaConfigHandler config) {
 		if (accessor.getTileEntity() instanceof SOTileEntity){
 			SOTileEntity tileSO = (SOTileEntity) accessor.getTileEntity();
-			FluidTankInfo info = tileSO.getTankInfo(null)[0];
+			FluidTankInfo info = tileSO.getInfo();
 			FluidStack fluid = info.fluid;
 			
 			if(info != null && fluid != null){

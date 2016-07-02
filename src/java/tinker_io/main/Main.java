@@ -1,5 +1,6 @@
 package tinker_io.main;
 
+import slimeknights.tconstruct.smeltery.TinkerSmeltery;
 import slimeknights.tconstruct.tools.TinkerTools;
 import tinker_io.packet.PacketDispatcher;
 import tinker_io.plugins.waila.MainWaila;
@@ -11,6 +12,10 @@ import tinker_io.registry.OreCrusherBanLiatRegistry;
 import tinker_io.registry.SmelteryRecipeRegistry;
 import tinker_io.registry.SoundEventRegistry;
 import tinker_io.registry.RecipeRegistry;
+
+import com.google.common.collect.ImmutableSet;
+
+import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraftforge.fml.common.Mod;
@@ -24,15 +29,15 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 		modid = Main.MODID,
 		version = Main.VERSION,
 		name = Main.Name,
-		dependencies="required-after:Forge@[12.16.0.1887,);"
-				+ "required-after:tconstruct@[1.9-2.3.0,);"
+		dependencies="required-after:Forge@[12.18.0.1993,);"
+				+ "required-after:tconstruct@[1.10-2.3.3a,);"
 				+ "after:JEI;"
 				+ "after:Waila;",
-		acceptedMinecraftVersions = "[1.9,]")
+		acceptedMinecraftVersions = "[1.10,]")
 public class Main
 {
     public static final String MODID = "tinker_io";
-    public static final String VERSION = "beta 2.2.0a";
+    public static final String VERSION = "beta 2.3.0c";
     public static final String Name = "Tinker I/O";
     
     //public static boolean iguanas_support;
@@ -116,5 +121,13 @@ public class Main
 		  proxy.postInit(event);
 		  proxy.registerNetworkStuff();
 		  SmelteryRecipeRegistry.registerMeltingCasting();
+		  
+		  ImmutableSet.Builder<Block> builder = ImmutableSet.builder();
+          for(Block block : TinkerSmeltery.validSmelteryBlocks)
+          {
+              builder.add(block);
+          }
+          builder.add(BlockRegistry.fuelInputMachine);
+          TinkerSmeltery.validSmelteryBlocks = builder.build();
 	  }
 }

@@ -85,11 +85,11 @@ public class SOGui extends GuiContainer{
 		
 		this.fontRendererObj.drawString(TextFormatting.DARK_GREEN + "Max : " + outputSize, 120, 17, 4210752);
 		
-		FluidTankInfo[] info = tileSO.getTankInfo();
-		FluidStack Wliquid = info[0].fluid;
+		FluidTankInfo info = tileSO.getInfo();
+		FluidStack Wliquid = info.fluid;
 		
 //		Tool Tips (For tank)
-		FluidStack liquid = info[0].fluid;
+		FluidStack liquid = info.fluid;
 		int cornerX = (width - xSize) / 2;
         int cornerY = (height - ySize) / 2;
         if (liquid != null){
@@ -115,8 +115,8 @@ public class SOGui extends GuiContainer{
 
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float var1, int mouseX, int mouseY) {
-		FluidTankInfo[] info = tileSO.getTankInfo();
-		FluidStack liquid = info[0].fluid;
+		FluidTankInfo info = tileSO.getInfo();
+		FluidStack liquid = info.fluid;
 
         int cornerX = (width - xSize) / 2;
         int cornerY = (height - ySize) / 2;

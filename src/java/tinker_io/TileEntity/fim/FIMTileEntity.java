@@ -18,11 +18,14 @@ import slimeknights.tconstruct.smeltery.network.SmelteryFuelUpdatePacket;
 import slimeknights.tconstruct.smeltery.tileentity.TileSmeltery;
 import slimeknights.tconstruct.smeltery.tileentity.TileTank;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.NetworkManager;
+import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.util.EnumFacing;
@@ -70,6 +73,7 @@ public class FIMTileEntity extends TileEntityContainerAdapter implements ITickab
     {
         if (!this.worldObj.isRemote)
         {
+        	this.notifyBlockUpdate();
             if (tick % 4 == 0)
             {
                 toUpdateSCInfoAndSpeedUpSC();
@@ -238,6 +242,19 @@ public class FIMTileEntity extends TileEntityContainerAdapter implements ITickab
         this.fuelFSM.writeToNBT(tag);
         return tag;
     }
+    
+	//Packet
+	@Override
+	public SPacketUpdateTileEntity getUpdatePacket() {	 
+		NBTTagCompound tag = new NBTTagCompound();
+		this.writeToNBT(tag);
+		return new SPacketUpdateTileEntity(pos, 1, tag);
+	}
+  	 
+	@Override
+	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity packet) {
+		readFromNBT(packet.getNbtCompound());
+	}
 
 
     /*
@@ -301,4 +318,11 @@ public class FIMTileEntity extends TileEntityContainerAdapter implements ITickab
             this.ratio = temp;
         }
     }
+    
+    private void notifyBlockUpdate(){
+		if(worldObj!=null && pos != null){
+			IBlockState state = worldObj.getBlockState(pos);
+			worldObj.notifyBlockUpdate(pos, state, state, 3);
+		}
+	}
 }

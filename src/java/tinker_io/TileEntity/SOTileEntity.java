@@ -5,6 +5,10 @@ import tinker_io.handler.SOEliminateList;
 import tinker_io.handler.SORecipe;
 import tinker_io.registry.ItemRegistry;
 import slimeknights.mantle.multiblock.MultiServantLogic;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
@@ -13,25 +17,26 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.NetworkManager;
-import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.translation.I18n;
+import net.minecraftforge.common.capabilities.Capability;
 //import net.minecraftforge.common.util.ForgeDirection;1.7
 import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.FluidTankInfo;
-import net.minecraftforge.fluids.IFluidHandler;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidTankProperties;
+import net.minecraftforge.fluids.IFluidTank;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class SOTileEntity extends MultiServantLogic implements IFluidHandler , ISidedInventory, ITickable{
+public class SOTileEntity extends MultiServantLogic implements IFluidHandler, IFluidTank, ISidedInventory, ITickable{
 	public FluidTank tank;
 	
 	public FluidStack otherLiquid;
@@ -54,46 +59,47 @@ public class SOTileEntity extends MultiServantLogic implements IFluidHandler , I
 	private String nameSO;
 	
 	public SOTileEntity(){
-		tank = new FluidTank(FluidContainerRegistry.BUCKET_VOLUME * 10);
+		tank = new FluidTank(Fluid.BUCKET_VOLUME * 10);
 	}
 
 	/**
 	 * Fills fluid into internal tanks, distribution is left entirely to the IFluidHandler.
 	 */
 	@Override
-	public int fill(EnumFacing from, FluidStack resource, boolean doFill) {
+	public int fill(FluidStack resource, boolean doFill) {
 		//TODO
 		int amount = tank.fill(resource, doFill);
-        if (amount > 0 && doFill)
-        {
-            //worldObj.markBlockForUpdate(this.pos);
+        /*if (amount > 0 && doFill){
         	this.notifyBlockUpdate();
-        }
+        }*/
+		this.notifyBlockUpdate();
         return amount;
 	}
 
 	/**
 	 * Drains fluid out of internal tanks, distribution is left entirely to the IFluidHandler.
 	 */
-	@Override
-	public FluidStack drain(EnumFacing from, FluidStack resource, boolean doDrain) {
+	/*@Override
+	public FluidStack drain(FluidStack resource, boolean doDrain) {
 		return this.drain(resource, doDrain);
-	}
+	}*/
 	
-	FluidStack drain(FluidStack resource, boolean doDrain) {
+	@Override
+	public FluidStack drain(FluidStack resource, boolean doDrain) {
 		if (tank.getFluidAmount() == 0)
             return null;
         if (tank.getFluid().getFluid() != resource.getFluid())
             return null;
+        this.notifyBlockUpdate();
 		return this.drain(resource.amount, doDrain);
 	}
 
-	@Override
-	public FluidStack drain(EnumFacing from, int maxDrain, boolean doDrain) {
+	/*@Override
+	public FluidStack drain(int maxDrain, boolean doDrain) {
 		return this.drain(maxDrain, doDrain);
-	}
-	
-	FluidStack drain(int maxDrain, boolean doDrain) {
+	}*/
+	@Override
+	public FluidStack drain(int maxDrain, boolean doDrain) {
 		FluidStack amount = tank.drain(maxDrain, doDrain);
         if (amount != null && doDrain)
         {
@@ -103,61 +109,98 @@ public class SOTileEntity extends MultiServantLogic implements IFluidHandler , I
         return amount;
 	}
 
-	@Override
+	/*@Override
 	public boolean canFill(EnumFacing from, Fluid fluid) {
 		return tank.getFluidAmount() == 0 || (tank.getFluid().getFluid() == fluid && tank.getFluidAmount() < tank.getCapacity());
-	}
+	}*/
 
-	@Override
+	/*@Override
 	public boolean canDrain(EnumFacing from, Fluid fluid) {
 		return tank.getFluidAmount() > 0;
-	}
+	}*/
 
 	@Override
-	public FluidTankInfo[] getTankInfo(EnumFacing from) {
-		return this.getTankInfo();
+	public FluidTankInfo getInfo() {
+		return this.tank.getInfo();
 	}
 	
+	/*@Override
 	public FluidTankInfo[] getTankInfo() {
 		FluidStack fluid = null;
         if (tank.getFluid() != null)
             fluid = tank.getFluid().copy();
         return new FluidTankInfo[] { new FluidTankInfo(fluid, tank.getCapacity()) };
+	}*/
+
+	@Override
+	public IFluidTankProperties[] getTankProperties() {
+		return this.tank.getTankProperties();
+	}
+	
+	@Override
+	public FluidStack getFluid() {
+		return tank.getFluid();
 	}
 
 	@Override
-    public void readFromNBT (NBTTagCompound tags)
-    {
+	public int getFluidAmount() {
+		if(tank.getFluid() != null){
+			return tank.getFluid().amount;
+		}else{
+			return 0;
+		}
+	}
+
+	@Override
+	public int getCapacity() {
+		return tank.getCapacity();
+	}
+	
+	@Override
+	public boolean hasCapability(@Nonnull Capability<?> capability, @Nullable EnumFacing facing) {
+		if(capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
+			return true;
+		}
+		return super.hasCapability(capability, facing);
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Nonnull
+	@Override
+	public <T> T getCapability(@Nonnull Capability<T> capability, @Nullable EnumFacing facing) {
+		if(capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
+			return (T) tank;
+		}
+		return super.getCapability(capability, facing);
+	}
+	
+	//NBT
+	@Override
+    public void readFromNBT (NBTTagCompound tags){
         super.readFromNBT(tags);
         readCustomNBT(tags);
     }
 
     @Override
-    public NBTTagCompound writeToNBT (NBTTagCompound tags)
-    {
+    public NBTTagCompound writeToNBT (NBTTagCompound tags){
         super.writeToNBT(tags);
         writeCustomNBT(tags);
         return tags;
     }
-    
-    //NBT
 
     @Override
-    public void readCustomNBT (NBTTagCompound tags)
-    {   	
+    public void readCustomNBT (NBTTagCompound tags){   	
     	currentFrozenTime = tags.getInteger("CurrentFrozenTime");
-    	/*canBasin = tags.getBoolean("CanBasin");
-    	canFrozen = tags.getBoolean("CanFrozen");*/
     	
-        if (tags.getBoolean("hasFluid"))
-        {
-            if (tags.getInteger("itemID") != 0)
-            {
+        if (tags.getBoolean("hasFluid")){
+            if (tags.getInteger("itemID") != 0){
 //                tank.setFluid(new FluidStack(tags.getInteger("itemID"), tags.getInteger("amount")));
-            }
-            else
-            {
-                tank.setFluid(FluidRegistry.getFluidStack(tags.getString("fluidName"), tags.getInteger("amount")));
+            }else{
+            	FluidStack tankFluid = FluidRegistry.getFluidStack(tags.getString("fluidName"), tags.getInteger("amount"));
+                if(tags.getString("fluidTag") != null){
+                	tankFluid = new FluidStack(tankFluid.getFluid(), tankFluid.amount, (NBTTagCompound) tags.getTag("fluidTag"));
+                }
+                tank.setFluid(tankFluid);
             }
         }else{
         	tank.setFluid(null);
@@ -175,7 +218,7 @@ public class SOTileEntity extends MultiServantLogic implements IFluidHandler , I
 				this.itemStacksSO[byte0] = ItemStack.loadItemStackFromNBT(tabCompound1);
 			}
 		}
-		//mode = tags.getInteger("Mode");
+//mode = tags.getInteger("Mode");
     }
 
     @Override
@@ -192,6 +235,11 @@ public class SOTileEntity extends MultiServantLogic implements IFluidHandler , I
         {
             tags.setString("fluidName", liquid.getFluid().getName());
             tags.setInteger("amount", liquid.amount);
+            if(this.tank.getFluid() != null && this.tank.getFluid().tag != null){
+            	tags.setTag("fluidTag", this.tank.getFluid().tag);
+            }else{
+            	//tags.setTag("fluidTag", new NBTTagCompound());
+            }
         }
         
         
@@ -264,8 +312,9 @@ public class SOTileEntity extends MultiServantLogic implements IFluidHandler , I
 	}
 
 	public int getLiquidAmount(int par1){
-		FluidTankInfo[] info = getTankInfo();
-		FluidStack liquid = info[0].fluid;
+		//FluidTankInfo[] info = getTankInfo();
+		FluidTankInfo info = getInfo();
+		FluidStack liquid = info.fluid;
 		
 		
 		int capacity = 0;
@@ -274,7 +323,7 @@ public class SOTileEntity extends MultiServantLogic implements IFluidHandler , I
 		
 		 if (liquid != null && info != null){
 			 liquidAmount = liquid.amount;
-			 capacity = info[0].capacity;
+			 capacity = info.capacity;
         }else{
         	liquidAmount = 0;
         	capacity = 0;
@@ -494,8 +543,8 @@ public class SOTileEntity extends MultiServantLogic implements IFluidHandler , I
 	
 	//Frozen!? Let it go! Let it go! Can't hold it back anymore~  - GKB 2015/4/4 22:22 (Tired...)
 	public boolean canFrozen(){
-		FluidTankInfo[] info = getTankInfo();
-		FluidStack liquid = info[0].fluid;
+		FluidTankInfo info = getInfo();
+		FluidStack liquid = info.fluid;
 		
 		boolean hasPowered = true;
 		boolean canStart = false;
@@ -563,15 +612,15 @@ public class SOTileEntity extends MultiServantLogic implements IFluidHandler , I
 //	}
 	
 	public void frozen(){
-		FluidTankInfo[] info = getTankInfo();
-		FluidStack liquid = info[0].fluid;
+		FluidTankInfo info = getInfo();
+		FluidStack liquid = info.fluid;
 		if(canFrozen() == true && info != null){
 			ItemStack itemstack = recipes.getCastingRecipes(liquid, this.itemStacksSO[0]); // Product
 			ItemStack bucket = new ItemStack(Items.BUCKET);
 			//ItemStack basin = new ItemStack(TinkerSmeltery.searedBlock ,1 ,2);
 			
 			if(recipes.getCastingFluidCost(liquid, itemStacksSO[0]) != null && recipes.getCastingFluidCost(liquid, itemStacksSO[0]).amount <= liquid.amount){
-				this.drain( recipes.getCastingFluidCost(liquid, itemStacksSO[0]), true);
+				this.drain(recipes.getCastingFluidCost(liquid, itemStacksSO[0]), true);
 				
 				if (this.itemStacksSO[1] == null) {
 					this.itemStacksSO[1] = itemstack.copy();
@@ -647,8 +696,8 @@ public class SOTileEntity extends MultiServantLogic implements IFluidHandler , I
 //	}
 	
 	public void voidLiquid(){
-		FluidTankInfo[] info = getTankInfo();
-		FluidStack liquid = info[0].fluid;
+		FluidTankInfo info = getInfo();
+		FluidStack liquid = info.fluid;
 		if(liquid != null){
 			int amount = liquid.amount;
 			int toVoid = this.tank.drain(amount, false).amount;
@@ -787,5 +836,71 @@ public class SOTileEntity extends MultiServantLogic implements IFluidHandler , I
 			worldObj.notifyBlockUpdate(pos, state, state, 3);
 		}
 	}
+
+	//Tank
+	
+	/*@Override
+	public FluidStack getFluid() {
+		return tank.getFluid();
+	}
+
+	@Override
+	public int getFluidAmount() {
+		if(tank.getFluid() != null){
+			return tank.getFluid().amount;
+		}else{
+			return 0;
+		}
+	}
+
+	@Override
+	public int getCapacity() {
+		return tank.getCapacity();
+	}
+
+	@Override
+	public FluidTankInfo getInfo() {
+		FluidStack fluid = null;
+        if (tank.getFluid() != null)
+            fluid = tank.getFluid().copy();
+        return new FluidTankInfo(fluid, tank.getCapacity());
+	}
+
+	@Override
+	public int fill(FluidStack resource, boolean doFill) {
+		int amount = tank.fill(resource, doFill);
+        if (amount > 0 && doFill)
+        {
+            //worldObj.markBlockForUpdate(this.pos);
+        	this.notifyBlockUpdate();
+        }
+        return amount;
+	}
+
+	@Override
+	public FluidStack drain(int maxDrain, boolean doDrain) {
+		System.out.println("~");
+		FluidStack amount = tank.drain(maxDrain, doDrain);
+        if (amount != null && doDrain)
+        {
+            //worldObj.markBlockForUpdate(this.pos);
+        	this.notifyBlockUpdate();
+        }
+        return amount;
+	}
+
+	@Override
+	public IFluidTankProperties[] getTankProperties() {
+		return tank.getTankProperties();
+	}
+
+	@Override
+	public FluidStack drain(FluidStack resource, boolean doDrain) {
+		if (tank.getFluidAmount() == 0)
+            return null;
+        if (tank.getFluid().getFluid() != resource.getFluid())
+            return null;
+		return this.drain(resource.amount, doDrain);
+	}*/
 }
 

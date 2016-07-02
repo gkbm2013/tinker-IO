@@ -2,6 +2,7 @@ package tinker_io.registry;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import slimeknights.mantle.util.RecipeMatch;
@@ -10,6 +11,8 @@ import slimeknights.tconstruct.library.TinkerRegistry;
 import slimeknights.tconstruct.library.materials.Material;
 import slimeknights.tconstruct.library.smeltery.CastingRecipe;
 import slimeknights.tconstruct.library.smeltery.MeltingRecipe;
+import slimeknights.tconstruct.shared.TinkerCommons;
+import slimeknights.tconstruct.smeltery.TinkerSmeltery;
 import tinker_io.handler.CrushedOreMeltingRegistry;
 import tinker_io.handler.PureMetalCastingRegistry;
 import tinker_io.handler.SORecipe;
@@ -26,7 +29,14 @@ public class SmelteryRecipeRegistry {
 		
 		//Cast
 		PureMetalCastingRegistry.registerPureMetalCasting();
+
+		FluidStack fluidStackCobalt = new FluidStack(FluidRegister.pureMetal, Material.VALUE_Ingot, new NBTTagCompound());
+		fluidStackCobalt.tag.setString("oreDic", "oreCobalt");
+		registerSmaetOutputCasting(TinkerCommons.ingotCobalt, TinkerSmeltery.castIngot, fluidStackCobalt);
 		
+		FluidStack fluidStackArdite = new FluidStack(FluidRegister.pureMetal, Material.VALUE_Ingot, new NBTTagCompound());
+		fluidStackArdite.tag.setString("oreDic", "oreArdite");
+		registerSmaetOutputCasting(TinkerCommons.ingotArdite, TinkerSmeltery.castIngot, fluidStackArdite);
 	}
 	
 	public static void registerMeltingWithNBT(ItemStack inputItem, FluidStack outputFluidStack, int meltingTime){
