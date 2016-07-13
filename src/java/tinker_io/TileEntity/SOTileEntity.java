@@ -1,7 +1,6 @@
 package tinker_io.TileEntity;
 
 //import tconstruct.smeltery.TinkerSmeltery;
-import tinker_io.handler.SOEliminateList;
 import tinker_io.handler.SORecipe;
 import tinker_io.registry.ItemRegistry;
 import slimeknights.mantle.multiblock.MultiServantLogic;
@@ -569,7 +568,6 @@ public class SOTileEntity extends MultiServantLogic implements IFluidHandler, IF
 		}else{
 			canStart = true;
 		}
-		
 		if(info != null && liquid != null && this.itemStacksSO[0] != null && canStart == true){
 			if(recipes.getCastingFluidCost(liquid, itemStacksSO[0]) != null && recipes.getCastingFluidCost(liquid, itemStacksSO[0]).amount <= liquid.amount){
 				if(recipes.getCastingRecipes(liquid, this.itemStacksSO[0]) != null){
