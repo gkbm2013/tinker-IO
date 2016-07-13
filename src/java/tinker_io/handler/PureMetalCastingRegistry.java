@@ -24,7 +24,7 @@ public class PureMetalCastingRegistry {
 				fluidStack.tag.setString("oreDic", oreDicts[i]);
 				
 				if(getOutput(fluidStack) != null){
-					SmelteryRecipeRegistry.registerSmaetOutputCasting(getOutput(fluidStack), TinkerSmeltery.castIngot, fluidStack);
+					SmelteryRecipeRegistry.registerSmartOutputCasting(getOutput(fluidStack), TinkerSmeltery.castIngot, fluidStack);
 					//SmelteryRecipeRegistry.registerTableCasting(getOutput(fluidStack), casting, fluidStack);
 				}
 			}

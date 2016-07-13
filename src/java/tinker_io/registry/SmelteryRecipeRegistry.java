@@ -12,7 +12,9 @@ import slimeknights.tconstruct.library.materials.Material;
 import slimeknights.tconstruct.library.smeltery.CastingRecipe;
 import slimeknights.tconstruct.library.smeltery.MeltingRecipe;
 import slimeknights.tconstruct.shared.TinkerCommons;
+import slimeknights.tconstruct.shared.TinkerFluids;
 import slimeknights.tconstruct.smeltery.TinkerSmeltery;
+import slimeknights.tconstruct.smeltery.block.BlockCasting;
 import tinker_io.handler.CrushedOreMeltingRegistry;
 import tinker_io.handler.PureMetalCastingRegistry;
 import tinker_io.handler.SORecipe;
@@ -32,11 +34,14 @@ public class SmelteryRecipeRegistry {
 
 		FluidStack fluidStackCobalt = new FluidStack(FluidRegister.pureMetal, Material.VALUE_Ingot, new NBTTagCompound());
 		fluidStackCobalt.tag.setString("oreDic", "oreCobalt");
-		registerSmaetOutputCasting(TinkerCommons.ingotCobalt, TinkerSmeltery.castIngot, fluidStackCobalt);
+		registerSmartOutputCasting(TinkerCommons.ingotCobalt, TinkerSmeltery.castIngot, fluidStackCobalt);
 		
 		FluidStack fluidStackArdite = new FluidStack(FluidRegister.pureMetal, Material.VALUE_Ingot, new NBTTagCompound());
 		fluidStackArdite.tag.setString("oreDic", "oreArdite");
-		registerSmaetOutputCasting(TinkerCommons.ingotArdite, TinkerSmeltery.castIngot, fluidStackArdite);
+		registerSmartOutputCasting(TinkerCommons.ingotArdite, TinkerSmeltery.castIngot, fluidStackArdite);
+		
+		//Clear glass
+		registerSmartOutputCasting(new ItemStack(TinkerCommons.blockClearGlass, 1), new ItemStack(TinkerSmeltery.castingBlock, 1, BlockCasting.CastingType.BASIN.getMeta()), new FluidStack(TinkerFluids.glass, Material.VALUE_Glass));
 	}
 	
 	public static void registerMeltingWithNBT(ItemStack inputItem, FluidStack outputFluidStack, int meltingTime){
@@ -52,8 +57,8 @@ public class SmelteryRecipeRegistry {
 		//ItemStack output, RecipeMatch cast, FluidStack fluid, boolean consumesCast, boolean switchOutputs
 	}
 	
-	public static void registerSmaetOutputCasting(ItemStack output, ItemStack cast, FluidStack fluid){
-		SORecipe.registerTableCastingWithFluidStack(new CastingRecipe(output, RecipeMatch.of(cast.getItem()), fluid, false, true));
+	public static void registerSmartOutputCasting(ItemStack output, ItemStack cast, FluidStack fluid){
+		SORecipe.registerTableCastingWithFluidStack(new CastingRecipe(output, RecipeMatch.of(cast), fluid, false, true));
 		//ItemStack output, RecipeMatch cast, FluidStack fluid, boolean consumesCast, boolean switchOutputs
 	}
 	

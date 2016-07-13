@@ -8,7 +8,7 @@ import java.util.Map;
 import tinker_io.main.Main;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;*/
-
+@Deprecated
 public class SOEliminateList {
 /*private Map<String, ItemStack> eliminateItemList = new HashMap();
 private Map eliminateItemListControlledByConfig = new HashMap();

@@ -1,7 +1,6 @@
 package tinker_io.TileEntity;
 
 //import tconstruct.smeltery.TinkerSmeltery;
-import tinker_io.handler.SOEliminateList;
 import tinker_io.handler.SORecipe;
 import tinker_io.registry.ItemRegistry;
 import slimeknights.mantle.multiblock.MultiServantLogic;
