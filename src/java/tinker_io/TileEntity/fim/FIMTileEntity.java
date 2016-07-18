@@ -3,48 +3,33 @@ package tinker_io.TileEntity.fim;
 import java.util.ArrayList;
 import java.util.List;
 
-import tinker_io.TileEntity.TileEntityContainerAdapter;
-import tinker_io.api.Observable;
-import tinker_io.api.Observer;
-import tinker_io.packet.PacketDispatcher;
-import tinker_io.reflection.TempField;
-import tinker_io.registry.ItemRegistry;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-import slimeknights.tconstruct.common.TinkerNetwork;
-import slimeknights.tconstruct.smeltery.network.SmelteryFuelUpdatePacket;
-import slimeknights.tconstruct.smeltery.tileentity.TileSmeltery;
-import slimeknights.tconstruct.smeltery.tileentity.TileTank;
-import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SPacketUpdateTileEntity;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import slimeknights.tconstruct.smeltery.tileentity.TileSmelteryComponent;
+import tinker_io.TileEntity.SidedInventory;
+import tinker_io.api.Observable;
+import tinker_io.api.Observer;
+import tinker_io.reflection.TempField;
+import tinker_io.registry.ItemRegistry;
 
-public class FIMTileEntity extends TileEntityContainerAdapter implements ITickable, Observable<Observer>
+public class FIMTileEntity extends TileSmelteryComponent implements ITickable, Observable<Observer>, ISidedInventory
 {
     private static final int[] slotsSpeedUPG = new int[] { 0 };
     private static final int[] slotsFuel = new int[] { 1 };
-    /*private static final int[] slotsUPG1 = new int[] { 2 };
-    private static final int[] slotsUPG2 = new int[] { 3 };*/
-
 
     public FIMTileEntity()
     {
-        super(null, 2);
     }
 
     public ItemStack fuel = new ItemStack(ItemRegistry.SolidFuel);
@@ -66,6 +51,7 @@ public class FIMTileEntity extends TileEntityContainerAdapter implements ITickab
     public int keepInputTime;
     public int inputTime;
     public int fuelTemp;
+    private int currentTemp;
 
 
     @Override
@@ -73,31 +59,29 @@ public class FIMTileEntity extends TileEntityContainerAdapter implements ITickab
     {
         if (!this.worldObj.isRemote)
         {
-        	this.notifyBlockUpdate();
             if (tick % 4 == 0)
             {
                 toUpdateSCInfoAndSpeedUpSC();
+                notifyBlockUpdate();
             }
             tick = (tick + 1) % 20;
         }
     }
 
-
     private void toUpdateSCInfoAndSpeedUpSC()
     {
-        this.scInfo.update();
+        this.scInfo.update(this.getSmeltery());
         this.fuelFSM.update();
-
-        if (scInfo.canFindSCPos() && scInfo.isSCHeatingItem())
+        
+        if (scInfo.canFindSCPos() /*&& scInfo.isSCHeatingItem()*/)
         {
-            fuelFSM.startChangeState();
-            Adapter adap = scInfo.getAdapter();
-            
-            final int fuelTemp = adap.getFuelTemp();
-
-            this.toSpeedUpSC(fuelTemp, adap);
+        	if(scInfo.isSCHeatingItem()){
+        		fuelFSM.startChangeState();
+        	}
+        	
+        	Adapter adap = scInfo.getAdapter();
+            this.updateTemp(adap.getFuelTemp(), adap);
         }
-
         if (fuelFSM.isActive)
         {
             this.notifyObservers();
@@ -105,36 +89,50 @@ public class FIMTileEntity extends TileEntityContainerAdapter implements ITickab
     }
 
 
-    private void toSpeedUpSC(final int originFuelTemp, Adapter adap)
-    {    	
-    	double ratio = this.getSpeedUpInfo().ratio;
-    	int fuelTempWithRatio = fuelTemp * (int) ratio;
-    	
-    	int f = fuelTempWithRatio / 2 + originFuelTemp;
-    	
-    	if(fuelTempWithRatio <= 20000){
-    		f = (fuelTempWithRatio * 6) / 100  + originFuelTemp;
-    	}
-    	if(f >= 200000){
-    		f = 200000;
-    	}
-    	
+    private void updateTemp(final int originFuelTemp, Adapter adap)
+    {       
     	//I am reluctant to use reflection. However to preserve Fuel Input Machine, I have to do this.
-    	TempField field = new TempField(worldObj, scInfo.getSCpos());
-    	field.setTemp(f);
+    	calculateTemperature(originFuelTemp);
+        TempField field = new TempField(worldObj, adap.getPos());
+        field.setTemp(currentTemp);
+    }
+    
+    public void resetTemp(){
+    	this.scInfo.update(this.getSmeltery());
+    	if (scInfo.canFindSCPos()){
+    		Adapter adap = scInfo.getAdapter();
+    		TempField field = new TempField(worldObj, adap.getPos());
+            field.setTemp(adap.getFuelTemp());
+    	}
+    }
+    
+    private void calculateTemperature(int originFuelTemp){
+    	double ratio = this.getSpeedUpInfo().ratio;
+        int fuelTempWithRatio = fuelTemp * (int) ratio;
+        
+        int f = fuelTempWithRatio / 2 + originFuelTemp;
+        
+        if(fuelTempWithRatio <= 20000){
+            f = (fuelTempWithRatio * 6) / 100  + originFuelTemp;
+        }
+        if(f >= 200000){
+            f = 200000;
+        }
+        currentTemp = f;
     }
 
 
     public int getSpeedUpTemp(final int originFuelTemp)
     {
-        //		return getStackSize(this.getSlots()[0]) * 200 + originFuelTemp;
-        return TileEntityFurnace.getItemBurnTime(this.getSlots()[1]) + originFuelTemp;
+        //      return getStackSize(this.getSlots()[0]) * 200 + originFuelTemp;
+        return TileEntityFurnace.getItemBurnTime(inv.getSlot(1)) + originFuelTemp;
     }
 
 
     public void onNeighborChange(IBlockAccess world, BlockPos neighbor)
     {
-        scInfo.manager.onNeighborChange(world, neighbor);
+//        TODO
+//        scInfo.manager.onNeighborChange(world, neighbor);
     }
 
 
@@ -171,52 +169,7 @@ public class FIMTileEntity extends TileEntityContainerAdapter implements ITickab
         }
     }
 
-
-    /**
-     * Returns true if automation is allowed to insert the given stack
-     * (ignoring stack size) into the given slot.
-     */
-    @Override
-    public boolean isItemValidForSlot(int index, ItemStack itemstack)
-    {
-        if (TileEntityFurnace.getItemBurnTime(itemstack) > 0)
-        {
-            return true;
-        }
-        return false;
-    }
-
-
-    @Override
-    public int[] getSlotsForFace(EnumFacing side)
-    {
-        return slotsFuel;
-    }
-
-
-    /**
-     * Returns true if automation can insert the given item in the given slot from the given side.
-     * Args: slot, item, side
-     */
-    @Override
-    public boolean canInsertItem(int index, ItemStack itemStackIn, EnumFacing direction)
-    {
-        return this.isItemValidForSlot(index, itemStackIn);
-    }
-
-
-    /**
-     * Returns true if automation can extract the given item in the given slot from the given side.
-     * Args: slot, item, side
-     */
-    @Override
-    public boolean canExtractItem(int index, ItemStack stack, EnumFacing direction)
-    {
-        //return par3 != 0 || par1 != 1 || itemstack.getItem() == Items.bucket;
-        return false;
-    }
-
-
+    
     /**
      *  loading and saving
      */
@@ -227,7 +180,9 @@ public class FIMTileEntity extends TileEntityContainerAdapter implements ITickab
         super.readFromNBT(tag);
         this.inputTime = tag.getShort("InputTime");
         this.keepInputTime = tag.getShort("keepInputTime");
+        this.currentTemp = tag.getInteger("currentTemp");
 
+        this.inv.readFromNBT(tag);
         this.fuelFSM.readFromNBT(tag);
     }
 
@@ -238,23 +193,13 @@ public class FIMTileEntity extends TileEntityContainerAdapter implements ITickab
         super.writeToNBT(tag);
         tag.setShort("InputTime", (short) this.inputTime);
         tag.setShort("keepInputTime", (short) this.keepInputTime);
+        tag.setInteger("currentTemp", this.currentTemp);
 
+        this.inv.writeToNBT(tag);
         this.fuelFSM.writeToNBT(tag);
-        return tag;
+        
+        return tag; 
     }
-    
-	//Packet
-	@Override
-	public SPacketUpdateTileEntity getUpdatePacket() {	 
-		NBTTagCompound tag = new NBTTagCompound();
-		this.writeToNBT(tag);
-		return new SPacketUpdateTileEntity(pos, 1, tag);
-	}
-  	 
-	@Override
-	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity packet) {
-		readFromNBT(packet.getNbtCompound());
-	}
 
 
     /*
@@ -274,11 +219,14 @@ public class FIMTileEntity extends TileEntityContainerAdapter implements ITickab
 
         return pixels - (n * pixels / i);
     }
-
+    
+    public int getCurrentTempture(){
+        return currentTemp;
+    }
 
     public boolean hasFuel()
     {
-        if (slots[1] != null && TileEntityFurnace.getItemBurnTime(slots[1]) > 0)
+        if (inv.getSlot(1) != null && TileEntityFurnace.getItemBurnTime(inv.getSlot(1)) > 0)
         {
             return true;
         }
@@ -288,7 +236,7 @@ public class FIMTileEntity extends TileEntityContainerAdapter implements ITickab
 
     public SpeedUpRatio getSpeedUpInfo()
     {
-        double temp = this.getStackSize(slots[0]) * 0.1 + 1.0;
+        double temp = this.getStackSize(inv.getSlot(0)) * 0.1 + 1.0;
         return new SpeedUpRatio(temp);
     }
 
@@ -296,7 +244,9 @@ public class FIMTileEntity extends TileEntityContainerAdapter implements ITickab
     @SideOnly(Side.CLIENT)
     public String getDirection()
     {
-        return this.scInfo.getFacing();
+//        TODO
+//        return this.scInfo.getFacing();
+        return "NONE";
     }
 
 
@@ -317,6 +267,217 @@ public class FIMTileEntity extends TileEntityContainerAdapter implements ITickab
         {
             this.ratio = temp;
         }
+    }
+    
+    /*
+     * sideinventory
+     */
+    
+    private SidedInventory inv = new SidedInventory(this, null, 2)
+    {
+
+        /**
+         * Returns true if automation is allowed to insert the given stack
+         * (ignoring stack size) into the given slot.
+         */
+        @Override
+        public boolean isItemValidForSlot(int index, ItemStack itemstack)
+        {
+            if (TileEntityFurnace.getItemBurnTime(itemstack) > 0)
+            {
+                return true;
+            }
+            return false;
+        }
+
+
+        @Override
+        public int[] getSlotsForFace(EnumFacing side)
+        {
+            return slotsFuel;
+        }
+
+
+        /**
+         * Returns true if automation can insert the given item in the given slot from the given side.
+         * Args: slot, item, side
+         */
+        @Override
+        public boolean canInsertItem(int index, ItemStack itemStackIn, EnumFacing direction)
+        {
+            return this.isItemValidForSlot(index, itemStackIn);
+        }
+
+
+        /**
+         * Returns true if automation can extract the given item in the given slot from the given side.
+         * Args: slot, item, side
+         */
+        @Override
+        public boolean canExtractItem(int index, ItemStack stack, EnumFacing direction)
+        {
+            //return par3 != 0 || par1 != 1 || itemstack.getItem() == Items.bucket;
+            return false;
+        }
+
+
+        @Override
+        public void markDirty()
+        {
+            throw new UnsupportedOperationException();            
+        }
+
+    };
+    
+    
+
+    @Override
+    public int getSizeInventory()
+    {
+        return inv.getSizeInventory();
+    }
+
+
+    @Override
+    public ItemStack getStackInSlot(int index)
+    {
+        return inv.getStackInSlot(index);
+    }
+
+
+    @Override
+    public ItemStack decrStackSize(int index, int count)
+    {
+        return inv.decrStackSize(index, count);
+    }
+
+
+    @Override
+    public ItemStack removeStackFromSlot(int index)
+    {
+        return inv.removeStackFromSlot(index);
+    }
+
+
+    @Override
+    public void setInventorySlotContents(int index, ItemStack stack)
+    {
+        inv.setInventorySlotContents(index, stack);
+    }
+
+
+    @Override
+    public int getInventoryStackLimit()
+    {
+        return inv.getInventoryStackLimit();
+    }
+
+
+    @Override
+    public boolean isUseableByPlayer(EntityPlayer player)
+    {
+        return inv.isUseableByPlayer(player);
+    }
+
+
+    @Override
+    public void openInventory(EntityPlayer player)
+    {
+        inv.openInventory(player);
+    }
+
+
+    @Override
+    public void closeInventory(EntityPlayer player)
+    {
+        inv.closeInventory(player);
+    }
+
+
+    @Override
+    public int getField(int id)
+    {
+        throw new UnsupportedOperationException();
+    }
+
+
+    @Override
+    public void setField(int id, int value)
+    {
+        throw new UnsupportedOperationException();        
+    }
+
+
+    @Override
+    public int getFieldCount()
+    {
+        throw new UnsupportedOperationException();
+    }
+
+
+    @Override
+    public void clear()
+    {
+        inv.clear();
+    }
+
+
+    @Override
+    public String getName()
+    {
+        return inv.getName();
+    }
+
+
+    @Override
+    public boolean hasCustomName()
+    {
+        return inv.hasCustomName();
+    }
+
+
+    @Override
+    public ITextComponent getDisplayName()
+    {
+        return inv.getDisplayName();
+    }
+
+
+    @Override
+    public boolean isItemValidForSlot(int index, ItemStack stack)
+    {
+        return inv.isItemValidForSlot(index, stack);
+    }
+
+
+    @Override
+    public int[] getSlotsForFace(EnumFacing side)
+    {
+        return inv.getSlotsForFace(side);
+    }
+
+
+    @Override
+    public boolean canInsertItem(int index, ItemStack itemStackIn, EnumFacing direction)
+    {
+        return inv.canExtractItem(index, itemStackIn, direction);
+    }
+
+
+    @Override
+    public boolean canExtractItem(int index, ItemStack stack, EnumFacing direction)
+    {
+        return inv.canExtractItem(index, stack, direction);
+    }
+    
+    public ItemStack getSlot(int i)
+    {
+        return inv.getSlot(i);
+    }
+    
+    public void setSlot(int i, ItemStack stack)
+    {
+        inv.setSlot(i, stack);
     }
     
     private void notifyBlockUpdate(){

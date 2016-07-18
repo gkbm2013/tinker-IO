@@ -11,39 +11,50 @@ import slimeknights.tconstruct.smeltery.TinkerSmeltery;
 import slimeknights.tconstruct.smeltery.tileentity.TileSmeltery;
 import tinker_io.api.vanilla.PosInfo;
 
+interface ISCInfo
+{
+    
+}
+
 public class SCInfo{
+    final private FIMTileEntity fim;
 	final private BlockPos FIMBlockPos;
 	final private World worldObj;
 	
+	@Deprecated
 	public BlockPos pos;
+	@Deprecated
 	public List<BlockPos> posList;
 	
-	public FIMNeighborBlocksManager manager;
+	public TileSmeltery sc;
+	public Adapter adap;
 	
-	public SCInfo(
-			BlockPos FIMBlockPos, World worldObj)
+	public SCInfo(FIMTileEntity tile)
 	{
-		this.FIMBlockPos = FIMBlockPos;
-		this.worldObj = worldObj;
-		
-		this.manager = new FIMNeighborBlocksManager(worldObj, FIMBlockPos);
+	    this.fim = tile;
+	    this.FIMBlockPos = tile.getPos();
+	    this.worldObj = tile.getWorld();
 	}
 	
 	public boolean canFindSCPos()
 	{
-		return pos != null;
+		return sc != null;
 	}
-	
-	private boolean initFlag = false;
 	
 	protected void update()
 	{
-		posList = findSCPos(FIMBlockPos);
-		if (isOnlyOneSmelteryController(posList)) {
-			pos = posList.get(0);
-		} else {
-			pos = null;
-		}
+//		posList = findSCPos(FIMBlockPos);
+//		if (isOnlyOneSmelteryController(posList)) {
+//			pos = posList.get(0);
+//		} else {
+//			pos = null;
+//		}
+	}
+	
+	protected void update(TileSmeltery tile)
+	{
+	    this.sc = tile;
+	    this.adap = SCInfo.getAdapter(tile);
 	}
 	
 	private List<BlockPos> findSCPos(BlockPos pos) {
@@ -89,12 +100,16 @@ public class SCInfo{
 	}
 	
 	public boolean isSCHeatingItem() {
-		final Adapter adap = this.getAdapter();
 		return adap.isHeatingItem() && !adap.isAllItemFinishHeating();
 	}
 
 	public Adapter getAdapter(){
-		return  new SCTileAdapter(SCInfo.getTileSmeltery(worldObj, pos));
+		return this.adap;
+	}
+	
+	public static Adapter getAdapter(TileSmeltery tile)
+	{
+	    return new SCTileAdapter(tile);
 	}
 	
 	public String getFacing()

@@ -1,7 +1,5 @@
 package tinker_io.TileEntity.fim;
 
-import tinker_io.api.IState;
-import tinker_io.api.IStateMachine;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntityFurnace;
@@ -46,7 +44,7 @@ public class FuelFSM implements ITickable, NBTable
 
     public int computeFuelTemp()
     {
-        final ItemStack stack = tile.getSlots()[1];
+        final ItemStack stack = tile.getSlot(1);
 
         return TileEntityFurnace.getItemBurnTime(stack);
     }
@@ -60,7 +58,7 @@ public class FuelFSM implements ITickable, NBTable
 
     public int getFuelStackSize()
     {
-        ItemStack stack = tile.getSlots()[1];
+        ItemStack stack = tile.getSlot(1);
         return FuelFSM.getStackSize(stack);
     }
 
@@ -99,7 +97,7 @@ public class FuelFSM implements ITickable, NBTable
 
 
     @Override
-    public  NBTTagCompound writeToNBT(NBTTagCompound tag)
+    public NBTTagCompound writeToNBT(NBTTagCompound tag)
     {
         tag.setBoolean("isActive", isActive);
         return tag;

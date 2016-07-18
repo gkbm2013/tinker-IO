@@ -1,5 +1,7 @@
 package tinker_io.blocks;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -13,7 +15,6 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import tinker_io.TileEntity.TileEntityContainerAdapter;
 import tinker_io.main.Main;
 
 public abstract class BlockContainerAdapter extends BlockContainer{
@@ -27,8 +28,7 @@ public abstract class BlockContainerAdapter extends BlockContainer{
 		setCreativeTab(Main.TinkerIOTabs);
 	}
 	
-	 @Override public abstract boolean onBlockActivated(
-			 World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ);
+	 @Override public abstract boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ);
 	
 	  @Override
 	  public boolean hasTileEntity(IBlockState state) {
@@ -44,17 +44,16 @@ public abstract class BlockContainerAdapter extends BlockContainer{
      * 
      * We need number 3.
      */
-	@Override
-    public EnumBlockRenderType getRenderType(IBlockState state)
-    {
-        return renderTypeForStandardBlockModels;
-    }
+	  @Override
+	  public EnumBlockRenderType getRenderType(IBlockState state){
+	        return renderTypeForStandardBlockModels;
+	  }
 	
 	@Override
 	public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
 	    TileEntity tile = worldIn.getTileEntity(pos);
 
-	    if(tile instanceof TileEntityContainerAdapter) {
+	    if(tile instanceof IInventory) {
 	      InventoryHelper.dropInventoryItems(worldIn, pos, (IInventory) tile);
 	      worldIn.updateComparatorOutputLevel(pos, this);
 	    }

@@ -14,13 +14,11 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import slimeknights.tconstruct.smeltery.tileentity.TileSmelteryComponent;
 import tinker_io.TileEntity.fim.FIMTileEntity;
 import tinker_io.main.Main;
 
@@ -63,7 +61,7 @@ public class FuelInputMachine extends BlockContainerAdapter
 	
     @Override
     public boolean eventReceived(IBlockState state, World worldIn, BlockPos pos, int id, int param) {
-        super.eventReceived(state, worldIn, pos, id, param);
+    	super.eventReceived(state, worldIn, pos, id, param);
         TileEntity tileentity = worldIn.getTileEntity(pos);
         return tileentity == null ? false : tileentity.receiveClientEvent(id, param);
     }
@@ -72,7 +70,7 @@ public class FuelInputMachine extends BlockContainerAdapter
      * right-click block 
      */
 	@Override
-    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ)
+	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ)
     {
 	    if(playerIn.isSneaking()) {
 	        return false;
@@ -87,8 +85,8 @@ public class FuelInputMachine extends BlockContainerAdapter
 	
 	private void toSpecialPlayerMessage(World world, BlockPos pos,  EntityPlayer player) {
 		
-     	if(world.isBlockPowered(pos)){
-     		String name = player.getName();
+		if(world.isBlockPowered(pos)){
+			String name = player.getName();
      		SoundEvent creeperPrimed = new SoundEvent(new ResourceLocation("entity.creeper.primed"));
      		
      		if(world.isRemote){
@@ -217,10 +215,40 @@ public class FuelInputMachine extends BlockContainerAdapter
     /**
      * Possibly modify the given BlockState before rendering it on an Entity (Minecarts, Endermen, ...)
      */
+	// I don't know how to fix this method... -GKB 2016-07-18 19:30
 	/*@Override
     @SideOnly(Side.CLIENT)
     public IBlockState getStateForEntityRender(IBlockState state)
     {
         return this.getDefaultState().withProperty(FACING, EnumFacing.SOUTH);
     }*/
+	
+	@Override
+	public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player, boolean willHarvest){
+		if(world.isRemote){
+			 return false;
+		 }
+		TileEntity te = world.getTileEntity(pos);
+        if (te instanceof TileSmelteryComponent)
+        {
+            ((TileSmelteryComponent) te).notifyMasterOfChange();
+        }
+        if(te instanceof FIMTileEntity){
+        	((FIMTileEntity) te).resetTemp();
+        }
+        world.setBlockToAir(pos);
+		return false;
+	}
+	
+	
+    @Override
+    public void breakBlock(World worldIn, BlockPos pos, IBlockState state)
+    {
+        TileEntity te = worldIn.getTileEntity(pos);
+        if (te instanceof TileSmelteryComponent)
+        {
+            ((TileSmelteryComponent) te).notifyMasterOfChange();
+        }
+        super.breakBlock(worldIn, pos, state);
+    }
 }

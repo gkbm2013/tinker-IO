@@ -7,7 +7,6 @@ import net.minecraft.block.Block;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
-import slimeknights.tconstruct.smeltery.TinkerSmeltery;
 import tinker_io.api.vanilla.PosInfo;
 
 public class BlockFinder {

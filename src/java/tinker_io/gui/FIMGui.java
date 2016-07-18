@@ -44,11 +44,11 @@ public class FIMGui extends GuiContainer {
 		this.fontRendererObj.drawString(tip2, (this.xSize - 87 - (this.fontRendererObj.getStringWidth(tip2))/2), 25, 4210752);
 		this.fontRendererObj.drawString(I18n.format("container.inventory", new Object[0]), 8, this.ySize - 94, 4210752);
 		
-		String connectInfo = I18n.format("tio.gui.fim.direction", new Object[0]) + " :";
-		this.fontRendererObj.drawString(connectInfo, (-55 - (this.fontRendererObj.getStringWidth(connectInfo))/2), 14, 4210752);
+		String temperatureInfo = I18n.format("tio.gui.fim.temperature", new Object[0]) + " :";
+		this.fontRendererObj.drawString(temperatureInfo, (-55 - (this.fontRendererObj.getStringWidth(temperatureInfo))/2), 14, 4210752);
 		
-		String connectInfoDiraction = tile.getDirection();
-		this.fontRendererObj.drawString(connectInfoDiraction, (-55 - (this.fontRendererObj.getStringWidth(connectInfoDiraction))/2), 26, 4210752);
+		String currentTempture = tile.getCurrentTempture() + "";
+		this.fontRendererObj.drawString(currentTempture, (-55 - (this.fontRendererObj.getStringWidth(currentTempture))/2), 26, 4210752);
 		
 		double ratio = this.getSpeedUpTimes();
 		String msgRatio = TextFormatting.DARK_GREEN + "Ratio : " + ratio;

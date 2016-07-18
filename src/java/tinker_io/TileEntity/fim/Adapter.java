@@ -1,9 +1,8 @@
 package tinker_io.TileEntity.fim;
 
-import java.util.List;
-
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraft.util.math.BlockPos;
+/*import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;*/
 
 public interface Adapter
 {
@@ -12,7 +11,8 @@ public interface Adapter
 	boolean isStructureActive();
 	boolean isAllItemFinishHeating();
 	int getFuelTemp();
+	BlockPos getPos();
 	
-	@SideOnly(Side.CLIENT)
-	void setFuelTemp(int temp);
+	/*@SideOnly(Side.CLIENT)
+	void setFuelTemp(int temp);*/
 }
