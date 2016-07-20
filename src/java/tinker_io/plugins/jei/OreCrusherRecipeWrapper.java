@@ -48,7 +48,7 @@ public class OreCrusherRecipeWrapper extends BlankRecipeWrapper {
 	    int x = 15;
 	    x -= minecraft.fontRendererObj.getStringWidth(s)/2;
 
-	   /* String s2 = "30% + 1";
+	    /*String s2 = "100% + 1";
 	    int x2 = 118;
 	    x2 -= minecraft.fontRendererObj.getStringWidth(s2)/2;*/
 
@@ -68,7 +68,7 @@ public class OreCrusherRecipeWrapper extends BlankRecipeWrapper {
 	}
 	
 	private ItemStack getProduce(String oreDic){
-		ItemStack produce = new ItemStack(ItemRegistry.CrushedOre, 2);
+		ItemStack produce = new ItemStack(ItemRegistry.CrushedOre, 3);
 		produce.setTagCompound(new NBTTagCompound());
 		NBTTagCompound nbt = produce.getTagCompound();
 		nbt.setString("oreDic", oreDic);

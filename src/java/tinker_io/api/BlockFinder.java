@@ -27,6 +27,14 @@ public class BlockFinder {
 		return posList;
 	}
 	
+	public List<BlockPos> getSurroundingTileEntityPos(BlockPos pos) {
+		List<BlockPos> posList = PosInfo.getFacingList().stream()
+			.filter(facing -> isTileEntityBlock(pos, facing))
+			.map(pos::offset)
+			.collect(Collectors.toList());
+		return posList;
+	}
+	
 	/**
 	 * About the list
 	 * Index -> the block
@@ -77,6 +85,10 @@ public class BlockFinder {
 	
 	private boolean isTargetBlock(BlockPos pos, EnumFacing f, Block targetBlock){
 		return getBlock(pos, f) == targetBlock;
+	}
+	
+	private boolean isTileEntityBlock(BlockPos pos, EnumFacing f){
+		return worldObj.getTileEntity(pos) != null;
 	}
 	
 	private Block getBlock(BlockPos pos, EnumFacing facing) {

@@ -41,7 +41,7 @@ public class OreCrusherGui extends GuiContainer{
 		this.fontRendererObj.drawString(rate, (this.xSize - this.fontRendererObj.getStringWidth(string))/2 + 50, 66, 4210752);
 		//ToolTip
 		List<String> text = Lists.newArrayList();
-    	text.add(TextFormatting.WHITE.toString() + I18n.format("tile.FuelInputMachine.name", new Object[0]));
+    	text.add(TextFormatting.WHITE.toString() + I18n.format("tio.toolTips.oreCrusher.energy", new Object[0]));
     	text.add(TextFormatting.WHITE.toString() + tileOC.getEnergyStored(null) + " / " + tileOC.getMaxEnergyStored(null)+ " " + I18n.format("tio.toolTips.oreCrusher.rf"));
     	
     	if(mouseX >= cornerX + 11 && mouseX <= cornerX + 21 && mouseY <= cornerY + 67 && mouseY >= cornerY + 67 - 54){

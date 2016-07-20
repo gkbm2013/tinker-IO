@@ -19,7 +19,7 @@ import net.minecraft.enchantment.Enchantment;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.translation.I18n;
+import net.minecraft.client.resources.I18n;
 import tinker_io.main.Main;
 import tinker_io.registry.ItemRegistry;
 
@@ -47,7 +47,7 @@ public class OreCrusherRecipeCategory implements IRecipeCategory {
 	@Nonnull
 	@Override
 	public String getTitle() {
-		return I18n.translateToLocal("tile.Ore_Crusher.name");
+		return I18n.format("tile.Ore_Crusher.name", new Object[0]);
 	}
 
 	@Nonnull
@@ -82,8 +82,19 @@ public class OreCrusherRecipeCategory implements IRecipeCategory {
 		    items.init(2, false, 34, 22);
 		    items.setFromRecipe(2, speedUpg);
 		    
-		    ItemStack enchantedBook = new ItemStack(Items.ENCHANTED_BOOK);
-		    enchantedBook.addEnchantment(Enchantment.REGISTRY.getObjectById(35), 3);
+		    List<ItemStack> enchantedBook = Lists.newLinkedList();
+		    
+		    ItemStack fortune1 = new ItemStack(Items.ENCHANTED_BOOK);
+		    fortune1.addEnchantment(Enchantment.REGISTRY.getObjectById(35), 1);
+		    enchantedBook.add(fortune1);
+		    
+		    ItemStack fortune2 = new ItemStack(Items.ENCHANTED_BOOK);
+		    fortune2.addEnchantment(Enchantment.REGISTRY.getObjectById(35), 2);
+		    enchantedBook.add(fortune2);
+		    
+		    ItemStack fortune3 = new ItemStack(Items.ENCHANTED_BOOK);
+		    fortune3.addEnchantment(Enchantment.REGISTRY.getObjectById(35), 3);
+		    enchantedBook.add(fortune3);
 	    	
 	    	items.init(3, false, 40, 42);
 		    items.setFromRecipe(3, enchantedBook);

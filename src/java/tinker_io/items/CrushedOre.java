@@ -7,7 +7,10 @@ import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraftforge.oredict.OreDictionary;
+import net.minecraft.client.resources.I18n;
 import tinker_io.handler.CrushedOreColorList;
 import tinker_io.main.Main;
 
@@ -25,13 +28,31 @@ public class CrushedOre extends Item implements IItemColor{
 	}*/
 	
 	@Override
-	public void addInformation(ItemStack itemStack, EntityPlayer player, List list, boolean par4) {
+	public void addInformation(ItemStack itemStack, EntityPlayer player, List<String> list, boolean par4) {
 		if (itemStack.getTagCompound() != null) {
             String oreDic = itemStack.getTagCompound().getString("oreDic");
             list.add(TextFormatting.RED + "oreDic : "+oreDic);   
         }
 		
 	}
+	
+	@Override
+	public String getItemStackDisplayName(ItemStack stack)
+    {
+		String name = I18n.format(this.getUnlocalizedNameInefficiently(stack) + ".name", new Object[0]).trim();
+		
+		NBTTagCompound nbt = stack.getTagCompound();
+		if(nbt != null){
+			String oreDicName = nbt.getString("oreDic");
+			List<ItemStack> oreList = OreDictionary.getOres(oreDicName);
+			if(!oreList.isEmpty()){
+				ItemStack oreItem = oreList.get(0);
+				String oreName = oreItem.getDisplayName();
+				name = name + " (" + oreName + ")";
+			}
+		}
+		return name;
+    }
 	
 	@Override
 	public int getColorFromItemstack(ItemStack stack, int renderLayer) {

@@ -1,6 +1,7 @@
 package tinker_io.TileEntity;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import cofh.api.energy.EnergyStorage;
 import cofh.api.energy.IEnergyProvider;
@@ -37,7 +38,7 @@ public class StirlingEngineTileEntity extends TileEntity implements  ITickable, 
 	private void generateEnergy(){
 		BlockPos tankPos = pos.down();
 		//int liquidAmount = 0;
-		int fuildTemp = 0;
+		int fluidTemp = 0;
 		int generateEnergy = 0;
 		
 	    TileEntity te = this.worldObj.getTileEntity(tankPos);
@@ -49,13 +50,16 @@ public class StirlingEngineTileEntity extends TileEntity implements  ITickable, 
 		    	
 		    	FluidStack fulid = teTank.getInternalTank().getFluid();
 		    	if(fulid != null && this.getEnergyStored(null) < storage.getMaxEnergyStored()){
-		    		fuildTemp = fulid.getFluid().getTemperature();
-		    		generateEnergy = (fuildTemp - 300)*30/100;
+		    		fluidTemp = fulid.getFluid().getTemperature();
+		    		fluidTemp = fluidTemp - 300; //Fix
+		    		
+		    		generateEnergy = fluidTemp * 15 / 100;
+		    		
 		    		if(generateEnergy > 0){
 		    			generatePerTick = generateEnergy;
 			    		storage.setEnergyStored(storage.getEnergyStored() + generateEnergy);
 			    		if(canDrain != null){
-				    		toDrain.drain(1, true);
+				    		toDrain.drain(2, true);
 				    	}
 		    		}
 		    	}else{
@@ -74,7 +78,7 @@ public class StirlingEngineTileEntity extends TileEntity implements  ITickable, 
 	
 	private void angel(){
 		BlockPos tankPos = new BlockPos(pos.getX(), pos.getY() - 1, pos.getZ());
-		int fuildTemp = 0;
+		int fluidTemp = 0;
 		double anglePlus = 0;
 		
 		TileEntity te = this.worldObj.getTileEntity(tankPos);
@@ -83,13 +87,12 @@ public class StirlingEngineTileEntity extends TileEntity implements  ITickable, 
 		    if(teTank != null){
 		    	//liquidAmount = teTank.tank.getFluidAmount();
 		    	FluidStack fulid = teTank.getInternalTank().getFluid();
-		    	teTank.getInternalTank().drain(1, true);
 		    	if(fulid != null){
-		    		fuildTemp = fulid.getFluid().getTemperature();
+		    		fluidTemp = fulid.getFluid().getTemperature();
 		    	}
 		    }
 	    }
-		if((fuildTemp - 300) > 0 && this.getEnergyStored(null) < storage.getMaxEnergyStored()){
+		if((fluidTemp - 300) > 0 && this.getEnergyStored(null) < storage.getMaxEnergyStored()){
 			anglePlus = 1;
 		}
 		
@@ -106,7 +109,9 @@ public class StirlingEngineTileEntity extends TileEntity implements  ITickable, 
 		int extraPerTick = Math.min(this.storage.getEnergyStored(), 1000);
 		
 		BlockFinder blockFinder = new BlockFinder(pos, worldObj);
-		List<BlockPos> blocPoskList = blockFinder.getSurroundingBlockPos(pos, BlockRegistry.oreCrusher);
+		List<BlockPos> blocPoskList = blockFinder.getSurroundingTileEntityPos(pos);
+		blocPoskList = blocPoskList.stream().filter(pos -> worldObj.getTileEntity(pos) instanceof IEnergyReceiver).collect(Collectors.toList());
+		
 		if(blocPoskList.size() == 0){
 			return;
 		}
@@ -121,6 +126,7 @@ public class StirlingEngineTileEntity extends TileEntity implements  ITickable, 
 			extraEnergyID = 0;
 			return;
 		}
+		
 		int averageExtraEnergy = (int)Math.floor(extraPerTick / blocPoskList.size());
 		//averageExtraEnergy = Math.min(averageExtraEnergy, this.storage.getEnergyStored());
 		
