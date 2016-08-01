@@ -1,8 +1,5 @@
 package tinker_io.registry;
 
-import java.util.ArrayList;
-
-import slimeknights.tconstruct.TConstruct;
 //import slimeknights.tconstruct.library.TConstructRegistry;
 //import slimeknights.tconstruct.library.crafting.LiquidCasting;
 import slimeknights.tconstruct.smeltery.TinkerSmeltery;
@@ -12,8 +9,6 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 

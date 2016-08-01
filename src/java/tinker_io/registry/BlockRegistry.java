@@ -1,14 +1,17 @@
 package tinker_io.registry;
 
-import net.minecraftforge.fluids.BlockFluidClassic;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.common.registry.IForgeRegistryEntry;
 import tinker_io.blocks.FuelInputMachine;
 import tinker_io.blocks.OreCrusher;
 import tinker_io.blocks.SmartOutput;
 import tinker_io.blocks.StirlingEngine;
 import tinker_io.blocks.WhatABeautifulBlock;
-import tinker_io.fluids.BlockPureMetal;
+import tinker_io.main.Main;
+
 import net.minecraft.block.Block;
+import net.minecraft.item.ItemBlock;
+import net.minecraft.util.ResourceLocation;
 
 public class BlockRegistry {
 	public static void mainRegistry() {
@@ -32,10 +35,18 @@ public class BlockRegistry {
 	}
 	
     private static void registerBlock() {
-    	GameRegistry.registerBlock(fuelInputMachine, "fuel_input_machine");
-    	GameRegistry.registerBlock(smartOutput, "smart_output");
-    	GameRegistry.registerBlock(whatABeautifulBlock, "WhatABeautifulBlock");
-    	GameRegistry.registerBlock(oreCrusher, "Ore_Crusher");
-    	GameRegistry.registerBlock(stirlingEngine, "Stirling_Engine");
+    	registerBlock(fuelInputMachine, "fuel_input_machine");
+    	registerBlock(smartOutput, "smart_output");
+    	registerBlock(whatABeautifulBlock, "WhatABeautifulBlock");
+    	registerBlock(oreCrusher, "Ore_Crusher");
+    	registerBlock(stirlingEngine, "Stirling_Engine");
 	}
+    
+    public static <K extends IForgeRegistryEntry<?>> K  registerBlock(K object, String name){
+    	ResourceLocation rsl = new ResourceLocation(Main.MODID, name);
+    	object.setRegistryName(rsl);
+    	GameRegistry.register(object);
+    	GameRegistry.register(new ItemBlock((Block) object).setRegistryName(object.getRegistryName()));
+    	return object;
+    }
 }

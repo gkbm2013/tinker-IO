@@ -1,7 +1,6 @@
 package tinker_io.registry;
 
 import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 import tinker_io.fluids.BlockPureMetal;
 import tinker_io.fluids.PureMetal;
 
@@ -31,6 +30,6 @@ public class FluidRegister {
 	}
 	
 	private static void registerFluidBlocks(){
-		GameRegistry.registerBlock(blockPureMetal, "blockPureMetal");
+		BlockRegistry.registerBlock(blockPureMetal, "blockPureMetal");
 	}
 }

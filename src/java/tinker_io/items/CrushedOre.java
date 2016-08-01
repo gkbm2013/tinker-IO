@@ -1,20 +1,17 @@
 package tinker_io.items;
 
-import java.awt.Color;
 import java.util.List;
 
-import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.oredict.OreDictionary;
-import net.minecraft.client.resources.I18n;
-import tinker_io.handler.CrushedOreColorList;
 import tinker_io.main.Main;
 
-public class CrushedOre extends Item implements IItemColor{
+public class CrushedOre extends Item{
 	public CrushedOre(String unlocalizedName){
 		super();
 		setUnlocalizedName(unlocalizedName);
@@ -39,7 +36,7 @@ public class CrushedOre extends Item implements IItemColor{
 	@Override
 	public String getItemStackDisplayName(ItemStack stack)
     {
-		String name = I18n.format(this.getUnlocalizedNameInefficiently(stack) + ".name", new Object[0]).trim();
+		String name = ("" + I18n.translateToLocal(this.getUnlocalizedNameInefficiently(stack) + ".name")).trim();
 		
 		NBTTagCompound nbt = stack.getTagCompound();
 		if(nbt != null){
@@ -53,19 +50,4 @@ public class CrushedOre extends Item implements IItemColor{
 		}
 		return name;
     }
-	
-	@Override
-	public int getColorFromItemstack(ItemStack stack, int renderLayer) {
-		CrushedOreColorList colorlist = new CrushedOreColorList();
-	    switch (renderLayer) {
-	    	case 0: return Color.WHITE.getRGB();
-	    	case 1: {
-	    		return colorlist.getColor(stack);
-	    	}
-	    	default: {
-	    		// oops! should never get here.
-	    		return Color.black.getRGB();
-	    	}
-	    }
-	}
 }

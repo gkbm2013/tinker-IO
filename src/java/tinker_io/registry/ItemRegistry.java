@@ -33,11 +33,11 @@ public class ItemRegistry {
 	}
 	
 	private static void registerItem() {
-		GameRegistry.registerItem(SpeedUPG, "speedUPG");
-		GameRegistry.registerItem(SolidFuel, "SolidFuel");
-		GameRegistry.registerItem(Upgrade, "Upgrade");
-		GameRegistry.registerItem(Lonesome_Avenue, "CD_Lonesome_Avenue");
-		GameRegistry.registerItem(CrushedOre, "Crushed_ore");
+		GameRegistry.register(SpeedUPG.setRegistryName("speedUPG"));
+		GameRegistry.register(SolidFuel.setRegistryName("SolidFuel"));
+		GameRegistry.register(Upgrade.setRegistryName("Upgrade"));
+		GameRegistry.register(Lonesome_Avenue.setRegistryName("CD_Lonesome_Avenue"));
+		GameRegistry.register(CrushedOre.setRegistryName("Crushed_ore"));
 		
 		GameRegistry.registerFuelHandler(itemstack -> itemstack.isItemEqual(new ItemStack(SolidFuel))? 40000 : 0);
 	}
