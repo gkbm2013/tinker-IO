@@ -1,49 +1,39 @@
 package tinker_io.gui;
 
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Iterator;
 import java.util.Map;
 
-import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
-import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.library.TinkerRegistry;
 import slimeknights.tconstruct.library.Util;
 import slimeknights.tconstruct.library.client.RenderUtil;
 import slimeknights.tconstruct.library.smeltery.CastingRecipe;
+import slimeknights.tconstruct.library.smeltery.ICastingRecipe;
 import slimeknights.tconstruct.smeltery.TinkerSmeltery;
 import tinker_io.TileEntity.SOTileEntity;
-import tinker_io.handler.SORecipe;
 import tinker_io.inventory.ContainerSO;
 import tinker_io.main.Main;
 import tinker_io.packet.PacketDispatcher;
 import tinker_io.packet.VoidLiquidPacket;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 //import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraft.world.World;
 import net.minecraftforge.fluids.Fluid;
 //import net.minecraftforge.common.util.ForgeDirection;
-import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 
@@ -86,7 +76,7 @@ public class SOGui extends GuiContainer{
 		this.fontRendererObj.drawString(TextFormatting.DARK_GREEN + "Max : " + outputSize, 120, 17, 4210752);
 		
 		FluidTankInfo info = tileSO.getInfo();
-		FluidStack Wliquid = info.fluid;
+		//FluidStack Wliquid = info.fluid;
 		
 //		Tool Tips (For tank)
 		FluidStack liquid = info.fluid;
@@ -210,10 +200,11 @@ public class SOGui extends GuiContainer{
 	/*
 	 * Copied by GKB
 	 * 2016/2/11
+	 * 2016/8/3 Update
 	 */
 	
 	/* Fluid amount displays */
-	  private static Map<Fluid, List<FluidGuiEntry>> fluidGui = Maps.newHashMap();
+	private static Map<Fluid, List<FluidGuiEntry>> fluidGui = Maps.newHashMap();
 
 	  public void liquidToString(FluidStack fluid, List<String> text) {
 	    int amount = fluid.amount;
@@ -240,33 +231,39 @@ public class SOGui extends GuiContainer{
 	    List<FluidGuiEntry> list = Lists.newArrayList();
 
 	    // go through all casting recipes for the fluids and check for known "units" like blocks, ingots,...
-	    for(CastingRecipe recipe : TinkerRegistry.getAllBasinCastingRecipes()) {
-	      // search for a block recipe
-	      if(recipe.getFluid().getFluid() == fluid && recipe.cast == null) {
-	        // it's a block that is cast solely from the material, using no cast, therefore it's a block made out of the material
-	        list.add(new FluidGuiEntry(recipe.getFluid().amount, "gui.smeltery.liquid.block"));
+	    for(ICastingRecipe irecipe : TinkerRegistry.getAllBasinCastingRecipes()) {
+	      if(irecipe instanceof CastingRecipe) {
+	        CastingRecipe recipe = (CastingRecipe) irecipe;
+	        // search for a block recipe
+	        if(recipe.getFluid().getFluid() == fluid && recipe.cast == null) {
+	          // it's a block that is cast solely from the material, using no cast, therefore it's a block made out of the material
+	          list.add(new FluidGuiEntry(recipe.getFluid().amount, "gui.smeltery.liquid.block"));
+	        }
 	      }
 	    }
 	    // table casting
-	    for(CastingRecipe recipe : TinkerRegistry.getAllTableCastingRecipes()) {
-	      if(recipe.getFluid().getFluid() == fluid && recipe.cast != null) {
-	        // nugget
-	        if(recipe.cast.matches(new ItemStack[]{TinkerSmeltery.castNugget}) != null) {
-	          list.add(new FluidGuiEntry(recipe.getFluid().amount, "gui.smeltery.liquid.nugget"));
-	        }
-	        // ingot
-	        if(recipe.cast.matches(new ItemStack[]{TinkerSmeltery.castIngot}) != null) {
-	          list.add(new FluidGuiEntry(recipe.getFluid().amount, "gui.smeltery.liquid.ingot"));
-	        }
-	        // gem
-	        if(recipe.cast.matches(new ItemStack[]{TinkerSmeltery.castGem}) != null) {
-	          list.add(new FluidGuiEntry(recipe.getFluid().amount, "gui.smeltery.liquid.gem"));
+	    for(ICastingRecipe irecipe : TinkerRegistry.getAllTableCastingRecipes()) {
+	      if(irecipe instanceof CastingRecipe) {
+	        CastingRecipe recipe = (CastingRecipe) irecipe;
+	        if(recipe.getFluid().getFluid() == fluid && recipe.cast != null) {
+	          // nugget
+	          if(recipe.cast.matches(new ItemStack[]{TinkerSmeltery.castNugget}) != null) {
+	            list.add(new FluidGuiEntry(recipe.getFluid().amount, "gui.smeltery.liquid.nugget"));
+	          }
+	          // ingot
+	          if(recipe.cast.matches(new ItemStack[]{TinkerSmeltery.castIngot}) != null) {
+	            list.add(new FluidGuiEntry(recipe.getFluid().amount, "gui.smeltery.liquid.ingot"));
+	          }
+	          // gem
+	          if(recipe.cast.matches(new ItemStack[]{TinkerSmeltery.castGem}) != null) {
+	            list.add(new FluidGuiEntry(recipe.getFluid().amount, "gui.smeltery.liquid.gem"));
+	          }
 	        }
 	      }
 	    }
 
 	    // sort by amount descending because the order in which they're accessed is important since it changes the remaining value during processing
-	    list.sort(new Comparator<FluidGuiEntry>() {
+	    Collections.sort(list, new Comparator<FluidGuiEntry>() {
 	      @Override
 	      public int compare(FluidGuiEntry o1, FluidGuiEntry o2) {
 	        return o2.amount - o1.amount;
@@ -277,7 +274,7 @@ public class SOGui extends GuiContainer{
 	  }
 
 	  private int calcLiquidText(int amount, int divider, String unit, List<String> text) {
-	    int full = amount/divider;
+	    int full = amount / divider;
 	    if(full > 0) {
 	      text.add(String.format("%d %s%s", full, TextFormatting.GRAY, unit));
 	    }
@@ -286,6 +283,7 @@ public class SOGui extends GuiContainer{
 	  }
 
 	  private static class FluidGuiEntry {
+
 	    public final int amount;
 	    public final String unlocName;
 

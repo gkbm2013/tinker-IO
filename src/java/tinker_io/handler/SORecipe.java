@@ -12,6 +12,7 @@ import net.minecraftforge.fluids.FluidStack;
 import slimeknights.tconstruct.library.TinkerRegistry;
 import slimeknights.tconstruct.library.smeltery.Cast;
 import slimeknights.tconstruct.library.smeltery.CastingRecipe;
+import slimeknights.tconstruct.library.smeltery.ICastingRecipe;
 import slimeknights.tconstruct.smeltery.item.CastCustom;
 //import slimeknights.tconstruct.library.crafting.LiquidCasting;
 
@@ -25,16 +26,18 @@ public class SORecipe{
 			return new ItemStack(TinkerSmeltery.clearGlass ,1);
 		}*/
 		
-		CastingRecipe tableRecipe = TinkerRegistry.getTableCasting(itemStack, fluid.getFluid());
+		ICastingRecipe itableRecipe = TinkerRegistry.getTableCasting(itemStack, fluid.getFluid());
 		CastingRecipe tableRecipeWithFluidStack = getTableCastingWithFluidStack(itemStack, fluid);
 		
-		if(tableRecipe != null){
-			return tableRecipe.getResult();
+		if(itableRecipe != null && itableRecipe instanceof CastingRecipe){
+			CastingRecipe tableRecipe = (CastingRecipe)itableRecipe;
+			if(tableRecipe.getResult() != null){
+				return tableRecipe.getResult();
+			}
 		}else if(tableRecipeWithFluidStack != null){
 			return tableRecipeWithFluidStack.getResult();
-		}else{
-			return null;
 		}
+		return null;
 	}
 	
 	public FluidStack getCastingFluidCost(FluidStack fluid, ItemStack itemStack){
@@ -46,13 +49,15 @@ public class SORecipe{
 		
 		//Fluid
 		
-		CastingRecipe tableRecipe = TinkerRegistry.getTableCasting(itemStack, fluid.getFluid());
+		ICastingRecipe itableRecipe = TinkerRegistry.getTableCasting(itemStack, fluid.getFluid());
 		CastingRecipe tableRecipeWithFluidStack = getTableCastingWithFluidStack(itemStack, fluid);
 		
 		CastingRecipe useAbleTableRecipe = null;
-		
-		if(tableRecipe != null){
-			useAbleTableRecipe = tableRecipe;
+		if(itableRecipe != null && itableRecipe instanceof CastingRecipe){
+			CastingRecipe tableRecipe = (CastingRecipe) itableRecipe;
+			if(tableRecipe.getResult() != null){
+				useAbleTableRecipe = tableRecipe;
+			}
 		}else if(tableRecipeWithFluidStack != null){
 			useAbleTableRecipe = tableRecipeWithFluidStack;
 		}
@@ -73,15 +78,18 @@ public class SORecipe{
 	}
 	
 	public boolean isConsumeCast(FluidStack fluid, ItemStack itemStack){
-		CastingRecipe tableRecipe = TinkerRegistry.getTableCasting(itemStack, fluid.getFluid());
+		ICastingRecipe itableRecipe = TinkerRegistry.getTableCasting(itemStack, fluid.getFluid());
 		CastingRecipe tableRecipeWithFluidStack = getTableCastingWithFluidStack(itemStack, fluid);
-		if(tableRecipe != null){
-			return tableRecipe.consumesCast();
+		
+		if(itableRecipe != null && itableRecipe instanceof CastingRecipe){
+			CastingRecipe tableRecipe = (CastingRecipe) itableRecipe;
+			if(tableRecipe.getResult() != null){
+				return tableRecipe.consumesCast();
+			}
 		}else if(tableRecipeWithFluidStack != null){
 			return tableRecipeWithFluidStack.consumesCast();
-		}else{
-			return false;
 		}
+		return false;
 	}
 	
 	/**
@@ -111,10 +119,11 @@ public class SORecipe{
 	}*/
 	
 	public FluidStack getBasinFluid(FluidStack fluid, ItemStack itemStack){
-		CastingRecipe basinRecipe = TinkerRegistry.getBasinCasting(itemStack, fluid.getFluid());
+		ICastingRecipe ibasinRecipe = TinkerRegistry.getBasinCasting(itemStack, fluid.getFluid());
 
 		
-		if(basinRecipe != null){
+		if(ibasinRecipe != null && ibasinRecipe instanceof CastingRecipe){
+			CastingRecipe basinRecipe = (CastingRecipe)ibasinRecipe;
 			FluidStack basinFluid = basinRecipe.getFluid();
 			if(basinFluid != null){
 				return basinFluid;

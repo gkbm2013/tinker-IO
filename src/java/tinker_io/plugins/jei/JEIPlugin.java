@@ -22,6 +22,7 @@ import net.minecraftforge.oredict.OreDictionary;
 import slimeknights.tconstruct.library.TinkerRegistry;
 import slimeknights.tconstruct.library.smeltery.Cast;
 import slimeknights.tconstruct.library.smeltery.CastingRecipe;
+import slimeknights.tconstruct.library.smeltery.ICastingRecipe;
 import tinker_io.gui.FIMGui;
 import tinker_io.gui.OreCrusherGui;
 import tinker_io.gui.SOGui;
@@ -75,21 +76,25 @@ public class JEIPlugin implements IModPlugin {
 		//Smart Output
 		Map<Triple<Item, Item, Fluid>, List<ItemStack >> castDict = Maps.newHashMap();
 		
-	    for(CastingRecipe recipe : TinkerRegistry.getAllTableCastingRecipes()) {
-	        if(recipe.cast != null && recipe.getResult() != null && recipe.getResult().getItem() instanceof Cast) {
-	        	Triple<Item, Item, Fluid> output = Triple.of(recipe.getResult().getItem(), Cast.getPartFromTag(recipe.getResult()), recipe.getFluid().getFluid());
-	        	if(!castDict.containsKey(output)) {
-	        		
-	        		// recipe for the cast doesn't exist yet. create list and recipe and add it
-	        		List<ItemStack> list = Lists.newLinkedList();
-	        		castDict.put(output, list);
-	        		registry.addRecipes(ImmutableList.of(new SmartOutputRecipeWrapper(list, recipe)));
-	        	}
-	        	// add the item to the list
-	        	castDict.get(output).addAll(recipe.cast.getInputs());
-	        }else{
-	          registry.addRecipes(ImmutableList.of(new SmartOutputRecipeWrapper(recipe)));
-	        }
+	    for(ICastingRecipe irecipe : TinkerRegistry.getAllTableCastingRecipes()) {
+	    	if(irecipe instanceof CastingRecipe){
+	    		CastingRecipe recipe = (CastingRecipe) irecipe;
+	    		
+	    		if(recipe.cast != null && recipe.getResult() != null && recipe.getResult().getItem() instanceof Cast) {
+		        	Triple<Item, Item, Fluid> output = Triple.of(recipe.getResult().getItem(), Cast.getPartFromTag(recipe.getResult()), recipe.getFluid().getFluid());
+		        	if(!castDict.containsKey(output)) {
+		        		
+		        		// recipe for the cast doesn't exist yet. create list and recipe and add it
+		        		List<ItemStack> list = Lists.newLinkedList();
+		        		castDict.put(output, list);
+		        		registry.addRecipes(ImmutableList.of(new SmartOutputRecipeWrapper(list, recipe)));
+		        	}
+		        	// add the item to the list
+		        	castDict.get(output).addAll(recipe.cast.getInputs());
+		        }else{
+		          registry.addRecipes(ImmutableList.of(new SmartOutputRecipeWrapper(recipe)));
+		        }
+	    	}
 	      }
 	    
 	    List<CastingRecipe> castingRecipeWithNBT = SORecipe.getCastingRecipeWithNBT();
