@@ -47,6 +47,7 @@ public class FIMTileEntity extends TileSmelteryComponent implements ITickable, O
     }
 
     protected int tick = 0;
+    protected int timer = 0;
 
     public int keepInputTime;
     public int inputTime;
@@ -62,7 +63,6 @@ public class FIMTileEntity extends TileSmelteryComponent implements ITickable, O
             if (tick % 4 == 0)
             {
                 toUpdateSCInfoAndSpeedUpSC();
-                notifyBlockUpdate();
             }
             tick = (tick + 1) % 20;
         }
@@ -77,6 +77,10 @@ public class FIMTileEntity extends TileSmelteryComponent implements ITickable, O
         {
         	if(scInfo.isSCHeatingItem()){
         		fuelFSM.startChangeState();
+        	}
+        	
+        	if(inputTime > 0){
+        		notifyBlockUpdate();
         	}
         	
         	Adapter adap = scInfo.getAdapter();

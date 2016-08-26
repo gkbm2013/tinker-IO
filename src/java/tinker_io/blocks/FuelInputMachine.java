@@ -7,6 +7,8 @@ import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -226,7 +228,7 @@ public class FuelInputMachine extends BlockContainerAdapter
 	@Override
 	public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player, boolean willHarvest){
 		if(world.isRemote){
-			 return false;
+			 return true;
 		 }
 		TileEntity te = world.getTileEntity(pos);
         if (te instanceof TileSmelteryComponent)
@@ -236,19 +238,13 @@ public class FuelInputMachine extends BlockContainerAdapter
         if(te instanceof FIMTileEntity){
         	((FIMTileEntity) te).resetTemp();
         }
+        
+        if(te instanceof IInventory) {
+  	      InventoryHelper.dropInventoryItems(world, pos, (IInventory) te);
+  	    world.updateComparatorOutputLevel(pos, this);
+  	    }
+        
         world.setBlockToAir(pos);
-		return false;
+		return true;
 	}
-	
-	
-    @Override
-    public void breakBlock(World worldIn, BlockPos pos, IBlockState state)
-    {
-        TileEntity te = worldIn.getTileEntity(pos);
-        if (te instanceof TileSmelteryComponent)
-        {
-            ((TileSmelteryComponent) te).notifyMasterOfChange();
-        }
-        super.breakBlock(worldIn, pos, state);
-    }
 }

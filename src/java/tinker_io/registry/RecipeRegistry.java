@@ -9,6 +9,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 
@@ -70,30 +71,52 @@ public class RecipeRegistry {
 		manyullyn_hammer_head.setTagCompound(nbt);
 		manyullyn_hammer_head.getTagCompound().setString("Material", "manyullyn");
 		
-		GameRegistry.addRecipe(new ShapedOreRecipe(oreCrusher, true, new Object[]{"ABA", "CDC", "DED", 'A', searedBlock, 'B', "ingotTin", 'C', redstone_lamp, 'D', manyullyn_hammer_head, 'E', "blockDiamond"}));
+		String ingotTinOrIron = "ingotTin";
+		String ingotAluminumOrLeadOrGold = "ingotAluminum";
+		String ingotLeadOrIron = "ingotLead";
+		String ingotCopperOrIron = "ingotCopper";
 		
-		GameRegistry.addRecipe(new ShapedOreRecipe(stirlingEngine, true, new Object[]{"FAF", "BCB", "DED", 'A', "blockGold", 'B', "blockQuartz", 'C', "stickWood", 'D', searedBlock, 'E', "blockGlass", 'F', "ingotTin"}));
+		if(OreDictionary.getOres("ingotTin").isEmpty()){
+			ingotTinOrIron = "ingotIron";
+		}
+		
+		if(OreDictionary.getOres("ingotAluminum").isEmpty()){
+			if(!OreDictionary.getOres("ingotLead").isEmpty()){
+				ingotAluminumOrLeadOrGold = "ingotLead";
+			}else{
+				ingotAluminumOrLeadOrGold = "ingotGold";
+			}
+		}
+		
+		if(OreDictionary.getOres("ingotLead").isEmpty()){
+			ingotLeadOrIron = "ingotIron";
+		}
+		
+		if(OreDictionary.getOres("ingotCopper").isEmpty()){
+			ingotCopperOrIron = "ingotIron";
+		}
+		
+		
+		GameRegistry.addRecipe(new ShapedOreRecipe(oreCrusher, true, new Object[]{"ABA", "CDC", "DED", 'A', searedBlock, 'B', ingotTinOrIron, 'C', redstone_lamp, 'D', manyullyn_hammer_head, 'E', "blockDiamond"}));
+		
+		GameRegistry.addRecipe(new ShapedOreRecipe(stirlingEngine, true, new Object[]{"FAF", "BCB", "DED", 'A', "blockGold", 'B', "blockQuartz", 'C', "stickWood", 'D', searedBlock, 'E', "blockGlass", 'F', ingotTinOrIron}));
 		
 		GameRegistry.addRecipe(FIM, new Object[]{"AAA", "ABA","AAA", 'A', searedBrick, 'B', hopper});
-		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(ItemRegistry.SolidFuel,8), "ingotAluminum",Items.GUNPOWDER,Items.COAL));
+		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(ItemRegistry.SolidFuel,8), ingotAluminumOrLeadOrGold,Items.GUNPOWDER,Items.COAL));
 		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(ItemRegistry.SolidFuel,8), "dustAluminium",Items.GUNPOWDER,"dustCoal"));
-		
-		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(ItemRegistry.SolidFuel,8), "ingotLead",Items.GUNPOWDER,Items.COAL));
-		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(ItemRegistry.SolidFuel,8), "dustLead",Items.GUNPOWDER,"dustCoal"));
 		
 		GameRegistry.addRecipe(SO, new Object[]{"ABA", "B B","ABA", 'A', searedBrick, 'B', ice});
 		GameRegistry.addRecipe(new ShapedOreRecipe(whatABeautifulBlock, true, new Object[]{"AAA", "ABA","AAA", 'A', glowstone, 'B', nether_star}));
 		
 		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(ItemRegistry.Lonesome_Avenue,1), BlockRegistry.smartOutput, BlockRegistry.fuelInputMachine, ItemRegistry.SolidFuel));
 		
-		GameRegistry.addRecipe(new ShapedOreRecipe(UpgBase, true, new Object[]{"AAA", "BCB","AAA", 'A', lapis, 'B', "ingotAluminum", 'C', paper}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(UpgBase, true, new Object[]{"AAA", "BCB","AAA", 'A', lapis, 'B', "ingotLead", 'C', paper}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(UpgBase, true, new Object[]{"AAA", "BCB","AAA", 'A', lapis, 'B', ingotAluminumOrLeadOrGold, 'C', paper}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(UpgBase, true, new Object[]{"AAA", "BCB","AAA", 'A', lapis, 'B', ingotLeadOrIron, 'C', paper}));
 		
-		GameRegistry.addRecipe(new ShapedOreRecipe(speedUPG, true, new Object[]{"ABA", "CDC","ABA", 'A', sugar, 'B', "ingotGold", 'C', "ingotTin", 'D', UpgBase}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(slotUPG1, true, new Object[]{"ABA", "BCB","ABA", 'A', "ingotCopper", 'B', chest, 'C', UpgBase}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(speedUPG, true, new Object[]{"ABA", "CDC","ABA", 'A', sugar, 'B', "ingotGold", 'C', ingotTinOrIron, 'D', UpgBase}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(slotUPG1, true, new Object[]{"ABA", "BCB","ABA", 'A', ingotCopperOrIron, 'B', chest, 'C', UpgBase}));
 		
-		GameRegistry.addRecipe(new ShapedOreRecipe(slotUPG2, true, new Object[]{"ABA", "BCB","ABA", 'A', "ingotAluminum", 'B', iron_ingot, 'C', slotUPG1}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(slotUPG2, true, new Object[]{"ABA", "BCB","ABA", 'A', "ingotLead", 'B', iron_ingot, 'C', slotUPG1}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(slotUPG2, true, new Object[]{"ABA", "BCB","ABA", 'A', ingotAluminumOrLeadOrGold, 'B', iron_ingot, 'C', slotUPG1}));
 		
 		GameRegistry.addRecipe(new ShapedOreRecipe(slotUPG3, true, new Object[]{"ABA", "BCB","ABA", 'A', "nuggetKnightslime", 'B', "ingotGold", 'C', slotUPG2}));
 		GameRegistry.addRecipe(new ShapedOreRecipe(slotUPG4, true, new Object[]{"ABA", "BCB","ABA", 'A', "nuggetManyullyn", 'B', "gemDiamond", 'C', slotUPG3}));

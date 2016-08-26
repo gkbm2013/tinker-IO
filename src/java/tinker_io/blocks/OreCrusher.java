@@ -3,8 +3,6 @@ package tinker_io.blocks;
 import java.util.List;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockContainer;
-import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockStateContainer;
@@ -21,17 +19,14 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import tinker_io.TileEntity.OreCrusherTileEntity;
 import tinker_io.main.Main;
 
-public class OreCrusher extends BlockContainer {
+public class OreCrusher extends BlockContainerAdapter {
 	public static final PropertyDirection FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
 	//public static PropertyBool ACTIVE = PropertyBool.create("active");
 	
 	public OreCrusher(String unlocalizedName){
-		super(Material.ROCK);
 		setUnlocalizedName(unlocalizedName);
 		setCreativeTab(Main.TinkerIOTabs);
 		setHarvestLevel("pickaxe", 1);
