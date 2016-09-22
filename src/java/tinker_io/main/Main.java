@@ -29,15 +29,15 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 		modid = Main.MODID,
 		version = Main.VERSION,
 		name = Main.Name,
-		dependencies="required-after:Forge@[12.18.1.2024,);"
-				+ "required-after:tconstruct@[1.10.2-2.4.0,);"
+		dependencies="required-after:Forge@[12.18.1.2073,);"
+				+ "required-after:tconstruct@[1.10.2-2.5.2,);"
 				+ "after:JEI;"
 				+ "after:Waila;",
 		acceptedMinecraftVersions = "[1.10.2,]")
 public class Main
 {
     public static final String MODID = "tinker_io";
-    public static final String VERSION = "beta 2.3.5";
+    public static final String VERSION = "release 2.3.6";
     public static final String Name = "Tinker I/O";
     
     //public static boolean iguanas_support;

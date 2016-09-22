@@ -14,6 +14,7 @@ import com.google.common.collect.Maps;
 
 import slimeknights.tconstruct.library.TinkerRegistry;
 import slimeknights.tconstruct.library.Util;
+import slimeknights.tconstruct.library.client.GuiUtil;
 import slimeknights.tconstruct.library.client.RenderUtil;
 import slimeknights.tconstruct.library.smeltery.CastingRecipe;
 import slimeknights.tconstruct.library.smeltery.ICastingRecipe;
@@ -157,7 +158,7 @@ public class SOGui extends GuiContainer{
 			this.mc.getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE); 
 	        //this.drawLiquidRect(cornerX + 26, cornerY + 15 + 52 - liquidAmount, renderIndex, 12, liquidAmount);
 			if(liquid != null){
-				RenderUtil.renderTiledFluid(cornerX + 26, cornerY + 15 + 52 - liquidAmount, 12, liquidAmount, this.zLevel, liquid);
+				GuiUtil.renderTiledFluid(cornerX + 26, cornerY + 15 + 52 - liquidAmount, 12, liquidAmount, this.zLevel, liquid);
 			}
 	        //Control the button of void liquid
 	        if(isShiftKeyDown()){

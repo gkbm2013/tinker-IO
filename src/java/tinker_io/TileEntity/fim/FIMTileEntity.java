@@ -8,6 +8,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
@@ -16,6 +17,7 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import slimeknights.tconstruct.smeltery.tileentity.TileSmeltery;
 import slimeknights.tconstruct.smeltery.tileentity.TileSmelteryComponent;
 import tinker_io.TileEntity.SidedInventory;
 import tinker_io.api.Observable;
@@ -93,7 +95,8 @@ public class FIMTileEntity extends TileSmelteryComponent implements ITickable, O
     }
 
 
-    private void updateTemp(final int originFuelTemp, Adapter adap)
+
+	private void updateTemp(final int originFuelTemp, Adapter adap)
     {       
     	//I am reluctant to use reflection. However to preserve Fuel Input Machine, I have to do this.
     	calculateTemperature(originFuelTemp);
@@ -109,6 +112,16 @@ public class FIMTileEntity extends TileSmelteryComponent implements ITickable, O
             field.setTemp(adap.getFuelTemp());
     	}
     }
+    
+    private TileSmeltery getSmeltery() {
+    	TileSmeltery smelteryTileEntity = null;
+    	
+    	TileEntity te = this.getSmelteryTankHandler();
+    	if(te != null && te instanceof TileSmeltery){
+    		smelteryTileEntity = (TileSmeltery) te;
+    	}
+		return smelteryTileEntity;
+	}
     
     private void calculateTemperature(int originFuelTemp){
     	double ratio = this.getSpeedUpInfo().ratio;
