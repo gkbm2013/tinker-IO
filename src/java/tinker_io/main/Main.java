@@ -2,6 +2,7 @@ package tinker_io.main;
 
 import slimeknights.tconstruct.smeltery.TinkerSmeltery;
 import slimeknights.tconstruct.tools.TinkerTools;
+import tinker_io.config.TIOConfig;
 import tinker_io.packet.PacketDispatcher;
 import tinker_io.plugins.waila.MainWaila;
 import tinker_io.proxy.CommonProxy;
@@ -13,11 +14,15 @@ import tinker_io.registry.SmelteryRecipeRegistry;
 import tinker_io.registry.SoundEventRegistry;
 import tinker_io.registry.RecipeRegistry;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.google.common.collect.ImmutableSet;
 
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
+import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.Instance;
 import net.minecraftforge.fml.common.SidedProxy;
@@ -37,7 +42,7 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 public class Main
 {
     public static final String MODID = "tinker_io";
-    public static final String VERSION = "release 2.3.6";
+    public static final String VERSION = "alpha 2.4.0";
     public static final String Name = "Tinker I/O";
     
     //public static boolean iguanas_support;
@@ -45,6 +50,9 @@ public class Main
     //Proxy
     @SidedProxy(modId=Main.MODID, clientSide="tinker_io.proxy.ClientProxy", serverSide="tinker_io.proxy.ServerProxy")
 	public static CommonProxy proxy;
+    
+    public static Configuration config;
+    public static Logger logger;
     
     //MOD
     @Instance(Main.MODID)
@@ -66,6 +74,11 @@ public class Main
     public void preInit(FMLPreInitializationEvent event)
     {
     	proxy.preInit(event);
+    	config = new Configuration(event.getSuggestedConfigurationFile());
+    	TIOConfig.syncConfig();
+    	
+    	logger = LogManager.getLogger(Main.Name);
+    	
 		/*
 		 * iguanas_support_cofg and Smart Output Eliminate List list will be removed to come.
 		 * 

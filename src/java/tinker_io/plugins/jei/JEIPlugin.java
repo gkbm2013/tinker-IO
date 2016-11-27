@@ -23,6 +23,7 @@ import slimeknights.tconstruct.library.TinkerRegistry;
 import slimeknights.tconstruct.library.smeltery.Cast;
 import slimeknights.tconstruct.library.smeltery.CastingRecipe;
 import slimeknights.tconstruct.library.smeltery.ICastingRecipe;
+import slimeknights.tconstruct.plugin.jei.CastingRecipeWrapper;
 import tinker_io.gui.FIMGui;
 import tinker_io.gui.OreCrusherGui;
 import tinker_io.gui.SOGui;
@@ -87,19 +88,28 @@ public class JEIPlugin implements IModPlugin {
 		        		// recipe for the cast doesn't exist yet. create list and recipe and add it
 		        		List<ItemStack> list = Lists.newLinkedList();
 		        		castDict.put(output, list);
-		        		registry.addRecipes(ImmutableList.of(new SmartOutputRecipeWrapper(list, recipe)));
+		        		registry.addRecipes(ImmutableList.of(new SmartOutputRecipeWrapper(list, recipe, false)));
 		        	}
 		        	// add the item to the list
 		        	castDict.get(output).addAll(recipe.cast.getInputs());
 		        }else{
-		          registry.addRecipes(ImmutableList.of(new SmartOutputRecipeWrapper(recipe)));
+		          registry.addRecipes(ImmutableList.of(new SmartOutputRecipeWrapper(recipe, false)));
 		        }
 	    	}
 	      }
 	    
+	    //Basin
+	    for(ICastingRecipe irecipe : TinkerRegistry.getAllBasinCastingRecipes()) {
+	    	if(irecipe instanceof CastingRecipe) {
+	    		CastingRecipe recipe = (CastingRecipe) irecipe;
+	    		registry.addRecipes(ImmutableList.of(new SmartOutputRecipeWrapper(recipe, true)));
+	    	}
+	    }
+	    
+	    //Smart Output custom casting table recipe.
 	    List<CastingRecipe> castingRecipeWithNBT = SORecipe.getCastingRecipeWithNBT();
 	    castingRecipeWithNBT.stream()
-	    	.forEach(nbtRecipe -> registry.addRecipes(ImmutableList.of(new SmartOutputRecipeWrapper(nbtRecipe))));
+	    	.forEach(nbtRecipe -> registry.addRecipes(ImmutableList.of(new SmartOutputRecipeWrapper(nbtRecipe, false))));
 	    
 	  //Click area
 	    registry.addRecipeClickArea(SOGui.class, 94, 34, 24, 15, SmartOutputRecipeCategory.CATEGORY);

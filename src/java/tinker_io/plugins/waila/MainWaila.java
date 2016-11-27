@@ -1,5 +1,7 @@
 package tinker_io.plugins.waila;
 
+import org.apache.logging.log4j.Level;
+
 import net.minecraftforge.fml.common.event.FMLInterModComms;
 import net.minecraftforge.fml.common.registry.GameRegistry.ObjectHolder;
 import tinker_io.main.Main;
@@ -13,7 +15,8 @@ public class MainWaila {
 	}
 
 	private static void load() {
-		System.out.println("[Tinker I/O] Tinker I/O Waila Plugin Started!");
+		//System.out.println("[Tinker I/O] Tinker I/O Waila Plugin Started!");
+		Main.logger.log(Level.INFO, "Tinker I/O Waila Plugin Started!", "");
         FMLInterModComms.sendMessage("Waila", "register", "tinker_io.plugins.waila.Registry.wailaCallback");		
 	}
 }

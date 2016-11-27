@@ -3,6 +3,7 @@ package tinker_io.registry;
 //import slimeknights.tconstruct.library.TConstructRegistry;
 //import slimeknights.tconstruct.library.crafting.LiquidCasting;
 import slimeknights.tconstruct.smeltery.TinkerSmeltery;
+import slimeknights.tconstruct.smeltery.block.BlockCasting;
 import slimeknights.tconstruct.tools.TinkerTools;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraft.init.Blocks;
@@ -63,6 +64,8 @@ public class RecipeRegistry {
 	static ItemStack oreCrusher = new ItemStack(BlockRegistry.oreCrusher ,1);
 	static ItemStack redstone_lamp = new ItemStack(Blocks.REDSTONE_LAMP ,1);
 	
+	static ItemStack basinUPG = new ItemStack(ItemRegistry.Upgrade ,1 ,7);
+	static ItemStack castingBasin = new ItemStack(TinkerSmeltery.castingBlock, 1, BlockCasting.CastingType.BASIN.getMeta());
 
 	private static void registerRecipe() {		
 		
@@ -122,6 +125,7 @@ public class RecipeRegistry {
 		GameRegistry.addRecipe(new ShapedOreRecipe(slotUPG4, true, new Object[]{"ABA", "BCB","ABA", 'A', "nuggetManyullyn", 'B', "gemDiamond", 'C', slotUPG3}));
 		GameRegistry.addRecipe(new ShapedOreRecipe(slotUPGInfinity, true, new Object[]{"ABA", "ACA","ABA", 'A', obsidian, 'B', whatABeautifulBlock, 'C', slotUPG4}));
 		GameRegistry.addRecipe(new ShapedOreRecipe(redstoneUPG, true, new Object[]{"ABA", "CDC","AEA", 'A', "blockRedstone", 'B', comparator, 'C', "gemQuartz", 'D', UpgBase, 'E', repeater}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(basinUPG, true, new Object[]{"ABA", "BCB","ABA", 'A', obsidian, 'B', castingBasin, 'C', slotUPG4}));
 		
 	}
 

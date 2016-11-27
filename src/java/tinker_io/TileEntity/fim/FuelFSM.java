@@ -4,6 +4,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.util.ITickable;
+import tinker_io.config.TIOConfig;
 
 public class FuelFSM implements ITickable, NBTable
 {
@@ -52,7 +53,8 @@ public class FuelFSM implements ITickable, NBTable
 
     public int computeInputTime()
     {
-        return 200;
+        return TIOConfig.fuelConsumptionRateFIM;
+    	//return 200;
     }
 
 

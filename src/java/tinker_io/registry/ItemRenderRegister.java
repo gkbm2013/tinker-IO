@@ -27,7 +27,8 @@ public class ItemRenderRegister {
 				getModelResourceLocation("upg_3"),
 				getModelResourceLocation("upg_4"),
 				getModelResourceLocation("upg_5"),
-				getModelResourceLocation("upg_6")
+				getModelResourceLocation("upg_6"),
+				getModelResourceLocation("upg_7")
 				);
 		reg(ItemRegistry.Upgrade, 0, "upg_0");
 		reg(ItemRegistry.Upgrade, 1, "upg_1");
@@ -36,6 +37,7 @@ public class ItemRenderRegister {
 		reg(ItemRegistry.Upgrade, 4, "upg_4");
 		reg(ItemRegistry.Upgrade, 5, "upg_5");
 		reg(ItemRegistry.Upgrade, 6, "upg_6");
+		reg(ItemRegistry.Upgrade, 7, "upg_7");
 	}
 	
 	public static void reg(Item item) {

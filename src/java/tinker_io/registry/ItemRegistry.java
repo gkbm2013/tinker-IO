@@ -1,6 +1,7 @@
 package tinker_io.registry;
 
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import tinker_io.config.TIOConfig;
 import tinker_io.items.CD_Lonesome_Avenue;
 import tinker_io.items.SolidFuel;
 import tinker_io.items.SpeedUPG;
@@ -39,6 +40,7 @@ public class ItemRegistry {
 		GameRegistry.register(Lonesome_Avenue.setRegistryName("CD_Lonesome_Avenue"));
 		GameRegistry.register(CrushedOre.setRegistryName("Crushed_ore"));
 		
-		GameRegistry.registerFuelHandler(itemstack -> itemstack.isItemEqual(new ItemStack(SolidFuel))? 40000 : 0);
+		int solidFuelBurnTime = TIOConfig.solidFuelBurnTime;
+		GameRegistry.registerFuelHandler(itemstack -> itemstack.isItemEqual(new ItemStack(SolidFuel))? solidFuelBurnTime : 0);
 	}
 }

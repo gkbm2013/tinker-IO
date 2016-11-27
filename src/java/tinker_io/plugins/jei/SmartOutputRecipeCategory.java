@@ -16,9 +16,9 @@ import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.recipe.IRecipeCategory;
 import mezz.jei.api.recipe.IRecipeWrapper;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.translation.I18n;
 import slimeknights.tconstruct.library.materials.Material;
 import tinker_io.main.Main;
 import tinker_io.registry.ItemRegistry;
@@ -46,7 +46,7 @@ public class SmartOutputRecipeCategory implements IRecipeCategory {
 	@Nonnull
 	@Override
 	public String getTitle() {
-		return I18n.translateToLocal("tile.smart_output.name");
+		return I18n.format("tile.smart_output.name");
 	}
 
 	@Nonnull
@@ -88,7 +88,12 @@ public class SmartOutputRecipeCategory implements IRecipeCategory {
 		      items.setFromRecipe(2, upg);
 		      
 		      items.init(3, false, 129, 29);
-		      items.setFromRecipe(3, upg);
+		      if(!recipe.isBasin){
+		    	  items.setFromRecipe(3, upg);
+		      }else{
+		    	  items.setFromRecipe(3, new ItemStack(ItemRegistry.Upgrade, 1, 7));
+		      }
+		      
 
 		      fluids.init(0, true, 3, 2, 12, 52, Material.VALUE_Block, false, null);
 		      fluids.set(0, recipe.getFluidInputs());

@@ -41,7 +41,7 @@ public class SmelteryRecipeRegistry {
 		registerSmartOutputCasting(TinkerCommons.ingotArdite, TinkerSmeltery.castIngot, fluidStackArdite);
 		
 		//Clear glass
-		registerSmartOutputCasting(new ItemStack(TinkerCommons.blockClearGlass, 1), new ItemStack(TinkerSmeltery.castingBlock, 1, BlockCasting.CastingType.BASIN.getMeta()), new FluidStack(TinkerFluids.glass, Material.VALUE_Glass));
+		//registerSmartOutputCasting(new ItemStack(TinkerCommons.blockClearGlass, 1), new ItemStack(TinkerSmeltery.castingBlock, 1, BlockCasting.CastingType.BASIN.getMeta()), new FluidStack(TinkerFluids.glass, Material.VALUE_Glass));
 	}
 	
 	public static void registerMeltingWithNBT(ItemStack inputItem, FluidStack outputFluidStack, int meltingTime){

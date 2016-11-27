@@ -118,10 +118,9 @@ public class SORecipe{
 		return isPattern(itemStack);
 	}*/
 	
-	public FluidStack getBasinFluid(FluidStack fluid, ItemStack itemStack){
+	public FluidStack getBasinFluidCost(FluidStack fluid, ItemStack itemStack){
 		ICastingRecipe ibasinRecipe = TinkerRegistry.getBasinCasting(itemStack, fluid.getFluid());
 
-		
 		if(ibasinRecipe != null && ibasinRecipe instanceof CastingRecipe){
 			CastingRecipe basinRecipe = (CastingRecipe)ibasinRecipe;
 			FluidStack basinFluid = basinRecipe.getFluid();
@@ -133,7 +132,18 @@ public class SORecipe{
 		}else{
 			return null;
 		}
-		
+	}
+	
+	public ItemStack getBasinResult(FluidStack fluid, ItemStack itemStack){
+		ICastingRecipe ibasinRecipe = TinkerRegistry.getBasinCasting(itemStack, fluid.getFluid());
+
+		if(ibasinRecipe != null && ibasinRecipe instanceof CastingRecipe){
+			CastingRecipe basinRecipe = (CastingRecipe)ibasinRecipe;
+			ItemStack basinResult = basinRecipe.getResult();
+			return basinResult;
+		}else{
+			return null;
+		}
 	}
 	
 	/*

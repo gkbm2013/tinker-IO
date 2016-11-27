@@ -142,6 +142,11 @@ public class SOGui extends GuiContainer{
         		}
         	}
         	
+        	//Basin icon
+        	if(tileSO.hasBasinUPG()){
+        		this.drawTexturedModalRect(k + 77, l + 52, 177, 104, 16, 16);
+        	}
+        	
         	
 	        
 			int liquidAmount = tileSO.getLiquidAmount(52);

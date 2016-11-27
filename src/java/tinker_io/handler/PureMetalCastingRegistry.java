@@ -2,6 +2,8 @@ package tinker_io.handler;
 
 import java.util.List;
 
+import org.apache.logging.log4j.Level;
+
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.nbt.NBTTagCompound;
@@ -9,6 +11,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
 import slimeknights.tconstruct.library.materials.Material;
 import slimeknights.tconstruct.smeltery.TinkerSmeltery;
+import tinker_io.main.Main;
 import tinker_io.registry.FluidRegister;
 import tinker_io.registry.SmelteryRecipeRegistry;
 
@@ -32,7 +35,8 @@ public class PureMetalCastingRegistry {
 		
 		long endTime   = System.currentTimeMillis();
 		long totalTime = endTime - startTime;
-		System.out.println("[Tinker I/O]Pure Metal casting registry loaded. Cost "+totalTime+" ms");
+		//System.out.println("[Tinker I/O]Pure Metal casting registry loaded. Cost "+totalTime+" ms");
+		Main.logger.log(Level.INFO, "Pure Metal casting registry loaded. Cost "+totalTime+" ms");
 		
 	}
 	

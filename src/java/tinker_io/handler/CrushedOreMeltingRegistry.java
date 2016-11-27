@@ -2,6 +2,8 @@ package tinker_io.handler;
 
 import java.util.List;
 
+import org.apache.logging.log4j.Level;
+
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fluids.Fluid;
@@ -9,6 +11,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
 import slimeknights.mantle.util.RecipeMatch.ItemCombination;
 import slimeknights.tconstruct.library.materials.Material;
+import tinker_io.main.Main;
 import tinker_io.registry.FluidRegister;
 import tinker_io.registry.ItemRegistry;
 import tinker_io.registry.SmelteryRecipeRegistry;
@@ -36,7 +39,8 @@ public class CrushedOreMeltingRegistry {
 		
 		long endTime   = System.currentTimeMillis();
 		long totalTime = endTime - startTime;
-		System.out.println("[Tinker I/O]Crushed Ore melting registry loaded. Cost "+totalTime+" ms");
+		//System.out.println("[Tinker I/O]Crushed Ore melting registry loaded. Cost "+totalTime+" ms");
+		Main.logger.log(Level.INFO, "Crushed Ore melting registry loaded. Cost " + totalTime + " ms");
 	}
 	
 	private static FluidStack itemNBTtoFluidNBT(FluidStack fluidStack, ItemStack itemStack){		

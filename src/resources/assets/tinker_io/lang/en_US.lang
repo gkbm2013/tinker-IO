@@ -18,6 +18,7 @@ item.upg_3.name=Slot Upgrade III
 item.upg_4.name=Slot Upgrade IV
 item.upg_5.name=Redstone Upgrade
 item.upg_6.name=Fortune upgrade
+item.upg_7.name=Basin upgrade
 item.CD_Lonesome_Avenue.name=Music Disc
 item.CD_Lonesome_Avenue.desc=Lonesome Avenue (YouTube Audio Library)
 item.Crushed_ore.name=Crushed Ore
@@ -62,6 +63,9 @@ tio.toolTips.slotUPGinfinity.usage1=Increase 60% to get more crushed ore
 
 tio.toolTips.redstoneUPG=For : Smart Output
 tio.toolTips.redstoneUPG.usage1=Make Smart Output can control by redstone signal
+
+tio.toolTips.basinUPG=For : Smart Output
+tio.toolTips.basinUPG.usage1=Switch to Basin Mode
 
 tio.toolTips.CD_Lonesome_Avenue=In memory of the modding process of Tinker I/O
 

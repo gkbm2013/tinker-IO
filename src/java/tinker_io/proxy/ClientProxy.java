@@ -1,5 +1,7 @@
 package tinker_io.proxy;
 
+import org.apache.logging.log4j.Level;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
@@ -8,6 +10,7 @@ import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import tinker_io.TileEntity.StirlingEngineTileEntity;
+import tinker_io.main.Main;
 import tinker_io.registry.BlockRenderRegister;
 import tinker_io.registry.FluidRenderRegister;
 import tinker_io.registry.ItemColorRegister;
@@ -16,7 +19,8 @@ import tinker_io.render.TileEntityStirlingEngineRender;
 
 public class ClientProxy extends CommonProxy{
 	public void registerRenderThings() {
-		System.out.println("[Tinker I/O] Render Started!");
+		//System.out.println("[Tinker I/O] Render Started!");
+		Main.logger.log(Level.INFO, "Render Started!");
 		ClientRegistry.bindTileEntitySpecialRenderer(StirlingEngineTileEntity.class, new TileEntityStirlingEngineRender());
 		FluidRenderRegister.fluidModelRegister();
 	}
