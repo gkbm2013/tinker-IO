@@ -35,14 +35,14 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 		version = Main.VERSION,
 		name = Main.Name,
 		dependencies="required-after:Forge@[12.18.1.2073,);"
-				+ "required-after:tconstruct@[1.10.2-2.5.2,);"
+				+ "required-after:tconstruct@[1.10.2-2.5.6b,);"
 				+ "after:JEI;"
 				+ "after:Waila;",
 		acceptedMinecraftVersions = "[1.10.2,]")
 public class Main
 {
     public static final String MODID = "tinker_io";
-    public static final String VERSION = "alpha 2.4.0";
+    public static final String VERSION = "alpha 2.4.0a";
     public static final String Name = "Tinker I/O";
     
     //public static boolean iguanas_support;
@@ -52,7 +52,7 @@ public class Main
 	public static CommonProxy proxy;
     
     public static Configuration config;
-    public static Logger logger;
+    public static Logger logger = LogManager.getLogger(Main.Name);
     
     //MOD
     @Instance(Main.MODID)
@@ -76,8 +76,6 @@ public class Main
     	proxy.preInit(event);
     	config = new Configuration(event.getSuggestedConfigurationFile());
     	TIOConfig.syncConfig();
-    	
-    	logger = LogManager.getLogger(Main.Name);
     	
 		/*
 		 * iguanas_support_cofg and Smart Output Eliminate List list will be removed to come.
