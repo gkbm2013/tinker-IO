@@ -1,4 +1,4 @@
-package tinker_io.inventory;
+package tinker_io.inventory.slots;
 
 import tinker_io.registry.ItemRegistry;
 import net.minecraft.inventory.IInventory;

@@ -59,10 +59,10 @@ tio.toolTips.slotUPG4.usage1=Increase 4 slot in Smart Output
 tio.toolTips.slotUPG4.usage2=Increase 120 maximum process slot in Fuel Input Machine
 
 tio.toolTips.slotUPGinfinity=For : Ore Crusher
-tio.toolTips.slotUPGinfinity.usage1=Increase 60% to get more crushed ore
+tio.toolTips.slotUPGinfinity.usage1=Increase 30 percent of triplication rate for Ore Crusher.
 
 tio.toolTips.redstoneUPG=For : Smart Output
-tio.toolTips.redstoneUPG.usage1=Make Smart Output can control by redstone signal
+tio.toolTips.redstoneUPG.usage1=By using this upgrade, Smart Output can be control by redstone signal.
 
 tio.toolTips.basinUPG=For : Smart Output
 tio.toolTips.basinUPG.usage1=Switch to Basin Mode

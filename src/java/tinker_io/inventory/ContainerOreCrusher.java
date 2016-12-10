@@ -1,6 +1,9 @@
 package tinker_io.inventory;
 
 import tinker_io.TileEntity.OreCrusherTileEntity;
+import tinker_io.inventory.slots.SlotFortuneEnchantedBook;
+import tinker_io.inventory.slots.SlotProduct;
+import tinker_io.inventory.slots.SlotUPG;
 import tinker_io.items.SpeedUPG;
 import tinker_io.registry.ItemRegistry;
 
@@ -101,8 +104,13 @@ public class ContainerOreCrusher extends Container{
             		}
             	}
             	//slot UPG. infinity is in player
-            	else if (stackInSlot.isItemEqual(new ItemStack(ItemRegistry.Upgrade, 1, 6))){
-            		if (!this.mergeItemStack(stackInSlot, slotsFortuneUPG3, slotsFortuneUPG3+1, false)){
+            	else if (this.getSlot(slotsFortuneUPG3) != null && this.getSlot(slotsFortuneUPG3).getStack() == null && stackInSlot.isItemEqual(new ItemStack(ItemRegistry.Upgrade, 1, 6))){
+            		if (!this.mergeItemStack(new ItemStack(stackInSlot.getItem(), 1 , stackInSlot.getMetadata()), slotsFortuneUPG3, slotsFortuneUPG3+1, false)){
+            			return null;
+            		}else{
+            			if(stackInSlot != null){
+            				slotObject.decrStackSize(1);
+            			}
             			return null;
             		}
             	}

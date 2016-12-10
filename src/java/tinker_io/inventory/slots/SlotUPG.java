@@ -1,4 +1,4 @@
-package tinker_io.inventory;
+package tinker_io.inventory.slots;
 
 import java.util.List;
 

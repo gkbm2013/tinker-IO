@@ -5,6 +5,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import tinker_io.TileEntity.fim.FIMTileEntity;
 import tinker_io.api.Observable;
 import tinker_io.api.Observer;
+import tinker_io.inventory.slots.SlotFIMFuel;
+import tinker_io.inventory.slots.SlotFIMSpeedUPG;
 import tinker_io.items.SolidFuel;
 import tinker_io.items.SpeedUPG;
 import tinker_io.items.Upgrade;

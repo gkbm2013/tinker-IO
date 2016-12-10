@@ -15,6 +15,8 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import tinker_io.TileEntity.SOTileEntity;
 import tinker_io.handler.SORecipe;
+import tinker_io.inventory.slots.SlotProduct;
+import tinker_io.inventory.slots.SlotUPG;
 import tinker_io.items.Upgrade;
 
 public class ContainerSO extends ContainerTemplate{

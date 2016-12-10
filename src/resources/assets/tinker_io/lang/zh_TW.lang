@@ -59,7 +59,7 @@ tio.toolTips.slotUPG4.usage1=使智慧輸出增加 4 個輸出欄位
 tio.toolTips.slotUPG4.usage2=使燃料輸入機增加 120 個處理欄位
 
 tio.toolTips.slotUPGinfinity=For : 礦物粉碎機
-tio.toolTips.slotUPGinfinity.usage1=增加60%的機率取得更多礦物碎片
+tio.toolTips.slotUPGinfinity.usage1=增加百分之30的機率取得更多礦物碎片
 
 tio.toolTips.redstoneUPG=For : 智慧輸出
 tio.toolTips.redstoneUPG.usage1=使智慧輸出可以被紅石控制

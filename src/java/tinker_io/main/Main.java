@@ -42,7 +42,7 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 public class Main
 {
     public static final String MODID = "tinker_io";
-    public static final String VERSION = "alpha 2.4.0a";
+    public static final String VERSION = "release 2.4.1";
     public static final String Name = "Tinker I/O";
     
     //public static boolean iguanas_support;
