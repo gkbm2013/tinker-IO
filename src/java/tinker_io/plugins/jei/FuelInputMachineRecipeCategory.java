@@ -12,16 +12,16 @@ import mezz.jei.api.gui.IDrawableAnimated;
 import mezz.jei.api.gui.IDrawableStatic;
 import mezz.jei.api.gui.IGuiItemStackGroup;
 import mezz.jei.api.gui.IRecipeLayout;
+import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.IRecipeCategory;
-import mezz.jei.api.recipe.IRecipeWrapper;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.translation.I18n;
 import tinker_io.main.Main;
 import tinker_io.registry.ItemRegistry;
 
-public class FuelInputMachineRecipeCategory implements IRecipeCategory {
+public class FuelInputMachineRecipeCategory implements IRecipeCategory<FuelInputMachineRecipeWrapper> {
 
 	public static String CATEGORY = Main.MODID + ":" + "fuel_input_mechine";
 	public static ResourceLocation backgroundLocation = new ResourceLocation(Main.MODID, "textures/gui/jei/Fuel_Input_Mechine_jei_recipe.png");
@@ -45,7 +45,7 @@ public class FuelInputMachineRecipeCategory implements IRecipeCategory {
 	@Nonnull
 	@Override
 	public String getTitle() {
-		return I18n.translateToLocal("tile.fuel_input_machine.name");
+		return I18n.format("tile.fuel_input_machine.name");
 	}
 
 	@Nonnull
@@ -61,23 +61,53 @@ public class FuelInputMachineRecipeCategory implements IRecipeCategory {
 	public void drawAnimations(Minecraft minecraft) {
 		arrow.draw(minecraft, 81, 24);
 	}
+	
+	@Override
+	public void setRecipe(IRecipeLayout recipeLayout, FuelInputMachineRecipeWrapper recipe, IIngredients ingredients) {
+		IGuiItemStackGroup items = recipeLayout.getItemStacks();
+		
+		items.init(0, true, 57, 22);
+		items.set(0, ingredients.getInputs(ItemStack.class).get(0));
+	    //items.setFromRecipe(0, recipe.getInputs());
+	    
+	    List<ItemStack> speedUpg = Lists.newLinkedList();
+	    speedUpg.add(new ItemStack(ItemRegistry.SpeedUPG));
+	    
+	    items.init(2, false, 3, 22);
+	    items.set(2, speedUpg);
+	    //items.setFromRecipe(2, speedUpg);
+	}
 
 	@Override
+	public IDrawable getIcon() {
+		// TODO
+		return null;
+	}
+
+	@Override
+	@Deprecated
+	public void setRecipe(IRecipeLayout recipeLayout, FuelInputMachineRecipeWrapper recipeWrapper) {
+		
+	}
+	
+	/*@Override
 	public void setRecipe(@Nonnull IRecipeLayout recipeLayout, @Nonnull IRecipeWrapper recipeWrapper) {
 		if(recipeWrapper instanceof FuelInputMachineRecipeWrapper){
 			FuelInputMachineRecipeWrapper recipe = (FuelInputMachineRecipeWrapper) recipeWrapper;
 			IGuiItemStackGroup items = recipeLayout.getItemStacks();
 			
 			items.init(0, true, 57, 22);
-		    items.setFromRecipe(0, recipe.getInputs());
+			items.set(0, recipe.getInputs());
+		    //items.setFromRecipe(0, recipe.getInputs());
 		    
 		    List<ItemStack> speedUpg = Lists.newLinkedList();
 		    speedUpg.add(new ItemStack(ItemRegistry.SpeedUPG));
 		    
 		    items.init(2, false, 3, 22);
-		    items.setFromRecipe(2, speedUpg);
+		    items.set(2, speedUpg);
+		    //items.setFromRecipe(2, speedUpg);
 		}
 		
-	}
+	}*/
 
 }

@@ -35,7 +35,7 @@ public class FIMTileEntity extends TileSmelteryComponent implements ITickable, O
     }
 
     public ItemStack fuel = new ItemStack(ItemRegistry.SolidFuel);
-    private List<Observer> obs = new ArrayList();
+    private List<Observer> obs = new ArrayList<Observer>();
 
     protected SCInfo scInfo;
     protected FuelFSM fuelFSM = FuelFSMFactory.getNewFuelFSM(this);
@@ -477,7 +477,7 @@ public class FIMTileEntity extends TileSmelteryComponent implements ITickable, O
     @Override
     public boolean canInsertItem(int index, ItemStack itemStackIn, EnumFacing direction)
     {
-        return inv.canExtractItem(index, itemStackIn, direction);
+    	return inv.canInsertItem(index, itemStackIn, direction);
     }
 
 

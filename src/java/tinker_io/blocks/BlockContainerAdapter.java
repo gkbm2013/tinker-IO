@@ -59,5 +59,11 @@ public abstract class BlockContainerAdapter extends BlockContainer{
 	    }
 	    super.breakBlock(worldIn, pos, state);
 	  }
+	
+	@Override
+	public boolean rotateBlock(World world, BlockPos pos, EnumFacing axis)
+    {
+        return false;
+    }
 
 }

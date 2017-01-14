@@ -15,7 +15,13 @@ public class SmartOutputRecipeHandler  implements IRecipeHandler<SmartOutputReci
 
 	@Nonnull
 	@Override
+	@Deprecated
 	public String getRecipeCategoryUid() {
+		return SmartOutputRecipeCategory.CATEGORY;
+	}
+	
+	@Override
+	public String getRecipeCategoryUid(SmartOutputRecipeWrapper recipe) {
 		return SmartOutputRecipeCategory.CATEGORY;
 	}
 
@@ -31,11 +37,6 @@ public class SmartOutputRecipeHandler  implements IRecipeHandler<SmartOutputReci
 		           recipe.inputFluid.get(0) != null &&
 		           (!recipe.hasCast() || (!recipe.cast.isEmpty() && recipe.cast.get(0) != null)) &&
 		           (recipe.output != null && !recipe.output.isEmpty() && recipe.output.get(0) != null);
-	}
-
-	@Override
-	public String getRecipeCategoryUid(SmartOutputRecipeWrapper recipe) {
-		return SmartOutputRecipeCategory.CATEGORY;
 	}
 
 }

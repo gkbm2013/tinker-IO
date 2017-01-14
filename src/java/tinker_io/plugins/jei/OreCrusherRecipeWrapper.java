@@ -5,8 +5,10 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 
+import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.BlankRecipeWrapper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
@@ -27,6 +29,7 @@ public class OreCrusherRecipeWrapper extends BlankRecipeWrapper {
 	}
 
 	@Override
+	@Deprecated
 	public List<ItemStack> getInputs() {
 		if(oreInputList == null){
 			return this.getInputs();
@@ -34,10 +37,9 @@ public class OreCrusherRecipeWrapper extends BlankRecipeWrapper {
 		return oreInputList;
 	}
 	
-	@Override
-	public List<ItemStack> getOutputs() {
+	public List<ItemStack> getOutputsHook() {
 		if(outputList == null){
-			return this.getOutputs();
+			return ImmutableList.of();
 		}
 		return outputList;
 	}
@@ -83,6 +85,12 @@ public class OreCrusherRecipeWrapper extends BlankRecipeWrapper {
 			oreDicName = OreDictionary.getOreName(oreID);
 		}
 		return oreDicName;
+	}
+
+	@Override
+	public void getIngredients(IIngredients ingredients) {
+		ingredients.setInputLists(ItemStack.class, ImmutableList.of(oreInputList));
+		ingredients.setOutputs(ItemStack.class, getOutputsHook());
 	}
 	
 	

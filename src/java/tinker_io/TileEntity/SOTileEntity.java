@@ -421,7 +421,7 @@ public class SOTileEntity extends MultiServantLogic implements IFluidHandler, IF
 		ItemStack resultItem = null;
 		
 		if(info != null && liquid != null){
-			if(this.itemStacksSO[0] != null && recipes.getCastingFluidCost(liquid, itemStacksSO[0]) != null && recipes.getCastingFluidCost(liquid, itemStacksSO[0]).amount <= liquid.amount){
+			if(recipes.getCastingFluidCost(liquid, itemStacksSO[0]) != null && recipes.getCastingFluidCost(liquid, itemStacksSO[0]).amount <= liquid.amount){
 				if(recipes.getCastingRecipes(liquid, this.itemStacksSO[0]) != null){
 					resultItem = recipes.getCastingRecipes(liquid, this.itemStacksSO[0]);
 					mode = "table";
@@ -496,7 +496,6 @@ public class SOTileEntity extends MultiServantLogic implements IFluidHandler, IF
 			product = recipes.getBasinResult(liquid, this.itemStacksSO[0]); // Product
 			fluidCost = recipes.getBasinFluidCost(liquid, itemStacksSO[0]);
 		}
-		
 		if(product != null && fluidCost != null && fluidCost.amount <= liquid.amount){
 			this.drain(fluidCost, true);
 			
@@ -542,7 +541,7 @@ public class SOTileEntity extends MultiServantLogic implements IFluidHandler, IF
     
     public void update() {
     	if (worldObj.isRemote) return;
-    	this.notifyBlockUpdate();
+    	//this.notifyBlockUpdate();
     	
     	if(canFrozen()){
     		if(currentFrozenTime >= frozenTimeMax){
@@ -554,8 +553,6 @@ public class SOTileEntity extends MultiServantLogic implements IFluidHandler, IF
     		}
     		
     		this.notifyBlockUpdate();
-    	}else{
-    		currentFrozenTime = 0;
     	}
     }
 

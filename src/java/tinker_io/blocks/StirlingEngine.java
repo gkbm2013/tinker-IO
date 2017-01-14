@@ -47,9 +47,10 @@ public class StirlingEngine extends BlockContainer {
 	@Override
 	protected BlockStateContainer createBlockState()
 	{
-		return new BlockStateContainer(this, new IProperty[] { FACING });
+		return new BlockStateContainer(this, FACING );
 	}
 
+	@Override
 	public TileEntity createNewTileEntity(World worldIn, int meta) {
 		return new StirlingEngineTileEntity();
 	}
@@ -126,7 +127,7 @@ public class StirlingEngine extends BlockContainer {
 	@Override
 	public void onBlockAdded(World worldIn, BlockPos pos, IBlockState state)
     {
-        this.setDefaultFacing(worldIn, pos, state);
+		this.setDefaultFacing(worldIn, pos, state);
     }
 	
 	private void setDefaultFacing(World worldIn, BlockPos pos, IBlockState state)
@@ -247,4 +248,10 @@ public class StirlingEngine extends BlockContainer {
 	    }
 	    return items;
 	}
+	
+	@Override
+	public boolean rotateBlock(World world, BlockPos pos, EnumFacing axis)
+    {
+        return false;
+    }
 }
