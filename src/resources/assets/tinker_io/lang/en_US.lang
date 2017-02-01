@@ -77,6 +77,9 @@ tio.toolTips.StirlingEngine.liquidTemp=Fuel Temperature
 tio.toolTips.StirlingEngine.energyStored=Enery Stored
 tio.toolTips.StirlingEngine.generatePerTick=Generate per tick
 
+#Chat Message
+tio.playerMessage.FIM.rightClick=Fuel Input Machine should be placed in the Smeltery structure.
+
 #Waila
 tio.plugin.waila.tankEmpty=(Empty)
 

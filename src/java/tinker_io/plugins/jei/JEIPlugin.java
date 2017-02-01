@@ -26,15 +26,14 @@ import slimeknights.tconstruct.library.TinkerRegistry;
 import slimeknights.tconstruct.library.smeltery.Cast;
 import slimeknights.tconstruct.library.smeltery.CastingRecipe;
 import slimeknights.tconstruct.library.smeltery.ICastingRecipe;
-import slimeknights.tconstruct.plugin.jei.CastingRecipeWrapper;
 import slimeknights.tconstruct.plugin.jei.PatternSubtypeInterpreter;
-import slimeknights.tconstruct.plugin.jei.TableSubtypeInterpreter;
 import slimeknights.tconstruct.smeltery.TinkerSmeltery;
 import tinker_io.gui.FIMGui;
 import tinker_io.gui.OreCrusherGui;
 import tinker_io.gui.SOGui;
 import tinker_io.handler.OreCrusherRecipe;
 import tinker_io.handler.SORecipe;
+import tinker_io.registry.BlockRegistry;
 
 @mezz.jei.api.JEIPlugin
 public class JEIPlugin implements IModPlugin {
@@ -81,6 +80,7 @@ public class JEIPlugin implements IModPlugin {
 			}
 		});
 		registry.addRecipes(FIMrecipeList);
+		registry.addRecipeCategoryCraftingItem(new ItemStack(BlockRegistry.fuelInputMachine), FIMCategory.getUid());
 
 		//Ore Crusher
 		List<OreCrusherRecipeWrapper> OCrecipeList = Lists.newLinkedList();
@@ -90,6 +90,7 @@ public class JEIPlugin implements IModPlugin {
 			}
 		});
 		registry.addRecipes(OCrecipeList);
+		registry.addRecipeCategoryCraftingItem(new ItemStack(BlockRegistry.oreCrusher), OCCategory.getUid());
 
 		//Smart Output
 		Map<Triple<Item, Item, Fluid>, List<ItemStack >> castDict = Maps.newHashMap();
@@ -127,7 +128,9 @@ public class JEIPlugin implements IModPlugin {
 		List<CastingRecipe> castingRecipeWithNBT = SORecipe.getCastingRecipeWithNBT();
 		castingRecipeWithNBT.stream()
 		.forEach(nbtRecipe -> registry.addRecipes(ImmutableList.of(new SmartOutputRecipeWrapper(nbtRecipe, false))));
-
+		registry.addRecipeCategoryCraftingItem(new ItemStack(BlockRegistry.smartOutput), SOCategory.getUid());
+		
+		
 		//Click area
 		registry.addRecipeClickArea(SOGui.class, 94, 34, 24, 15, SmartOutputRecipeCategory.CATEGORY);
 		registry.addRecipeClickArea(OreCrusherGui.class, 82, 35, 24, 15, OreCrusherRecipeCategory.CATEGORY);

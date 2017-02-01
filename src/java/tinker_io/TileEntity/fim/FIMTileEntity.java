@@ -113,7 +113,7 @@ public class FIMTileEntity extends TileSmelteryComponent implements ITickable, O
     	}
     }
     
-    private TileSmeltery getSmeltery() {
+    public TileSmeltery getSmeltery() {
     	TileSmeltery smelteryTileEntity = null;
     	
     	TileEntity te = this.getSmelteryTankHandler();
@@ -122,6 +122,17 @@ public class FIMTileEntity extends TileSmelteryComponent implements ITickable, O
     	}
 		return smelteryTileEntity;
 	}
+    
+    public TileSmeltery getMasterTE(){
+    	TileSmeltery smelteryTileEntity = null;
+    	if(this.getMasterPosition() != null){
+    		TileEntity te = worldObj.getTileEntity(this.getMasterPosition());
+    		if(te instanceof TileSmeltery){
+    			smelteryTileEntity = (TileSmeltery) te;
+    		}
+    	}
+    	return smelteryTileEntity; 
+    }
     
     private void calculateTemperature(int originFuelTemp){
     	double ratio = this.getSpeedUpInfo().ratio;

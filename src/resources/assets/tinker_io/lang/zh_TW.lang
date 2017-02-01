@@ -77,6 +77,9 @@ tio.toolTips.StirlingEngine.liquidTemp=燃料溫度
 tio.toolTips.StirlingEngine.energyStored=儲存的能量
 tio.toolTips.StirlingEngine.generatePerTick=單位時間產生的能量
 
+#Chat Message
+tio.playerMessage.FIM.rightClick=燃料輸入機應該被放在冶煉爐機構裡
+
 #Waila
 tio.plugin.waila.tankEmpty=(空)
 

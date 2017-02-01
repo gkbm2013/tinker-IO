@@ -48,6 +48,7 @@ public class SOTileEntity extends MultiServantLogic implements IFluidHandler, IF
 	private final int[] slotsUPGdown = new int[] { 3 };
 	
 	int connection = 0;
+	int tick = 0;
 	
 	public int currentFrozenTime = 0;
 	public int frozenTimeMax = 2; //Ticks
@@ -73,7 +74,8 @@ public class SOTileEntity extends MultiServantLogic implements IFluidHandler, IF
 		this.notifyBlockUpdate();
         return amount;
 	}
-
+	
+	
 	/**
 	 * Drains fluid out of internal tanks, distribution is left entirely to the IFluidHandler.
 	 */
@@ -420,16 +422,20 @@ public class SOTileEntity extends MultiServantLogic implements IFluidHandler, IF
 		FluidStack liquid = info.fluid;
 		ItemStack resultItem = null;
 		
-		if(info != null && liquid != null){
-			if(recipes.getCastingFluidCost(liquid, itemStacksSO[0]) != null && recipes.getCastingFluidCost(liquid, itemStacksSO[0]).amount <= liquid.amount){
-				if(recipes.getCastingRecipes(liquid, this.itemStacksSO[0]) != null){
-					resultItem = recipes.getCastingRecipes(liquid, this.itemStacksSO[0]);
-					mode = "table";
+		if(info != null && liquid != null){			
+			if(hasBasinUPG()){
+				if(recipes.getBasinFluidCost(liquid, itemStacksSO[0]) != null && recipes.getBasinFluidCost(liquid, itemStacksSO[0]).amount <= liquid.amount){
+					if(recipes.getBasinResult(liquid, itemStacksSO[0]) != null){
+						resultItem = recipes.getBasinResult(liquid, this.itemStacksSO[0]);
+						mode = "basin";
+					}
 				}
-			}else if(hasBasinUPG() && recipes.getBasinFluidCost(liquid, itemStacksSO[0]) != null && recipes.getBasinFluidCost(liquid, itemStacksSO[0]).amount <= liquid.amount){
-				if(recipes.getBasinResult(liquid, itemStacksSO[0]) != null){
-					resultItem = recipes.getBasinResult(liquid, this.itemStacksSO[0]);
-					mode = "basin";
+			}else{
+				if(recipes.getCastingFluidCost(liquid, itemStacksSO[0]) != null && recipes.getCastingFluidCost(liquid, itemStacksSO[0]).amount <= liquid.amount){
+					if(recipes.getCastingRecipes(liquid, this.itemStacksSO[0]) != null){
+						resultItem = recipes.getCastingRecipes(liquid, this.itemStacksSO[0]);
+						mode = "table";
+					}
 				}
 			}
 			
@@ -540,19 +546,27 @@ public class SOTileEntity extends MultiServantLogic implements IFluidHandler, IF
     
     
     public void update() {
-    	if (worldObj.isRemote) return;
+    	if (worldObj.isRemote){return;}
     	//this.notifyBlockUpdate();
     	
     	if(canFrozen()){
     		if(currentFrozenTime >= frozenTimeMax){
     			currentFrozenTime = 0;
     			frozen();
-    			//notifyMasterOfChange();
+    			
     		}else{
     				currentFrozenTime++;
     		}
     		
     		this.notifyBlockUpdate();
+    	}
+    	
+    	if(tank.canFill() || tank.canDrain()){
+    		if(tick % 4 == 0){
+    			this.notifyBlockUpdate();
+    			tick = 0;
+    		}
+    		tick++;
     	}
     }
 
@@ -651,6 +665,7 @@ public class SOTileEntity extends MultiServantLogic implements IFluidHandler, IF
 		if(worldObj!=null && pos != null){
 			IBlockState state = worldObj.getBlockState(pos);
 			worldObj.notifyBlockUpdate(pos, state, state, 3);
+			worldObj.markChunkDirty(pos, this);
 		}
 	}
 

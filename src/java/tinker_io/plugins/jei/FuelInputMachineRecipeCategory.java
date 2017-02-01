@@ -80,7 +80,6 @@ public class FuelInputMachineRecipeCategory implements IRecipeCategory<FuelInput
 
 	@Override
 	public IDrawable getIcon() {
-		// TODO
 		return null;
 	}
 

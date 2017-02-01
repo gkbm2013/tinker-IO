@@ -5,6 +5,7 @@ import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -20,6 +21,7 @@ import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import slimeknights.tconstruct.smeltery.tileentity.TileSmeltery;
 import slimeknights.tconstruct.smeltery.tileentity.TileSmelteryComponent;
 import tinker_io.TileEntity.fim.FIMTileEntity;
 import tinker_io.main.Main;
@@ -78,10 +80,25 @@ public class FuelInputMachine extends BlockContainerAdapter
 	        return false;
 	      }
 		if (!worldIn.isRemote) {
-		    playerIn.openGui(Main.instance, 0, worldIn, pos.getX(), pos.getY(), pos.getZ());
+			TileEntity te = worldIn.getTileEntity(pos);
+			boolean showMessage = true;
+			
+			if(te != null && te instanceof FIMTileEntity){
+				FIMTileEntity tile = (FIMTileEntity) te;
+				if(tile.getMasterTE() != null){
+					TileSmeltery tileSC = tile.getMasterTE();
+					if(tileSC.isActive()){
+						playerIn.openGui(Main.instance, 0, worldIn, pos.getX(), pos.getY(), pos.getZ());
+						toSpecialPlayerMessage(worldIn, pos, playerIn);
+						showMessage =  false;
+					}
+				}
+			}
+		    if(showMessage){
+		    	playerIn.addChatMessage(new TextComponentString(TextFormatting.RED + I18n.format("tio.playerMessage.FIM.rightClick")));
+		    }
 		}
 		
-		toSpecialPlayerMessage(worldIn, pos, playerIn);
         return true;
     }
 	
