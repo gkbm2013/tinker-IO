@@ -3,15 +3,14 @@ package tinker_io.TileEntity;
 import cofh.api.energy.EnergyStorage;
 import cofh.api.energy.IEnergyReceiver;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemEnchantedBook;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
-import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
-import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
@@ -48,7 +47,7 @@ public class OreCrusherTileEntity extends TileEntityContainerAdapter implements 
 
 	@Override
 	public String getName() {
-		return this.hasCustomName() ? this.nameOreCrusher : I18n.translateToLocal("tile.Ore_Crusher.name");
+		return this.hasCustomName() ? this.nameOreCrusher : I18n.format("tile.Ore_Crusher.name");
 	}
 
 	@Override
@@ -59,24 +58,22 @@ public class OreCrusherTileEntity extends TileEntityContainerAdapter implements 
 	//Slot
 	@Override
 	public int[] getSlotsForFace(EnumFacing side) {
-		int[] slot = null;
-		if(side == EnumFacing.DOWN){
-			slot = this.slotsProduct;
-		}else{
-			slot = this.slotsOre;
-		}
+		int[] slot = new int[]{this.slotsProduct[0], this.slotsOre[0]};
 		return slot;
 	}
 
 	@Override
 	public boolean canInsertItem(int index, ItemStack itemStackIn, EnumFacing direction) {
+		if(index != slotsOre[0]){
+			return false;
+		}
 		OreCrusherBanList banList = OreCrusherBanList.banedOreDicList();
 		return this.isOreInOreDic(itemStackIn) && banList.canItemCrush(itemStackIn);
 	}
 
 	@Override
 	public boolean canExtractItem(int index, ItemStack stack, EnumFacing direction) {
-		if(index == 2){
+		if(index == slotsProduct[0]){
 			return true;
 		}
 		return false;
