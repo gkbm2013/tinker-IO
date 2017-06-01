@@ -3,17 +3,12 @@ package tinker_io.render;
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.model.ModelBase;
-import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
 import net.minecraft.entity.Entity;
 import tinker_io.TileEntity.StirlingEngineTileEntity;
 import tinker_io.main.Main;
 import tinker_io.model.StirlingEngineModel;
-import tinker_io.registry.BlockRegistry;
 
 public class TileEntityStirlingEngineRender extends TileEntitySpecialRenderer<StirlingEngineTileEntity>{
 	
@@ -38,7 +33,7 @@ public class TileEntityStirlingEngineRender extends TileEntitySpecialRenderer<St
 		//This is setting the initial location.
         GL11.glTranslatef((float) x + 0.5F, (float) y + 1.5F, (float) z + 0.5F);
 		//This is the texture of your block. It's pathed to be the same place as your other blocks here.
-        ResourceLocation textures = (new ResourceLocation(Main.MODID, "textures/models/specialRender/StirlingEngine.png")); 
+        ResourceLocation textures = (new ResourceLocation(Main.MODID, "textures/models/special_render/stirling_engine.png")); 
 		//binding the textures
         Minecraft.getMinecraft().renderEngine.bindTexture(textures);
 

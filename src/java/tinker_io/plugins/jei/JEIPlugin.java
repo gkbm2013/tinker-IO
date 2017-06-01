@@ -21,13 +21,13 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.oredict.OreDictionary;
-import slimeknights.tconstruct.TConstruct;
+//import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.library.TinkerRegistry;
 import slimeknights.tconstruct.library.smeltery.Cast;
 import slimeknights.tconstruct.library.smeltery.CastingRecipe;
 import slimeknights.tconstruct.library.smeltery.ICastingRecipe;
-import slimeknights.tconstruct.plugin.jei.PatternSubtypeInterpreter;
-import slimeknights.tconstruct.smeltery.TinkerSmeltery;
+/*import slimeknights.tconstruct.plugin.jei.PatternSubtypeInterpreter;
+import slimeknights.tconstruct.smeltery.TinkerSmeltery;*/
 import tinker_io.gui.FIMGui;
 import tinker_io.gui.OreCrusherGui;
 import tinker_io.gui.SOGui;
@@ -43,12 +43,12 @@ public class JEIPlugin implements IModPlugin {
 	@Override
 	public void registerItemSubtypes(ISubtypeRegistry registry) {
 		// casts
-		PatternSubtypeInterpreter patternInterpreter = new PatternSubtypeInterpreter();
+		/*PatternSubtypeInterpreter patternInterpreter = new PatternSubtypeInterpreter();
 
 		if(TConstruct.pulseManager.isPulseLoaded(TinkerSmeltery.PulseId)) {
 			registry.registerSubtypeInterpreter(TinkerSmeltery.cast, patternInterpreter);
 			registry.registerSubtypeInterpreter(TinkerSmeltery.clayCast, patternInterpreter);
-		}
+		}*/
 	}
 
 	@Override
@@ -57,17 +57,21 @@ public class JEIPlugin implements IModPlugin {
 		IGuiHelper guiHelper = jeiHelpers.getGuiHelper();
 
 		OreCrusherRecipeCategory OCCategory = new OreCrusherRecipeCategory(guiHelper);
-		OreCrusherRecipeHandler OCRecipeHandler = new OreCrusherRecipeHandler();
+		//OreCrusherRecipeHandler OCRecipeHandler = new OreCrusherRecipeHandler();
 
 		SmartOutputRecipeCategory SOCategory = new SmartOutputRecipeCategory(guiHelper);
-		SmartOutputRecipeHandler SORecipeHandler = new SmartOutputRecipeHandler();
+		//SmartOutputRecipeHandler SORecipeHandler = new SmartOutputRecipeHandler();
 
 		FuelInputMachineRecipeCategory FIMCategory = new FuelInputMachineRecipeCategory(guiHelper);
-		FuelInputMachineRecipeHandler FIMRecipeHandler = new FuelInputMachineRecipeHandler();
+		//FuelInputMachineRecipeHandler FIMRecipeHandler = new FuelInputMachineRecipeHandler();
 
 		registry.addRecipeCategories(OCCategory, SOCategory, FIMCategory);
-		registry.addRecipeHandlers(OCRecipeHandler, SORecipeHandler, FIMRecipeHandler);
-
+		//registry.addRecipeHandlers(OCRecipeHandler, SORecipeHandler, FIMRecipeHandler);
+		
+		registry.handleRecipes(FuelInputMachineRecipeWrapper.class, new FuelInputMachineRecipeWrapperFactory(), FuelInputMachineRecipeCategory.CATEGORY);
+		registry.handleRecipes(OreCrusherRecipeWrapper.class, new OreCrusherRecipeWrapperFactory(), OreCrusherRecipeCategory.CATEGORY);
+		registry.handleRecipes(SmartOutputRecipeWrapper.class, new SmartOutputRecipeWrapperFactory(), SmartOutputRecipeCategory.CATEGORY);
+		
 		String[] oreDicArray = OreDictionary.getOreNames();
 		List<String> oreDicList = Lists.newArrayList(oreDicArray);
 
@@ -79,7 +83,7 @@ public class JEIPlugin implements IModPlugin {
 				FIMrecipeList.add(new FuelInputMachineRecipeWrapper(itemstack));
 			}
 		});
-		registry.addRecipes(FIMrecipeList);
+		registry.addRecipes(FIMrecipeList, FIMCategory.getUid());
 		registry.addRecipeCategoryCraftingItem(new ItemStack(BlockRegistry.fuelInputMachine), FIMCategory.getUid());
 
 		//Ore Crusher
@@ -89,7 +93,7 @@ public class JEIPlugin implements IModPlugin {
 				OCrecipeList.add(new OreCrusherRecipeWrapper(oreDic));
 			}
 		});
-		registry.addRecipes(OCrecipeList);
+		registry.addRecipes(OCrecipeList, OCCategory.getUid());
 		registry.addRecipeCategoryCraftingItem(new ItemStack(BlockRegistry.oreCrusher), OCCategory.getUid());
 
 		//Smart Output
@@ -106,12 +110,12 @@ public class JEIPlugin implements IModPlugin {
 						// recipe for the cast doesn't exist yet. create list and recipe and add it
 						List<ItemStack> list = Lists.newLinkedList();
 						castDict.put(output, list);
-						registry.addRecipes(ImmutableList.of(new SmartOutputRecipeWrapper(list, recipe, false)));
+						registry.addRecipes(ImmutableList.of(new SmartOutputRecipeWrapper(list, recipe, false)), SOCategory.getUid());
 					}
 					// add the item to the list
 					castDict.get(output).addAll(recipe.cast.getInputs());
 				}else{
-					registry.addRecipes(ImmutableList.of(new SmartOutputRecipeWrapper(recipe, false)));
+					registry.addRecipes(ImmutableList.of(new SmartOutputRecipeWrapper(recipe, false)), SOCategory.getUid());
 				}
 			}
 		}
@@ -120,21 +124,21 @@ public class JEIPlugin implements IModPlugin {
 		for(ICastingRecipe irecipe : TinkerRegistry.getAllBasinCastingRecipes()) {
 			if(irecipe instanceof CastingRecipe) {
 				CastingRecipe recipe = (CastingRecipe) irecipe;
-				registry.addRecipes(ImmutableList.of(new SmartOutputRecipeWrapper(recipe, true)));
+				registry.addRecipes(ImmutableList.of(new SmartOutputRecipeWrapper(recipe, true)), SOCategory.getUid());
 			}
 		}
 
 		//Smart Output custom casting table recipe.
 		List<CastingRecipe> castingRecipeWithNBT = SORecipe.getCastingRecipeWithNBT();
 		castingRecipeWithNBT.stream()
-		.forEach(nbtRecipe -> registry.addRecipes(ImmutableList.of(new SmartOutputRecipeWrapper(nbtRecipe, false))));
+		.forEach(nbtRecipe -> registry.addRecipes(ImmutableList.of(new SmartOutputRecipeWrapper(nbtRecipe, false)), SOCategory.getUid()));
 		registry.addRecipeCategoryCraftingItem(new ItemStack(BlockRegistry.smartOutput), SOCategory.getUid());
 		
 		
 		//Click area
-		registry.addRecipeClickArea(SOGui.class, 94, 34, 24, 15, SmartOutputRecipeCategory.CATEGORY);
-		registry.addRecipeClickArea(OreCrusherGui.class, 82, 35, 24, 15, OreCrusherRecipeCategory.CATEGORY);
-		registry.addRecipeClickArea(FIMGui.class, 102, 35, 18, 18, FuelInputMachineRecipeCategory.CATEGORY);
+		registry.addRecipeClickArea(SOGui.class, 94, 34, 24, 15, SOCategory.getUid());
+		registry.addRecipeClickArea(OreCrusherGui.class, 82, 35, 24, 15, OCCategory.getUid());
+		registry.addRecipeClickArea(FIMGui.class, 102, 35, 18, 18, FIMCategory.getUid());
 	}
 
 	@Override

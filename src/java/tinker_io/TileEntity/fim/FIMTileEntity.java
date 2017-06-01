@@ -27,11 +27,11 @@ import tinker_io.registry.ItemRegistry;
 
 public class FIMTileEntity extends TileSmelteryComponent implements ITickable, Observable<Observer>, ISidedInventory
 {
-    private static final int[] slotsSpeedUPG = new int[] { 0 };
-    private static final int[] slotsFuel = new int[] { 1 };
+    static final int[] slotsSpeedUPG = new int[] { 0 };
+    static final int[] slotsFuel = new int[] { 1 };
 
-    public FIMTileEntity()
-    {
+    public FIMTileEntity(){
+    	
     }
 
     public ItemStack fuel = new ItemStack(ItemRegistry.SolidFuel);
@@ -60,7 +60,7 @@ public class FIMTileEntity extends TileSmelteryComponent implements ITickable, O
     @Override
     public void update()
     {
-        if (!this.worldObj.isRemote)
+        if (!this.world.isRemote)
         {
             if (tick % 4 == 0)
             {
@@ -100,7 +100,7 @@ public class FIMTileEntity extends TileSmelteryComponent implements ITickable, O
     {       
     	//I am reluctant to use reflection. However to preserve Fuel Input Machine, I have to do this.
     	calculateTemperature(originFuelTemp);
-        TempField field = new TempField(worldObj, adap.getPos());
+        TempField field = new TempField(world, adap.getPos());
         field.setTemp(currentTemp);
     }
     
@@ -108,7 +108,7 @@ public class FIMTileEntity extends TileSmelteryComponent implements ITickable, O
     	this.scInfo.update(this.getSmeltery());
     	if (scInfo.canFindSCPos()){
     		Adapter adap = scInfo.getAdapter();
-    		TempField field = new TempField(worldObj, adap.getPos());
+    		TempField field = new TempField(world, adap.getPos());
             field.setTemp(adap.getFuelTemp());
     	}
     }
@@ -126,7 +126,7 @@ public class FIMTileEntity extends TileSmelteryComponent implements ITickable, O
     public TileSmeltery getMasterTE(){
     	TileSmeltery smelteryTileEntity = null;
     	if(this.getMasterPosition() != null){
-    		TileEntity te = worldObj.getTileEntity(this.getMasterPosition());
+    		TileEntity te = world.getTileEntity(this.getMasterPosition());
     		if(te instanceof TileSmeltery){
     			smelteryTileEntity = (TileSmeltery) te;
     		}
@@ -166,7 +166,7 @@ public class FIMTileEntity extends TileSmelteryComponent implements ITickable, O
 
     public int getStackSize(ItemStack stack)
     {
-        return stack == null ? 0 : stack.stackSize;
+        return stack == null ? 0 : stack.getCount();
     }
 
 
@@ -355,6 +355,12 @@ public class FIMTileEntity extends TileSmelteryComponent implements ITickable, O
             throw new UnsupportedOperationException();            
         }
 
+
+		@Override
+		public boolean isEmpty() {
+			return false;
+		}
+
     };
     
     
@@ -402,9 +408,9 @@ public class FIMTileEntity extends TileSmelteryComponent implements ITickable, O
 
 
     @Override
-    public boolean isUseableByPlayer(EntityPlayer player)
+    public boolean isUsableByPlayer(EntityPlayer player)
     {
-        return inv.isUseableByPlayer(player);
+        return inv.isUsableByPlayer(player);
     }
 
 
@@ -509,9 +515,14 @@ public class FIMTileEntity extends TileSmelteryComponent implements ITickable, O
     }
     
     private void notifyBlockUpdate(){
-		if(worldObj!=null && pos != null){
-			IBlockState state = worldObj.getBlockState(pos);
-			worldObj.notifyBlockUpdate(pos, state, state, 3);
+		if(world!=null && pos != null){
+			IBlockState state = world.getBlockState(pos);
+			world.notifyBlockUpdate(pos, state, state, 3);
 		}
+	}
+
+	@Override
+	public boolean isEmpty() {
+		return false;
 	}
 }

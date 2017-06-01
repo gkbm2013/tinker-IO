@@ -4,12 +4,12 @@ import java.util.List;
 
 import org.lwjgl.input.Keyboard;
 
-import tinker_io.main.Main;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.translation.I18n;
+import tinker_io.main.Main;
 
 public class SpeedUPG extends Item {
 	public SpeedUPG(String unlocalizedName){
@@ -26,11 +26,11 @@ public class SpeedUPG extends Item {
 	 * when mouseover
 	 */
 	@Override
-	public void addInformation(ItemStack itemStack, EntityPlayer player, List list, boolean par4) {
-		if(this.isShiftKeyDown()){
-			list.add(TextFormatting.GRAY + I18n.translateToLocalFormatted("tio.toolTips.UpgSpeed"));
+	public void addInformation(ItemStack itemStack, EntityPlayer player, List<String> list, boolean par4) {
+		if(SpeedUPG.isShiftKeyDown()){
+			list.add(TextFormatting.GRAY + I18n.format("tio.toolTips.UpgSpeed"));
 		}else{
-			list.add(TextFormatting.GOLD + I18n.translateToLocalFormatted("tio.toolTips.common.holdShift"));			
+			list.add(TextFormatting.GOLD + I18n.format("tio.toolTips.common.holdShift"));			
 		}
 		
 	}

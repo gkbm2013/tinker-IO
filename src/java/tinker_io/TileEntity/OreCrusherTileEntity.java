@@ -22,12 +22,12 @@ public class OreCrusherTileEntity extends TileEntityContainerAdapter implements 
 		super(null, 6);
 	}
 
-	private final int[] slotsSpeedUPG = new int[] { 0 };
-	private final int[] slotsOre = new int[] { 1 };
-	private final int[] slotsProduct = new int[] { 2 };
-	private final int[] slotsFortuneUPG1 = new int[] { 3 };
-	private final int[] slotsFortuneUPG2 = new int[] { 4 };
-	private final int[] slotsFortuneUPG3 = new int[] { 5 };
+	final int[] slotsSpeedUPG = new int[] { 0 };
+	final int[] slotsOre = new int[] { 1 };
+	final int[] slotsProduct = new int[] { 2 };
+	final int[] slotsFortuneUPG1 = new int[] { 3 };
+	final int[] slotsFortuneUPG2 = new int[] { 4 };
+	final int[] slotsFortuneUPG3 = new int[] { 5 };
 	
 	protected EnergyStorage storage = new EnergyStorage(100000, 2000, 0);
 	
@@ -100,7 +100,7 @@ public class OreCrusherTileEntity extends TileEntityContainerAdapter implements 
 	}
 	
 	public void update() {
-		if (worldObj.isRemote) return;
+		if (world.isRemote) return;
 		crush();
 		this.notifyBlockUpdate();
 	}
@@ -115,7 +115,7 @@ public class OreCrusherTileEntity extends TileEntityContainerAdapter implements 
 	 * @return
 	 */
 	public boolean isOreInOreDic(ItemStack itemStack){
-		if(itemStack != null){
+		if(itemStack != null && !itemStack.isEmpty()){
 			if(OreDictionary.getOreIDs(itemStack).length > 0){
 				int oreID = OreDictionary.getOreIDs(itemStack)[0];
 				String oreName = OreDictionary.getOreName(oreID);
@@ -137,7 +137,7 @@ public class OreCrusherTileEntity extends TileEntityContainerAdapter implements 
 	
 	public String getOreDicName(ItemStack itemStack){
 		String oreDicName = null;
-		if(itemStack != null && OreDictionary.getOreIDs(itemStack).length > 0){
+		if(itemStack != null && !itemStack.isEmpty() && OreDictionary.getOreIDs(itemStack).length > 0){
 			int oreID = OreDictionary.getOreIDs(itemStack)[0];
 			oreDicName = OreDictionary.getOreName(oreID);
 		}
@@ -145,7 +145,7 @@ public class OreCrusherTileEntity extends TileEntityContainerAdapter implements 
 	}
 	
 	private boolean isOreDicNBTTagEqual(ItemStack itemStack1, ItemStack itemStack2){
-		if(itemStack1 != null && itemStack2 != null && itemStack1.getTagCompound() != null && itemStack2.getTagCompound() != null){
+		if(itemStack1 != null && !itemStack1.isEmpty() && itemStack2 != null && !itemStack2.isEmpty() && itemStack1.getTagCompound() != null && itemStack2.getTagCompound() != null){
 			NBTTagCompound nbt1 = itemStack1.getTagCompound();
 			NBTTagCompound nbt2 = itemStack2.getTagCompound();
 			if(nbt1.getString("oreDic").equals(nbt2.getString("oreDic"))){
@@ -224,7 +224,7 @@ public class OreCrusherTileEntity extends TileEntityContainerAdapter implements 
 		ItemStack product = this.getProduct();
 		OreCrusherBanList banList = OreCrusherBanList.banedOreDicList();
 		
-		if(getSlots()[1] == null){
+		if(getSlots()[1] != null && getSlots()[1].isEmpty()){
 			return false;
 		}
 		
@@ -232,10 +232,10 @@ public class OreCrusherTileEntity extends TileEntityContainerAdapter implements 
 			return false;
 		}
 		
-		if(getSlots()[2] == null && this.storage.getEnergyStored() > speed){
+		if(getSlots()[2] != null && getSlots()[2].isEmpty() && this.storage.getEnergyStored() > speed){
 			return true;
 		}else if(getSlots()[2] != null && getSlots()[2].isItemEqual(product) && isOreDicNBTTagEqual(getSlots()[2], product) && this.storage.getEnergyStored() > speed){
-			if(this.getSlots()[2].stackSize <= product.getMaxStackSize() - 3){
+			if(this.getSlots()[2].getCount() <= product.getMaxStackSize() - 3){
 				return true;
 			}
 		}
@@ -252,15 +252,17 @@ public class OreCrusherTileEntity extends TileEntityContainerAdapter implements 
 		if(canCrush()){
 			if(crushTime >= speed){
 				crushTime = 0;
-				if (this.getSlots()[2] == null) {
+				if (this.getSlots()[2] != null && this.getSlots()[2].isEmpty()) {
 					this.getSlots()[2] = Product.copy();
 				} else if (this.getSlots()[2].getItem() == Product.getItem()) {
-					this.getSlots()[2].stackSize += Product.stackSize;
+					//this.getSlots()[2].stackSize += Product.stackSize;
+					this.getSlots()[2].grow(Product.getCount());
 				}
-				if(getSlots()[1].stackSize == 1){
-					getSlots()[1] = null;
+				if(getSlots()[1].getCount() == 1){
+					getSlots()[1] = ItemStack.EMPTY;
 				}else{
-					--getSlots()[1].stackSize;
+					//--getSlots()[1].stackSize;
+					getSlots()[1].grow(-1);
 				}
 			}else{
 				crushTime++;
@@ -275,11 +277,11 @@ public class OreCrusherTileEntity extends TileEntityContainerAdapter implements 
 	private void speedUPG(){
 		ItemStack stackSpeedUPG = new ItemStack(ItemRegistry.SpeedUPG);
 		
-		if(this.getSlots()[0] == null){
+		if(this.getSlots()[0] != null && this.getSlots()[0].isEmpty()){
 
 		}else{
 			if(this.getSlots()[0].isItemEqual(stackSpeedUPG)){
-				crushTime = crushTime+(this.getSlots()[0].stackSize/3/2);
+				crushTime = crushTime+(this.getSlots()[0].getCount()/3/2);
 			}
 		}
 	}
@@ -379,10 +381,15 @@ public class OreCrusherTileEntity extends TileEntityContainerAdapter implements 
 	}
 	
 	private void notifyBlockUpdate(){
-		if(worldObj!=null && pos != null){
-			IBlockState state = worldObj.getBlockState(pos);
-			worldObj.notifyBlockUpdate(pos, state, state, 3);
+		if(world!=null && pos != null){
+			IBlockState state = world.getBlockState(pos);
+			world.notifyBlockUpdate(pos, state, state, 3);
 		}
+	}
+
+	@Override
+	public boolean isEmpty() {
+		return false;
 	}
 		
 }

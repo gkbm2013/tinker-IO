@@ -1,5 +1,6 @@
 package tinker_io.plugins.jei;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Nonnull;
@@ -26,7 +27,7 @@ import tinker_io.registry.ItemRegistry;
 
 public class SmartOutputRecipeCategory implements IRecipeCategory<SmartOutputRecipeWrapper> {
 	public static String CATEGORY = Main.MODID + ":" + "smart_output";
-	public static ResourceLocation backgroundLocation = new ResourceLocation(Main.MODID, "textures/gui/jei/Smart_Output_jei_recipe.png");
+	public static ResourceLocation backgroundLocation = new ResourceLocation(Main.MODID, "textures/gui/jei/smart_output_jei_recipe.png");
 	
 	protected final IDrawable background;
 	protected final IDrawableAnimated arrow;
@@ -57,10 +58,7 @@ public class SmartOutputRecipeCategory implements IRecipeCategory<SmartOutputRec
 	}
 
 	@Override
-	public void drawExtras(Minecraft minecraft) {}
-
-	@Override
-	public void drawAnimations(Minecraft minecraft) {
+	public void drawExtras(Minecraft minecraft) {
 		arrow.draw(minecraft, 71, 21);
 	}
 
@@ -128,9 +126,8 @@ public class SmartOutputRecipeCategory implements IRecipeCategory<SmartOutputRec
 	}
 
 	@Override
-	@Deprecated
-	public void setRecipe(IRecipeLayout recipeLayout, SmartOutputRecipeWrapper recipeWrapper) {
-		
+	public List<String> getTooltipStrings(int mouseX, int mouseY) {
+		return new ArrayList<String>();
 	}
 	
 	/*@Override

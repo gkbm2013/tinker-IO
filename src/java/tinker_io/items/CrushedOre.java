@@ -2,12 +2,14 @@ package tinker_io.items;
 
 import java.util.List;
 
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.translation.I18n;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
 import tinker_io.main.Main;
 
@@ -34,9 +36,10 @@ public class CrushedOre extends Item{
 	}
 	
 	@Override
+	@SideOnly(Side.CLIENT)
 	public String getItemStackDisplayName(ItemStack stack)
     {
-		String name = ("" + I18n.translateToLocal(this.getUnlocalizedNameInefficiently(stack) + ".name")).trim();
+		String name = ("" + I18n.format(this.getUnlocalizedNameInefficiently(stack) + ".name")).trim();
 		
 		NBTTagCompound nbt = stack.getTagCompound();
 		if(nbt != null){

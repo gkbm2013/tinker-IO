@@ -3,6 +3,7 @@ package tinker_io.plugins.jei;
 import mezz.jei.api.recipe.IRecipeHandler;
 import mezz.jei.api.recipe.IRecipeWrapper;
 
+@Deprecated
 public class FuelInputMachineRecipeHandler implements IRecipeHandler<FuelInputMachineRecipeWrapper>{
 
 	@Override
@@ -10,10 +11,10 @@ public class FuelInputMachineRecipeHandler implements IRecipeHandler<FuelInputMa
 		return FuelInputMachineRecipeWrapper.class;
 	}
 
-	@Override
+	/*@Override
 	public String getRecipeCategoryUid() {
 		return FuelInputMachineRecipeCategory.CATEGORY;
-	}
+	}*/
 
 	@Override
 	public IRecipeWrapper getRecipeWrapper(FuelInputMachineRecipeWrapper recipe) {

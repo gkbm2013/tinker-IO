@@ -43,7 +43,7 @@ public class ContainerFIM extends ContainerTemplate implements Observer{
 	 */
 	@Override
 	public boolean canInteractWith(EntityPlayer player) {
-		return this.tile.isUseableByPlayer(player);
+		return this.tile.isUsableByPlayer(player);
 	}
 	
 	/**
@@ -52,7 +52,7 @@ public class ContainerFIM extends ContainerTemplate implements Observer{
 	@Override
     public ItemStack transferStackInSlot(EntityPlayer player, int slot) {
 		final int fimINV_SIZE = tile.getSizeInventory();
-		ItemStack stack = null;
+		ItemStack stack = ItemStack.EMPTY;
         Slot slotObject = (Slot) inventorySlots.get(slot);
         
         //null checks and checks if the item can be stacked (maxStackSize > 1)
@@ -63,7 +63,7 @@ public class ContainerFIM extends ContainerTemplate implements Observer{
             //merges the item into player inventory since its in the tileEntity
             if (slot < fimINV_SIZE) {
                     if (!this.mergeItemStack(stackInSlot, fimINV_SIZE, 36+fimINV_SIZE, false)) {
-                            return null; //do nothing if it can't
+                            return ItemStack.EMPTY; //do nothing if it can't
                     }
             }
             //itemstack is in player
@@ -77,13 +77,13 @@ public class ContainerFIM extends ContainerTemplate implements Observer{
             	
             	if(TileEntityFurnace.getItemBurnTime(stackInSlot) > 0){
             		if (!this.mergeItemStack(stackInSlot, FUEL, FUEL+1, false)){
-            			return null;
+            			return ItemStack.EMPTY;
             		}
             	}
             	//spUPG is in player
             	else if (stackInSlot.getItem() instanceof SpeedUPG){
             		if (!this.mergeItemStack(stackInSlot, SPEED_UPG, SPEED_UPG+1, false)){
-            			return null;
+            			return ItemStack.EMPTY;
             		}
             	}
             	//upg is in player
@@ -95,13 +95,13 @@ public class ContainerFIM extends ContainerTemplate implements Observer{
             	// place in action bar
     			else if (slot < fimINV_SIZE+27) {
     				if (!this.mergeItemStack(stackInSlot, fimINV_SIZE+27, fimINV_SIZE+36, false)){
-    					return null;
+    					return ItemStack.EMPTY;
     				}
     			}
     			// item in action bar - place in player inventory
     			else if (slot >= fimINV_SIZE+27 && slot < fimINV_SIZE+36 ){
     				if (!this.mergeItemStack(stackInSlot, fimINV_SIZE, fimINV_SIZE+27, false)){
-    					return null;
+    					return ItemStack.EMPTY;
     				}
     			}
             }
@@ -110,16 +110,17 @@ public class ContainerFIM extends ContainerTemplate implements Observer{
 //                    return null;
 //            }
 
-                if (stackInSlot.stackSize == 0) {
-                        slotObject.putStack(null);
+                if (stackInSlot.getCount() == 0) {
+                        slotObject.putStack(ItemStack.EMPTY);
                 } else {
                         slotObject.onSlotChanged();
                 }
 
-                if (stackInSlot.stackSize == stack.stackSize) {
-                        return null;
+                if (stackInSlot.getCount() == stack.getCount()) {
+                        return ItemStack.EMPTY;
                 }
-                slotObject.onPickupFromSlot(player, stackInSlot);
+                //slotObject.onPickupFromSlot(player, stackInSlot);
+                slotObject.onSlotChanged();
         }
         return stack;
     }

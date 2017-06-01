@@ -1,5 +1,6 @@
 package tinker_io.plugins.jei;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Nonnull;
@@ -26,7 +27,7 @@ import tinker_io.registry.ItemRegistry;
 public class OreCrusherRecipeCategory implements IRecipeCategory<OreCrusherRecipeWrapper> {
 
 	public static String CATEGORY = Main.MODID + ":" + "ore_crusher";
-	public static ResourceLocation backgroundLocation = new ResourceLocation(Main.MODID, "textures/gui/jei/Ore_Crusher_jei_recipe.png");
+	public static ResourceLocation backgroundLocation = new ResourceLocation(Main.MODID, "textures/gui/jei/ore_crusher_jei_recipe.png");
 	
 	protected final IDrawable background;
 	protected final IDrawableAnimated arrow;
@@ -57,10 +58,7 @@ public class OreCrusherRecipeCategory implements IRecipeCategory<OreCrusherRecip
 	}
 
 	@Override
-	public void drawExtras(Minecraft minecraft) {}
-
-	@Override
-	public void drawAnimations(Minecraft minecraft) {
+	public void drawExtras(Minecraft minecraft) {
 		arrow.draw(minecraft, 79, 24);
 	}
 
@@ -73,7 +71,7 @@ public class OreCrusherRecipeCategory implements IRecipeCategory<OreCrusherRecip
 	    //items.set(0, recipe.getInputs());
 		
 		items.init(1, false, 109, 22);
-	    items.set(1, ingredients.getOutputs(ItemStack.class));
+	    items.set(1, ingredients.getOutputs(ItemStack.class).get(0));
 	    
 	    items.set(ingredients);
 	    
@@ -162,9 +160,7 @@ public class OreCrusherRecipeCategory implements IRecipeCategory<OreCrusherRecip
 	}*/
 
 	@Override
-	@Deprecated
-	public void setRecipe(IRecipeLayout recipeLayout, OreCrusherRecipeWrapper recipeWrapper) {
-		// TODO 自動產生的方法 Stub
-		
+	public List<String> getTooltipStrings(int mouseX, int mouseY) {
+		return new ArrayList<String>();
 	}
 }

@@ -58,8 +58,10 @@ public class SmelteryRecipeRegistry {
 	}
 	
 	public static void registerSmartOutputCasting(ItemStack output, ItemStack cast, FluidStack fluid){
-		SORecipe.registerTableCastingWithFluidStack(new CastingRecipe(output, RecipeMatch.of(cast), fluid, false, true));
-		//ItemStack output, RecipeMatch cast, FluidStack fluid, boolean consumesCast, boolean switchOutputs
+		if(!cast.isEmpty() && !output.isEmpty()){
+			SORecipe.registerTableCastingWithFluidStack(new CastingRecipe(output, RecipeMatch.of(cast), fluid, false, true));
+			//ItemStack output, RecipeMatch cast, FluidStack fluid, boolean consumesCast, boolean switchOutputs
+		}
 	}
 	
 }

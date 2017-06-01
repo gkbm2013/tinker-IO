@@ -1,25 +1,11 @@
 {
-    "forge_marker": 1,
-    "defaults": {
-        "model": "forge:fluid"
-    },
-    "variants": {
-        "level=0": { "model": "forge:fluid" },
-        "level=1": { "model": "forge:fluid" },
-        "level=2": { "model": "forge:fluid" },
-        "level=3": { "model": "forge:fluid" },
-        "level=4": { "model": "forge:fluid" },
-        "level=5": { "model": "forge:fluid" },
-        "level=6": { "model": "forge:fluid" },
-        "level=7": { "model": "forge:fluid" },
-        "level=8": { "model": "forge:fluid" },
-        "level=9": { "model": "forge:fluid" },
-        "level=10": { "model": "forge:fluid" },
-        "level=11": { "model": "forge:fluid" },
-        "level=12": { "model": "forge:fluid" },
-        "level=13": { "model": "forge:fluid" },
-        "level=14": { "model": "forge:fluid" },
-        "level=15": { "model": "forge:fluid" },
-        "inventory": { "model": "forge:fluid" }
-    }
+	"forge_marker": 1,
+	"variants": {
+		"puremetal": {
+			"model": "forge:fluid",
+			"custom": {
+				"fluid": "puremetal"
+			}
+		}
+	}
 }

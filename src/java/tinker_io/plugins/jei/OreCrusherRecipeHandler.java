@@ -5,6 +5,7 @@ import javax.annotation.Nonnull;
 import mezz.jei.api.recipe.IRecipeHandler;
 import mezz.jei.api.recipe.IRecipeWrapper;
 
+@Deprecated
 public class OreCrusherRecipeHandler implements IRecipeHandler<OreCrusherRecipeWrapper>{
 
 	@Nonnull

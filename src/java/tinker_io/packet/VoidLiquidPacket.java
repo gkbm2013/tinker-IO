@@ -64,8 +64,8 @@ public class VoidLiquidPacket implements IMessage{
 			int y = message.data.getIntArray("Coord")[1];
 			int z = message.data.getIntArray("Coord")[2];
 			
-			if(player.worldObj.isRemote == false){
-				SOTileEntity tileSO = (SOTileEntity) player.worldObj.getTileEntity(new BlockPos(x, y, z));
+			if(player.world.isRemote == false){
+				SOTileEntity tileSO = (SOTileEntity) player.world.getTileEntity(new BlockPos(x, y, z));
 				if(tileSO != null){
 					tileSO.voidLiquid();
 					if(DEBUG==true) System.out.println("[Tinker I/O] [DEBUG] voided!");

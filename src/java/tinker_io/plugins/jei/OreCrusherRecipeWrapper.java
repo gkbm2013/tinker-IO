@@ -28,14 +28,14 @@ public class OreCrusherRecipeWrapper extends BlankRecipeWrapper {
 		setOutputList(oreDic);
 	}
 
-	@Override
+	/*@Override
 	@Deprecated
 	public List<ItemStack> getInputs() {
 		if(oreInputList == null){
 			return this.getInputs();
 		}
 		return oreInputList;
-	}
+	}*/
 	
 	public List<ItemStack> getOutputsHook() {
 		if(outputList == null){

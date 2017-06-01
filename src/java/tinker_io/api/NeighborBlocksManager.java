@@ -14,7 +14,7 @@ public abstract class NeighborBlocksManager implements NeighborBlockChange
 	protected final IBlockAccess world;
 	protected final BlockPos pos;
 
-	protected  Map<BlockPos, IBlockState> blocks = new HashMap();
+	protected  Map<BlockPos, IBlockState> blocks = new HashMap<BlockPos, IBlockState>();
 	
 	public NeighborBlocksManager(IBlockAccess world, BlockPos pos)
 	{

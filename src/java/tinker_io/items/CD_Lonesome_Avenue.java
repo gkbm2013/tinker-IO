@@ -12,7 +12,6 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.EnumRarity;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemRecord;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.StatList;
@@ -26,10 +25,10 @@ import tinker_io.main.Main;
 
 public class CD_Lonesome_Avenue extends ItemRecord {
 
-	private static final Map records = new HashMap();
+	private static final Map<String, ItemRecord> records = new HashMap<String, ItemRecord>();
 	
 	public final String recordName;
-	public final static SoundEvent sound_CD = new SoundEvent(new ResourceLocation(Main.MODID, "records.Lonesome_Avenue"));
+	public final static SoundEvent sound_CD = new SoundEvent(new ResourceLocation(Main.MODID, "records.lonesome_avenue"));
 	
 	public CD_Lonesome_Avenue(String recordname) {
 		super(recordname, sound_CD);
@@ -57,7 +56,8 @@ public class CD_Lonesome_Avenue extends ItemRecord {
             {
                 ((BlockJukebox)Blocks.JUKEBOX).insertRecord(worldIn, pos, iblockstate, stack);
                 //worldIn.playAuxSFXAtEntity((EntityPlayer)null, 1005, pos, Item.getIdFromItem(this));
-                --stack.stackSize;
+                //--stack.stackSize;
+                stack.grow(-1);
                 playerIn.addStat(StatList.RECORD_PLAYED);
                 return true;
             }
@@ -92,11 +92,11 @@ public class CD_Lonesome_Avenue extends ItemRecord {
 
 
 	 @Override
-	 public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, boolean par4)
+	 public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List<String> par3List, boolean par4)
 	 {
 	 par3List.add(this.getRecordNameLocal());
 
-	 if(this.isShiftKeyDown()){
+	 if(CD_Lonesome_Avenue.isShiftKeyDown()){
 			par3List.add(TextFormatting.GRAY + I18n.format("tio.toolTips.CD_Lonesome_Avenue"));
 		}else{
 			par3List.add(TextFormatting.GOLD + I18n.format("tio.toolTips.common.holdShift"));			

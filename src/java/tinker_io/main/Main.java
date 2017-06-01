@@ -21,7 +21,7 @@ import com.google.common.collect.ImmutableSet;
 
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.Instance;
@@ -34,15 +34,16 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 		modid = Main.MODID,
 		version = Main.VERSION,
 		name = Main.Name,
-		dependencies="required-after:Forge@[12.18.2.2115,);"
-				+ "required-after:tconstruct@[1.10.2-2.6.1,);"
+		dependencies="required-after:forge@[13.20.0.2282,);"
+				//"required-after:Forge@[12.18.2.2115,);"
+				+ "required-after:tconstruct@[1.11.2-2.7.0.19,);"
 				+ "after:Waila;"
 				+ "after:JEI@[3.13.6.387,)",
 		acceptedMinecraftVersions = "[1.10.2,]")
 public class Main
 {
     public static final String MODID = "tinker_io";
-    public static final String VERSION = "release 2.4.4";
+    public static final String VERSION = "alpha 2.5.1c";
     public static final String Name = "Tinker I/O";
     
     //public static boolean iguanas_support;
@@ -61,8 +62,8 @@ public class Main
 	
     //Creative Tabs
     public static CreativeTabs TinkerIOTabs = new CreativeTabs("TinkerIO_Tabs"){
-    		public Item getTabIconItem() {
-    			return TinkerTools.largePlate;
+    		public ItemStack getTabIconItem() {
+    			return new ItemStack(TinkerTools.largePlate);
     		}
         };
         

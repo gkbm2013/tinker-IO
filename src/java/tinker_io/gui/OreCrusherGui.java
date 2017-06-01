@@ -17,7 +17,7 @@ import tinker_io.inventory.ContainerOreCrusher;
 import tinker_io.main.Main;
 
 public class OreCrusherGui extends GuiContainer{
-	private static final ResourceLocation OCGuiTextures = new ResourceLocation(Main.MODID, "textures/gui/OreCrusher.png");
+	private static final ResourceLocation OCGuiTextures = new ResourceLocation(Main.MODID, "textures/gui/ore_crusher.png");
 	public World world;
 	private OreCrusherTileEntity tileOC;
 

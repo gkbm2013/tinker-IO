@@ -49,14 +49,14 @@ public class ContainerSO extends ContainerTemplate{
 
 	@Override
 	public boolean canInteractWith(EntityPlayer player) {
-		return this.tileSO.isUseableByPlayer(player);
+		return this.tileSO.isUsableByPlayer(player);
 	}
 	
 	public static final int INV_START = 4; 
 	public static final int HOTBAR_START = INV_START +27;
 	@Override
 	public ItemStack transferStackInSlot(EntityPlayer player, int slot) {
-		ItemStack stack = null;
+		ItemStack stack = ItemStack.EMPTY;
 		Slot slotObject = (Slot) inventorySlots.get(slot);
 		SORecipe recipie = new SORecipe();
 
@@ -70,24 +70,24 @@ public class ContainerSO extends ContainerTemplate{
 				if (!this.mergeItemStack(stackInSlot,
 						tileSO.getSizeInventory(),
 						36 + tileSO.getSizeInventory(), true)) {
-					return null;
+					return ItemStack.EMPTY;
 				}
 			} else { // in inventory and bar
 				if (stackInSlot.getItem() instanceof Upgrade) {
 					if (!mergeItemStack(stackInSlot, UPG_UP_SLOT, UPG_DOWN_SLOT+1, false)) {
-						return null;
+						return ItemStack.EMPTY;
 					}
 				} else if(recipie.isPattern(stackInSlot)){
 					if (!mergeItemStack(stackInSlot, PATTERN_SLOT, PATTERN_SLOT+1, false)) {
-						return null;
+						return ItemStack.EMPTY;
 					}
 				} else if(slot >= INV_START && slot < HOTBAR_START){ // inv -> bar
 					if(!mergeItemStack(stackInSlot, HOTBAR_START, HOTBAR_START + 9, false)) {
-						return null;
+						return ItemStack.EMPTY;
 					}
 				} else if (slot >= HOTBAR_START && slot < HOTBAR_START + 9) {
 					if(!mergeItemStack(stackInSlot, INV_START, HOTBAR_START, false)) {
-						return null;
+						return ItemStack.EMPTY;
 					}
 				}
 			}
@@ -99,16 +99,17 @@ public class ContainerSO extends ContainerTemplate{
 //				return null;
 //			}
 
-			if (stackInSlot.stackSize == 0) {
-				slotObject.putStack(null);
+			if (stackInSlot.getCount() == 0) {
+				slotObject.putStack(ItemStack.EMPTY);
 			} else {
 				slotObject.onSlotChanged();
 			}
 
-			if (stackInSlot.stackSize == stack.stackSize) {
-				return null;
+			if (stackInSlot.getCount() == stack.getCount()) {
+				return ItemStack.EMPTY;
 			}
-			slotObject.onPickupFromSlot(player, stackInSlot);
+			//slotObject.onPickupFromSlot(player, stackInSlot);
+			slotObject.onSlotChanged();
 		}
 		return stack;
 	}

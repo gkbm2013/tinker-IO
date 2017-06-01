@@ -1,6 +1,6 @@
 {
     "parent": "block/cube_all",
     "textures": {
-        "all": "tinker_io:blocks/WhatABeautifulBlock"
+        "all": "tinker_io:blocks/what_a_beautiful_block"
     }
 }

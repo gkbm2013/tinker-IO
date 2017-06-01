@@ -20,14 +20,14 @@ public class FuelInputMachineRecipeWrapper extends BlankRecipeWrapper {
 		setFuelInput();
 	}
 	
-	@Override
+	/*@Override
 	@Deprecated
 	public List<ItemStack> getInputs() {
 		if(fuelInputList == null){
 			return this.getInputs();
 		}
 		return fuelInputList;
-	}
+	}*/
 	
 	protected void setFuelInput(){
 		fuelInputList.add(itemstack);

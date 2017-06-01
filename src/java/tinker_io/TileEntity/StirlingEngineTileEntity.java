@@ -9,7 +9,6 @@ import cofh.api.energy.IEnergyReceiver;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
-import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -17,11 +16,9 @@ import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
-import net.minecraftforge.fluids.IFluidHandler;
-import net.minecraftforge.fluids.IFluidTank;
+//import net.minecraftforge.fluids.IFluidHandler;
 import slimeknights.tconstruct.smeltery.tileentity.TileTank;
 import tinker_io.api.BlockFinder;
-import tinker_io.registry.BlockRegistry;
 
 public class StirlingEngineTileEntity extends TileEntity implements  ITickable, IEnergyProvider {
 
@@ -41,9 +38,9 @@ public class StirlingEngineTileEntity extends TileEntity implements  ITickable, 
 		int fluidTemp = 0;
 		int generateEnergy = 0;
 		
-	    TileEntity te = this.worldObj.getTileEntity(tankPos);
+	    TileEntity te = this.world.getTileEntity(tankPos);
 	    if(te instanceof TileTank){
-	    	TileTank teTank = (TileTank) this.worldObj.getTileEntity(tankPos);
+	    	TileTank teTank = (TileTank) this.world.getTileEntity(tankPos);
 		    if(teTank != null){
 		    	FluidTank toDrain = teTank.getInternalTank();
 		    	FluidStack canDrain = toDrain.drain(1, false);
@@ -81,9 +78,9 @@ public class StirlingEngineTileEntity extends TileEntity implements  ITickable, 
 		int fluidTemp = 0;
 		double anglePlus = 0;
 		
-		TileEntity te = this.worldObj.getTileEntity(tankPos);
+		TileEntity te = this.world.getTileEntity(tankPos);
 		if(te instanceof TileTank){
-	    	TileTank teTank = (TileTank) this.worldObj.getTileEntity(tankPos);
+	    	TileTank teTank = (TileTank) this.world.getTileEntity(tankPos);
 		    if(teTank != null){
 		    	//liquidAmount = teTank.tank.getFluidAmount();
 		    	FluidStack fulid = teTank.getInternalTank().getFluid();
@@ -108,9 +105,9 @@ public class StirlingEngineTileEntity extends TileEntity implements  ITickable, 
 	private void extraEnergyToSurroundingMechine(){
 		int extraPerTick = Math.min(this.storage.getEnergyStored(), 1000);
 		
-		BlockFinder blockFinder = new BlockFinder(pos, worldObj);
+		BlockFinder blockFinder = new BlockFinder(pos, world);
 		List<BlockPos> blocPoskList = blockFinder.getSurroundingTileEntityPos(pos);
-		blocPoskList = blocPoskList.stream().filter(pos -> worldObj.getTileEntity(pos) instanceof IEnergyReceiver).collect(Collectors.toList());
+		blocPoskList = blocPoskList.stream().filter(pos -> world.getTileEntity(pos) instanceof IEnergyReceiver).collect(Collectors.toList());
 		
 		if(blocPoskList.size() == 0){
 			return;
@@ -130,7 +127,7 @@ public class StirlingEngineTileEntity extends TileEntity implements  ITickable, 
 		int averageExtraEnergy = (int)Math.floor(extraPerTick / blocPoskList.size());
 		//averageExtraEnergy = Math.min(averageExtraEnergy, this.storage.getEnergyStored());
 		
-		IEnergyReceiver rfStorage = (IEnergyReceiver) worldObj.getTileEntity(blockPos);
+		IEnergyReceiver rfStorage = (IEnergyReceiver) world.getTileEntity(blockPos);
 		if(rfStorage != null){
 			if(this.storage.getEnergyStored() > 0 && rfStorage.getEnergyStored(EnumFacing.DOWN) < rfStorage.getMaxEnergyStored(EnumFacing.DOWN)){
 				storage.setEnergyStored(storage.getEnergyStored() - averageExtraEnergy);
@@ -144,9 +141,9 @@ public class StirlingEngineTileEntity extends TileEntity implements  ITickable, 
 	
 	@Override
 	public void update() {
-		if (worldObj.isRemote) return;
+		if (world.isRemote) return;
 		angel();
-		//worldObj.markBlockForUpdate(pos);
+		//world.markBlockForUpdate(pos);
 		this.notifyBlockUpdate();
 		generateEnergy();
 		extraEnergyToSurroundingMechine();
@@ -156,9 +153,9 @@ public class StirlingEngineTileEntity extends TileEntity implements  ITickable, 
 	
 	public TileTank getTETank(){
 		BlockPos tankPos = new BlockPos(pos.getX(), pos.getY() - 1, pos.getZ());
-	    TileEntity teUnknow = worldObj.getTileEntity(tankPos);
+	    TileEntity teUnknow = world.getTileEntity(tankPos);
 	    if(teUnknow instanceof TileTank){
-	    	TileTank teTank = (TileTank) worldObj.getTileEntity(tankPos);
+	    	TileTank teTank = (TileTank) world.getTileEntity(tankPos);
 	    	if(teTank != null){
 	    		return teTank;
 	    	}
@@ -225,9 +222,9 @@ public class StirlingEngineTileEntity extends TileEntity implements  ITickable, 
 	}
 	
 	private void notifyBlockUpdate(){
-		if(worldObj!=null && pos != null){
-			IBlockState state = worldObj.getBlockState(pos);
-			worldObj.notifyBlockUpdate(pos, state, state, 3);
+		if(world!=null && pos != null){
+			IBlockState state = world.getBlockState(pos);
+			world.notifyBlockUpdate(pos, state, state, 3);
 		}
 	}
 }

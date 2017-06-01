@@ -18,7 +18,7 @@ import tinker_io.inventory.ContainerFIM;
 import tinker_io.main.Main;
 
 public class FIMGui extends GuiContainer {
-	private static final ResourceLocation ASCGuiTextures = new ResourceLocation(Main.MODID, "textures/gui/ASC.png");
+	private static final ResourceLocation ASCGuiTextures = new ResourceLocation(Main.MODID, "textures/gui/fuel_input_machine.png");
 	private FIMTileEntity tile;
 	public World world;
 

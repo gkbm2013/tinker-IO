@@ -34,8 +34,8 @@ public class ItemRegistry {
 	}
 	
 	private static void registerItem() {
-		GameRegistry.register(SpeedUPG.setRegistryName("speedUPG"));
-		GameRegistry.register(SolidFuel.setRegistryName("SolidFuel"));
+		GameRegistry.register(SpeedUPG.setRegistryName("speed_upg"));
+		GameRegistry.register(SolidFuel.setRegistryName("solid_fuel"));
 		GameRegistry.register(Upgrade.setRegistryName("Upgrade"));
 		GameRegistry.register(Lonesome_Avenue.setRegistryName("CD_Lonesome_Avenue"));
 		GameRegistry.register(CrushedOre.setRegistryName("Crushed_ore"));

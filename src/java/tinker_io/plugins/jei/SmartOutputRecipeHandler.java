@@ -5,6 +5,7 @@ import javax.annotation.Nonnull;
 import mezz.jei.api.recipe.IRecipeHandler;
 import mezz.jei.api.recipe.IRecipeWrapper;
 
+@Deprecated
 public class SmartOutputRecipeHandler  implements IRecipeHandler<SmartOutputRecipeWrapper>{
 
 	@Nonnull
@@ -13,12 +14,12 @@ public class SmartOutputRecipeHandler  implements IRecipeHandler<SmartOutputReci
 		return SmartOutputRecipeWrapper.class;
 	}
 
-	@Nonnull
+	/*@Nonnull
 	@Override
 	@Deprecated
 	public String getRecipeCategoryUid() {
 		return SmartOutputRecipeCategory.CATEGORY;
-	}
+	}*/
 	
 	@Override
 	public String getRecipeCategoryUid(SmartOutputRecipeWrapper recipe) {

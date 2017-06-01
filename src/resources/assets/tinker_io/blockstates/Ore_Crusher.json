@@ -1,9 +1,9 @@
 {
     "variants": {
-        "facing=north": { "model": "tinker_io:Ore_Crusher" },
-        "facing=south": { "model": "tinker_io:Ore_Crusher", "y": 180 },
-        "facing=west":  { "model": "tinker_io:Ore_Crusher", "y": 270 },
-        "facing=east":  { "model": "tinker_io:Ore_Crusher", "y": 90 },
-        "inventory":  { "model": "tinker_io:Ore_Crusher" }
+        "facing=north": { "model": "tinker_io:ore_crusher" },
+        "facing=south": { "model": "tinker_io:ore_crusher", "y": 180 },
+        "facing=west":  { "model": "tinker_io:ore_crusher", "y": 270 },
+        "facing=east":  { "model": "tinker_io:ore_crusher", "y": 90 },
+        "inventory":  { "model": "tinker_io:ore_crusher" }
     }
 }

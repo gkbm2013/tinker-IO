@@ -3,10 +3,10 @@ package tinker_io.fluids;
 
 import java.util.List;
 
+import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.relauncher.Side;
@@ -34,7 +34,7 @@ public class PureMetal extends Fluid{
 	@SideOnly(Side.CLIENT)
 	public String getLocalizedName(FluidStack stack){
         String s = this.getUnlocalizedName();
-        String name = s == null ? "" : I18n.translateToLocal(s);
+        String name = s == null ? "" : I18n.format(s);
         NBTTagCompound nbt = stack.tag;
 		if(nbt != null){
 			String oreDicName = nbt.getString("oreDic");

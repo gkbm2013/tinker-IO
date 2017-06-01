@@ -1,13 +1,12 @@
 package tinker_io.registry;
 
-import java.util.ArrayList;
-import java.util.List;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 import tinker_io.main.Main;
 
 public class ItemRenderRegister {
@@ -15,10 +14,11 @@ public class ItemRenderRegister {
 	public static String  modid = Main.MODID;
 	
 	public static void registerItemRenderer() {
-		reg(ItemRegistry.SpeedUPG);
-		reg(ItemRegistry.SolidFuel);
-		reg(ItemRegistry.Lonesome_Avenue);
-		reg(ItemRegistry.CrushedOre);
+		//reg(ItemRegistry.SpeedUPG);
+		reg(ItemRegistry.SpeedUPG, 0, "speed_upg");
+		reg(ItemRegistry.SolidFuel, 0, "solid_fuel");
+		reg(ItemRegistry.Lonesome_Avenue, 0, "cd_lonesome_avenue");
+		reg(ItemRegistry.CrushedOre, 0, "crushed_ore");
 		
 		ModelBakery.registerItemVariants(ItemRegistry.Upgrade,
 				getModelResourceLocation("upg_0"), 
@@ -54,7 +54,8 @@ public class ItemRenderRegister {
 	}
 	
 	public static void reg2(Item item) {
-		List<ItemStack>  stacks = new ArrayList<ItemStack>();
+		//List<ItemStack>  stacks = new ArrayList<ItemStack>();
+		NonNullList<ItemStack> stacks = NonNullList.create();
 		item.getSubItems(item, null, stacks);
 		for (ItemStack stack : stacks) {
 			item.getUnlocalizedName(stack);

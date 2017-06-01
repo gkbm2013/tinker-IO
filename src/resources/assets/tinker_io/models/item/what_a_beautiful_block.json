@@ -1,5 +1,5 @@
 {
-    "parent":"tinker_io:block/WhatABeautifulBlock",
+    "parent":"tinker_io:block/what_a_beautiful_block",
     "display": {
         "thirdperson": {
             "rotation": [ 10, -45, 170 ],

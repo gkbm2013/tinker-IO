@@ -37,7 +37,7 @@ public class BlockRegistry {
     private static void registerBlock() {
     	registerBlock(fuelInputMachine, "fuel_input_machine");
     	registerBlock(smartOutput, "smart_output");
-    	registerBlock(whatABeautifulBlock, "WhatABeautifulBlock");
+    	registerBlock(whatABeautifulBlock, "what_a_beautiful_block");
     	registerBlock(oreCrusher, "Ore_Crusher");
     	registerBlock(stirlingEngine, "Stirling_Engine");
 	}

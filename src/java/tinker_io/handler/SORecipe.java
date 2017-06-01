@@ -13,6 +13,7 @@ import slimeknights.tconstruct.library.TinkerRegistry;
 import slimeknights.tconstruct.library.smeltery.Cast;
 import slimeknights.tconstruct.library.smeltery.CastingRecipe;
 import slimeknights.tconstruct.library.smeltery.ICastingRecipe;
+import slimeknights.tconstruct.library.utils.ListUtil;
 import slimeknights.tconstruct.smeltery.item.CastCustom;
 //import slimeknights.tconstruct.library.crafting.LiquidCasting;
 
@@ -168,7 +169,7 @@ public class SORecipe{
 	}
 	
 	public static boolean matches(ItemStack cast, FluidStack fluidStack, CastingRecipe recipe) {
-	    if((cast == null && recipe.cast == null) || (recipe.cast != null && recipe.cast.matches(new ItemStack[]{cast}) != null)) {
+	    if((cast == null && recipe.cast == null) || (recipe.cast != null && recipe.cast.matches(ListUtil.getListFrom(cast)) != null)) {
 	      return recipe.getFluid().isFluidEqual(fluidStack);
 	    }
 	    return false;

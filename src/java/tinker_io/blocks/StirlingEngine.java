@@ -81,7 +81,7 @@ public class StirlingEngine extends BlockContainer {
     }
 	
 	@Override
-	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ)
+	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ)
     {
 	    if(playerIn.isSneaking()) {
 	        return false;
@@ -103,16 +103,16 @@ public class StirlingEngine extends BlockContainer {
 		    		fuildTemp = fluid.getFluid().getTemperature();
 		    	}
 		    	if(worldIn.isRemote){
-		    		playerIn.addChatMessage(new TextComponentString(TextFormatting.WHITE + fuelAmountText + " : " + liquidAmount));
-		    		playerIn.addChatMessage(new TextComponentString(TextFormatting.WHITE + fuelTempText + " : " + fuildTemp));
+		    		playerIn.sendMessage(new TextComponentString(TextFormatting.WHITE + fuelAmountText + " : " + liquidAmount));
+		    		playerIn.sendMessage(new TextComponentString(TextFormatting.WHITE + fuelTempText + " : " + fuildTemp));
 		    	}
 		    }
 	    	
 	    	int energy = te.getEnergyStored(null);
 		    if(worldIn.isRemote){
-	    		playerIn.addChatMessage(new TextComponentString(TextFormatting.WHITE + energyStoredText + " : " + energy + " / " + te.getMaxEnergyStored(null) + " RF"));
-	    		playerIn.addChatMessage(new TextComponentString(TextFormatting.WHITE + generatePerTickText + " : " + te.getGeneratePetTick() + " RF"));
-	    		playerIn.addChatMessage(new TextComponentString(TextFormatting.YELLOW + "-----"));
+	    		playerIn.sendMessage(new TextComponentString(TextFormatting.WHITE + energyStoredText + " : " + energy + " / " + te.getMaxEnergyStored(null) + " RF"));
+	    		playerIn.sendMessage(new TextComponentString(TextFormatting.WHITE + generatePerTickText + " : " + te.getGeneratePetTick() + " RF"));
+	    		playerIn.sendMessage(new TextComponentString(TextFormatting.YELLOW + "-----"));
 	    	}
 	    }
         return true;
@@ -221,7 +221,7 @@ public class StirlingEngine extends BlockContainer {
 	    //IBlockState state = world.getBlockState(pos);
 	    this.onBlockDestroyedByPlayer(world, pos, state);
 	    if(willHarvest) {
-	      this.harvestBlock(world, player, pos, state, world.getTileEntity(pos), null);
+	      this.harvestBlock(world, player, pos, state, world.getTileEntity(pos), ItemStack.EMPTY);
 	    }
 
 	    world.setBlockToAir(pos);

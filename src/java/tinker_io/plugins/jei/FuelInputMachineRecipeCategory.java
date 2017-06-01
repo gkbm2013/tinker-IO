@@ -1,5 +1,6 @@
 package tinker_io.plugins.jei;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Nonnull;
@@ -24,7 +25,7 @@ import tinker_io.registry.ItemRegistry;
 public class FuelInputMachineRecipeCategory implements IRecipeCategory<FuelInputMachineRecipeWrapper> {
 
 	public static String CATEGORY = Main.MODID + ":" + "fuel_input_mechine";
-	public static ResourceLocation backgroundLocation = new ResourceLocation(Main.MODID, "textures/gui/jei/Fuel_Input_Mechine_jei_recipe.png");
+	public static ResourceLocation backgroundLocation = new ResourceLocation(Main.MODID, "textures/gui/jei/fuel_input_mechine_jei_recipe.png");
 	
 	protected final IDrawable background;
 	protected final IDrawableAnimated arrow;
@@ -55,10 +56,7 @@ public class FuelInputMachineRecipeCategory implements IRecipeCategory<FuelInput
 	}
 
 	@Override
-	public void drawExtras(Minecraft minecraft) {}
-
-	@Override
-	public void drawAnimations(Minecraft minecraft) {
+	public void drawExtras(Minecraft minecraft) {
 		arrow.draw(minecraft, 81, 24);
 	}
 	
@@ -83,10 +81,15 @@ public class FuelInputMachineRecipeCategory implements IRecipeCategory<FuelInput
 		return null;
 	}
 
-	@Override
+	/*@Override
 	@Deprecated
 	public void setRecipe(IRecipeLayout recipeLayout, FuelInputMachineRecipeWrapper recipeWrapper) {
 		
+	}*/
+
+	@Override
+	public List<String> getTooltipStrings(int mouseX, int mouseY) {
+		return new ArrayList<String>();
 	}
 	
 	/*@Override

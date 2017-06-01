@@ -50,10 +50,10 @@ public class SmartOutput extends BlockContainer {
     }
 	
 	@Override
-	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ)
+	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ)
     {
 //		fillAndDrain(worldIn, pos.getX(), pos.getY(), pos.getZ(), playerIn);
-		if (!worldIn.isRemote) {
+		if (!worldIn.isRemote && playerIn != null) {
 			playerIn.openGui(Main.instance, 1, worldIn, pos.getX(), pos.getY(), pos.getZ());
 		}
         return true;
@@ -104,9 +104,9 @@ public class SmartOutput extends BlockContainer {
 	
 	public static ItemStack consumeItem (ItemStack stack)
     {
-        if (stack.stackSize == 1)
+        if (stack.getCount() == 1)
         {
-            if (stack.getItem().hasContainerItem())
+            if (stack.getItem().hasContainerItem(stack))
                 return stack.getItem().getContainerItem(stack);
             else
                 return null;

@@ -19,19 +19,19 @@ public class GKBTools {
 		{
 			if(slot.isItemEqual(slotUPG1))
 			{
-				size = size+(slot.stackSize)*1;
+				size = size+(slot.getCount())*1;
 			}
 			else if(slot.isItemEqual(slotUPG2))
 			{
-				size = size+(slot.stackSize)*2;
+				size = size+(slot.getCount())*2;
 			}
 			else if(slot.isItemEqual(slotUPG3))
 			{
-				size = size+(slot.stackSize)*3;
+				size = size+(slot.getCount())*3;
 			}
 			else if(slot.isItemEqual(slotUPG4))
 			{
-				size = size+(slot.stackSize)*4;
+				size = size+(slot.getCount())*4;
 			}
 			else if(slot.isItemEqual(slotUPGinfinity))
 			{

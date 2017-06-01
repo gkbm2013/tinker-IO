@@ -12,6 +12,7 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.TextFormatting;
 //import net.minecraft.util.IIcon;
 public class Upgrade extends Item {
@@ -27,7 +28,7 @@ public class Upgrade extends Item {
 	 * returns a list of items with the same ID, but different meta (eg: dye returns 16 items)
 	 */
 	@Override
-	public void getSubItems(Item item, CreativeTabs tab, List<ItemStack> list) {
+	public void getSubItems(Item item, CreativeTabs tab, NonNullList<ItemStack> list) {
 	    for (int i = 0; i < 8; i ++) {
 	        list.add(new ItemStack(item, 1, i));
 	    }

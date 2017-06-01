@@ -67,7 +67,7 @@ public class FuelFSM implements ITickable, NBTable
 
     public static int getStackSize(ItemStack stack)
     {
-        return stack == null ? 0 : stack.stackSize;
+        return (stack == null || (stack != null && stack.isEmpty())) ? 0 : stack.getCount();
     }
 
 
