@@ -36,14 +36,14 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 		name = Main.Name,
 		dependencies="required-after:forge@[13.20.0.2282,);"
 				//"required-after:Forge@[12.18.2.2115,);"
-				+ "required-after:tconstruct@[1.11.2-2.7.0.19,);"
+				+ "required-after:tconstruct@[1.11.2-2.7.0.26,);"
 				+ "after:Waila;"
 				+ "after:JEI@[3.13.6.387,)",
 		acceptedMinecraftVersions = "[1.10.2,]")
 public class Main
 {
     public static final String MODID = "tinker_io";
-    public static final String VERSION = "alpha 2.5.1c";
+    public static final String VERSION = "release 2.5.2c";
     public static final String Name = "Tinker I/O";
     
     //public static boolean iguanas_support;

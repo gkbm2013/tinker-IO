@@ -187,7 +187,7 @@ public class OreCrusher extends BlockContainerAdapter {
 	    //IBlockState state = world.getBlockState(pos);
 	    this.onBlockDestroyedByPlayer(world, pos, state);
 	    if(willHarvest) {
-	      this.harvestBlock(world, player, pos, state, world.getTileEntity(pos), null);
+	      this.harvestBlock(world, player, pos, state, world.getTileEntity(pos), ItemStack.EMPTY);
 	    }
 
 	    world.setBlockToAir(pos);
