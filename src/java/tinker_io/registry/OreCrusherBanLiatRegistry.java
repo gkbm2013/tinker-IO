@@ -54,6 +54,7 @@ public class OreCrusherBanLiatRegistry {
 	}
 	
 	private static boolean isAccepted(String oreDic){
+		if(oreDic.length() < 3)	return false;
 		String title = oreDic.substring(0, 3);
 		List<String> banList = OreCrusherBanList.getBanList();
 		
