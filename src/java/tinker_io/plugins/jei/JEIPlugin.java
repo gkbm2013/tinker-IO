@@ -21,13 +21,13 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.oredict.OreDictionary;
-import slimeknights.tconstruct.TConstruct;
+//import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.library.TinkerRegistry;
 import slimeknights.tconstruct.library.smeltery.Cast;
 import slimeknights.tconstruct.library.smeltery.CastingRecipe;
 import slimeknights.tconstruct.library.smeltery.ICastingRecipe;
-import slimeknights.tconstruct.plugin.jei.PatternSubtypeInterpreter;
-import slimeknights.tconstruct.smeltery.TinkerSmeltery;
+//import slimeknights.tconstruct.plugin.jei.PatternSubtypeInterpreter;
+//import slimeknights.tconstruct.smeltery.TinkerSmeltery;
 import tinker_io.gui.FIMGui;
 import tinker_io.gui.OreCrusherGui;
 import tinker_io.gui.SOGui;
@@ -43,12 +43,12 @@ public class JEIPlugin implements IModPlugin {
 	@Override
 	public void registerItemSubtypes(ISubtypeRegistry registry) {
 		// casts
-		PatternSubtypeInterpreter patternInterpreter = new PatternSubtypeInterpreter();
+		/*PatternSubtypeInterpreter patternInterpreter = new PatternSubtypeInterpreter();
 
 		if(TConstruct.pulseManager.isPulseLoaded(TinkerSmeltery.PulseId)) {
 			registry.registerSubtypeInterpreter(TinkerSmeltery.cast, patternInterpreter);
 			registry.registerSubtypeInterpreter(TinkerSmeltery.clayCast, patternInterpreter);
-		}
+		}*/
 	}
 
 	@Override
