@@ -4,11 +4,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.Nullable;
+
 import org.lwjgl.input.Keyboard;
 
 import net.minecraft.block.BlockJukebox;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.EnumRarity;
@@ -21,6 +24,8 @@ import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import tinker_io.main.Main;
 
 public class CD_Lonesome_Avenue extends ItemRecord {
@@ -91,17 +96,18 @@ public class CD_Lonesome_Avenue extends ItemRecord {
 //	 }
 
 
-	 @Override
-	 public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List<String> par3List, boolean par4)
-	 {
-	 par3List.add(this.getRecordNameLocal());
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn)
+    {
+    	tooltip.add(this.getRecordNameLocal());
 
-	 if(CD_Lonesome_Avenue.isShiftKeyDown()){
-			par3List.add(TextFormatting.GRAY + I18n.format("tio.toolTips.CD_Lonesome_Avenue"));
-		}else{
-			par3List.add(TextFormatting.GOLD + I18n.format("tio.toolTips.common.holdShift"));			
-		}
-	 }
+    	if(CD_Lonesome_Avenue.isShiftKeyDown()){
+    		tooltip.add(TextFormatting.GRAY + I18n.format("tio.toolTips.CD_Lonesome_Avenue"));
+    	}else{
+    		tooltip.add(TextFormatting.GOLD + I18n.format("tio.toolTips.common.holdShift"));			
+    	}
+    }
 	 
 	@Override
 	 //TODO: getRecordTitle()
@@ -124,11 +130,11 @@ public class CD_Lonesome_Avenue extends ItemRecord {
 	 }
 
 
-	 @Override
+	 /*@Override
 	 public ResourceLocation getRecordResource(String name)
 	 {
 	 return new ResourceLocation("tinker_io:" + name);
-	 }
+	 }*/
 	 
 	 public static boolean isShiftKeyDown(){
 	        return Keyboard.isKeyDown(42) || Keyboard.isKeyDown(54);

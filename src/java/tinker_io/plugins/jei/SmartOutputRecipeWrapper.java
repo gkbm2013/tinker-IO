@@ -86,8 +86,8 @@ public class SmartOutputRecipeWrapper extends BlankRecipeWrapper{
 		if(recipe.consumesCast()) {
 			String s = I18n.format("gui.jei.casting.consume");
 			int x = 55;
-			x -= minecraft.fontRendererObj.getStringWidth(s)/2;
-			minecraft.fontRendererObj.drawString(s, x, 40, 0xaa0000);
+			x -= minecraft.fontRenderer.getStringWidth(s)/2;
+			minecraft.fontRenderer.drawString(s, x, 40, 0xaa0000);
 		}
 	}
 

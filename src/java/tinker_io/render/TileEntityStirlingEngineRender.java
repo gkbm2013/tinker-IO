@@ -18,10 +18,9 @@ public class TileEntityStirlingEngineRender extends TileEntitySpecialRenderer<St
     public TileEntityStirlingEngineRender() {
             this.model = new StirlingEngineModel();
     }
-
-	@Override
-	public void renderTileEntityAt(StirlingEngineTileEntity te, double x, double y, double z, float partialTicks,
-			int destroyStage) {
+    
+    @Override
+    public void render(StirlingEngineTileEntity te, double x, double y, double z, float partialTicks, int destroyStage, float alpha){
 		int meta = te.getBlockMetadata();
 		
 		model.angel = te.angel / 10;

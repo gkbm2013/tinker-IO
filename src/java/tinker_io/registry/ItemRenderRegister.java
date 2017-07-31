@@ -9,18 +9,19 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import tinker_io.main.Main;
 
+@Deprecated
 public class ItemRenderRegister {
 	
 	public static String  modid = Main.MODID;
 	
 	public static void registerItemRenderer() {
-		//reg(ItemRegistry.SpeedUPG);
-		reg(ItemRegistry.SpeedUPG, 0, "speed_upg");
-		reg(ItemRegistry.SolidFuel, 0, "solid_fuel");
-		reg(ItemRegistry.Lonesome_Avenue, 0, "cd_lonesome_avenue");
-		reg(ItemRegistry.CrushedOre, 0, "crushed_ore");
+		//reg(RegisterUtil.SpeedUPG);
+		reg(RegisterUtil.SpeedUPG, 0, "speed_upg");
+		reg(RegisterUtil.SolidFuel, 0, "solid_fuel");
+		reg(RegisterUtil.Lonesome_Avenue, 0, "cd_lonesome_avenue");
+		reg(RegisterUtil.CrushedOre, 0, "crushed_ore");
 		
-		ModelBakery.registerItemVariants(ItemRegistry.Upgrade,
+		ModelBakery.registerItemVariants(RegisterUtil.Upgrade,
 				getModelResourceLocation("upg_0"), 
 				getModelResourceLocation("upg_1"),
 				getModelResourceLocation("upg_2"),
@@ -30,14 +31,14 @@ public class ItemRenderRegister {
 				getModelResourceLocation("upg_6"),
 				getModelResourceLocation("upg_7")
 				);
-		reg(ItemRegistry.Upgrade, 0, "upg_0");
-		reg(ItemRegistry.Upgrade, 1, "upg_1");
-		reg(ItemRegistry.Upgrade, 2, "upg_2");
-		reg(ItemRegistry.Upgrade, 3, "upg_3");
-		reg(ItemRegistry.Upgrade, 4, "upg_4");
-		reg(ItemRegistry.Upgrade, 5, "upg_5");
-		reg(ItemRegistry.Upgrade, 6, "upg_6");
-		reg(ItemRegistry.Upgrade, 7, "upg_7");
+		reg(RegisterUtil.Upgrade, 0, "upg_0");
+		reg(RegisterUtil.Upgrade, 1, "upg_1");
+		reg(RegisterUtil.Upgrade, 2, "upg_2");
+		reg(RegisterUtil.Upgrade, 3, "upg_3");
+		reg(RegisterUtil.Upgrade, 4, "upg_4");
+		reg(RegisterUtil.Upgrade, 5, "upg_5");
+		reg(RegisterUtil.Upgrade, 6, "upg_6");
+		reg(RegisterUtil.Upgrade, 7, "upg_7");
 	}
 	
 	public static void reg(Item item) {
@@ -53,12 +54,12 @@ public class ItemRenderRegister {
 		return new ModelResourceLocation(modid + ":" + unlocalizedName, "inventory");
 	}
 	
-	public static void reg2(Item item) {
+	/*public static void reg2(Item item) {
 		//List<ItemStack>  stacks = new ArrayList<ItemStack>();
 		NonNullList<ItemStack> stacks = NonNullList.create();
 		item.getSubItems(item, null, stacks);
 		for (ItemStack stack : stacks) {
 			item.getUnlocalizedName(stack);
 		}
-	}
+	}*/
 }

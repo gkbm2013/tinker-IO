@@ -33,7 +33,7 @@ import tinker_io.gui.OreCrusherGui;
 import tinker_io.gui.SOGui;
 import tinker_io.handler.OreCrusherRecipe;
 import tinker_io.handler.SORecipe;
-import tinker_io.registry.BlockRegistry;
+import tinker_io.registry.RegisterUtil;
 
 @mezz.jei.api.JEIPlugin
 public class JEIPlugin implements IModPlugin {
@@ -84,7 +84,7 @@ public class JEIPlugin implements IModPlugin {
 			}
 		});
 		registry.addRecipes(FIMrecipeList, FIMCategory.getUid());
-		registry.addRecipeCategoryCraftingItem(new ItemStack(BlockRegistry.fuelInputMachine), FIMCategory.getUid());
+		registry.addRecipeCategoryCraftingItem(new ItemStack(RegisterUtil.fuelInputMachine), FIMCategory.getUid());
 
 		//Ore Crusher
 		List<OreCrusherRecipeWrapper> OCrecipeList = Lists.newLinkedList();
@@ -94,7 +94,7 @@ public class JEIPlugin implements IModPlugin {
 			}
 		});
 		registry.addRecipes(OCrecipeList, OCCategory.getUid());
-		registry.addRecipeCategoryCraftingItem(new ItemStack(BlockRegistry.oreCrusher), OCCategory.getUid());
+		registry.addRecipeCategoryCraftingItem(new ItemStack(RegisterUtil.oreCrusher), OCCategory.getUid());
 
 		//Smart Output
 		Map<Triple<Item, Item, Fluid>, List<ItemStack >> castDict = Maps.newHashMap();
@@ -132,7 +132,7 @@ public class JEIPlugin implements IModPlugin {
 		List<CastingRecipe> castingRecipeWithNBT = SORecipe.getCastingRecipeWithNBT();
 		castingRecipeWithNBT.stream()
 		.forEach(nbtRecipe -> registry.addRecipes(ImmutableList.of(new SmartOutputRecipeWrapper(nbtRecipe, false)), SOCategory.getUid()));
-		registry.addRecipeCategoryCraftingItem(new ItemStack(BlockRegistry.smartOutput), SOCategory.getUid());
+		registry.addRecipeCategoryCraftingItem(new ItemStack(RegisterUtil.smartOutput), SOCategory.getUid());
 		
 		
 		//Click area

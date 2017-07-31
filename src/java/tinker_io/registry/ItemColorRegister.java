@@ -15,6 +15,6 @@ public class ItemColorRegister {
 	
 	private static void registerItemColourHandlers(final ItemColors itemColors) {
 		final IItemColor itemColourHandler = new CrushedOreItemColorHandler();
-		itemColors.registerItemColorHandler(itemColourHandler, ItemRegistry.CrushedOre);
+		itemColors.registerItemColorHandler(itemColourHandler, RegisterUtil.CrushedOre);
 	}
 }

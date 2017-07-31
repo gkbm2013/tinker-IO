@@ -11,8 +11,9 @@ import tinker_io.items.CrushedOre;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
+@Deprecated
 public class ItemRegistry {
-	public static void mainRegistry() {
+	/*public static void mainRegistry() {
 		preLoadItem();
 		registerItem();
 		
@@ -42,5 +43,5 @@ public class ItemRegistry {
 		
 		int solidFuelBurnTime = TIOConfig.solidFuelBurnTime;
 		GameRegistry.registerFuelHandler(itemstack -> itemstack.isItemEqual(new ItemStack(SolidFuel))? solidFuelBurnTime : 0);
-	}
+	}*/
 }

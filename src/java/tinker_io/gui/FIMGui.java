@@ -27,6 +27,16 @@ public class FIMGui extends GuiContainer {
 		this.tile = tile;
 	}
 
+	/**
+	 * Draws the screen and all the components in it.
+	 */
+	@Override
+	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+		this.drawDefaultBackground();
+		super.drawScreen(mouseX, mouseY, partialTicks);
+		this.renderHoveredToolTip(mouseX, mouseY);
+	}
+
 	@Override
 	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY){
 		String string = this.tile.hasCustomName() ? this.tile.getName() : I18n.format(this.tile.getName(), new Object[0]);
@@ -39,23 +49,23 @@ public class FIMGui extends GuiContainer {
 		/*int cornerX = (width - xSize) / 2;
         int cornerY = (height - ySize) / 2;*/
 		
-		this.fontRendererObj.drawString(string, (this.xSize - this.fontRendererObj.getStringWidth(string))/2, 6, 4210752);
+		this.fontRenderer.drawString(string, (this.xSize - this.fontRenderer.getStringWidth(string))/2, 6, 4210752);
 		//this.fontRendererObj.drawString(tip1, (this.xSize - 145 - (this.fontRendererObj.getStringWidth(tip1))/2), 9, 4210752);
-		this.fontRendererObj.drawString(tip2, (this.xSize - 87 - (this.fontRendererObj.getStringWidth(tip2))/2), 25, 4210752);
-		this.fontRendererObj.drawString(I18n.format("container.inventory", new Object[0]), 8, this.ySize - 94, 4210752);
+		this.fontRenderer.drawString(tip2, (this.xSize - 87 - (this.fontRenderer.getStringWidth(tip2))/2), 25, 4210752);
+		this.fontRenderer.drawString(I18n.format("container.inventory", new Object[0]), 8, this.ySize - 94, 4210752);
 		
 		String temperatureInfo = I18n.format("tio.gui.fim.temperature", new Object[0]) + " :";
-		this.fontRendererObj.drawString(temperatureInfo, (-55 - (this.fontRendererObj.getStringWidth(temperatureInfo))/2), 14, 4210752);
+		this.fontRenderer.drawString(temperatureInfo, (-55 - (this.fontRenderer.getStringWidth(temperatureInfo))/2), 14, 4210752);
 		
 		String currentTempture = tile.getCurrentTempture() + "";
-		this.fontRendererObj.drawString(currentTempture, (-55 - (this.fontRendererObj.getStringWidth(currentTempture))/2), 26, 4210752);
+		this.fontRenderer.drawString(currentTempture, (-55 - (this.fontRenderer.getStringWidth(currentTempture))/2), 26, 4210752);
 		
 		double ratio = this.getSpeedUpTimes();
 		String msgRatio = TextFormatting.DARK_GREEN + "Ratio : " + ratio;
-		this.fontRendererObj.drawString(msgRatio, (-55 - (this.fontRendererObj.getStringWidth(msgRatio))/2), 37, 4210752);
+		this.fontRenderer.drawString(msgRatio, (-55 - (this.fontRenderer.getStringWidth(msgRatio))/2), 37, 4210752);
 		
 		if(!tile.hasFuel()){
-			this.fontRendererObj.drawString(warn, (-55 - (this.fontRendererObj.getStringWidth(warn))/2), 49, 4210752);			
+			this.fontRenderer.drawString(warn, (-55 - (this.fontRenderer.getStringWidth(warn))/2), 49, 4210752);			
 		}
 		
 		/*if(!tileASC.hasFuel() && par1 >= cornerX +159 && par1 <= cornerX + 170 && par2 >= cornerY + 4 && par2 <= cornerY + 15 ){
@@ -70,22 +80,22 @@ public class FIMGui extends GuiContainer {
 	
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float var1, int var2, int var3) {
-		 GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-	        this.mc.getTextureManager().bindTexture(ASCGuiTextures);
-	        int k = (this.width - this.xSize) / 2;
-	        int l = (this.height - this.ySize) / 2;
-	        this.drawTexturedModalRect(k, l, 0, 0, this.xSize, this.ySize);
-	        
-	        int i1;
-	        i1 = this.tile.getCookProgressScaled(13);
-	        this.drawTexturedModalRect(k + 103, l + 36 + i1, 176, 33 + i1, 13, 13 - i1);
-	        
-	        /*if(!tile.hasFuel()){
+		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+		this.mc.getTextureManager().bindTexture(ASCGuiTextures);
+		int k = (this.width - this.xSize) / 2;
+		int l = (this.height - this.ySize) / 2;
+		this.drawTexturedModalRect(k, l, 0, 0, this.xSize, this.ySize);
+
+		int i1;
+		i1 = this.tile.getCookProgressScaled(13);
+		this.drawTexturedModalRect(k + 103, l + 36 + i1, 176, 33 + i1, 13, 13 - i1);
+
+		/*if(!tile.hasFuel()){
 	        	this.drawTexturedModalRect(k + 159, l + 4, 177, 33, 11, 11);	
 	        }*/
-	        this.drawTexturedModalRect(k - 110, l + 10, 146, 170, 110, 60);
+		this.drawTexturedModalRect(k - 110, l + 10, 146, 170, 110, 60);
 	}
-	
+
 	private double getSpeedUpTimes()
 	{
 		SpeedUpRatio info = tile.getSpeedUpInfo();

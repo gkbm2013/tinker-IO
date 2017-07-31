@@ -1,6 +1,7 @@
 package tinker_io.inventory.slots;
 
 import tinker_io.registry.ItemRegistry;
+import tinker_io.registry.RegisterUtil;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.inventory.SlotFurnaceFuel;
@@ -23,7 +24,7 @@ public class SlotFIMFuel extends Slot
 	public boolean isItemValid(
 			ItemStack stack)
 	{
-		return slotFurnaceFuel.isItemValid(stack) || stack.isItemEqual(new ItemStack(ItemRegistry.SolidFuel));
+		return slotFurnaceFuel.isItemValid(stack) || stack.isItemEqual(new ItemStack(RegisterUtil.SolidFuel));
 	}
 	
 	@Override

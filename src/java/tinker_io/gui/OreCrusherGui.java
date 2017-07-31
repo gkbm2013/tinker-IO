@@ -26,6 +26,16 @@ public class OreCrusherGui extends GuiContainer{
 		super(new ContainerOreCrusher(invPlayer, tile));
 		this.tileOC = tile;
 	}
+	
+	/**
+	 * Draws the screen and all the components in it.
+	 */
+	@Override
+	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+		this.drawDefaultBackground();
+		super.drawScreen(mouseX, mouseY, partialTicks);
+		this.renderHoveredToolTip(mouseX, mouseY);
+	}
 
 	@Override
 	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
@@ -34,11 +44,11 @@ public class OreCrusherGui extends GuiContainer{
 		
 		String string = this.tileOC.hasCustomName() ? this.tileOC.getName() : I18n.format(this.tileOC.getName(), new Object[0]);
 		
-		this.fontRendererObj.drawString(string, (this.xSize - this.fontRendererObj.getStringWidth(string))/2, 6, 4210752);
+		this.fontRenderer.drawString(string, (this.xSize - this.fontRenderer.getStringWidth(string))/2, 6, 4210752);
 		
 		String rate = tileOC.getRate() + "% + 1";
 		
-		this.fontRendererObj.drawString(rate, (this.xSize - this.fontRendererObj.getStringWidth(string))/2 + 50, 66, 4210752);
+		this.fontRenderer.drawString(rate, (this.xSize - this.fontRenderer.getStringWidth(string))/2 + 50, 66, 4210752);
 		//ToolTip
 		List<String> text = Lists.newArrayList();
     	text.add(TextFormatting.WHITE.toString() + I18n.format("tio.toolTips.oreCrusher.energy", new Object[0]));

@@ -22,7 +22,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.client.resources.I18n;
 import tinker_io.main.Main;
-import tinker_io.registry.ItemRegistry;
+import tinker_io.registry.RegisterUtil;
 
 public class OreCrusherRecipeCategory implements IRecipeCategory<OreCrusherRecipeWrapper> {
 
@@ -76,7 +76,7 @@ public class OreCrusherRecipeCategory implements IRecipeCategory<OreCrusherRecip
 	    items.set(ingredients);
 	    
 	    List<ItemStack> speedUpg = Lists.newLinkedList();
-	    speedUpg.add(new ItemStack(ItemRegistry.SpeedUPG));
+	    speedUpg.add(new ItemStack(RegisterUtil.SpeedUPG));
 	    
 	    items.init(2, false, 34, 22);
 	    items.set(2, speedUpg);
@@ -101,7 +101,7 @@ public class OreCrusherRecipeCategory implements IRecipeCategory<OreCrusherRecip
 	    items.init(4, false, 58, 42);
 	    items.set(4, enchantedBook);
 	    
-	    ItemStack infUPG = new ItemStack(ItemRegistry.Upgrade, 1, 6);
+	    ItemStack infUPG = new ItemStack(RegisterUtil.Upgrade, 1, 6);
 	    
 	    items.init(5, false, 77, 42);
 	    items.set(5, infUPG);
@@ -126,7 +126,7 @@ public class OreCrusherRecipeCategory implements IRecipeCategory<OreCrusherRecip
 		    items.setFromRecipe(1, recipe.getOutputs());
 		    
 		    List<ItemStack> speedUpg = Lists.newLinkedList();
-		    speedUpg.add(new ItemStack(ItemRegistry.SpeedUPG));
+		    speedUpg.add(new ItemStack(RegisterUtil.SpeedUPG));
 		    
 		    items.init(2, false, 34, 22);
 		    items.setFromRecipe(2, speedUpg);
@@ -151,7 +151,7 @@ public class OreCrusherRecipeCategory implements IRecipeCategory<OreCrusherRecip
 		    items.init(4, false, 58, 42);
 		    items.setFromRecipe(4, enchantedBook);
 		    
-		    ItemStack infUPG = new ItemStack(ItemRegistry.Upgrade, 1, 6);
+		    ItemStack infUPG = new ItemStack(RegisterUtil.Upgrade, 1, 6);
 		    
 		    items.init(5, false, 77, 42);
 		    items.setFromRecipe(5, infUPG);
@@ -162,5 +162,10 @@ public class OreCrusherRecipeCategory implements IRecipeCategory<OreCrusherRecip
 	@Override
 	public List<String> getTooltipStrings(int mouseX, int mouseY) {
 		return new ArrayList<String>();
+	}
+
+	@Override
+	public String getModName() {
+		return Main.Name;
 	}
 }

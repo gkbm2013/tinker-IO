@@ -13,7 +13,7 @@ import slimeknights.mantle.util.RecipeMatch.ItemCombination;
 import slimeknights.tconstruct.library.materials.Material;
 import tinker_io.main.Main;
 import tinker_io.registry.FluidRegister;
-import tinker_io.registry.ItemRegistry;
+import tinker_io.registry.RegisterUtil;
 import tinker_io.registry.SmelteryRecipeRegistry;
 
 public class CrushedOreMeltingRegistry {
@@ -28,7 +28,7 @@ public class CrushedOreMeltingRegistry {
 				Fluid pureMetal = FluidRegister.pureMetal;
 				FluidStack pureMetalStack = new FluidStack(pureMetal, Material.VALUE_Ingot);
 				
-				ItemStack crushedOreStack = new ItemStack(ItemRegistry.CrushedOre);
+				ItemStack crushedOreStack = new ItemStack(RegisterUtil.CrushedOre);
 				
 				crushedOreStack.setTagCompound(new NBTTagCompound());
 				crushedOreStack.getTagCompound().setString("oreDic", oreDicts[i]);

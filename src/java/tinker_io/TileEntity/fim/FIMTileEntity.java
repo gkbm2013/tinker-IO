@@ -24,6 +24,7 @@ import tinker_io.api.Observable;
 import tinker_io.api.Observer;
 import tinker_io.reflection.TempField;
 import tinker_io.registry.ItemRegistry;
+import tinker_io.registry.RegisterUtil;
 
 public class FIMTileEntity extends TileSmelteryComponent implements ITickable, Observable<Observer>, ISidedInventory
 {
@@ -34,7 +35,7 @@ public class FIMTileEntity extends TileSmelteryComponent implements ITickable, O
     	
     }
 
-    public ItemStack fuel = new ItemStack(ItemRegistry.SolidFuel);
+    public ItemStack fuel = new ItemStack(RegisterUtil.SolidFuel);
     private List<Observer> obs = new ArrayList<Observer>();
 
     protected SCInfo scInfo;

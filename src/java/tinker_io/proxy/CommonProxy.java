@@ -14,10 +14,11 @@ import tinker_io.TileEntity.StirlingEngineTileEntity;
 import tinker_io.TileEntity.fim.FIMTileEntity;
 import tinker_io.handler.GuiHandler;
 import tinker_io.main.Main;
+import tinker_io.registry.RegisterUtil;
 
 public class CommonProxy {
 	public EntityPlayer getPlayerEntity(MessageContext ctx) {
-		 return ctx.getServerHandler().playerEntity;
+		 return ctx.getServerHandler().player;
 	}
 	
 	public void registerTileEntities(){
@@ -35,6 +36,7 @@ public class CommonProxy {
 	
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent e) {
+		RegisterUtil.registerAll(e);
 	}
 
 	@EventHandler

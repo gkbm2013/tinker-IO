@@ -2,18 +2,22 @@ package tinker_io.items;
 
 import java.util.List;
 
+import javax.annotation.Nullable;
+
 import org.lwjgl.input.Keyboard;
 
-import tinker_io.main.Main;
-import tinker_io.registry.ItemRegistry;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.client.util.ITooltipFlag;
 //import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.world.World;
+import tinker_io.main.Main;
+import tinker_io.registry.RegisterUtil;
+import tinker_io.registry.RegisterUtil;
 //import net.minecraft.util.IIcon;
 public class Upgrade extends Item {
 	public Upgrade(String unlocalizedName){
@@ -27,12 +31,22 @@ public class Upgrade extends Item {
 	/**
 	 * returns a list of items with the same ID, but different meta (eg: dye returns 16 items)
 	 */
-	@Override
+	/*@Override
 	public void getSubItems(Item item, CreativeTabs tab, NonNullList<ItemStack> list) {
 	    for (int i = 0; i < 8; i ++) {
 	        list.add(new ItemStack(item, 1, i));
 	    }
-	}
+	}*/
+	/**
+     * returns a list of items with the same ID, but different meta (eg: dye returns 16 items)
+     */
+    public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
+        for (int i = 0; i < 7; i ++) {
+        	if (this.isInCreativeTab(tab)){
+        		items.add(new ItemStack(this, 1, i));
+        	}
+	    }
+    }
 	
 	@Override
 	public String getUnlocalizedName(ItemStack stack) {
@@ -44,15 +58,15 @@ public class Upgrade extends Item {
     }
 	
 	@Override
-	public void addInformation(ItemStack itemStack, EntityPlayer player, List<String> list, boolean par4) {
-		ItemStack UpgBase = new ItemStack(ItemRegistry.Upgrade, 1, 0);
-		ItemStack slotUPG1 = new ItemStack(ItemRegistry.Upgrade, 1, 1);
-		ItemStack slotUPG2 = new ItemStack(ItemRegistry.Upgrade, 1, 2);
-		ItemStack slotUPG3 = new ItemStack(ItemRegistry.Upgrade, 1, 3);
-		ItemStack slotUPG4 = new ItemStack(ItemRegistry.Upgrade, 1, 4);
-		ItemStack slotUPGinfinity = new ItemStack(ItemRegistry.Upgrade, 1, 6);
-		ItemStack redstoneUPG = new ItemStack(ItemRegistry.Upgrade ,1 ,5);
-		ItemStack basinUPG = new ItemStack(ItemRegistry.Upgrade ,1 ,7);
+	public void addInformation(ItemStack itemStack, @Nullable World worldIn, List<String> list, ITooltipFlag flagIn){
+		ItemStack UpgBase = new ItemStack(RegisterUtil.Upgrade, 1, 0);
+		ItemStack slotUPG1 = new ItemStack(RegisterUtil.Upgrade, 1, 1);
+		ItemStack slotUPG2 = new ItemStack(RegisterUtil.Upgrade, 1, 2);
+		ItemStack slotUPG3 = new ItemStack(RegisterUtil.Upgrade, 1, 3);
+		ItemStack slotUPG4 = new ItemStack(RegisterUtil.Upgrade, 1, 4);
+		ItemStack slotUPGinfinity = new ItemStack(RegisterUtil.Upgrade, 1, 6);
+		ItemStack redstoneUPG = new ItemStack(RegisterUtil.Upgrade ,1 ,5);
+		ItemStack basinUPG = new ItemStack(RegisterUtil.Upgrade ,1 ,7);
 		
 		if(this.isShiftKeyDown()){
 			if(itemStack.isItemEqual(UpgBase)){

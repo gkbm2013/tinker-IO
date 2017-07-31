@@ -6,14 +6,15 @@ import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import tinker_io.main.Main;
 
+@Deprecated
 public class BlockRenderRegister {
 	public static String modid = Main.MODID;
 	public static void registerBlockRenderer() {
-		reg(BlockRegistry.whatABeautifulBlock, "what_a_beautiful_block");
-		reg(BlockRegistry.fuelInputMachine);
-		reg(BlockRegistry.smartOutput);
-		reg(BlockRegistry.oreCrusher);
-		reg(BlockRegistry.stirlingEngine);
+		reg(RegisterUtil.whatABeautifulBlock, "what_a_beautiful_block");
+		reg(RegisterUtil.fuelInputMachine);
+		reg(RegisterUtil.smartOutput);
+		reg(RegisterUtil.oreCrusher);
+		reg(RegisterUtil.stirlingEngine);
 		
 		//pureOre
 		//reg(FluidRegister.blockPureMetal);

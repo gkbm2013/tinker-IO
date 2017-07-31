@@ -21,6 +21,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import tinker_io.main.Main;
 import tinker_io.registry.ItemRegistry;
+import tinker_io.registry.RegisterUtil;
 
 public class FuelInputMachineRecipeCategory implements IRecipeCategory<FuelInputMachineRecipeWrapper> {
 
@@ -69,7 +70,7 @@ public class FuelInputMachineRecipeCategory implements IRecipeCategory<FuelInput
 	    //items.setFromRecipe(0, recipe.getInputs());
 	    
 	    List<ItemStack> speedUpg = Lists.newLinkedList();
-	    speedUpg.add(new ItemStack(ItemRegistry.SpeedUPG));
+	    speedUpg.add(new ItemStack(RegisterUtil.SpeedUPG));
 	    
 	    items.init(2, false, 3, 22);
 	    items.set(2, speedUpg);
@@ -90,6 +91,11 @@ public class FuelInputMachineRecipeCategory implements IRecipeCategory<FuelInput
 	@Override
 	public List<String> getTooltipStrings(int mouseX, int mouseY) {
 		return new ArrayList<String>();
+	}
+
+	@Override
+	public String getModName() {
+		return Main.Name;
 	}
 	
 	/*@Override

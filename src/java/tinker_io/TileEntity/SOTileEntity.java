@@ -2,7 +2,7 @@ package tinker_io.TileEntity;
 
 //import tconstruct.smeltery.TinkerSmeltery;
 import tinker_io.handler.SORecipe;
-import tinker_io.registry.ItemRegistry;
+import tinker_io.registry.RegisterUtil;
 import slimeknights.mantle.multiblock.MultiServantLogic;
 
 import javax.annotation.Nonnull;
@@ -347,10 +347,10 @@ public class SOTileEntity extends MultiServantLogic implements IFluidHandler, IF
 	public int getOutputSize(){
 		int size = 1;
 		
-		ItemStack slotUPG1 = new ItemStack(ItemRegistry.Upgrade, 1, 1);
-		ItemStack slotUPG2 = new ItemStack(ItemRegistry.Upgrade, 1, 2);
-		ItemStack slotUPG3 = new ItemStack(ItemRegistry.Upgrade, 1, 3);
-		ItemStack slotUPG4 = new ItemStack(ItemRegistry.Upgrade, 1, 4);
+		ItemStack slotUPG1 = new ItemStack(RegisterUtil.Upgrade, 1, 1);
+		ItemStack slotUPG2 = new ItemStack(RegisterUtil.Upgrade, 1, 2);
+		ItemStack slotUPG3 = new ItemStack(RegisterUtil.Upgrade, 1, 3);
+		ItemStack slotUPG4 = new ItemStack(RegisterUtil.Upgrade, 1, 4);
 		
 		if(this.itemStacksSO[2] != null){
 			if(this.itemStacksSO[2].isItemEqual(slotUPG1)){
@@ -384,7 +384,7 @@ public class SOTileEntity extends MultiServantLogic implements IFluidHandler, IF
 	}
 	
 	public boolean hasRedstoneUPG(){
-		ItemStack redStoneUPG = new ItemStack(ItemRegistry.Upgrade, 1, 5);
+		ItemStack redStoneUPG = new ItemStack(RegisterUtil.Upgrade, 1, 5);
 		
 		if(this.itemStacksSO[2] != null){
 			if(this.itemStacksSO[2].isItemEqual(redStoneUPG)){
@@ -402,7 +402,7 @@ public class SOTileEntity extends MultiServantLogic implements IFluidHandler, IF
 	}
 	
 	public boolean hasBasinUPG(){
-		ItemStack basinUPG = new ItemStack(ItemRegistry.Upgrade ,1 ,7);
+		ItemStack basinUPG = new ItemStack(RegisterUtil.Upgrade ,1 ,7);
 		
 		if(this.itemStacksSO[2] != null){
 			if(this.itemStacksSO[2].isItemEqual(basinUPG)){

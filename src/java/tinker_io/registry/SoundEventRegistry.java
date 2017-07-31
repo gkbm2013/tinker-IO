@@ -2,7 +2,7 @@ package tinker_io.registry;
 
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
-import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import tinker_io.main.Main;
 
 public class SoundEventRegistry {
@@ -14,6 +14,9 @@ public class SoundEventRegistry {
 	
 	private static SoundEvent registerSound(String soundName) {
 		final ResourceLocation soundID = new ResourceLocation(Main.MODID, soundName);
-		return GameRegistry.register(new SoundEvent(soundID).setRegistryName(soundID));
+		SoundEvent event = new SoundEvent(soundID).setRegistryName(soundID);
+		ForgeRegistries.SOUND_EVENTS.register(event);
+		return event;
+		//return GameRegistry.register(new SoundEvent(soundID).setRegistryName(soundID));
 	}
 }

@@ -13,6 +13,7 @@ import tinker_io.registry.OreCrusherBanLiatRegistry;
 import tinker_io.registry.SmelteryRecipeRegistry;
 import tinker_io.registry.SoundEventRegistry;
 import tinker_io.registry.RecipeRegistry;
+import tinker_io.registry.RegisterUtil;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -34,16 +35,16 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 		modid = Main.MODID,
 		version = Main.VERSION,
 		name = Main.Name,
-		dependencies="required-after:forge@[13.20.0.2282,);"
+		dependencies="required-after:forge@[14.21.1.2410,);"
 				//"required-after:Forge@[12.18.2.2115,);"
-				+ "required-after:tconstruct@[1.11.2-2.7.0.26,);"
+				+ "required-after:tconstruct@[1.11.2-2.7.2.15,);"
 				+ "after:Waila;"
-				+ "after:JEI@[3.13.6.387,)",
-		acceptedMinecraftVersions = "[1.10.2,]")
+				+ "after:JEI@[4.7.2.77,)",
+		acceptedMinecraftVersions = "[1.12,]")
 public class Main
 {
     public static final String MODID = "tinker_io";
-    public static final String VERSION = "release 2.5.2d";
+    public static final String VERSION = "beta 2.5.3e";
     public static final String Name = "Tinker I/O";
     
     //public static boolean iguanas_support;
@@ -95,10 +96,11 @@ public class Main
     	}*/
     	
 		//magma heater
-		FluidRegister.mainRegistry();
-    	BlockRegistry.mainRegistry();
-    	ItemRegistry.mainRegistry();
+		FluidRegister.mainRegistry(event);
+    	/*BlockRegistry.mainRegistry();
+    	ItemRegistry.mainRegistry();*/
     	SoundEventRegistry.registerSounds();
+    	RegisterUtil.registerAll(event);
 
     	PacketDispatcher.registerPackets();
     	
@@ -139,7 +141,7 @@ public class Main
           {
               builder.add(block);
           }
-          builder.add(BlockRegistry.fuelInputMachine);
+          builder.add(RegisterUtil.fuelInputMachine);
           TinkerSmeltery.validSmelteryBlocks = builder.build();
 	  }
 }

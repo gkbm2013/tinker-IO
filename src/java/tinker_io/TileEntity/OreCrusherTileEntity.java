@@ -15,7 +15,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
 import tinker_io.handler.OreCrusherBanList;
-import tinker_io.registry.ItemRegistry;
+import tinker_io.registry.RegisterUtil;
 
 public class OreCrusherTileEntity extends TileEntityContainerAdapter implements ITickable, IEnergyReceiver  {
 	public OreCrusherTileEntity() {
@@ -161,7 +161,7 @@ public class OreCrusherTileEntity extends TileEntityContainerAdapter implements 
 		if(canGetMoreProduct()){
 			productAmount = 3;
 		}
-		ItemStack product = new ItemStack(ItemRegistry.CrushedOre, productAmount);
+		ItemStack product = new ItemStack(RegisterUtil.CrushedOre, productAmount);
 		product.setTagCompound(new NBTTagCompound());
 		NBTTagCompound nbt = product.getTagCompound();
 		if(isOreInOreDic(getSlots()[1])){
@@ -185,7 +185,7 @@ public class OreCrusherTileEntity extends TileEntityContainerAdapter implements 
 			bookAmount = bookAmount+2;
 		}
 		
-		if(slotForutne3 != null && slotForutne3.isItemEqual(new ItemStack(ItemRegistry.Upgrade, 1, 6))){
+		if(slotForutne3 != null && slotForutne3.isItemEqual(new ItemStack(RegisterUtil.Upgrade, 1, 6))){
 			bookAmount = bookAmount + 3;
 		}
 		
@@ -275,7 +275,7 @@ public class OreCrusherTileEntity extends TileEntityContainerAdapter implements 
 	}
 	
 	private void speedUPG(){
-		ItemStack stackSpeedUPG = new ItemStack(ItemRegistry.SpeedUPG);
+		ItemStack stackSpeedUPG = new ItemStack(RegisterUtil.SpeedUPG);
 		
 		if(this.getSlots()[0] != null && this.getSlots()[0].isEmpty()){
 

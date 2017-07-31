@@ -23,7 +23,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.FluidStack;
 import slimeknights.tconstruct.library.materials.Material;
 import tinker_io.main.Main;
-import tinker_io.registry.ItemRegistry;
+import tinker_io.registry.RegisterUtil;
 
 public class SmartOutputRecipeCategory implements IRecipeCategory<SmartOutputRecipeWrapper> {
 	public static String CATEGORY = Main.MODID + ":" + "smart_output";
@@ -100,11 +100,11 @@ public class SmartOutputRecipeCategory implements IRecipeCategory<SmartOutputRec
 	    items.set(ingredients);
 	    
 	    List<ItemStack> upg = Lists.newLinkedList();
-	    upg.add(new ItemStack(ItemRegistry.Upgrade, 1, 1));
-	    upg.add(new ItemStack(ItemRegistry.Upgrade, 1, 2));
-	    upg.add(new ItemStack(ItemRegistry.Upgrade, 1, 3));
-	    upg.add(new ItemStack(ItemRegistry.Upgrade, 1, 4));
-	    upg.add(new ItemStack(ItemRegistry.Upgrade, 1, 5));
+	    upg.add(new ItemStack(RegisterUtil.Upgrade, 1, 1));
+	    upg.add(new ItemStack(RegisterUtil.Upgrade, 1, 2));
+	    upg.add(new ItemStack(RegisterUtil.Upgrade, 1, 3));
+	    upg.add(new ItemStack(RegisterUtil.Upgrade, 1, 4));
+	    upg.add(new ItemStack(RegisterUtil.Upgrade, 1, 5));
 
 	    items.init(2, false, 129, 11);
 	    items.set(2, upg);
@@ -113,7 +113,7 @@ public class SmartOutputRecipeCategory implements IRecipeCategory<SmartOutputRec
 	    if(!recipeWrapper.isBasin){
 	    	items.set(3, upg);
 	    }else{
-	    	items.set(3, new ItemStack(ItemRegistry.Upgrade, 1, 7));
+	    	items.set(3, new ItemStack(RegisterUtil.Upgrade, 1, 7));
 	    }
 
 
@@ -129,6 +129,11 @@ public class SmartOutputRecipeCategory implements IRecipeCategory<SmartOutputRec
 	public List<String> getTooltipStrings(int mouseX, int mouseY) {
 		return new ArrayList<String>();
 	}
+
+	@Override
+	public String getModName() {
+		return Main.Name;
+	}
 	
 	/*@Override
 	public void setRecipe(IRecipeLayout recipeLayout, IRecipeWrapper recipeWrapper) {
@@ -138,11 +143,11 @@ public class SmartOutputRecipeCategory implements IRecipeCategory<SmartOutputRec
 		      IGuiFluidStackGroup fluids = recipeLayout.getFluidStacks();
 
 		      List<ItemStack> upg = Lists.newLinkedList();
-		      upg.add(new ItemStack(ItemRegistry.Upgrade, 1, 1));
-		      upg.add(new ItemStack(ItemRegistry.Upgrade, 1, 2));
-		      upg.add(new ItemStack(ItemRegistry.Upgrade, 1, 3));
-		      upg.add(new ItemStack(ItemRegistry.Upgrade, 1, 4));
-		      upg.add(new ItemStack(ItemRegistry.Upgrade, 1, 5));
+		      upg.add(new ItemStack(RegisterUtil.Upgrade, 1, 1));
+		      upg.add(new ItemStack(RegisterUtil.Upgrade, 1, 2));
+		      upg.add(new ItemStack(RegisterUtil.Upgrade, 1, 3));
+		      upg.add(new ItemStack(RegisterUtil.Upgrade, 1, 4));
+		      upg.add(new ItemStack(RegisterUtil.Upgrade, 1, 5));
 		      
 
 		      items.init(0, true, 44, 19);
@@ -158,7 +163,7 @@ public class SmartOutputRecipeCategory implements IRecipeCategory<SmartOutputRec
 		      if(!recipe.isBasin){
 		    	  items.setFromRecipe(3, upg);
 		      }else{
-		    	  items.setFromRecipe(3, new ItemStack(ItemRegistry.Upgrade, 1, 7));
+		    	  items.setFromRecipe(3, new ItemStack(RegisterUtil.Upgrade, 1, 7));
 		      }
 		      
 

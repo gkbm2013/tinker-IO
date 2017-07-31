@@ -55,6 +55,16 @@ public class SOGui extends GuiContainer{
 		buttonList.add(btn0);
 
 	}
+	
+	/**
+	 * Draws the screen and all the components in it.
+	 */
+	@Override
+	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+		this.drawDefaultBackground();
+		super.drawScreen(mouseX, mouseY, partialTicks);
+		this.renderHoveredToolTip(mouseX, mouseY);
+	}
 
 	public SOGui(InventoryPlayer invPlayer, SOTileEntity tile) {
 		super(new ContainerSO(invPlayer, tile));
@@ -71,10 +81,10 @@ public class SOGui extends GuiContainer{
 		String string = this.tileSO.hasCustomName() ? this.tileSO.getName() : I18n.format(this.tileSO.getName(), new Object[0]);
 		int outputSize = tileSO.getOutputSize();
 
-		this.fontRendererObj.drawString(string, (this.xSize - this.fontRendererObj.getStringWidth(string))/2, 6, 4210752);
-		this.fontRendererObj.drawString(I18n.format("container.inventory", new Object[0]), 8, this.ySize - 94, 4210752);
+		this.fontRenderer.drawString(string, (this.xSize - this.fontRenderer.getStringWidth(string))/2, 6, 4210752);
+		this.fontRenderer.drawString(I18n.format("container.inventory", new Object[0]), 8, this.ySize - 94, 4210752);
 
-		this.fontRendererObj.drawString(TextFormatting.DARK_GREEN + "Max : " + outputSize, 120, 17, 4210752);
+		this.fontRenderer.drawString(TextFormatting.DARK_GREEN + "Max : " + outputSize, 120, 17, 4210752);
 
 		FluidTankInfo info = tileSO.getInfo();
 		//FluidStack Wliquid = info.fluid;
@@ -98,7 +108,7 @@ public class SOGui extends GuiContainer{
 		if (btn0.isMouseOver()) { // Tells you if the button is hovered by mouse
 			String[] desc = { TextFormatting.RED + I18n.format("tio.gui.SO.toolTips.button_head"), TextFormatting.GRAY + I18n.format("tio.gui.SO.toolTips.button_info") };
 			List<String> temp = Arrays.asList(desc);
-			drawHoveringText(temp, mouseX - cornerX + 10, mouseY - cornerY + 10, fontRendererObj);
+			drawHoveringText(temp, mouseX - cornerX + 10, mouseY - cornerY + 10, fontRenderer);
 		}
 
 	}

@@ -14,7 +14,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.oredict.OreDictionary;
-import tinker_io.registry.ItemRegistry;
+import tinker_io.registry.RegisterUtil;
 
 public class OreCrusherRecipeWrapper extends BlankRecipeWrapper {
 	
@@ -48,14 +48,14 @@ public class OreCrusherRecipeWrapper extends BlankRecipeWrapper {
 	public void drawInfo(@Nonnull Minecraft minecraft, int recipeWidth, int recipeHeight, int mouseX, int mouseY) {
 		String s = "45 RF/tick";
 	    int x = 15;
-	    x -= minecraft.fontRendererObj.getStringWidth(s)/2;
+	    x -= minecraft.fontRenderer.getStringWidth(s)/2;
 
 	    /*String s2 = "100% + 1";
 	    int x2 = 118;
 	    x2 -= minecraft.fontRendererObj.getStringWidth(s2)/2;*/
 
 	    
-	    minecraft.fontRendererObj.drawString(s, x, 57, Color.white.getRGB());
+	    minecraft.fontRenderer.drawString(s, x, 57, Color.white.getRGB());
 	    //minecraft.fontRendererObj.drawString(s2, x2, 45, Color.red.getRGB());
 	}
 
@@ -70,7 +70,7 @@ public class OreCrusherRecipeWrapper extends BlankRecipeWrapper {
 	}
 	
 	private ItemStack getProduce(String oreDic){
-		ItemStack produce = new ItemStack(ItemRegistry.CrushedOre, 3);
+		ItemStack produce = new ItemStack(RegisterUtil.CrushedOre, 3);
 		produce.setTagCompound(new NBTTagCompound());
 		NBTTagCompound nbt = produce.getTagCompound();
 		nbt.setString("oreDic", oreDic);

@@ -1,7 +1,6 @@
 package tinker_io.registry;
 
 import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.fml.common.registry.IForgeRegistryEntry;
 import tinker_io.blocks.FuelInputMachine;
 import tinker_io.blocks.OreCrusher;
 import tinker_io.blocks.SmartOutput;
@@ -13,8 +12,9 @@ import net.minecraft.block.Block;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.util.ResourceLocation;
 
+@Deprecated
 public class BlockRegistry {
-	public static void mainRegistry() {
+	/*public static void mainRegistry() {
 		preLoadBlock();
 		registerBlock();
 	}
@@ -29,7 +29,7 @@ public class BlockRegistry {
 	private static void preLoadBlock() {
 		fuelInputMachine = new FuelInputMachine("fuel_input_machine");
 		smartOutput = new SmartOutput("smart_output");
-		whatABeautifulBlock = new WhatABeautifulBlock("WhatABeautifulBlock");
+		whatABeautifulBlock = new WhatABeautifulBlock("what_a_beautiful_block");
 		oreCrusher = new OreCrusher("Ore_Crusher");
 		stirlingEngine = new StirlingEngine("Stirling_Engine");
 	}
@@ -48,5 +48,6 @@ public class BlockRegistry {
     	GameRegistry.register(object);
     	GameRegistry.register(new ItemBlock((Block) object).setRegistryName(object.getRegistryName()));
     	return object;
-    }
+    }*/
+
 }
