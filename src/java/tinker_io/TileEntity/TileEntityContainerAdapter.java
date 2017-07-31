@@ -14,6 +14,7 @@ public abstract class TileEntityContainerAdapter extends TileEntity  implements 
 	protected ItemStack[] slots;
 	protected String name;
 	protected int stackLimit;
+	protected int slotsNum;
 	
 	public TileEntityContainerAdapter(String name, int slotsNum) {
 		this(name, slotsNum, 64);
@@ -22,7 +23,11 @@ public abstract class TileEntityContainerAdapter extends TileEntity  implements 
 	public TileEntityContainerAdapter(String name, int slotsNum, int stackLimit ) {
 		this.name = name;
 		this.slots = new ItemStack[slotsNum];
+		for(int i = 0; i < slotsNum; i++){
+			slots[i] = ItemStack.EMPTY;
+		}
 		this.stackLimit = stackLimit;
+		this.slotsNum = slotsNum;
 		this.clear();
 	}
 	
