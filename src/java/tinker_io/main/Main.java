@@ -37,7 +37,7 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 		name = Main.Name,
 		dependencies="required-after:forge@[14.21.1.2410,);"
 				//"required-after:Forge@[12.18.2.2115,);"
-				+ "required-after:tconstruct@[1.11.2-2.7.2.15,);"
+				+ "required-after:tconstruct@[1.11.2-2.7.2.19,);"
 				+ "required-after:redstoneflux@[1.12-2.0.12,);"
 				+ "after:Waila;"
 				+ "after:JEI@[4.7.2.77,)",
@@ -45,7 +45,7 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 public class Main
 {
     public static final String MODID = "tinker_io";
-    public static final String VERSION = "beta 2.5.3f";
+    public static final String VERSION = "pre-release 2.5.4e";
     public static final String Name = "Tinker I/O";
     
     //public static boolean iguanas_support;
