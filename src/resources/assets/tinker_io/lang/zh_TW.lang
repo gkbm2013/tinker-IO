@@ -4,7 +4,7 @@ itemGroup.TinkerIO_Tabs=Tinker I/O
 #Blocks
 tile.fuel_input_machine.name=燃料輸入機
 tile.smart_output.name=智慧輸出
-tile.WhatABeautifulBlock.name=好漂亮的方塊
+tile.what_a_beautiful_block.name=好漂亮的方塊
 tile.Ore_Crusher.name=礦物粉碎機
 tile.Stirling_Engine.name=史特林引擎
 

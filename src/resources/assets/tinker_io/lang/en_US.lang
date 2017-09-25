@@ -4,7 +4,7 @@ itemGroup.TinkerIO_Tabs=Tinker I/O
 #Blocks
 tile.fuel_input_machine.name=Fuel Input Machine
 tile.smart_output.name=Smart Output
-tile.WhatABeautifulBlock.name=What a beautiful block
+tile.what_a_beautiful_block.name=What a beautiful block
 tile.Ore_Crusher.name=Ore Crusher
 tile.Stirling_Engine.name=Stirling Engine
 

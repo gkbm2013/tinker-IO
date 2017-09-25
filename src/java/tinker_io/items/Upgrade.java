@@ -41,7 +41,7 @@ public class Upgrade extends Item {
      * returns a list of items with the same ID, but different meta (eg: dye returns 16 items)
      */
     public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
-        for (int i = 0; i < 7; i ++) {
+        for (int i = 0; i < 8; i ++) {
         	if (this.isInCreativeTab(tab)){
         		items.add(new ItemStack(this, 1, i));
         	}
