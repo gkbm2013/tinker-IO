@@ -39,13 +39,13 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 				//"required-after:Forge@[12.18.2.2115,);"
 				+ "required-after:tconstruct@[1.11.2-2.7.3.30,);"
 				+ "required-after:redstoneflux@[1.12-2.0.12,);"
-				+ "after:Waila;"
-				+ "after:JEI@[4.7.2.77,)",
+				+ "after:waila;"
+				+ "after:jei@[4.7.2.77,)",
 		acceptedMinecraftVersions = "[1.12,]")
 public class Main
 {
     public static final String MODID = "tinker_io";
-    public static final String VERSION = "release 2.5.5e";
+    public static final String VERSION = "release 2.5.6e";
     public static final String Name = "Tinker I/O";
     
     //public static boolean iguanas_support;
