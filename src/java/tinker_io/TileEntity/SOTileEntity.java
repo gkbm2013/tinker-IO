@@ -415,41 +415,65 @@ public class SOTileEntity extends MultiServantLogic implements IFluidHandler, IF
 	//boolean canFrozen = false;
 	//boolean canBasin = false;
 	
-	public String getMode(){
-		String mode = null;
+	private FluidStack recipeFluidCost;
+	private boolean isConsumeCast;
+	private ItemStack resultItemStack;
+	private ItemStack oldCast;
+	private boolean wasHasBasinUPG;
+	
+	private void updateRecipe() {
+	
+		FluidTankInfo info = getInfo();
+		FluidStack liquid = info.fluid;
+		
+		// If we run out of liquid, just cache the old recipe.
+		if (liquid == null) {
+			return;
+		}
+		
+		if(!liquid.isFluidEqual(recipeFluidCost)
+				|| !ItemStack.areItemsEqual(oldCast, itemStacksSO[0])
+				|| wasHasBasinUPG != hasBasinUPG()) {
+
+			oldCast = itemStacksSO[0] == null ? null : itemStacksSO[0].copy();
+			if(hasBasinUPG()){
+				wasHasBasinUPG = true;
+				recipeFluidCost = recipes.getBasinFluidCost(liquid, itemStacksSO[0]);
+				resultItemStack = recipes.getBasinResult(liquid, itemStacksSO[0]);
+				isConsumeCast = true;
+			}else{
+				wasHasBasinUPG = false;
+				recipeFluidCost = recipes.getCastingFluidCost(liquid, itemStacksSO[0]);
+				resultItemStack = recipes.getCastingRecipes(liquid, itemStacksSO[0]);
+				isConsumeCast = recipes.isConsumeCast(liquid, itemStacksSO[0]);
+			}
+			
+		}
+		
+	}
+	
+	public boolean canCast(){
+		
+		updateRecipe();
 		
 		FluidTankInfo info = getInfo();
 		FluidStack liquid = info.fluid;
-		ItemStack resultItem = null;
 		
-		if(info != null && liquid != null){			
-			if(hasBasinUPG()){
-				if(recipes.getBasinFluidCost(liquid, itemStacksSO[0]) != null && recipes.getBasinFluidCost(liquid, itemStacksSO[0]).amount <= liquid.amount){
-					if(recipes.getBasinResult(liquid, itemStacksSO[0]) != null){
-						resultItem = recipes.getBasinResult(liquid, this.itemStacksSO[0]);
-						mode = "basin";
-					}
-				}
-			}else{
-				if(recipes.getCastingFluidCost(liquid, itemStacksSO[0]) != null && recipes.getCastingFluidCost(liquid, itemStacksSO[0]).amount <= liquid.amount){
-					if(recipes.getCastingRecipes(liquid, this.itemStacksSO[0]) != null){
-						resultItem = recipes.getCastingRecipes(liquid, this.itemStacksSO[0]);
-						mode = "table";
-					}
-				}
-			}
+		if(liquid == null || recipeFluidCost == null || recipeFluidCost.amount > liquid.amount || resultItemStack == null){
+			return false;
+		}
 			
-			if(this.itemStacksSO[1] != null && resultItem != null){
-				int resultSize = itemStacksSO[1].stackSize + resultItem.stackSize;
-				mode = (resultSize <= this.getOutputSize() &&
-						resultSize <= getInventoryStackLimit() && 
-						resultSize <= this.itemStacksSO[1].getMaxStackSize() && 
-						this.itemStacksSO[1].isItemEqual(resultItem))
-						? mode : null;
+		if(this.itemStacksSO[1] != null){
+			int resultSize = itemStacksSO[1].stackSize + resultItemStack.stackSize;
+			if(resultSize > this.getOutputSize() ||
+					resultSize > getInventoryStackLimit() ||
+					resultSize > this.itemStacksSO[1].getMaxStackSize() ||
+					!this.itemStacksSO[1].isItemEqual(resultItemStack)) {
+				return false;
 			}
 		}
 		
-		return mode;
+		return true;
 	}
 	
 	//Frozen!? Let it go! Let it go! Can't hold it back anymore~  - GKB 2015/4/4 22:22 (Tired...)
@@ -468,7 +492,7 @@ public class SOTileEntity extends MultiServantLogic implements IFluidHandler, IF
 			canStart = true;
 		}
 		
-		if(canStart && getMode() != null){
+		if(canStart && canCast()){
 			return true;
 		}
 		
@@ -489,36 +513,23 @@ public class SOTileEntity extends MultiServantLogic implements IFluidHandler, IF
 	}
 	
 	public void frozen(){
-		FluidTankInfo info = getInfo();
-		FluidStack liquid = info.fluid;
-		ItemStack product = null;
-		FluidStack fluidCost = null;
-		String mode = getMode();
 		
-		if(canFrozen() == true && info != null && mode.equals("table")){
-			product = recipes.getCastingRecipes(liquid, this.itemStacksSO[0]); // Product
-			fluidCost = recipes.getCastingFluidCost(liquid, itemStacksSO[0]);
-		}else if(canFrozen() == true && info != null && mode.equals("basin")){
-			product = recipes.getBasinResult(liquid, this.itemStacksSO[0]); // Product
-			fluidCost = recipes.getBasinFluidCost(liquid, itemStacksSO[0]);
+		this.drain(recipeFluidCost, true);
+		
+		if (this.itemStacksSO[1] == null) {
+			this.itemStacksSO[1] = resultItemStack.copy();
+		} else {
+			this.itemStacksSO[1].stackSize += resultItemStack.stackSize;
 		}
-		if(product != null && fluidCost != null && fluidCost.amount <= liquid.amount){
-			this.drain(fluidCost, true);
-			
-			if (this.itemStacksSO[1] == null) {
-				this.itemStacksSO[1] = product.copy();
-			} else if (this.itemStacksSO[1].getItem() == product.getItem()) {
-				this.itemStacksSO[1].stackSize += product.stackSize;
-			}
-			
-			if(itemStacksSO[0] != null && (mode.equals("basin") || recipes.isConsumeCast(liquid, itemStacksSO[0]))){
-				if(itemStacksSO[0].stackSize == 1){
-					itemStacksSO[0] = null;
-				}else{
-					--itemStacksSO[0].stackSize;
-				}
+		
+		if(itemStacksSO[0] != null && isConsumeCast){
+			if(itemStacksSO[0].stackSize == 1){
+				itemStacksSO[0] = null;
+			}else{
+				--itemStacksSO[0].stackSize;
 			}
 		}
+		
 	}
 	
 	public void voidLiquid(){
