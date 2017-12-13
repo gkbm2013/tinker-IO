@@ -433,6 +433,7 @@ public class SOTileEntity extends MultiServantLogic implements IFluidHandler, IF
 		
 		if(!liquid.isFluidEqual(recipeFluidCost)
 				|| !ItemStack.areItemsEqual(oldCast, itemStacksSO[0])
+				|| !ItemStack.areItemStackTagsEqual(oldCast, itemStacksSO[0])
 				|| wasHasBasinUPG != hasBasinUPG()) {
 
 			oldCast = itemStacksSO[0] == null ? null : itemStacksSO[0].copy();
