@@ -5,6 +5,7 @@ import java.util.List;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -17,6 +18,7 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.items.IItemHandler;
 import slimeknights.tconstruct.smeltery.tileentity.TileSmeltery;
 import slimeknights.tconstruct.smeltery.tileentity.TileSmelteryComponent;
 import tinker_io.TileEntity.SidedInventory;
@@ -26,7 +28,7 @@ import tinker_io.reflection.TempField;
 import tinker_io.registry.ItemRegistry;
 import tinker_io.registry.RegisterUtil;
 
-public class FIMTileEntity extends TileSmelteryComponent implements ITickable, Observable<Observer>, ISidedInventory
+public class FIMTileEntity extends TileSmelteryComponent implements ITickable, Observable<Observer>, IInventory, IItemHandler
 {
     static final int[] slotsSpeedUPG = new int[] { 0 };
     static final int[] slotsFuel = new int[] { 1 };
@@ -485,7 +487,7 @@ public class FIMTileEntity extends TileSmelteryComponent implements ITickable, O
     }
 
 
-    @Override
+    /*@Override
     public int[] getSlotsForFace(EnumFacing side)
     {
         return inv.getSlotsForFace(side);
@@ -503,7 +505,7 @@ public class FIMTileEntity extends TileSmelteryComponent implements ITickable, O
     public boolean canExtractItem(int index, ItemStack stack, EnumFacing direction)
     {
         return inv.canExtractItem(index, stack, direction);
-    }
+    }*/
     
     public ItemStack getSlot(int i)
     {
@@ -526,4 +528,68 @@ public class FIMTileEntity extends TileSmelteryComponent implements ITickable, O
 	public boolean isEmpty() {
 		return false;
 	}
+	
+	@Override
+	public int getSlots() {
+		return 2;
+	}
+
+	
+	private boolean canInsertItem(int slot, ItemStack stack){
+		if(slot == 1 && TileEntityFurnace.getItemBurnTime(stack) > 0){
+			ItemStack soSlot = this.getSlot(slot);
+			int currentSize =  soSlot.getCount();
+			int maxSize = soSlot.getMaxStackSize();
+			if( (soSlot.isEmpty() || stack.isItemEqual(soSlot)) && currentSize != maxSize ){
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	private void insertItem(int slot, ItemStack stack){
+		ItemStack soSlot = this.getSlot(slot);
+		if(soSlot.isEmpty()){
+			this.setSlot(slot, stack.copy());
+		}else{
+			int maxSize = soSlot.getMaxStackSize();
+			int currentSize = soSlot.getCount();
+			int slotSize = stack.getCount();
+			if(slotSize + currentSize > maxSize){
+				soSlot.setCount(maxSize);
+			}else{
+				soSlot.grow(slotSize);
+			}
+		}
+	}
+
+	@Override
+	public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) { 
+		if(canInsertItem(slot, stack)){
+			if(!simulate) insertItem(slot, stack);
+			ItemStack soSlot = this.getSlot(slot);
+			int maxSize = soSlot.getMaxStackSize();
+			int currentSize = soSlot.getCount();
+			int slotSize = stack.getCount();
+			int result = slotSize - (maxSize - currentSize);
+			if(result < 0){
+				return ItemStack.EMPTY;
+			}else{
+				ItemStack newStack = stack.copy();
+				newStack.setCount(result);
+				return newStack;
+			}
+		}
+		return stack;
+	}
+
+	@Override
+	public ItemStack extractItem(int slot, int amount, boolean simulate) {
+		return ItemStack.EMPTY;
+	}
+
+	@Override
+	public int getSlotLimit(int slot) {
+		return 64;
+	}	
 }

@@ -154,7 +154,7 @@ public abstract class TileEntityContainerAdapter extends TileEntity  implements 
 	@Override public void setField(int id, int value) {}
 	@Override public int getFieldCount() {return 0;}
 	
-	public ItemStack[] getSlots() {
+	public ItemStack[] getInventorySlots() {
 		return slots;
 	}
 	

@@ -14,11 +14,13 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.oredict.OreDictionary;
 import tinker_io.handler.OreCrusherBanList;
+import tinker_io.handler.OreCrusherRecipe;
 import tinker_io.registry.RegisterUtil;
 
-public class OreCrusherTileEntity extends TileEntityContainerAdapter implements ITickable, IEnergyReceiver  {
+public class OreCrusherTileEntity extends TileEntityContainerAdapter implements ITickable, IEnergyReceiver, IItemHandler  {
 	public OreCrusherTileEntity() {
 		super(null, 6);
 	}
@@ -36,7 +38,7 @@ public class OreCrusherTileEntity extends TileEntityContainerAdapter implements 
 	
 	private int crushTime = 0;
 	
-	//private ItemStack[] getSlots() = this.getSlots();
+	//private ItemStack[] getInventorySlots() = this.getInventorySlots();
 	
 	private int doubleProductRate;
 	
@@ -165,8 +167,8 @@ public class OreCrusherTileEntity extends TileEntityContainerAdapter implements 
 		ItemStack product = new ItemStack(RegisterUtil.CrushedOre, productAmount);
 		product.setTagCompound(new NBTTagCompound());
 		NBTTagCompound nbt = product.getTagCompound();
-		if(isOreInOreDic(getSlots()[1])){
-			nbt.setString("oreDic", getOreDicName(getSlots()[1]));
+		if(isOreInOreDic(getInventorySlots()[1])){
+			nbt.setString("oreDic", getOreDicName(getInventorySlots()[1]));
 		}
 		return product;
 	}
@@ -174,9 +176,9 @@ public class OreCrusherTileEntity extends TileEntityContainerAdapter implements 
 	private boolean canGetMoreProduct(){
 		int bookAmount = 0;
 		
-		ItemStack slotForutne1 = this.getSlots()[3];
-		ItemStack slotForutne2 = this.getSlots()[4];
-		ItemStack slotForutne3 = this.getSlots()[5];
+		ItemStack slotForutne1 = this.getInventorySlots()[3];
+		ItemStack slotForutne2 = this.getInventorySlots()[4];
+		ItemStack slotForutne3 = this.getInventorySlots()[5];
 		
 		if(isFortuenEnchantedBook(slotForutne1)){
 			bookAmount = bookAmount+2;
@@ -225,18 +227,18 @@ public class OreCrusherTileEntity extends TileEntityContainerAdapter implements 
 		ItemStack product = this.getProduct();
 		OreCrusherBanList banList = OreCrusherBanList.banedOreDicList();
 		
-		if(getSlots()[1] != null && getSlots()[1].isEmpty()){
+		if(getInventorySlots()[1] != null && getInventorySlots()[1].isEmpty()){
 			return false;
 		}
 		
-		if(!isOreInOreDic(getSlots()[1]) || !banList.canItemCrush(getSlots()[1])){
+		if(!isOreInOreDic(getInventorySlots()[1]) || !banList.canItemCrush(getInventorySlots()[1])){
 			return false;
 		}
 		
-		if(getSlots()[2] != null && getSlots()[2].isEmpty() && this.storage.getEnergyStored() > speed){
+		if(getInventorySlots()[2] != null && getInventorySlots()[2].isEmpty() && this.storage.getEnergyStored() > speed){
 			return true;
-		}else if(getSlots()[2] != null && getSlots()[2].isItemEqual(product) && isOreDicNBTTagEqual(getSlots()[2], product) && this.storage.getEnergyStored() > speed){
-			if(this.getSlots()[2].getCount() <= product.getMaxStackSize() - 3){
+		}else if(getInventorySlots()[2] != null && getInventorySlots()[2].isItemEqual(product) && isOreDicNBTTagEqual(getInventorySlots()[2], product) && this.storage.getEnergyStored() > speed){
+			if(this.getInventorySlots()[2].getCount() <= product.getMaxStackSize() - 3){
 				return true;
 			}
 		}
@@ -253,17 +255,17 @@ public class OreCrusherTileEntity extends TileEntityContainerAdapter implements 
 		if(canCrush()){
 			if(crushTime >= speed){
 				crushTime = 0;
-				if (this.getSlots()[2] != null && this.getSlots()[2].isEmpty()) {
-					this.getSlots()[2] = Product.copy();
-				} else if (this.getSlots()[2].getItem() == Product.getItem()) {
-					//this.getSlots()[2].stackSize += Product.stackSize;
-					this.getSlots()[2].grow(Product.getCount());
+				if (this.getInventorySlots()[2] != null && this.getInventorySlots()[2].isEmpty()) {
+					this.getInventorySlots()[2] = Product.copy();
+				} else if (this.getInventorySlots()[2].getItem() == Product.getItem()) {
+					//this.getInventorySlots()[2].stackSize += Product.stackSize;
+					this.getInventorySlots()[2].grow(Product.getCount());
 				}
-				if(getSlots()[1].getCount() == 1){
-					getSlots()[1] = ItemStack.EMPTY;
+				if(getInventorySlots()[1].getCount() == 1){
+					getInventorySlots()[1] = ItemStack.EMPTY;
 				}else{
-					//--getSlots()[1].stackSize;
-					getSlots()[1].grow(-1);
+					//--getInventorySlots()[1].stackSize;
+					getInventorySlots()[1].grow(-1);
 				}
 			}else{
 				crushTime++;
@@ -278,11 +280,11 @@ public class OreCrusherTileEntity extends TileEntityContainerAdapter implements 
 	private void speedUPG(){
 		ItemStack stackSpeedUPG = new ItemStack(RegisterUtil.SpeedUPG);
 		
-		if(this.getSlots()[0] != null && this.getSlots()[0].isEmpty()){
+		if(this.getInventorySlots()[0] != null && this.getInventorySlots()[0].isEmpty()){
 
 		}else{
-			if(this.getSlots()[0].isItemEqual(stackSpeedUPG)){
-				crushTime = crushTime+(this.getSlots()[0].getCount()/3/2);
+			if(this.getInventorySlots()[0] != null && stackSpeedUPG != null && this.getInventorySlots()[0].isItemEqual(stackSpeedUPG)){
+				crushTime = crushTime+(this.getInventorySlots()[0].getCount()/3/2);
 			}
 		}
 	}
@@ -299,14 +301,14 @@ public class OreCrusherTileEntity extends TileEntityContainerAdapter implements 
 		this.doubleProductRate = tagCompound.getInteger("Rate");
 		
 		/*NBTTagList tagList = tagCompound.getTagList("Items", 10);
-		this.getSlots() = new ItemStack[this.getSizeInventory()];
+		this.getInventorySlots() = new ItemStack[this.getSizeInventory()];
 		
 		for (int i = 0; i < tagList.tagCount(); ++i) {
 			NBTTagCompound tabCompound1 = tagList.getCompoundTagAt(i);
 			byte byte0 = tabCompound1.getByte("Slot");
 			
-			if (byte0 >= 0 && byte0 < this.getSlots().length) {
-				this.getSlots()[byte0] = ItemStack.loadItemStackFromNBT(tabCompound1);
+			if (byte0 >= 0 && byte0 < this.getInventorySlots().length) {
+				this.getInventorySlots()[byte0] = ItemStack.loadItemStackFromNBT(tabCompound1);
 			}
 		}*/
 
@@ -324,11 +326,11 @@ public class OreCrusherTileEntity extends TileEntityContainerAdapter implements 
 		
 		/*NBTTagList tagList = new NBTTagList();
 
-		for (int i = 0; i < this.getSlots().length; ++i) {
-			if (this.getSlots()[i] != null) {
+		for (int i = 0; i < this.getInventorySlots().length; ++i) {
+			if (this.getInventorySlots()[i] != null) {
 				NBTTagCompound tagCompound1 = new NBTTagCompound();
 				tagCompound1.setByte("Slot", (byte) i);
-				this.getSlots()[i].writeToNBT(tagCompound1);
+				this.getInventorySlots()[i].writeToNBT(tagCompound1);
 				tagList.appendTag(tagCompound1);
 			}
 		}
@@ -392,5 +394,85 @@ public class OreCrusherTileEntity extends TileEntityContainerAdapter implements 
 	public boolean isEmpty() {
 		return false;
 	}
-		
+	
+	//IItemHandler
+	
+	@Override
+	public int getSlots() {
+		return 6;
+	}
+
+	
+	private boolean canInsertItem(int slot, ItemStack stack){
+		if(slot == 1 && this.isOreInOreDic(stack)){
+			ItemStack soSlot = this.getInventorySlots()[slot];
+			int currentSize =  soSlot.getCount();
+			int maxSize = soSlot.getMaxStackSize();
+			if( (soSlot.isEmpty() || stack.isItemEqual(soSlot)) && currentSize != maxSize ){
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	private void insertItem(int slot, ItemStack stack){
+		ItemStack soSlot = this.getInventorySlots()[slot];
+		if(soSlot.isEmpty()){
+			this.getInventorySlots()[slot] = stack.copy();
+		}else{
+			int maxSize = soSlot.getMaxStackSize();
+			int currentSize = soSlot.getCount();
+			int slotSize = stack.getCount();
+			if(slotSize + currentSize > maxSize){
+				soSlot.setCount(maxSize);
+			}else{
+				soSlot.grow(slotSize);
+			}
+		}
+	}
+
+	@Override
+	public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) { 
+		if(canInsertItem(slot, stack)){
+			if(!simulate) insertItem(slot, stack);
+			ItemStack soSlot = this.getInventorySlots()[slot];
+			int maxSize = soSlot.getMaxStackSize();
+			int currentSize = soSlot.getCount();
+			int slotSize = stack.getCount();
+			int result = slotSize - (maxSize - currentSize);
+			if(result < 0){
+				return ItemStack.EMPTY;
+			}else{
+				ItemStack newStack = stack.copy();
+				newStack.setCount(result);
+				return newStack;
+			}
+		}
+		return stack;
+	}
+
+	@Override
+	public ItemStack extractItem(int slot, int amount, boolean simulate) {
+		ItemStack result = ItemStack.EMPTY;
+		if(slot == 2){
+			ItemStack soSlot = this.getInventorySlots()[slot];
+			if(amount <= soSlot.getCount()){
+				result = soSlot.copy();
+				result.setCount(amount);
+			}else{
+				if(soSlot.getCount() > 0){
+					result = soSlot.copy();
+				}
+			}
+			if(!simulate){
+				soSlot.grow(-1 * result.getCount());
+			}
+		}
+		return result;
+	}
+
+	@Override
+	public int getSlotLimit(int slot) {
+		return 64;
+	}	
 }

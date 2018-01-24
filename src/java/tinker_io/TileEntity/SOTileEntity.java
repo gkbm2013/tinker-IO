@@ -11,6 +11,7 @@ import javax.annotation.Nullable;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -33,8 +34,9 @@ import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import net.minecraftforge.fluids.IFluidTank;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.items.IItemHandler;
 
-public class SOTileEntity extends MultiServantLogic implements IFluidHandler, IFluidTank, ISidedInventory, ITickable{
+public class SOTileEntity extends MultiServantLogic implements IFluidHandler, IFluidTank, ISidedInventory, ITickable, IItemHandler{
 	public FluidTank tank;
 	
 	public FluidStack otherLiquid;
@@ -422,7 +424,13 @@ public class SOTileEntity extends MultiServantLogic implements IFluidHandler, IF
 	//boolean canFrozen = false;
 	//boolean canBasin = false;
 	
-	public String getMode(){
+	private FluidStack recipeFluidCost;
+	private boolean isConsumeCast;
+	private ItemStack resultItemStack;
+	private ItemStack oldCast;
+	private boolean wasHasBasinUPG;
+	
+	/*public String getMode(){
 		String mode = null;
 		
 		FluidTankInfo info = getInfo();
@@ -457,6 +465,61 @@ public class SOTileEntity extends MultiServantLogic implements IFluidHandler, IF
 		}
 		
 		return mode;
+	}*/
+	private void updateRecipe() {
+		
+		FluidTankInfo info = getInfo();
+		FluidStack liquid = info.fluid;
+		
+		// If we run out of liquid, just cache the old recipe.
+		if (liquid == null) {
+			return;
+		}
+		
+		if(!liquid.isFluidEqual(recipeFluidCost)
+				|| !ItemStack.areItemsEqual(oldCast, itemStacksSO[0])
+				|| !ItemStack.areItemStackTagsEqual(oldCast, itemStacksSO[0])
+				|| wasHasBasinUPG != hasBasinUPG()) {
+
+			oldCast = itemStacksSO[0].isEmpty() ? null : itemStacksSO[0].copy();
+			if(hasBasinUPG()){
+				wasHasBasinUPG = true;
+				recipeFluidCost = recipes.getBasinFluidCost(liquid, itemStacksSO[0]);
+				resultItemStack = recipes.getBasinResult(liquid, itemStacksSO[0]);
+				isConsumeCast = true;
+			}else{
+				wasHasBasinUPG = false;
+				recipeFluidCost = recipes.getCastingFluidCost(liquid, itemStacksSO[0]);
+				resultItemStack = recipes.getCastingRecipes(liquid, itemStacksSO[0]);
+				isConsumeCast = recipes.isConsumeCast(liquid, itemStacksSO[0]);
+			}
+			
+		}
+		
+	}
+	
+	public boolean canCast(){
+		
+		updateRecipe();
+		
+		FluidTankInfo info = getInfo();
+		FluidStack liquid = info.fluid;
+		
+		if(liquid == null || recipeFluidCost == null || recipeFluidCost.amount > liquid.amount || resultItemStack.isEmpty()){
+			return false;
+		}
+			
+		if(!this.itemStacksSO[1].isEmpty()){
+			int resultSize = itemStacksSO[1].getCount() + resultItemStack.getCount();
+			if(resultSize > this.getOutputSize() ||
+					resultSize > getInventoryStackLimit() ||
+					resultSize > this.itemStacksSO[1].getMaxStackSize() ||
+					!this.itemStacksSO[1].isItemEqual(resultItemStack)) {
+				return false;
+			}
+		}
+		
+		return true;
 	}
 	
 	//Frozen!? Let it go! Let it go! Can't hold it back anymore~  - GKB 2015/4/4 22:22 (Tired...)
@@ -475,56 +538,26 @@ public class SOTileEntity extends MultiServantLogic implements IFluidHandler, IF
 			canStart = true;
 		}
 		
-		if(canStart && getMode() != null){
+		if(canStart && canCast()){
 			return true;
 		}
-		
-		/*if(info != null && liquid != null && this.itemStacksSO[0] != null && canStart == true){
-			if(recipes.getCastingFluidCost(liquid, itemStacksSO[0]) != null && recipes.getCastingFluidCost(liquid, itemStacksSO[0]).amount <= liquid.amount){
-				if(recipes.getCastingRecipes(liquid, this.itemStacksSO[0]) != null){
-					ItemStack itemstack = recipes.getCastingRecipes(liquid, this.itemStacksSO[0]);
-					if(this.itemStacksSO[1] != null){
-						int result = itemStacksSO[1].stackSize + itemstack.stackSize;
-						return result <= this.getOutputSize() && result <= getInventoryStackLimit() && result <= this.itemStacksSO[1].getMaxStackSize() && this.itemStacksSO[1].isItemEqual(itemstack);
-					}else{
-						return true;
-					}
-				}
-			}			
-		}*/
 		return false;
 	}
 	
 	public void frozen(){
-		FluidTankInfo info = getInfo();
-		FluidStack liquid = info.fluid;
-		ItemStack product = ItemStack.EMPTY;
-		FluidStack fluidCost = null;
-		String mode = getMode();
+		this.drain(recipeFluidCost, true);
 		
-		if(canFrozen() == true && info != null && mode.equals("table")){
-			product = recipes.getCastingRecipes(liquid, this.itemStacksSO[0]); // Product
-			fluidCost = recipes.getCastingFluidCost(liquid, itemStacksSO[0]);
-		}else if(canFrozen() == true && info != null && mode.equals("basin")){
-			product = recipes.getBasinResult(liquid, this.itemStacksSO[0]); // Product
-			fluidCost = recipes.getBasinFluidCost(liquid, itemStacksSO[0]);
+		if (this.itemStacksSO[1].isEmpty()) {
+			this.itemStacksSO[1] = resultItemStack.copy();
+		} else {
+			this.itemStacksSO[1].grow(resultItemStack.getCount());
 		}
-		if(product != null && !product.isEmpty() && fluidCost != null && fluidCost.amount <= liquid.amount){
-			this.drain(fluidCost, true);
-			
-			if (this.itemStacksSO[1] != null && this.itemStacksSO[1].isEmpty()) {
-				this.itemStacksSO[1] = product.copy();
-			} else if (this.itemStacksSO[1].getItem() == product.getItem()) {
-				this.itemStacksSO[1].grow(product.getCount());
-			}
-			
-			if(itemStacksSO[0] != null && (mode.equals("basin") || recipes.isConsumeCast(liquid, itemStacksSO[0]))){
-				if(itemStacksSO[0].getCount() == 1){
-					itemStacksSO[0] = ItemStack.EMPTY;
-				}else{
-					//--itemStacksSO[0].stackSize;
-					itemStacksSO[0].grow(-1);
-				}
+		
+		if(itemStacksSO[0] != null && isConsumeCast){
+			if(itemStacksSO[0].getCount() == 1){
+				itemStacksSO[0] = ItemStack.EMPTY;
+			}else{
+				itemStacksSO[0].grow(-1);
 			}
 		}
 	}
@@ -561,11 +594,10 @@ public class SOTileEntity extends MultiServantLogic implements IFluidHandler, IF
     		if(currentFrozenTime >= frozenTimeMax){
     			currentFrozenTime = 0;
     			frozen();
-    			
     		}else{
-    				currentFrozenTime++;
+				currentFrozenTime++;
     		}
-    		
+
     		this.notifyBlockUpdate();
     	}
     	
@@ -656,6 +688,7 @@ public class SOTileEntity extends MultiServantLogic implements IFluidHandler, IF
 	@Override
 	public boolean canExtractItem(int index, ItemStack stack,
 			EnumFacing direction) {
+		
 		return stack != null && !stack.isEmpty();
 	}
 	
@@ -681,6 +714,84 @@ public class SOTileEntity extends MultiServantLogic implements IFluidHandler, IF
 	public boolean isEmpty() {
 		// TODO
 		return false;
+	}
+
+	@Override
+	public int getSlots() {
+		return 2;
+	}
+	
+	private boolean canInsertItem(int slot, ItemStack stack){
+		if(slot == 0 && this.recipes.isPattern(stack)){
+			ItemStack soSlot = this.itemStacksSO[slot];
+			int currentSize =  soSlot.getCount();
+			int maxSize = soSlot.getMaxStackSize();
+			if( (soSlot.isEmpty() || stack.isItemEqual(soSlot)) && currentSize != maxSize ){
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	private void insertItem(int slot, ItemStack stack){
+		ItemStack soSlot = this.itemStacksSO[slot];
+		if(soSlot.isEmpty()){
+			this.itemStacksSO[slot] = stack.copy();
+		}else{
+			int maxSize = soSlot.getMaxStackSize();
+			int currentSize = soSlot.getCount();
+			int slotSize = stack.getCount();
+			if(slotSize + currentSize > maxSize){
+				soSlot.setCount(maxSize);
+			}else{
+				soSlot.grow(slotSize);
+			}
+		}
+	}
+
+	@Override
+	public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) { 
+		if(canInsertItem(slot, stack)){
+			if(!simulate) insertItem(slot, stack);
+			ItemStack soSlot = this.itemStacksSO[slot];
+			int maxSize = soSlot.getMaxStackSize();
+			int currentSize = soSlot.getCount();
+			int slotSize = stack.getCount();
+			int result = slotSize - (maxSize - currentSize);
+			if(result < 0){
+				return ItemStack.EMPTY;
+			}else{
+				ItemStack newStack = stack.copy();
+				newStack.setCount(result);
+				return newStack;
+			}
+		}
+		return stack;
+	}
+
+	@Override
+	public ItemStack extractItem(int slot, int amount, boolean simulate) {
+		ItemStack result = ItemStack.EMPTY;
+		if(slot == 1){
+			ItemStack soSlot = itemStacksSO[slot];
+			if(amount <= soSlot.getCount()){
+				result = soSlot.copy();
+				result.setCount(amount);
+			}else{
+				if(soSlot.getCount() > 0){
+					result = soSlot.copy();
+				}
+			}
+			if(!simulate){
+				soSlot.grow(-1 * result.getCount());
+			}
+		}
+		return result;
+	}
+
+	@Override
+	public int getSlotLimit(int slot) {
+		return itemStacksSO[slot].getMaxStackSize();
 	}
 
 	//Tank
