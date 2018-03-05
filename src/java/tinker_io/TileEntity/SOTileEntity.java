@@ -3,7 +3,6 @@ package tinker_io.TileEntity;
 //import tconstruct.smeltery.TinkerSmeltery;
 import tinker_io.handler.SORecipe;
 import tinker_io.registry.RegisterUtil;
-import slimeknights.mantle.multiblock.MultiServantLogic;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -18,6 +17,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.text.ITextComponent;
@@ -36,7 +36,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.IItemHandler;
 
-public class SOTileEntity extends MultiServantLogic implements IFluidHandler, IFluidTank, ISidedInventory, ITickable, IItemHandler{
+public class SOTileEntity extends TileEntity implements IInventory, IFluidHandler, IFluidTank, ISidedInventory, ITickable, IItemHandler{
 	public FluidTank tank;
 	
 	public FluidStack otherLiquid;
@@ -193,7 +193,6 @@ public class SOTileEntity extends MultiServantLogic implements IFluidHandler, IF
         return tags;
     }
 
-    @Override
     public void readCustomNBT (NBTTagCompound tags){   	
     	currentFrozenTime = tags.getInteger("CurrentFrozenTime");
     	
@@ -227,7 +226,6 @@ public class SOTileEntity extends MultiServantLogic implements IFluidHandler, IF
 //mode = tags.getInteger("Mode");
     }
 
-    @Override
     public NBTTagCompound writeCustomNBT (NBTTagCompound tags)
     {
         

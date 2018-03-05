@@ -6,9 +6,7 @@ import tinker_io.config.TIOConfig;
 import tinker_io.packet.PacketDispatcher;
 import tinker_io.plugins.waila.MainWaila;
 import tinker_io.proxy.CommonProxy;
-import tinker_io.registry.BlockRegistry;
 import tinker_io.registry.FluidRegister;
-import tinker_io.registry.ItemRegistry;
 import tinker_io.registry.OreCrusherBanLiatRegistry;
 import tinker_io.registry.SmelteryRecipeRegistry;
 import tinker_io.registry.SoundEventRegistry;
@@ -35,9 +33,9 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 		modid = Main.MODID,
 		version = Main.VERSION,
 		name = Main.Name,
-		dependencies="required-after:forge@[14.23.1.2577,);"
+		dependencies="required-after:forge@[14.23.1.2590,);"
 				//"required-after:Forge@[12.18.2.2115,);"
-				+ "required-after:tconstruct@[1.12.2-2.9.0.55,);"
+				+ "required-after:tconstruct@[1.12.2-2.9.1.65,);"
 				+ "required-after:redstoneflux@[1.12-2.0.1.2,);"
 				+ "after:waila;"
 				+ "after:jei@[4.8.5.138,)",
@@ -45,7 +43,7 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 public class Main
 {
     public static final String MODID = "tinker_io";
-    public static final String VERSION = "release 2.6.0a";
+    public static final String VERSION = "release 2.6.1";
     public static final String Name = "Tinker I/O";
     
     //public static boolean iguanas_support;

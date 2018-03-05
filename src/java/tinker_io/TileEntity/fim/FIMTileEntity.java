@@ -25,10 +25,9 @@ import tinker_io.TileEntity.SidedInventory;
 import tinker_io.api.Observable;
 import tinker_io.api.Observer;
 import tinker_io.reflection.TempField;
-import tinker_io.registry.ItemRegistry;
 import tinker_io.registry.RegisterUtil;
 
-public class FIMTileEntity extends TileSmelteryComponent implements ITickable, Observable<Observer>, IInventory, IItemHandler
+public class FIMTileEntity extends TileSmelteryComponent implements ITickable, Observable<Observer>, IInventory, IItemHandler, ISidedInventory
 {
     static final int[] slotsSpeedUPG = new int[] { 0 };
     static final int[] slotsFuel = new int[] { 1 };
@@ -487,7 +486,7 @@ public class FIMTileEntity extends TileSmelteryComponent implements ITickable, O
     }
 
 
-    /*@Override
+    @Override
     public int[] getSlotsForFace(EnumFacing side)
     {
         return inv.getSlotsForFace(side);
@@ -505,7 +504,7 @@ public class FIMTileEntity extends TileSmelteryComponent implements ITickable, O
     public boolean canExtractItem(int index, ItemStack stack, EnumFacing direction)
     {
         return inv.canExtractItem(index, stack, direction);
-    }*/
+    }
     
     public ItemStack getSlot(int i)
     {
@@ -591,5 +590,5 @@ public class FIMTileEntity extends TileSmelteryComponent implements ITickable, O
 	@Override
 	public int getSlotLimit(int slot) {
 		return 64;
-	}	
+	}
 }

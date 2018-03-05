@@ -42,7 +42,12 @@ public class CrushedOreColorList {
 				TextureAtlasSprite particleIcon = mc.getRenderItem().getItemModelMesher().getParticleIcon(oreItem.getItem(), oreItem.getMetadata());
 				if(particleIcon != null){					
 					int[] frameTextureData = particleIcon.getFrameTextureData(0)[0];
-					colorRGB = frameTextureData[151];
+					if(frameTextureData.length != 256){
+						int index = 151 / 256 * frameTextureData.length;
+						colorRGB = frameTextureData[index];
+					}else{
+						colorRGB = frameTextureData[151];
+					}
 				}
 				
 				/*if(oreDicName.equals("oreIron")){colorRGB = hex2Rgb("#B39886").getRGB();}
