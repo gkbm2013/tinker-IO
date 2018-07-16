@@ -1,0 +1,11 @@
+#ant stuff
+/bin/
+.gradle
+
+#IDEA files from Gradle
+.idea/
+/*.iml
+/*.ipr
+/*.iws
+
+/out

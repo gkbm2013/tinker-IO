@@ -1,0 +1,16 @@
+[
+{
+  "modid": "tinker_io",
+  "name": "Tinker I/O",
+  "description": "I/O for Smeltery! (Tinker I/O 3)",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "http://minecraft.curseforge.com/mc-mods/229503-tinker-i-o",
+  "updateUrl": "",
+  "authorList": ["GKB", "tokomikea"],
+  "credits": "Thanks KwongFong for making the texture.",
+  "logoFile": "logo.png",
+  "screenshots": [],
+  "dependencies": []
+}
+]
