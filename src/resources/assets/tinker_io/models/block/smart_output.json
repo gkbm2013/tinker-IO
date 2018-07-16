@@ -1,7 +1,0 @@
-{
-    "parent": "block/cube_top",
-    "textures": {
-        "top":"tinker_io:blocks/smart_output_top",
-        "side":"tinker_io:blocks/smart_output_side"
-    }
-}
