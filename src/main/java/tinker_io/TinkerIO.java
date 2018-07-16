@@ -1,14 +1,24 @@
 package tinker_io;
 
+import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Items;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.client.event.ModelRegistryEvent;
+import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.network.NetworkRegistry;
 import tinker_io.proxy.CommonProxy;
+import tinker_io.registry.BlockRegistry;
+import tinker_io.registry.GuiRegistry;
+import tinker_io.registry.ItemRegistry;
+import tinker_io.registry.TileEntityRegistry;
 
 @Mod(modid = TinkerIO.MOD_ID,
         version = TinkerIO.VERSION,
@@ -47,11 +57,34 @@ public class TinkerIO {
 
     @Mod.EventHandler
     public void init(FMLInitializationEvent event) {
-
+//        RecipeRegistry.init();
     }
 
     @Mod.EventHandler
     public void postInit(FMLPostInitializationEvent event) {
+        NetworkRegistry.INSTANCE.registerGuiHandler(this, new GuiRegistry());
+    }
+
+    @Mod.EventBusSubscriber
+    public static class RegistrationHandler {
+        @SubscribeEvent
+        public static void registerItems(RegistryEvent.Register<Item> event) {
+            ItemRegistry.register(event.getRegistry());
+            BlockRegistry.registerItemBlocks(event.getRegistry());
+        }
+
+        @SubscribeEvent
+        public static void registerBlocks(RegistryEvent.Register<Block> event) {
+            BlockRegistry.register(event.getRegistry());
+            TileEntityRegistry.register();
+        }
+
+        @SubscribeEvent
+        public static void registerModels(ModelRegistryEvent event) {
+            ItemRegistry.registerModels();
+            BlockRegistry.registerModels();
+        }
+
 
     }
 

@@ -2,7 +2,7 @@
 {
   "modid": "tinker_io",
   "name": "Tinker I/O",
-  "description": "I/O for Smeltery! (Tinker I/O 3)",
+  "description": "I/O for Smeltery! (Tinker I/O rewrite version)",
   "version": "${version}",
   "mcversion": "${mcversion}",
   "url": "http://minecraft.curseforge.com/mc-mods/229503-tinker-i-o",
