@@ -1,6 +1,7 @@
 package tinker_io.item;
 
 import net.minecraft.item.ItemStack;
+import tinker_io.config.TinkerIOConfig;
 
 public class ItemSolidFuel extends ItemBase {
     public ItemSolidFuel(String name) {
@@ -9,9 +10,7 @@ public class ItemSolidFuel extends ItemBase {
 
     @Override
     public int getItemBurnTime(ItemStack i){
-        //TODO Config burn time
-//        int solidFuelBurnTime = TIOConfig.solidFuelBurnTime;
-        int solidFuelBurnTime = 1000;
+        int solidFuelBurnTime = TinkerIOConfig.CONFIG_FUEL_INPUT_MACHINE.SolidFuelBurnTime;
         return solidFuelBurnTime;
     }
 }
