@@ -25,4 +25,8 @@ public class ItemBase extends Item {
     public void registerItemModel() {
         TinkerIO.proxy.registerItemRenderer(this, 0, name);
     }
+
+    public void registerItemModel(String name) {
+        TinkerIO.proxy.registerItemRenderer(this, 0, name);
+    }
 }
