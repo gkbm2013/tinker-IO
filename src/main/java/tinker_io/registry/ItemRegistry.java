@@ -2,15 +2,19 @@ package tinker_io.registry;
 
 import net.minecraft.item.Item;
 import net.minecraftforge.registries.IForgeRegistry;
+import tinker_io.TinkerIO;
+import tinker_io.item.ItemCdLonesomeAvenue;
 
 public class ItemRegistry {
-//    public static TestItem testItem = new TestItem("test_item");
+
+    public static ItemCdLonesomeAvenue cdLonesomeAvenue = new ItemCdLonesomeAvenue("Lonesome_Avenue");
 
     public static void register(IForgeRegistry<Item> registry) {
-//        registry.registerAll(testItem);
+        registry.registerAll(cdLonesomeAvenue);
     }
 
     public static void registerModels() {
-//        testItem.registerItemModel();
+//        cdLonesomeAvenue.registerItemModel();
+        TinkerIO.proxy.registerItemRenderer(cdLonesomeAvenue, 0, "cd_lonesome_avenue");
     }
 }

@@ -14,7 +14,7 @@ public class ItemBase extends Item {
         setCreativeTab(TinkerIO.creativeTabs);
     }
 
-    public boolean isShiftKeyDown(){
+    public static boolean isShiftKeyDown(){
         return Keyboard.isKeyDown(42) || Keyboard.isKeyDown(54);
     }
 
