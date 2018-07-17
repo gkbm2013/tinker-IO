@@ -1,4 +1,4 @@
-package tinker_io.registry;
+package tinker_io.handler;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
@@ -11,7 +11,7 @@ import tinker_io.tileentity.TileEntityFuelInputMachine;
 
 import javax.annotation.Nullable;
 
-public class GuiRegistry implements IGuiHandler {
+public class GuiHandler implements IGuiHandler {
 
     public static final int FUEL_INPUT_MACHINE = 0;
 

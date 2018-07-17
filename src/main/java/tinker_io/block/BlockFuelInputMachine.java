@@ -13,7 +13,7 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import tinker_io.TinkerIO;
 import tinker_io.block.base.BlockFacingTileEntity;
-import tinker_io.registry.GuiRegistry;
+import tinker_io.handler.GuiHandler;
 import tinker_io.tileentity.TileEntityFuelInputMachine;
 
 import javax.annotation.Nullable;
@@ -52,7 +52,7 @@ public class BlockFuelInputMachine extends BlockFacingTileEntity<TileEntityFuelI
             if (player.isSneaking()) {
                 return false;
             } else {
-                player.openGui(TinkerIO.instance, GuiRegistry.FUEL_INPUT_MACHINE, world, pos.getX(), pos.getY(), pos.getZ());
+                player.openGui(TinkerIO.instance, GuiHandler.FUEL_INPUT_MACHINE, world, pos.getX(), pos.getY(), pos.getZ());
             }
         }
         return true;

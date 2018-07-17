@@ -16,7 +16,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import tinker_io.proxy.CommonProxy;
 import tinker_io.registry.BlockRegistry;
-import tinker_io.registry.GuiRegistry;
+import tinker_io.handler.GuiHandler;
 import tinker_io.registry.ItemRegistry;
 import tinker_io.registry.TileEntityRegistry;
 
@@ -62,7 +62,7 @@ public class TinkerIO {
 
     @Mod.EventHandler
     public void postInit(FMLPostInitializationEvent event) {
-        NetworkRegistry.INSTANCE.registerGuiHandler(this, new GuiRegistry());
+        NetworkRegistry.INSTANCE.registerGuiHandler(this, new GuiHandler());
     }
 
     @Mod.EventBusSubscriber
