@@ -1,0 +1,7 @@
+{
+    "parent": "item/generated",
+    "textures": {
+        "layer0":"tinker_io:items/crushed_ore",
+		"layer1":"tinker_io:items/crushed_ore_top_layer"
+    }
+}

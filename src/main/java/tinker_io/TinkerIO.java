@@ -63,6 +63,7 @@ public class TinkerIO {
     @Mod.EventHandler
     public void postInit(FMLPostInitializationEvent event) {
         NetworkRegistry.INSTANCE.registerGuiHandler(this, new GuiHandler());
+        ItemRegistry.registerItemColors();
     }
 
     @Mod.EventBusSubscriber

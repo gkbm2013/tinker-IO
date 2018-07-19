@@ -1,5 +1,6 @@
 package tinker_io.item;
 
+import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.item.Item;
 import org.lwjgl.input.Keyboard;
 import tinker_io.TinkerIO;
@@ -28,5 +29,9 @@ public class ItemBase extends Item {
 
     public void registerItemModel(String name) {
         TinkerIO.proxy.registerItemRenderer(this, 0, name);
+    }
+
+    public void registerItemColor(IItemColor iItemColor){
+        TinkerIO.proxy.registerItemColor(this, iItemColor);
     }
 }
