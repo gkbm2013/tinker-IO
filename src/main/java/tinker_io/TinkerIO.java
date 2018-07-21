@@ -85,8 +85,6 @@ public class TinkerIO {
             ItemRegistry.registerModels();
             BlockRegistry.registerModels();
         }
-
-
     }
 
 }

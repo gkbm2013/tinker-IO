@@ -8,14 +8,14 @@ import net.minecraft.util.ResourceLocation;
 import tinker_io.TinkerIO;
 import tinker_io.registry.BlockRegistry;
 
-public class GuiFuelInputMachine extends GuiContainer {
+public class GuiSmartOutput extends GuiContainer {
 
     private InventoryPlayer playerInv;
-    private static final ResourceLocation BG_TEXTURE = new ResourceLocation(TinkerIO.MOD_ID, "textures/gui/fuel_input_machine.png");
+    private static final ResourceLocation BG_TEXTURE = new ResourceLocation(TinkerIO.MOD_ID, "textures/gui/smart_output.png");
     public static final int WIDTH = 176;
     public static final int HEIGHT = 166;
 
-    public GuiFuelInputMachine(Container container, InventoryPlayer playerInv) {
+    public GuiSmartOutput(Container container, InventoryPlayer playerInv) {
         super(container);
         this.playerInv = playerInv;
 
@@ -32,7 +32,7 @@ public class GuiFuelInputMachine extends GuiContainer {
 
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-        String name = I18n.format(BlockRegistry.fuelInputMachine.getUnlocalizedName() + ".name");
+        String name = I18n.format(BlockRegistry.smartOutput.getUnlocalizedName() + ".name");
         fontRenderer.drawString(name, xSize / 2 - fontRenderer.getStringWidth(name) / 2, 6, 0x404040);
         fontRenderer.drawString(playerInv.getDisplayName().getUnformattedText(), 8, ySize - 94, 0x404040);
     }

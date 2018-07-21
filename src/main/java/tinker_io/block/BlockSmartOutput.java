@@ -2,36 +2,32 @@ package tinker_io.block;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.items.CapabilityItemHandler;
-import net.minecraftforge.items.IItemHandler;
 import tinker_io.TinkerIO;
-import tinker_io.block.base.BlockFacingTileEntity;
+import tinker_io.block.base.BlockTileEntity;
 import tinker_io.handler.GuiHandler;
-import tinker_io.tileentity.TileEntityFuelInputMachine;
+import tinker_io.tileentity.TileEntitySmartOutput;
 
 import javax.annotation.Nullable;
 
-public class BlockFuelInputMachine extends BlockFacingTileEntity<TileEntityFuelInputMachine> {
-    public BlockFuelInputMachine(String name) {
+public class BlockSmartOutput extends BlockTileEntity<TileEntitySmartOutput> {
+    public BlockSmartOutput(String name) {
         super(Material.ROCK, name);
     }
 
     @Override
-    public Class<TileEntityFuelInputMachine> getTileEntityClass() {
-        return TileEntityFuelInputMachine.class;
+    public Class getTileEntityClass() {
+        return TileEntitySmartOutput.class;
     }
 
     @Nullable
     @Override
-    public TileEntityFuelInputMachine createTileEntity(World world, IBlockState state) {
-        return new TileEntityFuelInputMachine();
+    public TileEntitySmartOutput createTileEntity(World world, IBlockState state) {
+        return new TileEntitySmartOutput();
     }
 
     @Override
@@ -40,7 +36,7 @@ public class BlockFuelInputMachine extends BlockFacingTileEntity<TileEntityFuelI
             if (player.isSneaking()) {
                 return false;
             } else {
-                player.openGui(TinkerIO.instance, GuiHandler.FUEL_INPUT_MACHINE, world, pos.getX(), pos.getY(), pos.getZ());
+                player.openGui(TinkerIO.instance, GuiHandler.SMART_OUTPUT, world, pos.getX(), pos.getY(), pos.getZ());
             }
         }
         return true;

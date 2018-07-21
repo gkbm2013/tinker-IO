@@ -5,11 +5,15 @@ import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.IItemHandler;
+import tinker_io.tileentity.TileEntityFuelInputMachine;
 
 public abstract class BlockFacingTileEntity<TE extends TileEntity> extends BlockTileEntity<TE> {
 
@@ -68,6 +72,21 @@ public abstract class BlockFacingTileEntity<TE extends TileEntity> extends Block
             }
             worldIn.setBlockState(pos, state.withProperty(FACING, enumfacing), 2);
         }
+    }
+
+    @Override
+    public void breakBlock(World world, BlockPos pos, IBlockState state) {
+        TE tile = getTileEntity(world, pos);
+        IItemHandler itemHandler = tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, EnumFacing.NORTH);
+
+        if(itemHandler != null && itemHandler.getSlots() <= 0) return;
+
+        ItemStack stack = itemHandler.getStackInSlot(0);
+        if (!stack.isEmpty()) {
+            EntityItem item = new EntityItem(world, pos.getX(), pos.getY(), pos.getZ(), stack);
+            world.spawnEntity(item);
+        }
+        super.breakBlock(world, pos, state);
     }
 
 }
