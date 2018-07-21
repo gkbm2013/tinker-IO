@@ -1,0 +1,12 @@
+{
+  "parent": "block/cube",
+  "textures": {
+    "particle": "tinker_io:blocks/ore_crusher_front",
+    "down": "tinker_io:blocks/ore_crusher_top",
+    "up": "tinker_io:blocks/ore_crusher_top",
+    "east": "tinker_io:blocks/ore_crusher_side",
+    "west": "tinker_io:blocks/ore_crusher_side",
+    "north": "tinker_io:blocks/ore_crusher_front",
+    "south": "tinker_io:blocks/ore_crusher_side"
+  }
+}
