@@ -4,8 +4,8 @@ import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import tinker_io.block.base.BlockBase;
 
-public class BlockWhatABeautifal extends BlockBase {
-    public BlockWhatABeautifal(String name) {
+public class BlockWhatABeautiful extends BlockBase {
+    public BlockWhatABeautiful(String name) {
         super(Material.GLASS, name);
         setHardness(3F);
         setResistance(20F);
