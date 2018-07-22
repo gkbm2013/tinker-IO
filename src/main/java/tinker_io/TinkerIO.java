@@ -14,6 +14,7 @@ import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
+import tinker_io.network.NetworkHandler;
 import tinker_io.proxy.CommonProxy;
 import tinker_io.registry.BlockRegistry;
 import tinker_io.handler.GuiHandler;
@@ -52,7 +53,7 @@ public class TinkerIO {
 
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
-
+        NetworkHandler.init();
     }
 
     @Mod.EventHandler
