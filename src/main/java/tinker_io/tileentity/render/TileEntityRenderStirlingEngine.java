@@ -30,7 +30,7 @@ public class TileEntityRenderStirlingEngine extends TileEntitySpecialRenderer<Ti
         //This is setting the initial location.
         GL11.glTranslatef((float) x + 0.5F, (float) y + 1.5F, (float) z + 0.5F);
         //This is the texture of your block. It's pathed to be the same place as your other blocks here.
-        ResourceLocation textures = (new ResourceLocation(TinkerIO.MOD_ID, "textures/models/special_render/stirling_engine.png"));
+        ResourceLocation textures = (new ResourceLocation(TinkerIO.MOD_ID, "textures/blocks/special_render/stirling_engine.png"));
         //binding the textures
         Minecraft.getMinecraft().renderEngine.bindTexture(textures);
 
