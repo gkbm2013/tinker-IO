@@ -4,8 +4,11 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.client.renderer.color.ItemColors;
+import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.item.Item;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.fml.client.registry.ClientRegistry;
 import tinker_io.TinkerIO;
 
 public class ClientProxy extends CommonProxy {
@@ -19,5 +22,10 @@ public class ClientProxy extends CommonProxy {
         Minecraft minecraft = Minecraft.getMinecraft();
         final ItemColors itemColors = minecraft.getItemColors();
         itemColors.registerItemColorHandler(iItemColor, item);
+    }
+
+    @Override
+    public <T extends TileEntity> void registerTileEntitySpecialRender(Class<T> tileEntityClass, TileEntitySpecialRenderer<? super T> specialRenderer) {
+        ClientRegistry.bindTileEntitySpecialRenderer(tileEntityClass, specialRenderer);
     }
 }

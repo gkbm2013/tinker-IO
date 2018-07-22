@@ -79,7 +79,7 @@ public abstract class BlockFacingTileEntity<TE extends TileEntity> extends Block
         TE tile = getTileEntity(world, pos);
         IItemHandler itemHandler = tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, EnumFacing.NORTH);
 
-        if(itemHandler != null && itemHandler.getSlots() <= 0) return;
+        if(itemHandler == null || itemHandler.getSlots() <= 0) return;
 
         ItemStack stack = itemHandler.getStackInSlot(0);
         if (!stack.isEmpty()) {
