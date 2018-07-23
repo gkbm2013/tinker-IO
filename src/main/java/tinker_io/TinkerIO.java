@@ -14,18 +14,20 @@ import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
+import slimeknights.tconstruct.tools.TinkerTools;
 import tinker_io.network.NetworkHandler;
 import tinker_io.proxy.CommonProxy;
 import tinker_io.registry.BlockRegistry;
 import tinker_io.handler.GuiHandler;
 import tinker_io.registry.ItemRegistry;
+import tinker_io.registry.SmelteryStructureRegister;
 import tinker_io.registry.TileEntityRegistry;
 
 @Mod(modid = TinkerIO.MOD_ID,
         version = TinkerIO.VERSION,
         name = TinkerIO.NAME,
         dependencies = "required-after:forge@[14.23.1.2594,);"
-//                + "required-after:tconstruct@[1.12.2-2.9.1.65,);"
+                + "required-after:tconstruct@[1.12.2-2.10.1.87,);"
 //                + "required-after:redstoneflux@[1.12-2.0.1.2,);"
                 + "after:waila;"
                 + "after:jei@[4.8.5.138,)",
@@ -46,8 +48,7 @@ public class TinkerIO {
     //Creative Tabs
     public static CreativeTabs creativeTabs = new CreativeTabs("TinkerIO_Tabs"){
         public ItemStack getTabIconItem() {
-//            return new ItemStack(TinkerTools.largePlate);
-            return new ItemStack(Items.CAKE);
+            return new ItemStack(TinkerTools.largePlate);
         }
     };
 
@@ -73,6 +74,7 @@ public class TinkerIO {
         public static void registerItems(RegistryEvent.Register<Item> event) {
             ItemRegistry.register(event.getRegistry());
             BlockRegistry.registerItemBlocks(event.getRegistry());
+            SmelteryStructureRegister.init();
         }
 
         @SubscribeEvent

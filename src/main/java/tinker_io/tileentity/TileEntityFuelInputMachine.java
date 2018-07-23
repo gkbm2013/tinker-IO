@@ -13,7 +13,7 @@ import tinker_io.inventory.ContainerFuelInputMachine;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class TileEntityFuelInputMachine extends TileEntityItemCapacity implements ITickable {
+public class TileEntityFuelInputMachine extends TileEntitySmelteryItemCapacity implements ITickable {
 
     private static final int SLOTS_SIZE = 2;
 
@@ -35,6 +35,10 @@ public class TileEntityFuelInputMachine extends TileEntityItemCapacity implement
 //                return inventory.extractItem(slot, amount, simulate);
 //            }
         return ItemStack.EMPTY;
+    }
+
+    public void resetTemp(){
+
     }
 
     @Override
