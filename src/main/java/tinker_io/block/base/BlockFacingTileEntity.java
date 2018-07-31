@@ -77,7 +77,7 @@ public abstract class BlockFacingTileEntity<TE extends TileEntity> extends Block
     @Override
     public void breakBlock(World world, BlockPos pos, IBlockState state) {
         TE tile = getTileEntity(world, pos);
-        IItemHandler itemHandler = tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, EnumFacing.NORTH);
+        IItemHandler itemHandler = tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
 
         if(itemHandler == null || itemHandler.getSlots() <= 0) return;
 
