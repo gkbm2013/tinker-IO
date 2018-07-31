@@ -14,7 +14,7 @@ import javax.annotation.Nullable;
 public abstract class TileEntitySmelteryItemCapacity extends TileSmelteryComponent {
     private final int slotsSize;
     protected ItemStackHandler inventory;
-    protected ItemStackHandler inventoryIO;
+    private ItemStackHandler inventoryIO;
 
     protected TileEntitySmelteryItemCapacity(int slot){
         slotsSize = slot;

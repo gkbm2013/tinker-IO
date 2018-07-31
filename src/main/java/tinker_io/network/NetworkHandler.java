@@ -19,6 +19,7 @@ public class NetworkHandler {
 
     public static void init() {
         INSTANCE.registerMessage(MessageEmptyTank.class, MessageEmptyTank.class, 0, Side.SERVER);
+        INSTANCE.registerMessage(MessageHeatSmeltery.class, MessageHeatSmeltery.class, 0, Side.SERVER);
     }
 
     public static void sendToServer(IMessage message){

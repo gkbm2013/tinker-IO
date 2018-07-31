@@ -15,7 +15,7 @@ public abstract class TileEntityItemCapacity extends TileEntity {
 
     private final int slotsSize;
     protected ItemStackHandler inventory;
-    protected ItemStackHandler inventoryIO;
+    private ItemStackHandler inventoryIO;
 
     protected TileEntityItemCapacity(int slot){
         slotsSize = slot;
