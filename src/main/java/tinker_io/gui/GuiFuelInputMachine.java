@@ -5,6 +5,7 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.TextFormatting;
 import tinker_io.TinkerIO;
 import tinker_io.registry.BlockRegistry;
 import tinker_io.tileentity.TileEntityFuelInputMachine;
@@ -48,8 +49,27 @@ public class GuiFuelInputMachine extends GuiContainer {
 
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
+        //Title
         String name = I18n.format(BlockRegistry.fuelInputMachine.getUnlocalizedName() + ".name");
         fontRenderer.drawString(name, xSize / 2 - fontRenderer.getStringWidth(name) / 2, 6, 0x404040);
         fontRenderer.drawString(playerInv.getDisplayName().getUnformattedText(), 8, ySize - 94, 0x404040);
+
+        //Display Temperature (Title)
+        String temperatureInfo = I18n.format("tio.gui.fim.temperature", new Object[0]) + " :";
+        this.fontRenderer.drawString(temperatureInfo, (-55 - (this.fontRenderer.getStringWidth(temperatureInfo))/2), 14, 4210752);
+        //Display Temperature (Current Temperature)
+        String currentTempture = String.valueOf(tile.getTargetTemp());
+        this.fontRenderer.drawString(currentTempture, (-55 - (this.fontRenderer.getStringWidth(currentTempture))/2), 26, 4210752);
+
+        //Speedup Ratio
+        double ratio = tile.getRatio();
+        String msgRatio = TextFormatting.DARK_GREEN + "Ratio : " + ratio;
+        this.fontRenderer.drawString(msgRatio, (-55 - (this.fontRenderer.getStringWidth(msgRatio))/2), 37, 4210752);
+
+        //Lack of solid fuel
+        if(tile.getCurrentSolidFuelTemp() == 0){
+            String warn = TextFormatting.RED+I18n.format("tio.gui.fim.error_message", new Object[0]);
+            this.fontRenderer.drawString(warn, (-55 - (this.fontRenderer.getStringWidth(warn))/2), 49, 4210752);
+        }
     }
 }
