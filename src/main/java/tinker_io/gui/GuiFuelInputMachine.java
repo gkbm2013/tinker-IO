@@ -39,8 +39,10 @@ public class GuiFuelInputMachine extends GuiContainer {
 
         //Burning Progress
         int progress = tile.getScaledBurningCount(13);
-        if(!tile.isSmelteryHeatingItem() && progress <= 0)
+//        System.out.println(progress);
+        if(tile.getCurrentSolidFuelTemp() == 0)
             progress = 13;
+
         drawTexturedModalRect(guiLeft + 103, guiTop + 36 + progress, 176, 33 + progress, 13, 13 - progress);
     }
 

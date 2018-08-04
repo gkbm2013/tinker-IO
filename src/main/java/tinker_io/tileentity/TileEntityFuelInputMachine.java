@@ -2,12 +2,15 @@ package tinker_io.tileentity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntityFurnace;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.items.CapabilityItemHandler;
 import slimeknights.tconstruct.smeltery.tileentity.TileHeatingStructure;
 import slimeknights.tconstruct.smeltery.tileentity.TileSmeltery;
 import tinker_io.inventory.ContainerFuelInputMachine;
@@ -15,17 +18,26 @@ import tinker_io.network.MessageHeatSmeltery;
 import tinker_io.network.NetworkHandler;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class TileEntityFuelInputMachine extends TileEntitySmelteryItemCapacity implements ITickable {
 
     public static final int MAX_PROGRESS_COUNT = 250;
     private static final int SLOTS_SIZE = 2;
+
+    public static final String TAG_BURNING_COUNT = "burningCount";
+    public static final String TAG_RATIO = "ratio";
+    public static final String TAG_TARGET_TEMPERATURE = "targetTemp";
+    public static final String TAG_CURRENT_SOLID_FUEL_TEMPERATURE = "currentSolidFuelTemp";
+
+    private TileSmeltery tileSmeltery;
+
     private int tick = 0;
     private int burningCount = 0;
     private double ratio = 1;
     private int targetTemp = 0;
     private boolean isSmelteryHeatingItem = false;
-    private TileSmeltery tileSmeltery;
+
     private int currentSolidFuelTemp = 0;
 
     public TileEntityFuelInputMachine() {
@@ -56,12 +68,21 @@ public class TileEntityFuelInputMachine extends TileEntitySmelteryItemCapacity i
             tileSmeltery = getMasterTile();
             if(tileSmeltery != null) {
                 updateSmelteryHeatingState();
+                calculateRatio();
                 calculateTemperature();
                 burnSolidFuel();
             }
         }
 
         tick = (tick + 1) % 20;
+    }
+
+    private void calculateRatio() {
+        ItemStack stack = inventory.getStackInSlot(ContainerFuelInputMachine.SPEED_UPG);
+        if(stack == ItemStack.EMPTY){
+            this.ratio = 1;
+        }
+        this.ratio = (double) stack.getCount() / 10.0 + 1.0;
     }
 
     private void burnSolidFuel() {
@@ -201,8 +222,34 @@ public class TileEntityFuelInputMachine extends TileEntitySmelteryItemCapacity i
     }
 
     @SideOnly(Side.CLIENT)
+    public double getRatio() {
+        return ratio;
+    }
+
+    @SideOnly(Side.CLIENT)
     public int getScaledBurningCount(int pixel) {
         return (int) (((float)burningCount / (float)MAX_PROGRESS_COUNT) * pixel);
     }
 
+    public int getCurrentSolidFuelTemp() {
+        return currentSolidFuelTemp;
+    }
+
+    @Override
+    public NBTTagCompound writeToNBT(NBTTagCompound compound) {
+        compound.setInteger(TAG_BURNING_COUNT, burningCount);
+        compound.setDouble(TAG_RATIO, ratio);
+        compound.setInteger(TAG_TARGET_TEMPERATURE, targetTemp);
+        compound.setInteger(TAG_CURRENT_SOLID_FUEL_TEMPERATURE, currentSolidFuelTemp);
+        return super.writeToNBT(compound);
+    }
+
+    @Override
+    public void readFromNBT(NBTTagCompound compound) {
+        burningCount = compound.getInteger(TAG_BURNING_COUNT);
+        ratio = compound.getDouble(TAG_RATIO);
+        targetTemp = compound.getInteger(TAG_TARGET_TEMPERATURE);
+        currentSolidFuelTemp = compound.getInteger(TAG_CURRENT_SOLID_FUEL_TEMPERATURE);
+        super.readFromNBT(compound);
+    }
 }
