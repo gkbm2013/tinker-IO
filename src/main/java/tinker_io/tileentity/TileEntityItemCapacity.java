@@ -1,5 +1,6 @@
 package tinker_io.tileentity;
 
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -102,4 +103,7 @@ public abstract class TileEntityItemCapacity extends TileEntity {
         return super.getCapability(capability, facing);
     }
 
+    protected void consumeItemStack(int slotId, int amount){
+        inventory.extractItem(slotId, amount, false);
+    }
 }

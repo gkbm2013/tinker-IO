@@ -1,10 +1,14 @@
 package tinker_io.tileentity;
-
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import slimeknights.tconstruct.smeltery.tileentity.TileHeatingStructure;
 import slimeknights.tconstruct.smeltery.tileentity.TileSmeltery;
 import tinker_io.inventory.ContainerFuelInputMachine;
 import tinker_io.network.MessageHeatSmeltery;
@@ -14,8 +18,15 @@ import javax.annotation.Nonnull;
 
 public class TileEntityFuelInputMachine extends TileEntitySmelteryItemCapacity implements ITickable {
 
+    public static final int MAX_PROGRESS_COUNT = 250;
     private static final int SLOTS_SIZE = 2;
     private int tick = 0;
+    private int burningCount = 0;
+    private double ratio = 1;
+    private int targetTemp = 0;
+    private boolean isSmelteryHeatingItem = false;
+    private TileSmeltery tileSmeltery;
+    private int currentSolidFuelTemp = 0;
 
     public TileEntityFuelInputMachine() {
         super(SLOTS_SIZE);
@@ -39,36 +50,159 @@ public class TileEntityFuelInputMachine extends TileEntitySmelteryItemCapacity i
 
     @Override
     public void update() {
-        if(!getWorld().isRemote || getMasterPosition() == null) return;
+        if(/*!getWorld().isRemote || */getMasterPosition() == null) return;
 
-        if(tick % 4 < 100) {
-            NetworkHandler.sendToServer(new MessageHeatSmeltery(getPos(), 125000));
+        if(tick % 2 == 0) {
+            tileSmeltery = getMasterTile();
+            if(tileSmeltery != null) {
+                updateSmelteryHeatingState();
+                calculateTemperature();
+                burnSolidFuel();
+            }
         }
 
         tick = (tick + 1) % 20;
     }
 
-    public void resetTemp(){
-        NetworkHandler.sendToServer(new MessageHeatSmeltery(getPos(), getFuelTemp()));
+    private void burnSolidFuel() {
+        if(currentSolidFuelTemp == 0 && isSmelteryHeatingItem && inventory.getStackInSlot(ContainerFuelInputMachine.FUEL) != ItemStack.EMPTY) {
+            currentSolidFuelTemp = getSolidFuelTemp();
+            consumeItemStack(ContainerFuelInputMachine.FUEL, 1);
+            markDirty();
+        }
+
+        int lastSolidFuelTemp = currentSolidFuelTemp;
+
+        if(currentSolidFuelTemp != 0) {
+            if(targetTemp - 300 != getNBT().getInteger(TileHeatingStructure.TAG_TEMPERATURE)){
+                setSmelteryTemp(targetTemp);
+            }
+
+            if(burningCount == 0) {
+                currentSolidFuelTemp = 0;
+            }
+
+            burningCount = (burningCount + 1) % MAX_PROGRESS_COUNT;
+        }
+        if(lastSolidFuelTemp != 0 && currentSolidFuelTemp == 0) {
+            resetTemp();
+        }
     }
 
     private TileSmeltery getMasterTile() {
         TileSmeltery tileSmeltery = null;
         BlockPos masterPos = getMasterPosition();
         World world = getWorld();
-        if (getHasMaster() && masterPos != null) {
-            //TODO
+        if (getHasMaster() && masterPos != null && world.getTileEntity(masterPos) instanceof TileSmeltery) {
             tileSmeltery = (TileSmeltery) world.getTileEntity(masterPos);
         }
         return tileSmeltery;
     }
 
     private int getFuelTemp(){
-        FluidStack fluidStack = getMasterTile().getTank().getFluid();
+        if(tileSmeltery == null) return 0;
+        FluidStack fluidStack = tileSmeltery.currentFuel;
         if(fluidStack != null){
             return fluidStack.getFluid().getTemperature();
         }else{
-            return 300;
+            return 0;
         }
     }
+
+    private int getSolidFuelTemp() {
+        ItemStack solidFuel = inventory.getStackInSlot(ContainerFuelInputMachine.FUEL);
+        if(solidFuel != ItemStack.EMPTY) {
+            int burnTime = TileEntityFurnace.getItemBurnTime(solidFuel);
+            if(burnTime > 0){
+                return burnTime;
+            }
+        }
+        return 0;
+    }
+
+    private void calculateTemperature(){
+        int originFuelTemp = getFuelTemp();
+        if(!isSmelteryHeatingItem) {
+            targetTemp = getFuelTemp();
+            return;
+        }
+
+        int fuelTempWithRatio = (int)(currentSolidFuelTemp * ratio);
+
+        int f = fuelTempWithRatio / 2 + originFuelTemp;
+
+        if(fuelTempWithRatio <= 20000){
+            f = (fuelTempWithRatio * 6) / 100 + originFuelTemp;
+        }
+        if(f >= 200000){
+            f = 200000;
+        }
+        targetTemp = f;
+    }
+
+    private NBTTagCompound getNBT() {
+        final NBTTagCompound nbt = new NBTTagCompound();
+        if(tileSmeltery != null){
+            tileSmeltery.writeToNBT(nbt);
+            return nbt;
+        }else{
+            return null;
+        }
+    }
+
+    private void setSmelteryTempNBT(int temperature) {
+        final NBTTagCompound nbt = getNBT();
+        if(nbt == null) return;
+        nbt.setInteger(TileHeatingStructure.TAG_TEMPERATURE, temperature);
+        if(tileSmeltery != null){
+            tileSmeltery.readFromNBT(nbt);
+        }
+    }
+
+    private void setSmelteryTemp(int temperature) {
+        temperature = (temperature - 300 > 0) ? temperature - 300 : temperature;
+        if(!world.isRemote)
+            NetworkHandler.sendToServer(new MessageHeatSmeltery(getPos(), temperature));
+        setSmelteryTempNBT(temperature);
+    }
+
+    private int[] getSmelteryTemps() {
+        NBTTagCompound nbt = getNBT();
+        if(nbt != null) {
+            return nbt.getIntArray(TileHeatingStructure.TAG_ITEM_TEMPERATURES);
+        }
+        return null;
+    }
+
+    private void updateSmelteryHeatingState() {
+        NBTTagCompound nbt = getNBT();
+        if(nbt != null) {
+            int temps[] = getSmelteryTemps();
+            for(int temp : temps) {
+                if(temp > 0) {
+                    isSmelteryHeatingItem = true;
+                    return;
+                }
+            }
+        }
+        isSmelteryHeatingItem = false;
+    }
+
+    public int getTargetTemp() {
+        return targetTemp;
+    }
+
+    public void resetTemp(){
+        setSmelteryTemp(getFuelTemp());
+    }
+
+    public boolean isSmelteryHeatingItem() {
+        return isSmelteryHeatingItem;
+    }
+
+    @SideOnly(Side.CLIENT)
+    public int getScaledBurningCount(int pixel) {
+        return (int) (((float)burningCount / (float)MAX_PROGRESS_COUNT) * pixel);
+    }
+
 }

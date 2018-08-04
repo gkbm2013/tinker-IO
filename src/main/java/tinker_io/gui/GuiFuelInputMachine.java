@@ -7,6 +7,7 @@ import net.minecraft.inventory.Container;
 import net.minecraft.util.ResourceLocation;
 import tinker_io.TinkerIO;
 import tinker_io.registry.BlockRegistry;
+import tinker_io.tileentity.TileEntityFuelInputMachine;
 
 public class GuiFuelInputMachine extends GuiContainer {
 
@@ -14,20 +15,33 @@ public class GuiFuelInputMachine extends GuiContainer {
     private static final ResourceLocation BG_TEXTURE = new ResourceLocation(TinkerIO.MOD_ID, "textures/gui/fuel_input_machine.png");
     public static final int WIDTH = 176;
     public static final int HEIGHT = 166;
+    private TileEntityFuelInputMachine tile;
 
-    public GuiFuelInputMachine(Container container, InventoryPlayer playerInv) {
+    public GuiFuelInputMachine(Container container, TileEntityFuelInputMachine tile, InventoryPlayer playerInv) {
         super(container);
         this.playerInv = playerInv;
 
         this.xSize = WIDTH;
         this.ySize = HEIGHT;
+
+        this.tile = tile;
     }
 
     @Override
     protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
         drawDefaultBackground();
         mc.getTextureManager().bindTexture(BG_TEXTURE);
+
+        //Main GUI
         drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);
+        //Left hand side panel
+        drawTexturedModalRect(guiLeft - 110, guiTop + 10, 146, 170, 110, 60);
+
+        //Burning Progress
+        int progress = tile.getScaledBurningCount(13);
+        if(!tile.isSmelteryHeatingItem() && progress <= 0)
+            progress = 13;
+        drawTexturedModalRect(guiLeft + 103, guiTop + 36 + progress, 176, 33 + progress, 13, 13 - progress);
     }
 
     @Override

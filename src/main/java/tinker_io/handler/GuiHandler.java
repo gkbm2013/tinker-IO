@@ -41,7 +41,7 @@ public class GuiHandler implements IGuiHandler {
     public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
         switch (ID) {
             case FUEL_INPUT_MACHINE:
-                return new GuiFuelInputMachine((Container) getServerGuiElement(ID, player, world, x, y, z), player.inventory);
+                return new GuiFuelInputMachine((Container) getServerGuiElement(ID, player, world, x, y, z), (TileEntityFuelInputMachine) world.getTileEntity(new BlockPos(x, y, z)), player.inventory);
             case SMART_OUTPUT:
                 return new GuiSmartOutput((Container) getServerGuiElement(ID, player, world, x, y, z), player.inventory);
             case ORE_CRUSHER:

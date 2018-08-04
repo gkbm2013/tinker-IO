@@ -13,7 +13,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
-import tinker_io.tileentity.TileEntityFuelInputMachine;
 
 public abstract class BlockFacingTileEntity<TE extends TileEntity> extends BlockTileEntity<TE> {
 

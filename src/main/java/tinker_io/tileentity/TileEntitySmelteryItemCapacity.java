@@ -1,5 +1,6 @@
 package tinker_io.tileentity;
 
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
@@ -99,5 +100,9 @@ public abstract class TileEntitySmelteryItemCapacity extends TileSmelteryCompone
             }
         }
         return super.getCapability(capability, facing);
+    }
+
+    protected void consumeItemStack(int slotId, int amount){
+        inventory.extractItem(slotId, amount, false);
     }
 }
