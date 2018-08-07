@@ -1,6 +1,7 @@
 package tinker_io.gui;
 
 import com.google.common.collect.Lists;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.texture.TextureMap;
@@ -20,10 +21,13 @@ import tinker_io.registry.BlockRegistry;
 import tinker_io.tileentity.TileEntitySmartOutput;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
 
 public class GuiSmartOutput extends GuiContainer {
+
+    public static final int BUTTON_EMPTY_TANK = 0;
 
     private InventoryPlayer playerInv;
     private TileEntitySmartOutput tile;
@@ -45,7 +49,14 @@ public class GuiSmartOutput extends GuiContainer {
     @Override
     public void initGui() {
         super.initGui();
-        buttonEmptyTank = new GuiButton(0, guiLeft - 20,  guiTop + ySize - 150, 20, 20, "");
+        buttonEmptyTank = new GuiButton(BUTTON_EMPTY_TANK, guiLeft - 20,  guiTop + ySize - 150, 20, 20, ""){
+            @Override
+            public void drawButton(Minecraft mc, int mouseX, int mouseY, float partialTicks) {
+                super.drawButton(mc, mouseX, mouseY, partialTicks);
+                GuiSmartOutput.this.mc.getTextureManager().bindTexture(GuiSmartOutput.BG_TEXTURE);
+                this.drawTexturedModalRect(x, y, 178, 82, 20, 20);
+            }
+        };
         buttonList.add(buttonEmptyTank);
         buttonEmptyTank.enabled = false;
     }
@@ -61,9 +72,6 @@ public class GuiSmartOutput extends GuiContainer {
         drawDefaultBackground();
         mc.getTextureManager().bindTexture(BG_TEXTURE);
         drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);
-
-        //Button
-        buttonEmptyTank.drawTexturedModalRect(-20,  15, 177, 81, 20, 20);
 
         //Redstone Control
         if(tile.isCanControlledByRedstone()) {
@@ -100,7 +108,7 @@ public class GuiSmartOutput extends GuiContainer {
         //TODO Add translation
         //Max Output
         int outputSize = tile.getMaxOutputStackSize();
-        this.fontRenderer.drawString(TextFormatting.DARK_GREEN + "Max : " + outputSize, 120, 17, 0x404040);
+        this.fontRenderer.drawString(TextFormatting.DARK_GREEN + I18n.format("tio.gui.SO.max_output") + outputSize, 100, 17, 0x404040);
 
         FluidStack fluid = tile.getFluid();
         if(fluid != null) {
@@ -111,12 +119,19 @@ public class GuiSmartOutput extends GuiContainer {
         }
 
         buttonEmptyTank.enabled = Util.isShiftKeyDown();
+
+        //Tool Tips (For button)
+        if (buttonEmptyTank.isMouseOver()) { // Tells you if the button is hovered by mouse
+            String[] desc = { TextFormatting.RED + I18n.format("tio.gui.SO.toolTips.button_head"), TextFormatting.GRAY + I18n.format("tio.gui.SO.toolTips.button_info") };
+            List<String> temp = Arrays.asList(desc);
+            drawHoveringText(temp, mouseX - guiLeft, mouseY - guiTop, fontRenderer);
+        }
     }
 
     @Override
     protected void actionPerformed(GuiButton button) throws IOException {
         switch(button.id){
-            case 0:
+            case BUTTON_EMPTY_TANK:
                 tile.emptyTank();
                 NetworkHandler.sendToServer(new MessageEmptyTank(tile.getPos()));
                 break;

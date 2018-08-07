@@ -32,6 +32,7 @@ tio.gui.fim.slot2=Solid Fuel
 tio.gui.fim.error_message=Lack of solid fuel
 tio.gui.fim.temperature=Temperature
 
+tio.gui.SO.max_output=Max Output :
 tio.gui.SO.toolTips.button_head=Empty the tank.
 tio.gui.SO.toolTips.button_info=Hold Shift to unlock the button.
 

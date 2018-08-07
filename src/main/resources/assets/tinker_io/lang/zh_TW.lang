@@ -32,6 +32,7 @@ tio.gui.fim.slot2=固體燃料
 tio.gui.fim.error_message=缺少固體燃料
 tio.gui.fim.temperature=溫度
 
+tio.gui.SO.max_output=最多輸出 :
 tio.gui.SO.toolTips.button_head=清空液體
 tio.gui.SO.toolTips.button_info=按住shift以解鎖此按紐
 
