@@ -40,7 +40,6 @@ public class GuiFuelInputMachine extends GuiContainer {
 
         //Burning Progress
         int progress = tile.getScaledBurningCount(13);
-//        System.out.println(progress);
         if(tile.getCurrentSolidFuelTemp() == 0)
             progress = 13;
 

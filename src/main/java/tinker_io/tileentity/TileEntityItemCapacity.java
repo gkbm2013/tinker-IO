@@ -26,6 +26,7 @@ public abstract class TileEntityItemCapacity extends TileEntity {
                 // We need to tell the tile entity that something has changed so
                 // that the chest contents is persisted
                 TileEntityItemCapacity.this.markDirty();
+                TileEntityItemCapacity.this.onSlotChange(slot);
             }
         };
 
@@ -103,7 +104,7 @@ public abstract class TileEntityItemCapacity extends TileEntity {
         return super.getCapability(capability, facing);
     }
 
-    protected void consumeItemStack(int slotId, int amount){
-        inventory.extractItem(slotId, amount, false);
+    protected void onSlotChange(int slot) {
+
     }
 }

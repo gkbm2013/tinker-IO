@@ -25,6 +25,7 @@ public abstract class TileEntitySmelteryItemCapacity extends TileSmelteryCompone
                 // We need to tell the tile entity that something has changed so
                 // that the chest contents is persisted
                 TileEntitySmelteryItemCapacity.this.markDirty();
+                TileEntitySmelteryItemCapacity.this.onSlotChange(slot);
             }
         };
 
@@ -104,5 +105,9 @@ public abstract class TileEntitySmelteryItemCapacity extends TileSmelteryCompone
 
     protected void consumeItemStack(int slotId, int amount){
         inventory.extractItem(slotId, amount, false);
+    }
+
+    protected void onSlotChange(int slot) {
+
     }
 }

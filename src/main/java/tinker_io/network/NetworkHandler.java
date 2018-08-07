@@ -16,10 +16,11 @@ public class NetworkHandler {
      * */
 
     public static final SimpleNetworkWrapper INSTANCE = NetworkRegistry.INSTANCE.newSimpleChannel(TinkerIO.MOD_ID);
+    public static int discriminator = 0;
 
     public static void init() {
-        INSTANCE.registerMessage(MessageEmptyTank.class, MessageEmptyTank.class, 0, Side.SERVER);
-        INSTANCE.registerMessage(MessageHeatSmeltery.class, MessageHeatSmeltery.class, 0, Side.SERVER);
+        INSTANCE.registerMessage(MessageEmptyTank.class, MessageEmptyTank.class, discriminator++, Side.SERVER);
+        INSTANCE.registerMessage(MessageHeatSmeltery.class, MessageHeatSmeltery.class, discriminator++, Side.SERVER);
     }
 
     public static void sendToServer(IMessage message){

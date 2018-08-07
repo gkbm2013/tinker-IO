@@ -7,6 +7,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
+import tinker_io.tileentity.TileEntitySmartOutput;
 
 public class MessageEmptyTank extends MessageBase<MessageEmptyTank> {
 
@@ -36,12 +37,8 @@ public class MessageEmptyTank extends MessageBase<MessageEmptyTank> {
 
         if(!player.world.isRemote){
             TileEntity tileEntity = player.world.getTileEntity(new BlockPos(x, y, z));
-            if(tileEntity instanceof IFluidHandler){
-                IFluidHandler fluidHandler = (IFluidHandler) tileEntity;
-                if(fluidHandler.getTankProperties()[0].getContents() != null){
-                    int amount = fluidHandler.getTankProperties()[0].getContents().amount;
-                    fluidHandler.drain(amount, true);
-                }
+            if(tileEntity instanceof TileEntitySmartOutput) {
+                ((TileEntitySmartOutput) tileEntity).emptyTank();
             }
         }
     }
