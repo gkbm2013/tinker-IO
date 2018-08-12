@@ -73,6 +73,10 @@ public class GuiSmartOutput extends GuiContainer {
         mc.getTextureManager().bindTexture(BG_TEXTURE);
         drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);
 
+        //Progress
+        int progress = tile.getProgress(24);
+        this.drawTexturedModalRect(guiLeft + 93, guiTop + 33, 176, 0, progress + 1, 17);
+
         //Redstone Control
         if(tile.isCanControlledByRedstone()) {
             if(!tile.canWork()) {
