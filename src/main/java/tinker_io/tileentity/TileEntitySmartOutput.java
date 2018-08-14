@@ -78,7 +78,7 @@ public class TileEntitySmartOutput extends TileEntityItemCapacity implements ITi
         ItemStack cast = inventory.getStackInSlot(ContainerSmartOutput.PATTERN);
         FluidStack fluidStack = tank.getFluid();
         if(currentMode == MODE_BASIN) {
-            currentRecipe = SmartOutputRecipeHandler.findBasinCastingRecipe(ItemStack.EMPTY, fluidStack);
+            currentRecipe = SmartOutputRecipeHandler.findBasinCastingRecipe(cast, fluidStack);
         } else if(currentMode == MODE_CAST) {
             currentRecipe = SmartOutputRecipeHandler.findTableCastingRecipe(cast, fluidStack);
         }
