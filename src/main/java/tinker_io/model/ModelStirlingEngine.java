@@ -479,7 +479,7 @@ public class ModelStirlingEngine extends ModelBase {
 
 
     //TODO angle
-    public double angle;
+    private double angle;
     @Override
     public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
 
@@ -523,5 +523,9 @@ public class ModelStirlingEngine extends ModelBase {
         double b = (max + min)/2;
         double sin = Math.sin(timer);
         return a * sin + b;
+    }
+
+    public void setAngle(double angle) {
+        this.angle = angle;
     }
 }

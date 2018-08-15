@@ -8,13 +8,13 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import tinker_io.TinkerIO;
-import tinker_io.block.base.BlockTileEntity;
+import tinker_io.block.base.BlockFacingTileEntity;
 import tinker_io.handler.GuiHandler;
 import tinker_io.tileentity.TileEntityOreCrusher;
 
 import javax.annotation.Nullable;
 
-public class BlockOreCrusher extends BlockTileEntity<TileEntityOreCrusher> {
+public class BlockOreCrusher extends BlockFacingTileEntity<TileEntityOreCrusher> {
     public BlockOreCrusher(String name) {
         super(Material.ROCK, name);
     }

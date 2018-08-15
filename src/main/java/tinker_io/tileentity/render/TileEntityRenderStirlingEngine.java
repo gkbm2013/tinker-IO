@@ -21,7 +21,7 @@ public class TileEntityRenderStirlingEngine extends TileEntitySpecialRenderer<Ti
     public void render(TileEntityStirlingEngine te, double x, double y, double z, float partialTicks, int destroyStage, float alpha){
         int meta = te.getBlockMetadata();
 
-        model.angle = te.angle / 10;
+        model.setAngle(te.getAngle() / 10);
 
         //System.out.println("x");
 

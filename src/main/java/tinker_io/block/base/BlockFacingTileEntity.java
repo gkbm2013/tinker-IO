@@ -73,19 +73,4 @@ public abstract class BlockFacingTileEntity<TE extends TileEntity> extends Block
         }
     }
 
-    @Override
-    public void breakBlock(World world, BlockPos pos, IBlockState state) {
-        TE tile = getTileEntity(world, pos);
-        IItemHandler itemHandler = tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
-
-        if(itemHandler == null || itemHandler.getSlots() <= 0) return;
-
-        ItemStack stack = itemHandler.getStackInSlot(0);
-        if (!stack.isEmpty()) {
-            EntityItem item = new EntityItem(world, pos.getX(), pos.getY(), pos.getZ(), stack);
-            world.spawnEntity(item);
-        }
-        super.breakBlock(world, pos, state);
-    }
-
 }
