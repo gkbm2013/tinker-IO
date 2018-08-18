@@ -72,6 +72,7 @@ tio.toolTips.CD_Lonesome_Avenue=In memory of the modding process of Tinker I/O
 
 tio.toolTips.oreCrusher.energy=Energy Stored
 tio.toolTips.oreCrusher.rf=RF
+tio.toolTips.oreCrusher.rf_per_tick=RF / tick
 
 tio.toolTips.StirlingEngine.liquidAmount=Fuel Amount
 tio.toolTips.StirlingEngine.liquidTemp=Fuel Temperature

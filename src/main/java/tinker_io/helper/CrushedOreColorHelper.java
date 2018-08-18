@@ -27,7 +27,7 @@ public class CrushedOreColorHelper {
 
         NBTTagCompound nbt = itemStack.getTagCompound();
         if(nbt != null){
-            String oreDicName = nbt.getString("oreDic");
+            String oreDicName = nbt.getString(CrushedOreHelper.TAG_ORE_DICT);
             ItemStack oreItem;
 
             if(getOreByOreDic(oreDicName) != null && !getOreByOreDic(oreDicName).isEmpty()){
@@ -63,7 +63,7 @@ public class CrushedOreColorHelper {
 
         NBTTagCompound nbt = fluidStack.tag;
         if(nbt != null){
-            String oreDicName = nbt.getString("oreDic");
+            String oreDicName = nbt.getString(CrushedOreHelper.TAG_ORE_DICT);
             ItemStack oreItem;
 
             if(getOreByOreDic(oreDicName) != null && !getOreByOreDic(oreDicName).isEmpty()){

@@ -11,6 +11,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
 import tinker_io.helper.CrushedOreColorHelper;
+import tinker_io.helper.CrushedOreHelper;
 
 import javax.annotation.Nullable;
 import java.awt.*;
@@ -24,7 +25,7 @@ public class ItemCrushedOre extends ItemBase {
     @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
         if (stack.getTagCompound() != null) {
-            String oreDic = stack.getTagCompound().getString("oreDic");
+            String oreDic = stack.getTagCompound().getString(CrushedOreHelper.TAG_ORE_DICT);
             tooltip.add(TextFormatting.RED + "oreDic : " + oreDic);
         }
     }

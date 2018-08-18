@@ -17,11 +17,8 @@ import net.minecraftforge.fml.common.network.NetworkRegistry;
 import slimeknights.tconstruct.tools.TinkerTools;
 import tinker_io.network.NetworkHandler;
 import tinker_io.proxy.CommonProxy;
-import tinker_io.registry.BlockRegistry;
+import tinker_io.registry.*;
 import tinker_io.handler.GuiHandler;
-import tinker_io.registry.ItemRegistry;
-import tinker_io.registry.SmelteryStructureRegister;
-import tinker_io.registry.TileEntityRegistry;
 
 @Mod(modid = TinkerIO.MOD_ID,
         version = TinkerIO.VERSION,
@@ -59,6 +56,7 @@ public class TinkerIO {
 
     @Mod.EventHandler
     public void init(FMLInitializationEvent event) {
+        OreDictionaryRegister.init();
 //        RecipeRegistry.init();
     }
 
@@ -66,6 +64,7 @@ public class TinkerIO {
     public void postInit(FMLPostInitializationEvent event) {
         NetworkRegistry.INSTANCE.registerGuiHandler(this, new GuiHandler());
         ItemRegistry.registerItemColors();
+        OreCrusherRecipeRegister.init();
     }
 
     @Mod.EventBusSubscriber

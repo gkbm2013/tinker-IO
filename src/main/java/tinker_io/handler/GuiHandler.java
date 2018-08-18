@@ -47,7 +47,7 @@ public class GuiHandler implements IGuiHandler {
             case SMART_OUTPUT:
                 return new GuiSmartOutput((Container) getServerGuiElement(ID, player, world, x, y, z), (TileEntitySmartOutput) tile, player.inventory);
             case ORE_CRUSHER:
-                return new GuiOreCrusher((Container) getServerGuiElement(ID, player, world, x, y, z), player.inventory);
+                return new GuiOreCrusher((Container) getServerGuiElement(ID, player, world, x, y, z), (TileEntityOreCrusher) tile, player.inventory);
             default:
                 return null;
         }
