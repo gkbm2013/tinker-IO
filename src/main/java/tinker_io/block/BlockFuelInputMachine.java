@@ -2,16 +2,21 @@ package tinker_io.block;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
+import slimeknights.tconstruct.smeltery.tileentity.TileSmeltery;
 import slimeknights.tconstruct.smeltery.tileentity.TileSmelteryComponent;
 import tinker_io.TinkerIO;
 import tinker_io.block.base.BlockFacingTileEntity;
 import tinker_io.handler.GuiHandler;
+import tinker_io.helper.EasterEggsHelper;
 import tinker_io.tileentity.TileEntityFuelInputMachine;
 
 import javax.annotation.Nonnull;
@@ -39,10 +44,27 @@ public class BlockFuelInputMachine extends BlockFacingTileEntity<TileEntityFuelI
             if (player.isSneaking()) {
                 return false;
             } else {
-                player.openGui(TinkerIO.instance, GuiHandler.FUEL_INPUT_MACHINE, world, pos.getX(), pos.getY(), pos.getZ());
+                if(isActive(world, pos)) {
+                    player.openGui(TinkerIO.instance, GuiHandler.FUEL_INPUT_MACHINE, world, pos.getX(), pos.getY(), pos.getZ());
+                } else {
+                    player.sendMessage(new TextComponentString(TextFormatting.RED + I18n.format("tio.playerMessage.FIM.rightClick")));
+                }
             }
         }
+        EasterEggsHelper.displayMessage(world, pos, player);
         return true;
+    }
+
+    private boolean isActive(World world, BlockPos pos) {
+        TileEntity tile = world.getTileEntity(pos);
+        if(tile instanceof TileEntityFuelInputMachine) {
+            TileEntityFuelInputMachine tileEntityFuelInputMachine = (TileEntityFuelInputMachine) tile;
+            TileSmeltery tileSmeltery = tileEntityFuelInputMachine.getMasterTile();
+            if(tileSmeltery != null) {
+                return tileEntityFuelInputMachine.getHasMaster() && tileSmeltery.isActive();
+            }
+        }
+        return false;
     }
 
     /* BlockContainer TE handling */

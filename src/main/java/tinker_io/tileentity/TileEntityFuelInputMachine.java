@@ -110,7 +110,7 @@ public class TileEntityFuelInputMachine extends TileEntitySmelteryItemCapacity i
         }
     }
 
-    private TileSmeltery getMasterTile() {
+    public TileSmeltery getMasterTile() {
         TileSmeltery tileSmeltery = null;
         BlockPos masterPos = getMasterPosition();
         World world = getWorld();
