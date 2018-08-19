@@ -6,6 +6,7 @@ import mezz.jei.api.gui.*;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.IRecipeCategory;
 import mezz.jei.api.recipe.IRecipeWrapper;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.init.Items;
@@ -39,7 +40,7 @@ public class OreCrusherRecipeCategory implements IRecipeCategory {
 
     @Override
     public String getTitle() {
-        return I18n.format(BlockRegistry.fuelInputMachine.getUnlocalizedName() + ".name");
+        return I18n.format(BlockRegistry.oreCrusher.getUnlocalizedName() + ".name");
     }
 
     @Override
@@ -50,6 +51,11 @@ public class OreCrusherRecipeCategory implements IRecipeCategory {
     @Override
     public IDrawable getBackground() {
         return background;
+    }
+
+    @Override
+    public void drawExtras(Minecraft minecraft) {
+        arrow.draw(minecraft, 79, 24);
     }
 
     @Override

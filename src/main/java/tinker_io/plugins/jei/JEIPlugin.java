@@ -3,10 +3,16 @@ package tinker_io.plugins.jei;
 import mezz.jei.api.*;
 import mezz.jei.api.gui.ICraftingGridHelper;
 import mezz.jei.api.recipe.IRecipeCategoryRegistration;
+import slimeknights.tconstruct.plugin.jei.casting.CastingRecipeChecker;
 import tinker_io.gui.GuiOreCrusher;
+import tinker_io.gui.GuiSmartOutput;
 import tinker_io.helper.OreCrusherRecipe;
 import tinker_io.plugins.jei.oreCrusher.OreCrusherRecipeCategory;
 import tinker_io.plugins.jei.oreCrusher.OreCrusherRecipeHandler;
+import tinker_io.plugins.jei.smartOutput.SmartOutputRecipeCategory;
+import tinker_io.plugins.jei.smartOutput.SmartOutputRecipeChecker;
+import tinker_io.plugins.jei.smartOutput.SmartOutputRecipeHandler;
+import tinker_io.plugins.jei.smartOutput.SmartOutputRecipeWrapper;
 import tinker_io.registry.OreCrusherRecipeRegister;
 
 import javax.annotation.Nonnull;
@@ -19,6 +25,7 @@ public class JEIPlugin implements IModPlugin {
     public static IRecipeRegistry recipeRegistry;
 
     public static OreCrusherRecipeCategory oreCrusherRecipeCategory;
+    public static SmartOutputRecipeCategory smartOutputRecipeCategory;
 
     @Override
     public void registerCategories(IRecipeCategoryRegistration registry) {
@@ -27,8 +34,12 @@ public class JEIPlugin implements IModPlugin {
 
         //Ore Crusher
         oreCrusherRecipeCategory = new OreCrusherRecipeCategory(guiHelper);
+        smartOutputRecipeCategory = new SmartOutputRecipeCategory(guiHelper);
 
-        registry.addRecipeCategories(oreCrusherRecipeCategory);
+
+        registry.addRecipeCategories(
+                oreCrusherRecipeCategory,
+                smartOutputRecipeCategory);
     }
 
     @Override
@@ -40,8 +51,13 @@ public class JEIPlugin implements IModPlugin {
         registry.handleRecipes(OreCrusherRecipe.class, new OreCrusherRecipeHandler(), OreCrusherRecipeCategory.CATEGORY);
         registry.addRecipes(OreCrusherRecipeRegister.oreCrusherRecipes, OreCrusherRecipeCategory.CATEGORY);
 
+        //Smart Output
+        registry.handleRecipes(SmartOutputRecipeWrapper.class, new SmartOutputRecipeHandler(), SmartOutputRecipeCategory.CATEGORY);
+        registry.addRecipes(SmartOutputRecipeChecker.getCastingRecipes(), SmartOutputRecipeCategory.CATEGORY);
+
         //Click area
         registry.addRecipeClickArea(GuiOreCrusher.class, 82, 35, 24, 15, OreCrusherRecipeCategory.CATEGORY);
+        registry.addRecipeClickArea(GuiSmartOutput.class, 94, 34, 24, 15, SmartOutputRecipeCategory.CATEGORY);
 
     }
 

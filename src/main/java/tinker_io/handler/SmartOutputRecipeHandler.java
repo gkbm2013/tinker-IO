@@ -13,7 +13,7 @@ import slimeknights.tconstruct.library.utils.ListUtil;
 import java.util.List;
 
 public class SmartOutputRecipeHandler {
-    private static List<CastingRecipe> fluidStackTableCastingRecipe  = Lists.newLinkedList();
+    public static List<CastingRecipe> fluidStackTableCastingRecipe  = Lists.newLinkedList();
 
     public static ICastingRecipe findTableCastingRecipe(ItemStack cast, FluidStack fluidStack) {
         ICastingRecipe recipe = null;
