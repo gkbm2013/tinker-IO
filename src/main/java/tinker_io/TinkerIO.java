@@ -32,7 +32,7 @@ import tinker_io.handler.GuiHandler;
 public class TinkerIO {
 
     public static final String MOD_ID = "tinker_io";
-    public static final String VERSION = "${version}";
+    public static final String VERSION = "${mod_version}";
     public static final String NAME = "Tinker I/O";
 
     @SidedProxy(serverSide = "tinker_io.proxy.CommonProxy", clientSide = "tinker_io.proxy.ClientProxy")
