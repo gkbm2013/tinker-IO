@@ -29,7 +29,7 @@ public class TileEntitySmartOutput extends TileEntityItemCapacity implements ITi
     public static final String TAG_TARGET_ITEM_STACK = "targetItemStack";
 
     public static final int CAPACITY = Fluid.BUCKET_VOLUME * 10;
-    private static final int PROGRESS_MAX = 20;
+    private static final int PROGRESS_MAX = 15;
 
     public static final int MODE_CAST = 0;
     public static final int MODE_BASIN = 1;
@@ -55,6 +55,22 @@ public class TileEntitySmartOutput extends TileEntityItemCapacity implements ITi
     public TileEntitySmartOutput() {
         super(SLOTS_SIZE);
         tank = new FluidTankWithTile(this, CAPACITY);
+    }
+
+    @Override
+    public ItemStack insertItem(int slot, @Nonnull ItemStack stack, boolean simulate) {
+        if(slot == ContainerSmartOutput.PATTERN) {
+            return inventory.insertItem(slot, stack, simulate);
+        }
+        return super.insertItem(slot, stack, simulate);
+    }
+
+    @Override
+    public ItemStack extractItem(int slot, int amount, boolean simulate) {
+        if(slot == ContainerSmartOutput.PRODUCT) {
+            return inventory.extractItem(slot, amount, simulate);
+        }
+        return super.extractItem(slot, amount, simulate);
     }
 
     @Override

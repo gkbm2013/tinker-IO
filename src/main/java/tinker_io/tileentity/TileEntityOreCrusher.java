@@ -37,6 +37,7 @@ public class TileEntityOreCrusher extends TileEntityItemCapacity implements ITic
 
     private int energyConsume = 0;
     private int tick = 0;
+    private int initSyncCount = 0;
     private int syncPacketCount = 0;
     private int progress = 0;
     private int chance = 0;
@@ -65,6 +66,11 @@ public class TileEntityOreCrusher extends TileEntityItemCapacity implements ITic
 
     @Override
     public void update() {
+        if(initSyncCount <= 40) {
+            notifyBlockUpdate();
+            initSyncCount++;
+        }
+
         if(syncPacketCount <= 5) {
             if(tick % 4 == 0) {
                 notifyBlockUpdate();
