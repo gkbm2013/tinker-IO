@@ -7,7 +7,6 @@ import tinker_io.helper.CrushedOreHelper;
 import tinker_io.helper.OreCrusherRecipe;
 
 import java.util.List;
-import java.util.function.Predicate;
 
 public class OreCrusherRecipeRegister {
 

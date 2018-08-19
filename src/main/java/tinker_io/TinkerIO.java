@@ -2,7 +2,6 @@ package tinker_io;
 
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.event.ModelRegistryEvent;
@@ -65,6 +64,8 @@ public class TinkerIO {
         NetworkRegistry.INSTANCE.registerGuiHandler(this, new GuiHandler());
         ItemRegistry.registerItemColors();
         OreCrusherRecipeRegister.init();
+        MeltingRecipeRegister.register();
+        SmartOutputRecipeReigster.register();
     }
 
     @Mod.EventBusSubscriber
@@ -80,6 +81,7 @@ public class TinkerIO {
         public static void registerBlocks(RegistryEvent.Register<Block> event) {
             BlockRegistry.register(event.getRegistry());
             TileEntityRegistry.register();
+            FluidRegister.register();
         }
 
         @SubscribeEvent

@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
+import slimeknights.mantle.util.RecipeMatch;
 import slimeknights.tconstruct.library.TinkerRegistry;
 import slimeknights.tconstruct.library.smeltery.CastingRecipe;
 import slimeknights.tconstruct.library.smeltery.ICastingRecipe;
@@ -28,6 +29,12 @@ public class SmartOutputRecipeHandler {
     public static ICastingRecipe findBasinCastingRecipe(ItemStack cast, FluidStack fluidStack) {
         if(fluidStack == null) return null;
         return TinkerRegistry.getBasinCasting(cast, fluidStack.getFluid());
+    }
+
+    public static void registerSmartOutputCasting(ItemStack output, ItemStack cast, FluidStack fluid){
+        if(!cast.isEmpty() && !output.isEmpty()){
+            registerFluidStackCastingRecipe(new CastingRecipe(output, RecipeMatch.of(cast), fluid, false, true));
+        }
     }
 
     /*

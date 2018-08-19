@@ -24,7 +24,7 @@ item.CD_Lonesome_Avenue.desc=Lonesome Avenue (YouTube音效庫)
 item.Crushed_ore.name=礦物碎片
 
 #Fluid
-fluid.pureMetal=純化金屬
+fluid.pure_metal=純化金屬
 
 #GUI
 tio.gui.fim.slot1=升級

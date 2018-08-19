@@ -24,7 +24,7 @@ item.CD_Lonesome_Avenue.desc=Lonesome Avenue (YouTube Audio Library)
 item.Crushed_ore.name=Crushed Ore
 
 #Fluid
-fluid.pureMetal=Pure Metal
+fluid.pure_metal=Pure Metal
 
 #GUI
 tio.gui.fim.slot1=UPG.
