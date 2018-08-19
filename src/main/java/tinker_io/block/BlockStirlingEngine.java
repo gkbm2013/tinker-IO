@@ -3,9 +3,11 @@ package tinker_io.block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -24,6 +26,8 @@ import tinker_io.tileentity.TileEntityStirlingEngine;
 
 import javax.annotation.Nullable;
 import java.util.List;
+
+import static tinker_io.item.ItemBase.isShiftKeyDown;
 
 public class BlockStirlingEngine extends BlockFacingTileEntity<TileEntityStirlingEngine> {
     public BlockStirlingEngine(String name) {
@@ -160,4 +164,25 @@ public class BlockStirlingEngine extends BlockFacingTileEntity<TileEntityStirlin
         return false;
     }
 
+    @Override
+    public Item createItemBlock() {
+        ItemBlock itemBlock = new ItemBlock(this){
+            @Override
+            public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
+                super.addInformation(stack, worldIn, tooltip, flagIn);
+                NBTTagCompound nbt = stack.getTagCompound();
+                if(nbt != null) {
+                    int energy = nbt.getInteger("energy");
+                    if(isShiftKeyDown()){
+                        String tips = TextFormatting.GREEN + I18n.format("tio.toolTips.itemBlock.StirlingEngine.energyStored", energy);
+                        tooltip.add(tips);
+                    }else{
+                        tooltip.add(TextFormatting.GOLD + I18n.format("tio.toolTips.common.holdShift"));
+                    }
+                }
+            }
+        };
+        itemBlock.setRegistryName(getRegistryName());
+        return itemBlock;
+    }
 }
