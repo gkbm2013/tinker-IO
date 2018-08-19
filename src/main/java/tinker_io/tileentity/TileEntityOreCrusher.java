@@ -10,10 +10,14 @@ import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import tinker_io.helper.OreCrusherRecipe;
 import tinker_io.inventory.ContainerOreCrusher;
 import tinker_io.registry.ItemRegistry;
 import tinker_io.registry.OreCrusherRecipeRegister;
+
+import javax.annotation.Nonnull;
 
 public class TileEntityOreCrusher extends TileEntityItemCapacity implements ITickable, IEnergyReceiver {
 
@@ -33,20 +37,39 @@ public class TileEntityOreCrusher extends TileEntityItemCapacity implements ITic
 
     private int energyConsume = 0;
     private int tick = 0;
+    private int syncPacketCount = 0;
     private int progress = 0;
     private int chance = 0;
     private int speed = 1;
-    private int initCount = 0;
 
     public TileEntityOreCrusher() {
         super(SLOT_SIZE);
     }
 
     @Override
+    public ItemStack extractItem(int slot, int amount, boolean simulate) {
+        if(slot == ContainerOreCrusher.PRODUCT) {
+            return inventory.extractItem(slot, amount, simulate);
+        }
+        return super.extractItem(slot, amount, simulate);
+    }
+
+    @Override
+    public ItemStack insertItem(int slot, @Nonnull ItemStack stack, boolean simulate) {
+        //TODO: check item input
+        if(slot == ContainerOreCrusher.ORE) {
+            return inventory.insertItem(slot, stack, simulate);
+        }
+        return super.insertItem(slot, stack, simulate);
+    }
+
+    @Override
     public void update() {
-        if(initCount <= 40) {
-            initCount++;
-            notifyBlockUpdate();
+        if(syncPacketCount <= 5) {
+            if(tick % 4 == 0) {
+                notifyBlockUpdate();
+                syncPacketCount++;
+            }
         }
 
         if(tick % 2 == 0) {
@@ -75,7 +98,7 @@ public class TileEntityOreCrusher extends TileEntityItemCapacity implements ITic
             if(storage.getEnergyStored() - energyConsume > 0 && !targetItemStack.isEmpty()) {
                 progress = progress + speed;
                 storage.setEnergyStored(storage.getEnergyStored() - energyConsume);
-                notifyBlockUpdate();
+                syncPacketCount = 0;
             }
             if(progress >= PROGRESS_MAX) {
                 progress = 0;
@@ -87,15 +110,16 @@ public class TileEntityOreCrusher extends TileEntityItemCapacity implements ITic
                 inventory.insertItem(ContainerOreCrusher.PRODUCT, product, false);
                 targetItemStack = ItemStack.EMPTY;
                 markDirty();
+                syncPacketCount = 0;
             }
         }
     }
 
     private void calculateEnergyConsume() {
-        energyConsume = 45;
+        energyConsume = 90;
         ItemStack speedUpg = inventory.getStackInSlot(ContainerOreCrusher.SPEED_UPG);
         if(!speedUpg.isEmpty()){
-            energyConsume += speedUpg.getCount() * 2;
+            energyConsume += speedUpg.getCount() * 4;
         }
     }
 
@@ -141,7 +165,7 @@ public class TileEntityOreCrusher extends TileEntityItemCapacity implements ITic
         return changed;
     }
 
-    private static boolean isFortuneEnchantedBook(ItemStack itemstack){
+    public static boolean isFortuneEnchantedBook(ItemStack itemstack){
         if(itemstack != null && !itemstack.isEmpty()){
             return getEnchantID(itemstack) == 35;
         }
@@ -164,6 +188,7 @@ public class TileEntityOreCrusher extends TileEntityItemCapacity implements ITic
                 && inventory.getStackInSlot(ContainerOreCrusher.PRODUCT).getMaxStackSize() - productSlot.getCount() >= 3;
     }
 
+    @SideOnly(Side.CLIENT)
     public int getProgress(int pixel) {
         return (int) ((float) progress / (float) PROGRESS_MAX * (float) pixel);
     }
@@ -173,9 +198,10 @@ public class TileEntityOreCrusher extends TileEntityItemCapacity implements ITic
     }
 
     public int getEnergyConsume() {
-        return energyConsume;
+        return energyConsume / 2;
     }
 
+    @SideOnly(Side.CLIENT)
     public int getEnergyBar(int pixel) {
         return (int) ((float) storage.getEnergyStored() / (float) storage.getMaxEnergyStored() * (float) pixel);
     }
@@ -184,7 +210,7 @@ public class TileEntityOreCrusher extends TileEntityItemCapacity implements ITic
     @Override
     public int receiveEnergy(EnumFacing from, int maxReceive, boolean simulate) {
         markDirty();
-        notifyBlockUpdate();
+        syncPacketCount = 0;
         return storage.receiveEnergy(Math.min(storage.getMaxReceive(), maxReceive), simulate);
     }
 
