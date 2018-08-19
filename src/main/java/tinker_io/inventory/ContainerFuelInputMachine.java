@@ -4,7 +4,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.SlotItemHandler;
+import tinker_io.inventory.slots.SlotSolidFuel;
+import tinker_io.inventory.slots.SlotSpeedUpgrade;
 import tinker_io.tileentity.TileEntityFuelInputMachine;
 
 public class ContainerFuelInputMachine extends ContainerBase {
@@ -21,8 +22,8 @@ public class ContainerFuelInputMachine extends ContainerBase {
     private void addOwnSlots(){
         IItemHandler inventory = te.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
 
-        addSlotToContainer(new SlotItemHandler(inventory, SPEED_UPG, 25, 34));
-        addSlotToContainer(new SlotItemHandler(inventory, FUEL, 79, 34));
+        addSlotToContainer(new SlotSpeedUpgrade(inventory, SPEED_UPG, 25, 34));
+        addSlotToContainer(new SlotSolidFuel(inventory, FUEL, 79, 34));
     }
 
     @Override

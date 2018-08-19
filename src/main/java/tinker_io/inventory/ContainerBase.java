@@ -9,11 +9,9 @@ import net.minecraft.item.ItemStack;
 public abstract class ContainerBase extends Container {
     protected void addPlayerSlots(IInventory playerInventory) {
         // Slots for the main inventory
-        for (int row = 0; row < 3; ++row) {
-            for (int col = 0; col < 9; ++col) {
-                int x = 8 + col * 18;
-                int y = row * 18 + 84;
-                this.addSlotToContainer(new Slot(playerInventory, col + row * 9 + 10, x, y));
+        for(int i = 0; i < 3; ++i){
+            for(int j = 0; j < 9; ++j){
+                this.addSlotToContainer(new Slot(playerInventory, j + i * 9 + 9, 8 + j * 18, 84 + i * 18));
             }
         }
 
