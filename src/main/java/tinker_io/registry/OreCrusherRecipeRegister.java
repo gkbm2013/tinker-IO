@@ -5,6 +5,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 import tinker_io.helper.CrushedOreHelper;
 import tinker_io.helper.OreCrusherRecipe;
+import tinker_io.helper.OreDictionaryHelper;
 
 import java.util.List;
 
@@ -53,8 +54,10 @@ public class OreCrusherRecipeRegister {
         String[] oreDicts = OreDictionary.getOreNames();
         for (String oreDict : oreDicts) {
             if (!oreCrusherBanList.contains(oreDict) && oreDict.substring(0, 3).equals("ore")) {
-                ItemStack itemStack = CrushedOreHelper.getCrushedOre(oreDict, 1);
-                oreCrusherRecipes.add(new OreCrusherRecipe(oreDict, itemStack));
+                if(OreDictionaryHelper.getItemStacksFromOreDict(oreDict).size() > 0) {
+                    ItemStack itemStack = CrushedOreHelper.getCrushedOre(oreDict, 1);
+                    oreCrusherRecipes.add(new OreCrusherRecipe(oreDict, itemStack));
+                }
             }
         }
     }
