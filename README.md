@@ -1,6 +1,10 @@
-# Tinker I/O
+# Tinker I/O rw version
 Tinker I/O is a addon for Tinkers' Construct.<br/>
 Welcome to the Github repo for Tinker I/O!
+
+# What is the RW version?
+In Tinker I/O RW is the rewrite version of the mod. It is not compatible with the old version of Tinker I/O.
+So DO NOT UPGRADE TO THE RW VERSION if the map was already installed the old version of Tinker I/O.  
 
 ## About this branch
 I am rewriting Tinker I/O. And I will upload the new code in this branch.
@@ -9,12 +13,15 @@ I am rewriting Tinker I/O. And I will upload the new code in this branch.
 - Fuel Input Machine (100%)
 - Smart Output (100%)
 - What A Beautiful Block (100%)
-- Ore Crusher (50%)
-- Stirling Engine (50%)
-- Pure Metal (0%)
-- Crushed Ore (50%)
+- Ore Crusher (100%)
+- Stirling Engine (100%)
+- Pure Metal (100%)
+- Crushed Ore (100%)
 - All Upgrades (100%)
 - Solid Fuel (100%)
+- JEI Support (100%)
+- The One Prob Support (100%)
+- Waila Support (5%)
 
 ## Report issue
 When you are reporting bugs, please attach the crash report, mod version and forge version.
@@ -33,4 +40,4 @@ It is fine to use Tinker I/O into your modpack.
 - [Official Website](https://tio.gkbsite.org/)
  
 
-By GKB @Taiwan - 2018/8/12 17:38 (GMT+8) 
+By GKB @Taiwan - 2018/8/21 23:50 (GMT+8) 
