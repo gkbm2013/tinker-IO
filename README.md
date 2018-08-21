@@ -3,7 +3,7 @@ Tinker I/O is a addon for Tinkers' Construct.<br/>
 Welcome to the Github repo for Tinker I/O!
 
 # What is the RW version?
-In Tinker I/O RW is the rewrite version of the mod. It is not compatible with the old version of Tinker I/O.
+Tinker I/O RW is the rewrite version of the mod. It is not compatible with the old version of Tinker I/O.
 So DO NOT UPGRADE TO THE RW VERSION if the map was already installed the old version of Tinker I/O.  
 
 ## About this branch
