@@ -194,6 +194,32 @@ public class TileEntityStirlingEngine extends TileEntity implements ITickable, I
         return angle;
     }
 
+    public FluidStack getFluid() {
+        FluidTank tank = getTankBelow();
+        if(tank != null) {
+            if(tank.getFluid() != null) {
+                return tank.getFluid();
+            }
+        }
+        return null;
+    }
+
+    public int getFluidAmount() {
+        FluidStack fluidStack = getFluid();
+        if(fluidStack != null) {
+            return fluidStack.amount;
+        }
+        return 0;
+    }
+
+    public int getTemperature() {
+        FluidStack fluidStack = getFluid();
+        if(fluidStack != null && fluidStack.getFluid() != null) {
+            return fluidStack.getFluid().getTemperature();
+        }
+        return 0;
+    }
+
     private void notifyBlockUpdate(){
         if(world!=null && pos != null){
             IBlockState state = world.getBlockState(pos);

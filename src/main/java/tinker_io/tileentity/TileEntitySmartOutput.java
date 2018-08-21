@@ -256,6 +256,10 @@ public class TileEntitySmartOutput extends TileEntityItemCapacity implements ITi
         markDirty();
     }
 
+    public ItemStack getTargetItemStack() {
+        return targetItemStack;
+    }
+
     /* Capability */
     @Override
     public boolean hasCapability(@Nonnull Capability<?> capability, @Nullable EnumFacing facing) {

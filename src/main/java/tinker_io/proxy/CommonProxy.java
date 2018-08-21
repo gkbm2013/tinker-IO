@@ -7,8 +7,14 @@ import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import tinker_io.plugins.theoneprob.MainCompatHandler;
 
 public class CommonProxy {
+    public void preInit(FMLPreInitializationEvent event) {
+        MainCompatHandler.registerTOP();
+    }
+
     public void registerItemRenderer(Item item, int meta, String id) {
 
     }

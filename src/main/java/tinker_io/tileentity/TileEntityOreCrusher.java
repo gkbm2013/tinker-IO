@@ -281,4 +281,8 @@ public class TileEntityOreCrusher extends TileEntityItemCapacity implements ITic
             world.notifyBlockUpdate(pos, state, state, 3);
         }
     }
+
+    public ItemStack getTargetItemStack() {
+        return targetItemStack;
+    }
 }

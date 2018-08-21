@@ -1,5 +1,8 @@
 package tinker_io.block;
 
+import mcjty.theoneprobe.api.IProbeHitData;
+import mcjty.theoneprobe.api.IProbeInfo;
+import mcjty.theoneprobe.api.ProbeMode;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
@@ -22,6 +25,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
 import tinker_io.block.base.BlockFacingTileEntity;
+import tinker_io.plugins.theoneprob.TOPInfoProvider;
 import tinker_io.tileentity.TileEntityStirlingEngine;
 
 import javax.annotation.Nullable;
@@ -29,7 +33,7 @@ import java.util.List;
 
 import static tinker_io.item.ItemBase.isShiftKeyDown;
 
-public class BlockStirlingEngine extends BlockFacingTileEntity<TileEntityStirlingEngine> {
+public class BlockStirlingEngine extends BlockFacingTileEntity<TileEntityStirlingEngine> implements TOPInfoProvider {
     public BlockStirlingEngine(String name) {
         super(Material.ROCK, name);
         setHarvestLevel("pickaxe", 1);
@@ -60,27 +64,16 @@ public class BlockStirlingEngine extends BlockFacingTileEntity<TileEntityStirlin
             return false;
         }
         //TODO Stirling Engine
-        String fuelAmountText = I18n.format("tio.toolTips.StirlingEngine.liquidAmount", new Object[0]);
-        String fuelTempText = I18n.format("tio.toolTips.StirlingEngine.liquidTemp", new Object[0]);
-        String energyStoredText = I18n.format("tio.toolTips.StirlingEngine.energyStored", new Object[0]);
-        String generatePerTickText = I18n.format("tio.toolTips.StirlingEngine.generatePerTick", new Object[0]);
+        String fuelAmountText = I18n.format("tio.toolTips.StirlingEngine.liquidAmount");
+        String fuelTempText = I18n.format("tio.toolTips.StirlingEngine.liquidTemp");
+        String energyStoredText = I18n.format("tio.toolTips.StirlingEngine.energyStored");
+        String generatePerTickText = I18n.format("tio.toolTips.StirlingEngine.generatePerTick");
 
         TileEntityStirlingEngine te = (TileEntityStirlingEngine) worldIn.getTileEntity(pos);
 
         if (te != null) {
-            FluidTank tank = te.getTankBelow();
-            if (tank != null) {
-                int liquidAmount = tank.getFluidAmount();
-                FluidStack fluid = tank.getFluid();
-                int fuildTemp = 0;
-                if (fluid != null) {
-                    fuildTemp = fluid.getFluid().getTemperature();
-                }
-                if (worldIn.isRemote) {
-                    playerIn.sendMessage(new TextComponentString(TextFormatting.WHITE + fuelAmountText + " : " + liquidAmount));
-                    playerIn.sendMessage(new TextComponentString(TextFormatting.WHITE + fuelTempText + " : " + fuildTemp));
-                }
-            }
+            playerIn.sendMessage(new TextComponentString(TextFormatting.WHITE + fuelAmountText + " : " + te.getFluidAmount()));
+            playerIn.sendMessage(new TextComponentString(TextFormatting.WHITE + fuelTempText + " : " + te.getTemperature()));
 
             int energy = te.getEnergyStored(null);
             if (worldIn.isRemote) {
@@ -184,5 +177,29 @@ public class BlockStirlingEngine extends BlockFacingTileEntity<TileEntityStirlin
         };
         itemBlock.setRegistryName(getRegistryName());
         return itemBlock;
+    }
+
+    @Override
+    public void addProbeInfo(ProbeMode mode, IProbeInfo probeInfo, EntityPlayer player, World world, IBlockState blockState, IProbeHitData data) {
+        TileEntity te = world.getTileEntity(data.getPos());
+        if(te instanceof TileEntityStirlingEngine) {
+            TileEntityStirlingEngine tile = (TileEntityStirlingEngine) te;
+
+            String fuelAmountText = I18n.format("tio.toolTips.StirlingEngine.liquidAmount");
+            String fuelTempText = I18n.format("tio.toolTips.StirlingEngine.liquidTemp");
+            String energyStoredText = I18n.format("tio.toolTips.StirlingEngine.energyStored");
+            String generatePerTickText = I18n.format("tio.toolTips.StirlingEngine.generatePerTick");
+
+            probeInfo.vertical()
+                    .text(TextFormatting.WHITE + fuelAmountText + " : " + tile.getFluidAmount())
+                    .text(TextFormatting.WHITE + fuelTempText + " : " + tile.getTemperature())
+                    .text("");
+
+            int energy = tile.getEnergyStored(null);
+            probeInfo.vertical()
+
+                .text(TextFormatting.WHITE + energyStoredText + " : " + energy + " / " + tile.getMaxEnergyStored(null) + " RF")
+                .text(TextFormatting.WHITE + generatePerTickText + " : " + tile.getRfPerTick() + " RF");
+        }
     }
 }

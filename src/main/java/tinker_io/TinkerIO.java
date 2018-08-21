@@ -50,6 +50,7 @@ public class TinkerIO {
 
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
+        proxy.preInit(event);
         NetworkHandler.init();
     }
 
