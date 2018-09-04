@@ -51,22 +51,17 @@ public class TinkerIO {
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
         proxy.preInit(event);
-        NetworkHandler.init();
     }
 
     @Mod.EventHandler
     public void init(FMLInitializationEvent event) {
-        OreDictionaryRegister.init();
-        RecipeRegister.register();
+    	proxy.init(event);
     }
 
     @Mod.EventHandler
     public void postInit(FMLPostInitializationEvent event) {
+    	proxy.postInit(event);
         NetworkRegistry.INSTANCE.registerGuiHandler(this, new GuiHandler());
-        ItemRegistry.registerItemColors();
-        OreCrusherRecipeRegister.init();
-        MeltingRecipeRegister.register();
-        SmartOutputRecipeReigster.register();
     }
 
     @Mod.EventBusSubscriber

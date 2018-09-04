@@ -2,6 +2,8 @@ package tinker_io.registry;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.registries.IForgeRegistry;
 import tinker_io.TinkerIO;
 import tinker_io.block.*;
@@ -37,6 +39,7 @@ public class BlockRegistry {
         );
     }
 
+    @SideOnly(Side.CLIENT)
     public static void registerModels() {
         fuelInputMachine.registerItemModel(Item.getItemFromBlock(fuelInputMachine));
         smartOutput.registerItemModel(Item.getItemFromBlock(smartOutput));
