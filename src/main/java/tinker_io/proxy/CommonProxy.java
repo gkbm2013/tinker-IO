@@ -36,7 +36,7 @@ public class CommonProxy {
         MeltingRecipeRegister.register();
         SmartOutputRecipeReigster.register(); 	
     }
-
+    
     public void registerItemRenderer(Item item, int meta, String id) {
 
     }
