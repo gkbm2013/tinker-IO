@@ -53,7 +53,7 @@ public class OreCrusherRecipeRegister {
     private static void loadFromOreDict() {
         String[] oreDicts = OreDictionary.getOreNames();
         for (String oreDict : oreDicts) {
-            if (!oreCrusherBanList.contains(oreDict) && oreDict.substring(0, 3).equals("ore")) {
+            if (!oreCrusherBanList.contains(oreDict) && oreDict.length() >= 3 && oreDict.substring(0, 3).equals("ore")) {
                 if(OreDictionaryHelper.getItemStacksFromOreDict(oreDict).size() > 0) {
                     ItemStack itemStack = CrushedOreHelper.getCrushedOre(oreDict, 1);
                     oreCrusherRecipes.add(new OreCrusherRecipe(oreDict, itemStack));

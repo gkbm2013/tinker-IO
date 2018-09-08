@@ -10,7 +10,9 @@ import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
+import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import tinker_io.TinkerIO;
+import tinker_io.registry.ItemRegistry;
 
 public class ClientProxy extends CommonProxy {
     @Override
@@ -33,5 +35,10 @@ public class ClientProxy extends CommonProxy {
     @Override
     public EntityPlayer getClientPlayer(){
         return Minecraft.getMinecraft().player;
+    }
+
+    @Override
+    public void postInit(FMLPostInitializationEvent event) {
+        ItemRegistry.registerItemColors();
     }
 }

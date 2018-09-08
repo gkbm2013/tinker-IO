@@ -1,6 +1,8 @@
 package tinker_io.registry;
 
 import net.minecraft.item.Item;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.registries.IForgeRegistry;
 import tinker_io.TinkerIO;
 import tinker_io.item.*;
@@ -26,6 +28,7 @@ public class ItemRegistry {
         );
     }
 
+    @SideOnly(Side.CLIENT)
     public static void registerModels() {
         TinkerIO.proxy.registerItemRenderer(cdLonesomeAvenue, 0, "cd_lonesome_avenue");
         upgrade.registerItemModel();
@@ -34,6 +37,7 @@ public class ItemRegistry {
         crushedOre.registerItemModel("crushed_ore");
     }
 
+    @SideOnly(Side.CLIENT)
     public static void registerItemColors(){
         crushedOre.registerItemColor(new ItemCrushedOre.ItemColor());
     }

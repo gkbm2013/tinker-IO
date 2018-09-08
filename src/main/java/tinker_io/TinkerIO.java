@@ -13,6 +13,8 @@ import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import slimeknights.tconstruct.tools.TinkerTools;
 import tinker_io.network.NetworkHandler;
 import tinker_io.proxy.CommonProxy;
@@ -32,7 +34,7 @@ import tinker_io.handler.GuiHandler;
 public class TinkerIO {
 
     public static final String MOD_ID = "tinker_io";
-    public static final String VERSION = "rw2.7.0";
+    public static final String VERSION = "rw2.7.0a";
     public static final String NAME = "Tinker I/O";
 
     @SidedProxy(serverSide = "tinker_io.proxy.CommonProxy", clientSide = "tinker_io.proxy.ClientProxy")
@@ -56,14 +58,15 @@ public class TinkerIO {
 
     @Mod.EventHandler
     public void init(FMLInitializationEvent event) {
+        proxy.init(event);
         OreDictionaryRegister.init();
         RecipeRegister.register();
     }
 
     @Mod.EventHandler
     public void postInit(FMLPostInitializationEvent event) {
+        proxy.postInit(event);
         NetworkRegistry.INSTANCE.registerGuiHandler(this, new GuiHandler());
-        ItemRegistry.registerItemColors();
         OreCrusherRecipeRegister.init();
         MeltingRecipeRegister.register();
         SmartOutputRecipeReigster.register();

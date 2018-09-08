@@ -39,12 +39,14 @@ public class CrushedOreColorHelper {
             TextureAtlasSprite particleIcon = mc.getRenderItem().getItemModelMesher().getParticleIcon(oreItem.getItem(), oreItem.getMetadata());
             if(particleIcon != null){
                 int[] frameTextureData = particleIcon.getFrameTextureData(0)[0];
-                if(frameTextureData.length != 256){
-                    int index = 151 / 256 * frameTextureData.length;
-                    colorRGB = frameTextureData[index];
-                }else{
-                    colorRGB = frameTextureData[151];
-                }
+                int index = (int) ((float) 151 / (float)256 * (float) frameTextureData.length);
+                colorRGB = frameTextureData[index];
+//                if(frameTextureData.length != 256){
+//                    int index = 151 / 256 * frameTextureData.length;
+//                    colorRGB = frameTextureData[index];
+//                }else{
+//                    colorRGB = frameTextureData[151];
+//                }
             }
 
 				/*if(oreDicName.equals("oreIron")){colorRGB = hex2Rgb("#B39886").getRGB();}
@@ -75,7 +77,8 @@ public class CrushedOreColorHelper {
             TextureAtlasSprite particleIcon = mc.getRenderItem().getItemModelMesher().getParticleIcon(oreItem.getItem(), oreItem.getMetadata());
             if(particleIcon != null){
                 int[] frameTextureData = particleIcon.getFrameTextureData(0)[0];
-                colorRGB = frameTextureData[151];
+                int index = (int) ((float) 151 / (float)256 * (float) frameTextureData.length);
+                colorRGB = frameTextureData[index];
             }
         }
         return colorRGB;
