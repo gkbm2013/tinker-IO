@@ -41,6 +41,7 @@ public class CommonProxy {
 
     }
 
+    @SideOnly(Side.CLIENT)
     public void registerItemColor(Item item, IItemColor iItemColor){
 
     }

@@ -59,4 +59,9 @@ public class ClientProxy extends CommonProxy {
     public EntityPlayer getClientPlayer(){
         return Minecraft.getMinecraft().player;
     }
+
+    @Override
+    public void postInit(FMLPostInitializationEvent event) {
+        ItemRegistry.registerItemColors();
+    }
 }
