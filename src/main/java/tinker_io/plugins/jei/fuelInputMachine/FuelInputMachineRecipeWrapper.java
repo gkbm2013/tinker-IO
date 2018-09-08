@@ -4,8 +4,6 @@ import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.IRecipeWrapper;
 import net.minecraft.item.ItemStack;
 
-import java.util.List;
-
 public class FuelInputMachineRecipeWrapper implements IRecipeWrapper {
 
     protected final ItemStack input;

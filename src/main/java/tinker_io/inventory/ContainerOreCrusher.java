@@ -4,7 +4,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.SlotItemHandler;
 import tinker_io.inventory.slots.SlotFortuneUpgrade;
 import tinker_io.inventory.slots.SlotOreCrusherInput;
 import tinker_io.inventory.slots.SlotProduct;

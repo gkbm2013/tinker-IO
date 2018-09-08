@@ -10,14 +10,13 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.common.network.NetworkRegistry;
 import tinker_io.TinkerIO;
-import tinker_io.handler.GuiHandler;
 import tinker_io.registry.ItemRegistry;
 
 @EventBusSubscriber(Side.CLIENT)
@@ -25,16 +24,18 @@ public class ClientProxy extends CommonProxy {
 	
     @Override
     public void preInit(FMLPreInitializationEvent event) {
-    	
+ 	 	super.preInit(event);
+		MinecraftForge.EVENT_BUS.register(this);
     }
 	
     @Override
     public void init(FMLInitializationEvent event) {
-    	
+ 	 	super.init(event);
     }
-    
+ 
     @Override    
     public void postInit(FMLPostInitializationEvent event) {
+    	super.postInit(event);
         ItemRegistry.registerItemColors();
     }
     
@@ -60,8 +61,4 @@ public class ClientProxy extends CommonProxy {
         return Minecraft.getMinecraft().player;
     }
 
-    @Override
-    public void postInit(FMLPostInitializationEvent event) {
-        ItemRegistry.registerItemColors();
-    }
 }

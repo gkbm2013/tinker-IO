@@ -7,16 +7,16 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
+import net.minecraftforge.fml.common.Mod.EventHandler;
+import net.minecraftforge.fml.common.Mod.Instance;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import slimeknights.tconstruct.tools.TinkerTools;
-import tinker_io.network.NetworkHandler;
 import tinker_io.proxy.CommonProxy;
 import tinker_io.registry.*;
 import tinker_io.handler.GuiHandler;
@@ -40,7 +40,7 @@ public class TinkerIO {
     @SidedProxy(serverSide = "tinker_io.proxy.CommonProxy", clientSide = "tinker_io.proxy.ClientProxy")
     public static CommonProxy proxy;
 
-    @Mod.Instance(MOD_ID)
+    @Instance(MOD_ID)
     public static TinkerIO instance;
 
     //Creative Tabs
@@ -50,23 +50,23 @@ public class TinkerIO {
         }
     };
 
-    @Mod.EventHandler
+    @EventHandler
     public void preInit(FMLPreInitializationEvent event) {
         proxy.preInit(event);
     }
 
-    @Mod.EventHandler
+    @EventHandler
     public void init(FMLInitializationEvent event) {
     	proxy.init(event);
     }
 
-    @Mod.EventHandler
+    @EventHandler
     public void postInit(FMLPostInitializationEvent event) {
     	proxy.postInit(event);
         NetworkRegistry.INSTANCE.registerGuiHandler(this, new GuiHandler());
     }
 
-    @Mod.EventBusSubscriber
+    @EventBusSubscriber
     public static class RegistrationHandler {
         @SubscribeEvent
         public static void registerItems(RegistryEvent.Register<Item> event) {
