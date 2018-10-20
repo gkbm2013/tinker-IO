@@ -22,8 +22,6 @@ import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidTank;
 import tinker_io.block.base.BlockFacingTileEntity;
 import tinker_io.plugins.theoneprob.TOPInfoProvider;
 import tinker_io.tileentity.TileEntityStirlingEngine;

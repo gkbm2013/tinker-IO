@@ -1,7 +1,6 @@
 package tinker_io.helper;
 
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.oredict.OreDictionary;
 
 public class OreCrusherRecipe {
