@@ -4,9 +4,9 @@ import net.minecraftforge.common.config.Config;
 import tinker_io.TinkerIO;
 
 public class TinkerIOConfig {
-    @Config.LangKey("tio.config.fuel_input_machine")
+    @Config.LangKey("tio.config.name")
     @Config(modid = TinkerIO.MOD_ID, type = Config.Type.INSTANCE, name = "TinkerIO")
-    public static class CONFIG_FUEL_INPUT_MACHINE {
+    public static class CONFIG_TINKER_IO {
 
         @Config.RequiresMcRestart
         @Config.Name("Solid Fuel Burn Time")
@@ -21,6 +21,12 @@ public class TinkerIOConfig {
                 "Default: 200"})
         @Config.RangeInt(min = 1)
         public static int FuelInputMachineFuelConsumptionRate = 200;
+
+        @Config.RequiresMcRestart
+        @Config.Name("Smart Output Speed")
+        @Config.Comment({"The speed of Smart Output.", "Default: 15"})
+        @Config.RangeInt(min = 1)
+        public static int SmartOutputSpeed = 15;
 
     }
 }

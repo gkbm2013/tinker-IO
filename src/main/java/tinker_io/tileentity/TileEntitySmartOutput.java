@@ -12,6 +12,7 @@ import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import slimeknights.tconstruct.library.smeltery.ICastingRecipe;
+import tinker_io.config.TinkerIOConfig;
 import tinker_io.fluids.FluidTankWithTile;
 import tinker_io.handler.EnumHandler.ItemUpgradeTypes;
 import tinker_io.handler.SmartOutputRecipeHandler;
@@ -29,7 +30,7 @@ public class TileEntitySmartOutput extends TileEntityItemCapacity implements ITi
     public static final String TAG_TARGET_ITEM_STACK = "targetItemStack";
 
     public static final int CAPACITY = Fluid.BUCKET_VOLUME * 10;
-    private static final int PROGRESS_MAX = 15;
+    private static final int PROGRESS_MAX = TinkerIOConfig.CONFIG_TINKER_IO.SmartOutputSpeed;
 
     public static final int MODE_CAST = 0;
     public static final int MODE_BASIN = 1;

@@ -92,4 +92,4 @@ tio.plugin.waila.tankEmpty=(空)
 tio.plugin.jei.smart_output.consume=消耗模板!
 
 #Config
-tio.config.fuel_input_machine=燃料輸入機設定
+tio.config.name=Tinker I/O設定

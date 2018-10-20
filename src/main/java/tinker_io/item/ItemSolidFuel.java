@@ -10,7 +10,7 @@ public class ItemSolidFuel extends ItemBase {
 
     @Override
     public int getItemBurnTime(ItemStack i){
-        int solidFuelBurnTime = TinkerIOConfig.CONFIG_FUEL_INPUT_MACHINE.SolidFuelBurnTime;
+        int solidFuelBurnTime = TinkerIOConfig.CONFIG_TINKER_IO.SolidFuelBurnTime;
         return solidFuelBurnTime;
     }
 }
