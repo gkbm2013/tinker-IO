@@ -34,7 +34,7 @@ import tinker_io.handler.GuiHandler;
 public class TinkerIO {
 
     public static final String MOD_ID = "tinker_io";
-    public static final String VERSION = "rw2.7.0a";
+    public static final String VERSION = "rw2.7.1";
     public static final String NAME = "Tinker I/O";
 
     @SidedProxy(serverSide = "tinker_io.proxy.CommonProxy", clientSide = "tinker_io.proxy.ClientProxy")
