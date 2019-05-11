@@ -25,6 +25,8 @@ import javax.annotation.Nullable;
 public class BlockFuelInputMachine extends BlockFacingTileEntity<TileEntityFuelInputMachine> {
     public BlockFuelInputMachine(String name) {
         super(Material.ROCK, name);
+        this.setHardness(2.5f);
+        this.setHarvestLevel("pickaxe", 1);
     }
 
     @Override

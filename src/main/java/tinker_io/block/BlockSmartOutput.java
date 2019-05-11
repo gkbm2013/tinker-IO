@@ -23,6 +23,8 @@ import javax.annotation.Nullable;
 public class BlockSmartOutput extends BlockTileEntity<TileEntitySmartOutput> implements TOPInfoProvider {
     public BlockSmartOutput(String name) {
         super(Material.ROCK, name);
+        this.setHardness(2.5f);
+        this.setHarvestLevel("pickaxe", 1);
     }
 
     @Override

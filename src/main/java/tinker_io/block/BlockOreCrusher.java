@@ -26,6 +26,8 @@ import javax.annotation.Nullable;
 public class BlockOreCrusher extends BlockFacingTileEntity<TileEntityOreCrusher> implements TOPInfoProvider {
     public BlockOreCrusher(String name) {
         super(Material.ROCK, name);
+        this.setHardness(2.5f);
+        this.setHarvestLevel("pickaxe", 1);
     }
 
     @Override
