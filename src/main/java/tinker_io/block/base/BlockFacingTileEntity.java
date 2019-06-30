@@ -17,6 +17,7 @@ public abstract class BlockFacingTileEntity<TE extends TileEntity> extends Block
 
     public BlockFacingTileEntity(Material material, String name) {
         super(material, name);
+        setHardness(3);
         setDefaultState(blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
     }
 

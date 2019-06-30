@@ -51,6 +51,7 @@ public class TileEntityStirlingEngine extends TileEntity implements ITickable, I
 
     @Override
     public boolean canConnectEnergy(EnumFacing from) {
+        System.out.println("GO");
         return true;
     }
 
