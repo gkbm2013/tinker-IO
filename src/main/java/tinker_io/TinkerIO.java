@@ -24,8 +24,8 @@ import tinker_io.handler.GuiHandler;
 @Mod(modid = TinkerIO.MOD_ID,
         version = TinkerIO.VERSION,
         name = TinkerIO.NAME,
-        dependencies = "required-after:forge@[14.23.1.2594,);"
-                + "required-after:tconstruct@[1.12.2-2.10.1.87,);"
+        dependencies = "required-after:forge@[14.23.5.2831,);"
+                + "required-after:tconstruct@[1.12.2-2.13.0.171,);"
                 + "after:waila;"
                 + "after:jei@[4.8.5.138,)",
         acceptedMinecraftVersions = "[1.12.2,]")
@@ -33,7 +33,7 @@ import tinker_io.handler.GuiHandler;
 public class TinkerIO {
 
     public static final String MOD_ID = "tinker_io";
-    public static final String VERSION = "rw2.8.0";
+    public static final String VERSION = "rw2.8.1";
     public static final String NAME = "Tinker I/O";
 
     @SidedProxy(serverSide = "tinker_io.proxy.CommonProxy", clientSide = "tinker_io.proxy.ClientProxy")
