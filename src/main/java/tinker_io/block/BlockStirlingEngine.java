@@ -22,6 +22,8 @@ import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.energy.CapabilityEnergy;
+import net.minecraftforge.energy.IEnergyStorage;
 import tinker_io.block.base.BlockFacingTileEntity;
 import tinker_io.plugins.theoneprob.TOPInfoProvider;
 import tinker_io.tileentity.TileEntityStirlingEngine;
@@ -73,11 +75,15 @@ public class BlockStirlingEngine extends BlockFacingTileEntity<TileEntityStirlin
             playerIn.sendMessage(new TextComponentString(TextFormatting.WHITE + fuelAmountText + " : " + te.getFluidAmount()));
             playerIn.sendMessage(new TextComponentString(TextFormatting.WHITE + fuelTempText + " : " + te.getTemperature()));
 
-            int energy = te.getEnergyStored(null);
-            if (worldIn.isRemote) {
-                playerIn.sendMessage(new TextComponentString(TextFormatting.WHITE + energyStoredText + " : " + energy + " / " + te.getMaxEnergyStored(null) + " RF"));
-                playerIn.sendMessage(new TextComponentString(TextFormatting.WHITE + generatePerTickText + " : " + te.getRfPerTick() + " RF"));
-                playerIn.sendMessage(new TextComponentString(TextFormatting.YELLOW + "-----"));
+            IEnergyStorage storage = getEnergyStorage(worldIn, pos);
+
+            if(storage != null) {
+                int energy = storage.getEnergyStored();
+                if (worldIn.isRemote) {
+                    playerIn.sendMessage(new TextComponentString(TextFormatting.WHITE + energyStoredText + " : " + energy + " / " + storage.getMaxEnergyStored() + " RF"));
+                    playerIn.sendMessage(new TextComponentString(TextFormatting.WHITE + generatePerTickText + " : " + te.getRfPerTick() + " RF"));
+                    playerIn.sendMessage(new TextComponentString(TextFormatting.YELLOW + "-----"));
+                }
             }
         }
         return true;
@@ -193,11 +199,23 @@ public class BlockStirlingEngine extends BlockFacingTileEntity<TileEntityStirlin
                     .text(TextFormatting.WHITE + fuelTempText + " : " + tile.getTemperature())
                     .text("");
 
-            int energy = tile.getEnergyStored(null);
-            probeInfo.vertical()
+            IEnergyStorage storage = getEnergyStorage(world, data.getPos());
 
-                .text(TextFormatting.WHITE + energyStoredText + " : " + energy + " / " + tile.getMaxEnergyStored(null) + " RF")
-                .text(TextFormatting.WHITE + generatePerTickText + " : " + tile.getRfPerTick() + " RF");
+            if(storage != null) {
+                int energy = tile.getEnergyStored();
+                probeInfo.vertical()
+                        .text(TextFormatting.WHITE + energyStoredText + " : " + energy + " / " + storage.getMaxEnergyStored() + " RF")
+                        .text(TextFormatting.WHITE + generatePerTickText + " : " + tile.getRfPerTick() + " RF");
+            }
         }
+    }
+
+    private IEnergyStorage getEnergyStorage(World word, BlockPos pos) {
+        IEnergyStorage storage = null;
+        TileEntity te = word.getTileEntity(pos);
+        if(te != null && te.hasCapability(CapabilityEnergy.ENERGY, null)) {
+            storage = te.getCapability(CapabilityEnergy.ENERGY, null);
+        }
+        return storage;
     }
 }

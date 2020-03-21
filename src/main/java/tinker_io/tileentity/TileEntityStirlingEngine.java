@@ -1,8 +1,5 @@
 package tinker_io.tileentity;
 
-import cofh.redstoneflux.api.IEnergyProvider;
-import cofh.redstoneflux.api.IEnergyReceiver;
-import cofh.redstoneflux.impl.EnergyStorage;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
@@ -11,16 +8,21 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.energy.CapabilityEnergy;
+import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
 import slimeknights.tconstruct.smeltery.tileentity.TileTank;
 import tinker_io.helper.BlockFinder;
+import tinker_io.tileentity.energy.EnergyCapability;
 
+import javax.annotation.Nullable;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class TileEntityStirlingEngine extends TileEntity implements ITickable, IEnergyProvider {
+public class TileEntityStirlingEngine extends TileEntity implements ITickable {
 
     public static String TAG_ANGLE = "angle";
     public static String TAG_RF_PER_TICK = "rfPerTick";
@@ -30,29 +32,26 @@ public class TileEntityStirlingEngine extends TileEntity implements ITickable, I
     private int energyExportCount = 0;
     private int syncCount = 0;
 
-    protected EnergyStorage storage = new EnergyStorage(500000, 0, 2000);
+    protected EnergyCapability storage = new EnergyCapability(500000, 0, 2000);
 
 
     /* RF Energy */
+
+    @Nullable
     @Override
-    public int extractEnergy(EnumFacing from, int maxExtract, boolean simulate) {
-        return storage.extractEnergy(Math.min(storage.getMaxExtract(), maxExtract), simulate);
+    public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
+        if(capability == CapabilityEnergy.ENERGY) {
+            return (T) this.storage.getStorage();
+        }
+        return super.getCapability(capability, facing);
     }
 
     @Override
-    public int getEnergyStored(EnumFacing from) {
-        return storage.getEnergyStored();
-    }
-
-    @Override
-    public int getMaxEnergyStored(EnumFacing from) {
-        return storage.getMaxEnergyStored();
-    }
-
-    @Override
-    public boolean canConnectEnergy(EnumFacing from) {
-        System.out.println("GO");
-        return true;
+    public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
+        if(capability == CapabilityEnergy.ENERGY) {
+            return true;
+        }
+        return super.hasCapability(capability, facing);
     }
 
     /* NBT */
@@ -103,8 +102,8 @@ public class TileEntityStirlingEngine extends TileEntity implements ITickable, I
         if (tank != null) {
             calculateRfPerTick(tank);
 
-            if (rfPerTick != 0 && getEnergyStored(null) < getMaxEnergyStored(null)) {
-                storage.setEnergyStored(getEnergyStored(null) + rfPerTick);
+            if (rfPerTick != 0 && this.storage.getStorage().getEnergyStored() < this.storage.getStorage().getMaxEnergyStored()) {
+                storage.setEnergyStored(getEnergyStored() + rfPerTick);
                 angle = (angle + 1) % 61;
                 drainTank(tank);
                 notifyBlockUpdate();
@@ -148,34 +147,55 @@ public class TileEntityStirlingEngine extends TileEntity implements ITickable, I
     private boolean extraEnergyToSurroundingMachine() {
         int exportPerTick = Math.min(this.storage.getEnergyStored(), 1000);
 
-        BlockFinder blockFinder = new BlockFinder(pos, world);
-        List<BlockPos> blocPosList = blockFinder.getSurroundingTileEntityPos(pos);
-        blocPosList = blocPosList.stream().filter(pos -> world.getTileEntity(pos) instanceof IEnergyReceiver).collect(Collectors.toList());
-
-        if (blocPosList.size() == 0) {
-            return false;
+        EnumFacing facing = null;
+        EnumFacing facingOpp = null;
+        switch (energyExportCount) {
+            case 0:
+                facing = EnumFacing.EAST;
+                facingOpp = EnumFacing.WEST;
+                break;
+            case 1:
+                facing = EnumFacing.WEST;
+                facingOpp = EnumFacing.EAST;
+                break;
+            case 2:
+                facing = EnumFacing.SOUTH;
+                facingOpp = EnumFacing.NORTH;
+                break;
+            case 3:
+                facing = EnumFacing.NORTH;
+                facingOpp = EnumFacing.SOUTH;
+                break;
+            case 4:
+                facing = EnumFacing.UP;
+                facingOpp = EnumFacing.DOWN;
+                break;
+            case 5:
+                facing = EnumFacing.DOWN;
+                facingOpp = EnumFacing.UP;
+                break;
+            default:
+                break;
         }
-        if (energyExportCount >= blocPosList.size()) {
-            energyExportCount = 0;
-        }
-        BlockPos blockPos = blocPosList.get(energyExportCount);
 
-        if (blockPos == null) {
-            energyExportCount = 0;
-            return false;
-        }
-
-        int averageExtraEnergy = (int) Math.floor((float) exportPerTick / (float) blocPosList.size());
-
-        IEnergyReceiver rfStorage = (IEnergyReceiver) world.getTileEntity(blockPos);
-        if (rfStorage != null) {
-            if (this.storage.getEnergyStored() > 0 && rfStorage.getEnergyStored(EnumFacing.DOWN) < rfStorage.getMaxEnergyStored(EnumFacing.DOWN)) {
-                storage.setEnergyStored(storage.getEnergyStored() - averageExtraEnergy);
-                rfStorage.receiveEnergy(EnumFacing.DOWN, averageExtraEnergy, false);
+        if(facing != null) {
+            TileEntity te = this.getWorld().getTileEntity(getPos().offset(facing));
+            if(te != null) {
+                IEnergyStorage iEnergyStorage = te.getCapability(CapabilityEnergy.ENERGY, facingOpp);
+                if(iEnergyStorage != null) {
+                    int estConsume = iEnergyStorage.receiveEnergy(exportPerTick, true);
+                    iEnergyStorage.receiveEnergy(estConsume, false);
+                    this.storage.getStorage().extractEnergy(estConsume, false);
+                    return true;
+                }
             }
         }
 
-        energyExportCount++;
+        if(energyExportCount + 1 >= 6 || energyExportCount < 0) {
+            energyExportCount = 0;
+        } else {
+            energyExportCount++;
+        }
         return true;
     }
 
