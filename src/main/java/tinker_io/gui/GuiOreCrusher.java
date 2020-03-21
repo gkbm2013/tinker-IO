@@ -7,6 +7,8 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraftforge.energy.CapabilityEnergy;
+import net.minecraftforge.energy.IEnergyStorage;
 import tinker_io.TinkerIO;
 import tinker_io.registry.BlockRegistry;
 import tinker_io.tileentity.TileEntityOreCrusher;
@@ -59,14 +61,18 @@ public class GuiOreCrusher extends GuiContainer {
         String rate = tile.getChance() + "% + 1";
         this.fontRenderer.drawString(rate, (this.xSize - this.fontRenderer.getStringWidth(rate))/2 + 50, 66, 4210752);
 
-        //Energy Bar Tooltip
-        List<String> text = Lists.newArrayList();
-        text.add(TextFormatting.WHITE.toString() + I18n.format("tio.toolTips.oreCrusher.energy"));
-        text.add(TextFormatting.WHITE.toString() + tile.getEnergyStored(null) + " / " + tile.getMaxEnergyStored(null)+ " " + I18n.format("tio.toolTips.oreCrusher.rf"));
-        text.add(TextFormatting.WHITE.toString() + tile.getEnergyConsume() + " " + I18n.format("tio.toolTips.oreCrusher.rf_per_tick"));
+        IEnergyStorage iEnergyStorage = tile.getCapability(CapabilityEnergy.ENERGY, null);
 
-        if(mouseX >= guiLeft + 11 && mouseX <= guiLeft + 21 && mouseY <= guiTop + 67 && mouseY >= guiTop + 67 - 54){
-            this.drawHoveringText(text, mouseX-guiLeft, mouseY-guiTop);
+        if(iEnergyStorage != null) {
+            //Energy Bar Tooltip
+            List<String> text = Lists.newArrayList();
+            text.add(TextFormatting.WHITE.toString() + I18n.format("tio.toolTips.oreCrusher.energy"));
+            text.add(TextFormatting.WHITE.toString() + iEnergyStorage.getEnergyStored() + " / " + iEnergyStorage.getMaxEnergyStored()+ " " + I18n.format("tio.toolTips.oreCrusher.rf"));
+            text.add(TextFormatting.WHITE.toString() + tile.getEnergyConsume() + " " + I18n.format("tio.toolTips.oreCrusher.rf_per_tick"));
+
+            if(mouseX >= guiLeft + 11 && mouseX <= guiLeft + 21 && mouseY <= guiTop + 67 && mouseY >= guiTop + 67 - 54){
+                this.drawHoveringText(text, mouseX-guiLeft, mouseY-guiTop);
+            }
         }
     }
 }

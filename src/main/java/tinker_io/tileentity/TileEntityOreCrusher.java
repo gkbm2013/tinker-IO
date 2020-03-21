@@ -1,7 +1,5 @@
 package tinker_io.tileentity;
 
-import cofh.redstoneflux.api.IEnergyReceiver;
-import cofh.redstoneflux.impl.EnergyStorage;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemEnchantedBook;
 import net.minecraft.item.ItemStack;
@@ -10,16 +8,20 @@ import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import tinker_io.helper.OreCrusherRecipe;
 import tinker_io.inventory.ContainerOreCrusher;
 import tinker_io.registry.ItemRegistry;
 import tinker_io.registry.OreCrusherRecipeRegister;
+import tinker_io.tileentity.energy.EnergyCapability;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
-public class TileEntityOreCrusher extends TileEntityItemCapacity implements ITickable, IEnergyReceiver {
+public class TileEntityOreCrusher extends TileEntityItemCapacity implements ITickable {
 
     public static final String TAG_ENERGY_CONSUME = "energyConsume";
     public static final String TAG_PROGRESS = "progress";
@@ -33,7 +35,7 @@ public class TileEntityOreCrusher extends TileEntityItemCapacity implements ITic
     private OreCrusherRecipe recipe = OreCrusherRecipe.EMPTY;
     private ItemStack targetItemStack = ItemStack.EMPTY;
     private ItemStack lastOre = ItemStack.EMPTY;
-    private EnergyStorage storage = new EnergyStorage(100000, 2000, 0);
+    private EnergyCapability storage = new EnergyCapability(100000, 2000, 0);
 
     private int energyConsume = 0;
     private int tick = 0;
@@ -213,26 +215,22 @@ public class TileEntityOreCrusher extends TileEntityItemCapacity implements ITic
     }
 
     /* RF Energy */
-    @Override
-    public int receiveEnergy(EnumFacing from, int maxReceive, boolean simulate) {
-        markDirty();
-        syncPacketCount = 0;
-        return storage.receiveEnergy(Math.min(storage.getMaxReceive(), maxReceive), simulate);
-    }
 
     @Override
-    public int getEnergyStored(EnumFacing from) {
-        return storage.getEnergyStored();
+    public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
+        if(capability == CapabilityEnergy.ENERGY) {
+            return true;
+        }
+        return super.hasCapability(capability, facing);
     }
 
+    @Nullable
     @Override
-    public int getMaxEnergyStored(EnumFacing from) {
-        return storage.getMaxEnergyStored();
-    }
-
-    @Override
-    public boolean canConnectEnergy(EnumFacing from) {
-        return true;
+    public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
+        if(capability == CapabilityEnergy.ENERGY) {
+            return (T) this.storage.getStorage();
+        }
+        return super.getCapability(capability, facing);
     }
 
     /* NBT */
