@@ -6,8 +6,8 @@ import slimeknights.tconstruct.shared.TinkerCommons;
 public class OreDictionaryRegister {
 
     public static void init() {
-        OreDictionary.registerOre("oreCobalt", TinkerCommons.oreCobalt.getItem());
-        OreDictionary.registerOre("oreArdite", TinkerCommons.oreArdite.getItem());
+        OreDictionary.registerOre("oreCobalt", TinkerCommons.oreCobalt);
+        OreDictionary.registerOre("oreArdite", TinkerCommons.oreArdite);
     }
 
 }
