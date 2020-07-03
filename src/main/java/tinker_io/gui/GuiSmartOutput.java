@@ -78,7 +78,7 @@ public class GuiSmartOutput extends GuiContainer {
         this.drawTexturedModalRect(guiLeft + 93, guiTop + 33, 176, 0, progress + 1, 17);
 
         //Redstone Control
-        if(tile.isCanControlledByRedstone()) {
+        if(tile.isControlledByRedstone()) {
             if(!tile.canWork()) {
                 this.drawTexturedModalRect(guiLeft + 119, guiTop + 55, 176, 18, 22, 20);
                 this.drawTexturedModalRect(guiLeft + 92, guiTop + 32, 176, 60, 26, 20);

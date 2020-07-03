@@ -43,7 +43,7 @@ public class TileEntitySmartOutput extends TileEntityItemCapacity implements ITi
     private int maxOutputStackSize = 0;
     private int currentMode = MODE_CAST;
 
-    private boolean canControlledByRedstone = false;
+    private boolean controlledByRedstone = false;
     private boolean blockPowered = false;
 
     private ICastingRecipe currentRecipe;
@@ -76,6 +76,7 @@ public class TileEntitySmartOutput extends TileEntityItemCapacity implements ITi
 
     @Override
     public void update() {
+        if(world.isRemote) return;
         if(tick % 2 == 0) {
             checkUpgrade();
             blockPowered = world.isBlockPowered(pos);
@@ -176,7 +177,7 @@ public class TileEntitySmartOutput extends TileEntityItemCapacity implements ITi
         ItemStack stackUp = inventory.getStackInSlot(ContainerSmartOutput.UPG_UP);
         ItemStack stackDown = inventory.getStackInSlot(ContainerSmartOutput.UPG_DOWN);
         maxOutputStackSize = 1;
-        canControlledByRedstone = false;
+        controlledByRedstone = false;
         currentMode = MODE_CAST;
         checkUpgrade(stackUp);
         checkUpgrade(stackDown);
@@ -188,7 +189,7 @@ public class TileEntitySmartOutput extends TileEntityItemCapacity implements ITi
         if(itemStack != ItemStack.EMPTY && itemStack.getItem().equals(ItemRegistry.upgrade)) {
             maxOutputStackSize += getSlotExpendSize(itemStack);
             if(itemStack.isItemEqual(new ItemStack(ItemRegistry.upgrade, 1, ItemUpgradeTypes.REDETONE_UPG.getID()))) {
-                canControlledByRedstone = true;
+                controlledByRedstone = true;
             }
             if(itemStack.isItemEqual(new ItemStack(ItemRegistry.upgrade, 1, ItemUpgradeTypes.BASIN_UPGRADE.getID()))) {
                 currentMode = MODE_BASIN;
@@ -300,8 +301,8 @@ public class TileEntitySmartOutput extends TileEntityItemCapacity implements ITi
         return maxOutputStackSize;
     }
 
-    public boolean isCanControlledByRedstone() {
-        return canControlledByRedstone;
+    public boolean isControlledByRedstone() {
+        return controlledByRedstone;
     }
 
     public boolean isBlockPowered() {
@@ -309,7 +310,7 @@ public class TileEntitySmartOutput extends TileEntityItemCapacity implements ITi
     }
 
     public boolean canWork() {
-        if(!canControlledByRedstone)
+        if(!controlledByRedstone)
             return true;
         else
             return !blockPowered;
