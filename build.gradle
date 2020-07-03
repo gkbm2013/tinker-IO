@@ -94,7 +94,7 @@ dependencies {
     runtime "mezz.jei:jei_${minecraft_version}:${jei_version}"
 
     deobfCompile "mcjty.theoneprobe:TheOneProbe-${minecraft_version_short}:${the_one_probe_version}"
-    deobfCompile "mcp.mobius.waila:Hwyla:${waila_version}:api"
+//    deobfCompile "mcp.mobius.waila:Hwyla:${waila_version}:api"
 }
 
 sourceSets {
