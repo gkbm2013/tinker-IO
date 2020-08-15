@@ -32,10 +32,10 @@ repositories {
         url "http://maven.tterrag.com/"
     }
 
-    maven { // The repo from which to get waila
+    /*maven { // The repo from which to get waila
         name "Mobius Repo"
         url "http://tehnut.info/maven"
-    }
+    }*/
 }
 
 version = "${mod_version}"
