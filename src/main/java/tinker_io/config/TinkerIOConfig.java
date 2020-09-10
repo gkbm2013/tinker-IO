@@ -12,7 +12,7 @@ public class TinkerIOConfig {
         @Config.Name("Solid Fuel Burn Time")
         @Config.Comment({"The burn time of Solid Fuel.", "Default: 40000"})
         @Config.RangeInt(min = 1)
-        public static int SolidFuelBurnTime = 40000;
+        public static int SolidFuelBurnTime = 3200;
 
         @Config.RequiresMcRestart
         @Config.Name("Fuel Input Machine Fuel Consumption Rate")
