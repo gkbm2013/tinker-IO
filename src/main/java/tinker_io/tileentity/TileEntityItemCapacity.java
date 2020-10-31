@@ -1,9 +1,11 @@
 package tinker_io.tileentity;
 
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
@@ -106,4 +108,25 @@ public abstract class TileEntityItemCapacity extends TileEntity {
     protected void onSlotChange(int slot) {
 
     }
+
+    /**
+     * Code from Smeltery IO :P
+     * https://github.com/tgstyle/MCT-Smeltery-IO/blob/master/src/main/java/mctmods/smelteryio/tileentity/base/TileEntityBase.java
+     * */
+    public void efficientMarkDirty() {
+        world.getChunkFromBlockCoords(getPos()).markDirty();
+        this.markContainingBlockForUpdate(null);
+    }
+
+    public void markContainingBlockForUpdate(@Nullable IBlockState newState) {
+        markBlockForUpdate(getPos(), newState);
+    }
+
+    public void markBlockForUpdate(BlockPos pos, @Nullable IBlockState newState) {
+        IBlockState state = world.getBlockState(pos);
+        if(newState == null) newState = state;
+        world.notifyBlockUpdate(pos, state, newState, 3);
+        world.notifyNeighborsOfStateChange(pos, newState.getBlock(), true);
+    }
+
 }
