@@ -31,6 +31,7 @@ public class TileEntitySmartOutput extends TileEntityItemCapacity implements ITi
 
     public static final int CAPACITY = Fluid.BUCKET_VOLUME * 10;
     private static final int PROGRESS_MAX = TinkerIOConfig.CONFIG_TINKER_IO.SmartOutputSpeed;
+    private static final int MARK_DIRTY_DURATION = 2; // ticks
 
     public static final int MODE_CAST = 0;
     public static final int MODE_BASIN = 1;
@@ -52,6 +53,9 @@ public class TileEntitySmartOutput extends TileEntityItemCapacity implements ITi
     private int lastMode = MODE_CAST;
     private FluidStack lastFluidStack;
     private ItemStack lastCast = ItemStack.EMPTY;
+
+    private boolean isDirty = false;
+    private int markDirtyCount = 0;
 
     public TileEntitySmartOutput() {
         super(SLOTS_SIZE);
@@ -90,6 +94,16 @@ public class TileEntitySmartOutput extends TileEntityItemCapacity implements ITi
             }
         }
         tick = (tick + 1) % 200;
+
+        if (markDirtyCount % MARK_DIRTY_DURATION == 0) {
+            if (isDirty) {
+                efficientMarkDirty();
+                isDirty = false;
+            }
+            markDirtyCount = 0;
+        }
+
+        markDirtyCount = markDirtyCount + 1;
     }
 
     private void updateRecipe() {
@@ -104,7 +118,7 @@ public class TileEntitySmartOutput extends TileEntityItemCapacity implements ITi
 
 
     /**
-     * casting() or frozen() in old Tinker I/O version......
+     * casting() a.k.a. frozen() in old Tinker I/O version......
      * Frozen!? Let it go! Let it go! Can't hold it back anymore~  - GKB 2015/4/4 22:22 (Tired...)
      * */
     private void doCasting() {
@@ -120,7 +134,9 @@ public class TileEntitySmartOutput extends TileEntityItemCapacity implements ITi
                             inventory.extractItem(ContainerSmartOutput.PATTERN, 1, false);
                         tank.drain(currentRecipe.getFluidAmount(), true);
                         progress++;
-                        markDirty();
+//                        markDirty();
+//                        efficientMarkDirty();
+                        isDirty = true;
                     }else{
                         targetItemStack = ItemStack.EMPTY;
                     }
@@ -134,7 +150,9 @@ public class TileEntitySmartOutput extends TileEntityItemCapacity implements ITi
             }else{
                 progress = (progress + 1) % PROGRESS_MAX;
             }
-            markDirty();
+//            markDirty();
+//            efficientMarkDirty();
+            isDirty = true;
         }
     }
 
@@ -166,9 +184,11 @@ public class TileEntitySmartOutput extends TileEntityItemCapacity implements ITi
                 || !ItemStack.areItemsEqual(lastCast, itemStack)
                 || !ItemStack.areItemStackTagsEqual(lastCast, itemStack);
 
-        lastMode = currentMode;
-        lastFluidStack = fluidStack;
-        lastCast = itemStack;
+        if (changed) {
+            lastMode = currentMode;
+            lastFluidStack = fluidStack;
+            lastCast = itemStack;
+        }
 
         return changed;
     }
