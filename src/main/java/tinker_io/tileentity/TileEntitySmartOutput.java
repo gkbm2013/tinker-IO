@@ -28,6 +28,8 @@ public class TileEntitySmartOutput extends TileEntityItemCapacity implements ITi
     public static final String TAG_PROGRESS = "progress";
     public static final String TAG_MAX_OUTPUT_STACK_SIZE = "maxOutputStackSize";
     public static final String TAG_TARGET_ITEM_STACK = "targetItemStack";
+    public static final String TAG_CONTROLLED_BY_REDSTONE = "controlledByRedstone";
+    public static final String TAG_IS_BLOCK_POWERED = "isBlockPowered";
 
     public static final int CAPACITY = Fluid.BUCKET_VOLUME * 10;
     private static final int PROGRESS_MAX = TinkerIOConfig.CONFIG_TINKER_IO.SmartOutputSpeed;
@@ -53,6 +55,10 @@ public class TileEntitySmartOutput extends TileEntityItemCapacity implements ITi
     private int lastMode = MODE_CAST;
     private FluidStack lastFluidStack;
     private ItemStack lastCast = ItemStack.EMPTY;
+
+    private ItemStack lastUpgUp = ItemStack.EMPTY;
+    private ItemStack lastUpgDown = ItemStack.EMPTY;
+    private boolean lastBlockPowered = blockPowered;
 
     private boolean isDirty = false;
     private int markDirtyCount = 0;
@@ -83,7 +89,14 @@ public class TileEntitySmartOutput extends TileEntityItemCapacity implements ITi
         if(world.isRemote) return;
         if(tick % 2 == 0) {
             checkUpgrade();
-            blockPowered = world.isBlockPowered(pos);
+
+            if (controlledByRedstone) {
+                blockPowered = world.isBlockPowered(pos);
+                if (lastBlockPowered != blockPowered) {
+                    lastBlockPowered = blockPowered;
+                    isDirty = true;
+                }
+            }
 
             if(isChanged()){
                 updateRecipe();
@@ -201,8 +214,15 @@ public class TileEntitySmartOutput extends TileEntityItemCapacity implements ITi
         currentMode = MODE_CAST;
         checkUpgrade(stackUp);
         checkUpgrade(stackDown);
-        if(maxOutputStackSize > 64)
+        if(maxOutputStackSize > 64) {
             maxOutputStackSize = 64;
+        }
+
+        if (!lastUpgUp.equals(stackUp) || !lastUpgDown.equals(stackDown)) {
+            lastUpgUp = stackUp;
+            lastUpgDown = stackDown;
+            isDirty = true;
+        }
     }
 
     private void checkUpgrade(ItemStack itemStack) {
@@ -240,6 +260,9 @@ public class TileEntitySmartOutput extends TileEntityItemCapacity implements ITi
         currentMode = tag.getInteger(TAG_CURRENT_MODE);
         progress = tag.getInteger(TAG_PROGRESS);
         maxOutputStackSize = tag.getInteger(TAG_MAX_OUTPUT_STACK_SIZE);
+        controlledByRedstone = tag.getBoolean(TAG_CONTROLLED_BY_REDSTONE);
+        blockPowered = tag.getBoolean(TAG_IS_BLOCK_POWERED);
+
         targetItemStack = new ItemStack(tag.getCompoundTag(TAG_TARGET_ITEM_STACK));
     }
 
@@ -250,6 +273,8 @@ public class TileEntitySmartOutput extends TileEntityItemCapacity implements ITi
         tag.setInteger(TAG_CURRENT_MODE, currentMode);
         tag.setInteger(TAG_PROGRESS, progress);
         tag.setInteger(TAG_MAX_OUTPUT_STACK_SIZE, maxOutputStackSize);
+        tag.setBoolean(TAG_CONTROLLED_BY_REDSTONE, controlledByRedstone);
+        tag.setBoolean(TAG_IS_BLOCK_POWERED, blockPowered);
 
         NBTTagCompound tagItemStack = new NBTTagCompound();
         tagItemStack = targetItemStack.writeToNBT(tagItemStack);
