@@ -3,11 +3,8 @@ package tinker_io.network;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
-import tinker_io.tileentity.TileEntityFuelInputMachine;
-import tinker_io.tileentity.TileSmelteryAdapter;
 
 public class MessageHeatSmeltery extends MessageBase<MessageHeatSmeltery> {
 
@@ -32,16 +29,10 @@ public class MessageHeatSmeltery extends MessageBase<MessageHeatSmeltery> {
 
     @Override
     public void handleServerSide(MessageHeatSmeltery message, EntityPlayer player) {
-        int temp = message.data.getInteger("temp");
-        int x = message.data.getInteger("x");
-        int y = message.data.getInteger("y");
-        int z = message.data.getInteger("z");
-        TileEntity te = player.world.getTileEntity(new BlockPos(x, y, z));
-        if(te != null && te instanceof TileEntityFuelInputMachine){
-            TileEntityFuelInputMachine tileFIM = (TileEntityFuelInputMachine) te;
-            TileSmelteryAdapter adapter = new TileSmelteryAdapter(player.world, tileFIM.getMasterPosition());
-            adapter.setTemp(temp);
-        }
+        // Deliberately ignored. The Fuel Input Machine now sets the smeltery temperature on the server itself
+        // (TileEntityFuelInputMachine#setSmelteryTemp), so no client needs to send this, and honouring it let any
+        // client set the temperature of any smeltery by position. The message stays registered so the
+        // discriminators of NetworkHandler's other messages do not shift.
     }
 
     @Override

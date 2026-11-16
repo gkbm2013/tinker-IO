@@ -12,8 +12,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import slimeknights.tconstruct.smeltery.tileentity.TileHeatingStructure;
 import slimeknights.tconstruct.smeltery.tileentity.TileSmeltery;
 import tinker_io.inventory.ContainerFuelInputMachine;
-import tinker_io.network.MessageHeatSmeltery;
-import tinker_io.network.NetworkHandler;
 
 import javax.annotation.Nonnull;
 
@@ -171,8 +169,10 @@ public class TileEntityFuelInputMachine extends TileEntitySmelteryItemCapacity i
 
     private void setSmelteryTemp(int temperature) {
         temperature = (temperature - 300 > 0) ? temperature - 300 : temperature;
+        // This runs on the server (update() and removedByPlayer), so apply the temperature directly.
+        // NetworkHandler.sendToServer has no client-to-server connection on a dedicated server and throws there.
         if(!world.isRemote)
-            NetworkHandler.sendToServer(new MessageHeatSmeltery(getPos(), temperature));
+            new TileSmelteryAdapter(world, getMasterPosition()).setTemp(temperature);
         setSmelteryTempNBT(temperature);
     }
 

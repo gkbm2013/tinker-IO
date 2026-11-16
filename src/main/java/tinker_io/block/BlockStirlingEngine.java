@@ -18,7 +18,9 @@ import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -63,27 +65,24 @@ public class BlockStirlingEngine extends BlockFacingTileEntity<TileEntityStirlin
         if (playerIn.isSneaking()) {
             return false;
         }
-        //TODO Stirling Engine
-        String fuelAmountText = I18n.format("tio.toolTips.StirlingEngine.liquidAmount");
-        String fuelTempText = I18n.format("tio.toolTips.StirlingEngine.liquidTemp");
-        String energyStoredText = I18n.format("tio.toolTips.StirlingEngine.energyStored");
-        String generatePerTickText = I18n.format("tio.toolTips.StirlingEngine.generatePerTick");
-
+        // Only the server reports: it holds the authoritative values, and the client sending its own
+        // copy as well printed the fluid lines twice.
+        if (worldIn.isRemote) {
+            return true;
+        }
         TileEntityStirlingEngine te = (TileEntityStirlingEngine) worldIn.getTileEntity(pos);
 
         if (te != null) {
-            playerIn.sendMessage(new TextComponentString(TextFormatting.WHITE + fuelAmountText + " : " + te.getFluidAmount()));
-            playerIn.sendMessage(new TextComponentString(TextFormatting.WHITE + fuelTempText + " : " + te.getTemperature()));
+            playerIn.sendMessage(statusLine("tio.toolTips.StirlingEngine.liquidAmount", String.valueOf(te.getFluidAmount())));
+            playerIn.sendMessage(statusLine("tio.toolTips.StirlingEngine.liquidTemp", String.valueOf(te.getTemperature())));
 
             IEnergyStorage storage = getEnergyStorage(worldIn, pos);
 
             if(storage != null) {
                 int energy = storage.getEnergyStored();
-                if (worldIn.isRemote) {
-                    playerIn.sendMessage(new TextComponentString(TextFormatting.WHITE + energyStoredText + " : " + energy + " / " + storage.getMaxEnergyStored() + " RF"));
-                    playerIn.sendMessage(new TextComponentString(TextFormatting.WHITE + generatePerTickText + " : " + te.getRfPerTick() + " RF"));
-                    playerIn.sendMessage(new TextComponentString(TextFormatting.YELLOW + "-----"));
-                }
+                playerIn.sendMessage(statusLine("tio.toolTips.StirlingEngine.energyStored", energy + " / " + storage.getMaxEnergyStored() + " RF"));
+                playerIn.sendMessage(statusLine("tio.toolTips.StirlingEngine.generatePerTick", te.getRfPerTick() + " RF"));
+                playerIn.sendMessage(new TextComponentString(TextFormatting.YELLOW + "-----"));
             }
         }
         return true;
@@ -189,10 +188,12 @@ public class BlockStirlingEngine extends BlockFacingTileEntity<TileEntityStirlin
         if(te instanceof TileEntityStirlingEngine) {
             TileEntityStirlingEngine tile = (TileEntityStirlingEngine) te;
 
-            String fuelAmountText = I18n.format("tio.toolTips.StirlingEngine.liquidAmount");
-            String fuelTempText = I18n.format("tio.toolTips.StirlingEngine.liquidTemp");
-            String energyStoredText = I18n.format("tio.toolTips.StirlingEngine.energyStored");
-            String generatePerTickText = I18n.format("tio.toolTips.StirlingEngine.generatePerTick");
+            // TOP calls this on the server, where net.minecraft.client.resources.I18n does not exist.
+            // TOP translates {*key*} (IProbeInfo.STARTLOC/ENDLOC) on the client instead.
+            String fuelAmountText = probeKey("tio.toolTips.StirlingEngine.liquidAmount");
+            String fuelTempText = probeKey("tio.toolTips.StirlingEngine.liquidTemp");
+            String energyStoredText = probeKey("tio.toolTips.StirlingEngine.energyStored");
+            String generatePerTickText = probeKey("tio.toolTips.StirlingEngine.generatePerTick");
 
             probeInfo.vertical()
                     .text(TextFormatting.WHITE + fuelAmountText + " : " + tile.getFluidAmount())
@@ -208,6 +209,17 @@ public class BlockStirlingEngine extends BlockFacingTileEntity<TileEntityStirlin
                         .text(TextFormatting.WHITE + generatePerTickText + " : " + tile.getRfPerTick() + " RF");
             }
         }
+    }
+
+    private static ITextComponent statusLine(String key, String value) {
+        ITextComponent line = new TextComponentTranslation(key);
+        line.appendSibling(new TextComponentString(" : " + value));
+        line.getStyle().setColor(TextFormatting.WHITE);
+        return line;
+    }
+
+    private static String probeKey(String key) {
+        return IProbeInfo.STARTLOC + key + IProbeInfo.ENDLOC;
     }
 
     private IEnergyStorage getEnergyStorage(World word, BlockPos pos) {
